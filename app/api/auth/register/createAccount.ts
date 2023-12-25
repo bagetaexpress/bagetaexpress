@@ -42,6 +42,7 @@ async function createUser(req: ICreateUser): Promise<CreateUserResponse> {
     return { status: 200, error: "" }
   } catch (e: any) {
     const errMessage = e?.message ?? "Internal Server Error"
+    console.error(errMessage)
     return { status: 500, error: errMessage}
   }
 }
