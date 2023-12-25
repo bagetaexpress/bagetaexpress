@@ -4,11 +4,10 @@ import { db } from "@/db"
 import { customer, employee, user } from "@/db/schema"
 import { and, eq } from "drizzle-orm"
 import bcrypt from "bcrypt";
+import { getUserByEmail } from "@/db/controllers/userController"
 
 export interface BeUser {
   id: string
-  name: string
-  surname: string
   email: string
   isAdmin: boolean
   schoolId?: number
@@ -41,23 +40,10 @@ const handler = NextAuth({
           return null;
         }
 
-        const findUser = await db
-          .select()
-          .from(user)
-          .where(
-            and(
-              eq(user.email, credentials.email),
-              // eq(user.verified, true)
-            )
-          )
-          .leftJoin(employee, eq(employee.userId, user.id))
-          .leftJoin(customer, eq(customer.userId, user.id))
-          .limit(1);
-
-        if (!findUser || findUser.length === 0) {
+        const found = await getUserByEmail(credentials.email);
+        if (!found) {
           return null;
         }
-        const found = findUser[0];
 
         if (!found.user.password) {
           return null;
@@ -69,16 +55,14 @@ const handler = NextAuth({
           return null;
         }
 
-        const newUser: BeUser = {
+        const user: BeUser = {
           id: found.user.id.toString(),
-          name: found.user.name,
-          surname: found.user.surname,
           email: found.user.email,
           isAdmin: found.user.isAdmin,
           schoolId: found.customer?.schoolId,
           storeId: found.employee?.storeId,
         };
-        return newUser;
+        return user;
       },
     }),
   ],
@@ -98,8 +82,6 @@ const handler = NextAuth({
       session.user.isAdmin = token.user.isAdmin;
       session.user.schoolId = token.user.schoolId;
       session.user.storeId = token.user.storeId;
-      session.user.name = token.user.name;
-      session.user.surname = token.user.surname;
       session.user.email = token.user.email;
 
       return session;
