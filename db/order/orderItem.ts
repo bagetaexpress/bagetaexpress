@@ -1,17 +1,15 @@
-import { mysqlTable, int, primaryKey, serial } from "drizzle-orm/mysql-core";
+import { mysqlTable, int, primaryKey } from "drizzle-orm/mysql-core";
 import { item } from "../store/item";
 import { order } from "./order";
 import { relations } from "drizzle-orm";
 
 export const orderItem = mysqlTable('order_item', {
-  id: serial('id').primaryKey(),
-  orderId: int('order_id').unique().notNull(),
-  itemId: int('item_id').unique().notNull(),
-  quantity: int('quantity').notNull(),
-}
-  // }, (table) => ({
-  //   pk: primaryKey({ columns: [table.orderId, table.itemId] }),
-  // })
+    orderId: int('order_id').notNull(),
+    itemId: int('item_id').notNull(),
+    quantity: int('quantity').notNull(),
+  }, (table) => ({
+    pk: primaryKey({ columns: [table.orderId, table.itemId] }),
+  })
 )
 
 export const orderItemRelations = relations(orderItem, ({ one }) => ({
