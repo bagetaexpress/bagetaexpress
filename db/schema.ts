@@ -18,7 +18,7 @@ import { schoolStoreRelations } from "./school/schoolStore";
 import { storeRelations } from "./store/store";
 
 
-export const schema = {
+export const tables = {
   order,
   orderItem,
   school,
@@ -28,7 +28,9 @@ export const schema = {
   customer,
   item,
   store,
+}
 
+export const relations = {
   orderRelations,
   orderItemRelations,
   itemRelations,

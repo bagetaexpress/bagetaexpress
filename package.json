@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:push": "drizzle-kit push:mysql --config=drizzle.config.ts"
+    "db:push": "drizzle-kit push:mysql --config=drizzle.config.ts",
+    "migration:generate": "drizzle-kit generate:mysql --schema=./db/schema.ts",
+    "migration:push": "node -r esbuild-register db/migrate.ts",
+    "migration:pushc": "node -r esbuild-register db/migrate.ts --clear",
+    "migration:studio": "drizzle-kit studio; drizzle-kit studio --port 3000; drizzle-kit studio --verbose "
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
@@ -22,6 +26,7 @@
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.29.1",
     "lucide-react": "^0.301.0",
+    "mysql2": "^3.6.5",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
     "react": "^18",

@@ -90,6 +90,7 @@ async function createCustomer(data: ICreateCustomer): Promise<Customer> {
 }
 
 export { 
+  createUser,
   getUserByEmail,
   createEmployee,
   createCustomer,

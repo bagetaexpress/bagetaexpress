@@ -4,7 +4,7 @@ import { db } from "@/db"
 import { customer, employee, user } from "@/db/schema"
 import { and, eq } from "drizzle-orm"
 import bcrypt from "bcrypt";
-import { createCustomer, createEmployee, getUserByEmail } from "@/db/controllers/userController";
+import * as uController from "@/db/controllers/userController";
 
 interface ICreateUser {
   email: string
@@ -20,10 +20,13 @@ type CreateUserResponse = {
 
 async function createUser(req: ICreateUser): Promise<CreateUserResponse> {
   try {
-    const foundUser = await getUserByEmail(req.email)
+    const foundUser = await uController.getUserByEmail(req.email)
     if (foundUser) {
       throw new Error("User already exists")
     }
+
+    await uController.createUser(req.email, req.password)
+    return { status: 200, error: "" }
 
     if (!req.schoolId && !req.storeId) {
       throw new Error("Must provide schoolId or storeId")
