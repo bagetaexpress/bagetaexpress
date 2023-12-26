@@ -20,6 +20,7 @@ import {
   DrawerFooter,
   DrawerClose,
 } from "./ui/drawer";
+import addToCart from "@/lib/cart/addToCart";
 
 export default function ItemCard({ item }: { item: Item }) {
   return (
@@ -33,9 +34,16 @@ export default function ItemCard({ item }: { item: Item }) {
           <CardContent></CardContent>
           <CardFooter className="flex gap-2 justify-between">
             <p>{item.price}</p>
-            <DrawerTrigger>
-              <Button>Buy</Button>
-            </DrawerTrigger>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                addToCart(item.id, 1);
+              }}
+            >
+              <DrawerTrigger asChild>
+                <Button type="submit">Buy</Button>
+              </DrawerTrigger>
+            </form>
           </CardFooter>
         </Card>
         <DrawerContent>
@@ -46,12 +54,14 @@ export default function ItemCard({ item }: { item: Item }) {
             </DrawerHeader>
             <DrawerFooter>
               <div className="grid grid-cols-2 devide-x gap-2">
-                <DrawerClose className="flex">
+                <DrawerClose className="flex" asChild>
                   <Button className="flex-1" variant="outline">
                     Continue shopping
                   </Button>
                 </DrawerClose>
-                <Button>View cart</Button>
+                <a href="/auth/cart">
+                  <Button>View cart</Button>
+                </a>
               </div>
             </DrawerFooter>
           </div>

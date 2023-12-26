@@ -18,6 +18,15 @@ async function getItemsBySchool(schoolId: number) {
   return items.map(item => item.item)
 }
 
+async function getItemById(id: number): Promise<Item | null> {
+  const found = await db.select().from(item).where(eq(item.id, id))
+  if (found.length === 0) {
+    return null
+  }
+  return found[0]
+}
+
 export {
-  getItemsBySchool
+  getItemsBySchool,
+  getItemById,
 }

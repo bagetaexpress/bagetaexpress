@@ -15,7 +15,10 @@ export default function authLayout({ children }: { children: ReactNode }) {
           <p className="text-xl font-semibold">bagetaExpress</p>
         </div>
         <div className="flex gap-2">
-          <a href="">
+          <a href="/auth/store">
+            <Button variant="ghost">Home</Button>
+          </a>
+          <a href="/auth/cart">
             <Button variant="ghost">
               Shopping car
               <ShoppingCart className="ml-2 h-5 w-5" />
