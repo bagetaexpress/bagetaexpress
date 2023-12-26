@@ -2,6 +2,13 @@ import { eq } from "drizzle-orm"
 import { item, schoolStore, store } from "../schema"
 import { db } from "@/db"
 
+export type Item = {
+  id: number;
+  name: string;
+  storeId: number;
+  description: string;
+  price: string;
+}
 
 async function getItemsBySchool(schoolId: number) {
   const items = await db.select({item}).from(item)

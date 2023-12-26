@@ -6,7 +6,7 @@ import { orderItem } from "./orderItem";
 export const order = mysqlTable('order', {
   id: serial('id').primaryKey(),
   userId: int('user_id').notNull(),
-  status: mysqlEnum('status', ['pending', 'fulfilled', 'cancelled']).notNull(),
+  status: mysqlEnum('status', ['cart', 'ordered', 'pickedup', 'unpicked', 'cancelled']).notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow().onUpdateNow(),
 })
