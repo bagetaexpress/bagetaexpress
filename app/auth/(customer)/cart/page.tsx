@@ -7,6 +7,15 @@ export default async function CartPage() {
   const orderId = await getCartId();
   const data = await getCartItems();
 
+  if (data.length === 0) {
+    return (
+      <div className="h-full flex flex-col justify-center items-center">
+        <h1 className="text-2xl font-semibold">Cart</h1>
+        <p className="text-xl">Your cart is empty</p>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full flex flex-col justify-between md:justify-start">
       <div>

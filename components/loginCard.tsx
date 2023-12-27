@@ -50,7 +50,7 @@ export default function LoginForm() {
       router.push("?error=" + res.error);
       router.forward();
     } else {
-      router.push("?success=true");
+      router.push("/auth/store");
       router.forward();
     }
   }
@@ -67,11 +67,11 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input {...field} />
                   </FormControl>
-                  <FormDescription>
+                  {/* <FormDescription>
                     This is your public display name.
-                  </FormDescription>
+                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
@@ -83,9 +83,9 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input type="password" {...field} />
                   </FormControl>
-                  <FormDescription>This is your password.</FormDescription>
+                  {/* <FormDescription>This is your password.</FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}

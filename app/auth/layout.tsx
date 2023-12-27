@@ -1,8 +1,26 @@
 import { Button } from "@/components/ui/button";
+import UserDropdown from "@/components/userDropdown";
 import { ShoppingCart, User } from "lucide-react";
+import { getServerSession } from "next-auth";
 import { ReactNode } from "react";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
-export default function authLayout({ children }: { children: ReactNode }) {
+export default async function authLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) {
+    return (
+      <div className="h-screen flex flex-col gap-2 justify-center items-center">
+        <h1 className="text-2xl font-semibold">You are not logged in</h1>
+        <a href="/">
+          <Button>Login</Button>
+        </a>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen flex flex-col">
       <div className="bg-primary text-primary-foreground p-2">
@@ -24,11 +42,7 @@ export default function authLayout({ children }: { children: ReactNode }) {
                 <ShoppingCart className="ml-2 h-5 w-5" />
               </Button>
             </a>
-            <a href="/auth/user">
-              <Button variant="ghost" size="icon">
-                <User className="w-5 h-5" />
-              </Button>
-            </a>
+            <UserDropdown />
           </div>
         </nav>
       </div>
