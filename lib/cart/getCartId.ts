@@ -1,7 +1,7 @@
 "use server"
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getCartByUserId, createOrder } from "@/db/controllers/orderController";
+import { getCartByUserId, createCart } from "@/db/controllers/cartController";
 import { getServerSession } from "next-auth";
 
 export default async function getCartId(): Promise<number> {
@@ -14,9 +14,9 @@ export default async function getCartId(): Promise<number> {
   let cartId: number;
   let cart = await getCartByUserId(userId);
   if (cart === null) {
-    cartId = await createOrder(userId, "cart");
+    cartId = await createCart(userId);
   }else {
-    cartId = cart.id;
+    cartId = cart.userId;
   }
 
   return cartId;

@@ -16,6 +16,8 @@ import { customerRelations } from "./user/customer";
 import { schoolRelations } from "./school/school";
 import { schoolStoreRelations } from "./school/schoolStore";
 import { storeRelations } from "./store/store";
+import { cart, cartRelations } from "./cart/cart";
+import { cartItem, cartItemRelations } from "./cart/cartItem";
 
 
 export const tables = {
@@ -28,6 +30,8 @@ export const tables = {
   customer,
   item,
   store,
+  cart,
+  cartItem,
 }
 
 export const relations = {
@@ -39,6 +43,8 @@ export const relations = {
   schoolRelations,
   schoolStoreRelations,
   storeRelations,
+  cartRelations,
+  cartItemRelations,
 }
 
 export {
@@ -51,6 +57,8 @@ export {
   customer,
   item,
   store,
+  cart,
+  cartItem,
 
   orderRelations,
   orderItemRelations,
@@ -60,4 +68,6 @@ export {
   schoolRelations,
   schoolStoreRelations,
   storeRelations,
+  cartRelations,
+  cartItemRelations,
 }

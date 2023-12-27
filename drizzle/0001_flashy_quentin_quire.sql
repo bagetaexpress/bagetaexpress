@@ -1,1 +1,0 @@
-ALTER TABLE `order` MODIFY COLUMN `status` enum('cart','ordered','pickedup','unpicked','cancelled') NOT NULL;

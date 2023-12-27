@@ -17,7 +17,7 @@ async function main () {
   if (process.argv.includes("--clear")) {
     console.log("Clearing database");
     await clearDatabase(db);
-    console.log("Clearing dropped");
+    console.log("Database cleared");
   }
 
   console.log("Migrating database");
@@ -60,6 +60,13 @@ async function populate(db: Database) {
     id: 1,
     name: "bageta",
     description: "bageta popis",
+    price: "3.99",
+    storeId: 1,
+  })
+  await db.insert(tables.item).values({
+    id: 2,
+    name: "test bageta",
+    description: "najelpsia omega top bageta",
     price: "3.99",
     storeId: 1,
   })

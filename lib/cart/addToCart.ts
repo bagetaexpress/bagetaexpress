@@ -1,9 +1,9 @@
 "use server"
 
 import { 
-  createOrderItem,
-  getOrderItemByOrderIdAndItemId,
-  updateOrderItemQuantity
+  createCartItem,
+  getCartItemByCartIdAndItemId,
+  updateCartItemQuantity
 } from "@/db/controllers/orderItemController";
 import getCartId from "./getCartId";
 
@@ -12,12 +12,12 @@ export default async function addToCart(
 ): Promise<void> {
   const cartId = await getCartId();
 
-  const orderItem = await getOrderItemByOrderIdAndItemId(cartId, itemId);
+  const orderItem = await getCartItemByCartIdAndItemId(cartId, itemId);
   if (orderItem === null) {
     // create new order item
-    await createOrderItem(cartId, itemId, quantity);
+    await createCartItem(cartId, itemId, quantity);
     return;
   }
   // update quantity
-  await updateOrderItemQuantity(cartId, itemId, orderItem.quantity + quantity);
+  await updateCartItemQuantity(cartId, itemId, orderItem.quantity + quantity);
 }

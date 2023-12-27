@@ -2,6 +2,7 @@ import { decimal, int, mysqlTable, serial, varchar } from "drizzle-orm/mysql-cor
 import { store } from "./store";
 import { relations } from "drizzle-orm";
 import { orderItem } from "../schema";
+import { cartItem } from "../cart/cartItem";
 
 export const item = mysqlTable('item', {
   id: serial('id').primaryKey(),
@@ -13,6 +14,7 @@ export const item = mysqlTable('item', {
 
 export const itemRelations = relations(item, ({ one, many }) => ({
   orderItems: many(orderItem),
+  cartItems: many(cartItem),
   store: one(store, {
     fields: [item.storeId],
     references: [store.id]

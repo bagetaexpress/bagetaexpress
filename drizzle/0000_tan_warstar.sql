@@ -1,3 +1,17 @@
+CREATE TABLE `cart` (
+	`user_id` int NOT NULL,
+	`created_at` timestamp NOT NULL DEFAULT (now()),
+	`updated_at` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `cart_user_id` PRIMARY KEY(`user_id`)
+);
+--> statement-breakpoint
+CREATE TABLE `cart_item` (
+	`cart_id` int NOT NULL,
+	`item_id` int NOT NULL,
+	`quantity` int NOT NULL,
+	CONSTRAINT `cart_item_cart_id_item_id_pk` PRIMARY KEY(`cart_id`,`item_id`)
+);
+--> statement-breakpoint
 CREATE TABLE `customer` (
 	`user_id` int NOT NULL,
 	`school_id` int NOT NULL,
@@ -22,7 +36,7 @@ CREATE TABLE `item` (
 CREATE TABLE `order` (
 	`id` serial AUTO_INCREMENT NOT NULL,
 	`user_id` int NOT NULL,
-	`status` enum('pending','fulfilled','cancelled') NOT NULL,
+	`status` enum('ordered','pickedup','unpicked','cancelled') NOT NULL,
 	`created_at` timestamp NOT NULL DEFAULT (now()),
 	`updated_at` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `order_id` PRIMARY KEY(`id`)

@@ -1,7 +1,7 @@
 "use client";
 
 import { Item } from "@/db/controllers/itemController";
-import { saveUpdateOrderItemQuantity } from "@/db/controllers/orderItemController";
+import { saveUpdateCartItemQuantity } from "@/db/controllers/orderItemController";
 import { Minus, Plus } from "lucide-react";
 import { useOptimistic } from "react";
 
@@ -17,12 +17,12 @@ export default function CartItemRow({
 
   async function handleDescrease() {
     updateQ(q - 1);
-    await saveUpdateOrderItemQuantity(cartId, item.id, q - 1);
+    await saveUpdateCartItemQuantity(cartId, item.id, q - 1);
   }
 
   async function handleIncrease() {
     updateQ(q + 1);
-    await saveUpdateOrderItemQuantity(cartId, item.id, q + 1);
+    await saveUpdateCartItemQuantity(cartId, item.id, q + 1);
   }
 
   if (q <= 0 || quantity <= 0) {

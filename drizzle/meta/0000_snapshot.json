@@ -1,9 +1,87 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "ea536815-8529-4541-b091-80187c9b5e46",
+  "id": "642df117-01f8-4ce7-8296-7b105109fe44",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "cart": {
+      "name": "cart",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "onUpdate": true,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "cart_user_id": {
+          "name": "cart_user_id",
+          "columns": [
+            "user_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "cart_item": {
+      "name": "cart_item",
+      "columns": {
+        "cart_id": {
+          "name": "cart_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "cart_item_cart_id_item_id_pk": {
+          "name": "cart_item_cart_id_item_id_pk",
+          "columns": [
+            "cart_id",
+            "item_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "customer": {
       "name": "customer",
       "columns": {
@@ -134,7 +212,7 @@
         },
         "status": {
           "name": "status",
-          "type": "enum('pending','fulfilled','cancelled')",
+          "type": "enum('ordered','pickedup','unpicked','cancelled')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

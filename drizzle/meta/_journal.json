@@ -1,19 +1,12 @@
 {
   "version": "5",
-  "dialect": "pg",
+  "dialect": "mysql",
   "entries": [
     {
       "idx": 0,
       "version": "5",
-      "when": 1703544109530,
-      "tag": "0000_orange_black_tom",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1703620394409,
-      "tag": "0001_flashy_quentin_quire",
+      "when": 1703720360398,
+      "tag": "0000_tan_warstar",
       "breakpoints": true
     }
   ]
