@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, User } from "lucide-react";
 import { ReactNode } from "react";
 
 export default function authLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <div className="bg-primary text-primary-foreground p-2">
         <nav
           className="
@@ -14,7 +14,7 @@ export default function authLayout({ children }: { children: ReactNode }) {
           <div>
             <p className="text-xl font-semibold">bagetaExpress</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-1">
             <a href="/auth/store">
               <Button variant="ghost">Home</Button>
             </a>
@@ -24,10 +24,17 @@ export default function authLayout({ children }: { children: ReactNode }) {
                 <ShoppingCart className="ml-2 h-5 w-5" />
               </Button>
             </a>
+            <a href="/auth/user">
+              <Button variant="ghost" size="icon">
+                <User className="w-5 h-5" />
+              </Button>
+            </a>
           </div>
         </nav>
       </div>
-      <main className="max-w-screen-lg mx-auto p-2">{children}</main>
+      <div className="p-2 flex-1 flex">
+        <main className="max-w-screen-lg mx-auto flex-1">{children}</main>
+      </div>
     </div>
   );
 }

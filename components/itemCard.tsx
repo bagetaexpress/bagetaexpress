@@ -53,16 +53,12 @@ export default function ItemCard({ item }: { item: Item }) {
               <DrawerDescription>Want to order</DrawerDescription>
             </DrawerHeader>
             <DrawerFooter>
-              <div className="grid grid-cols-2 devide-x gap-2">
-                <DrawerClose className="flex" asChild>
-                  <Button className="flex-1" variant="outline">
-                    Continue shopping
-                  </Button>
-                </DrawerClose>
-                <a href="/auth/cart">
-                  <Button>View cart</Button>
-                </a>
-              </div>
+              <DrawerClose asChild>
+                <Button variant="outline">Continue shopping</Button>
+              </DrawerClose>
+              <a href="/auth/cart" className="flex">
+                <Button className="flex-1">View cart</Button>
+              </a>
             </DrawerFooter>
           </div>
         </DrawerContent>

@@ -37,7 +37,8 @@ export default function CartItemRow({
       </div>
       <div className="flex justify-center text-center gap-2 flex-col">
         <p className=" font-bold text-xl">
-          {(parseFloat(item.price) * q).toFixed(2)}€
+          {/* {(parseFloat(item.price) * q).toFixed(2)}€ */}
+          {item.price}€
         </p>
         <div className="flex items-center">
           <form action={handleDescrease}>
