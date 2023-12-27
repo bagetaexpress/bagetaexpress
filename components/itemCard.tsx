@@ -26,14 +26,14 @@ export default function ItemCard({ item }: { item: Item }) {
   return (
     <div>
       <Drawer>
-        <Card className="w-fit h-fit">
+        <Card className="flex-1">
           <CardHeader>
             <CardTitle>{item.name}</CardTitle>
             <CardDescription>{item.description}</CardDescription>
           </CardHeader>
           <CardContent></CardContent>
           <CardFooter className="flex gap-2 justify-between">
-            <p>{item.price}</p>
+            <p className="font-semibold text-lg">{item.price}€</p>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -41,7 +41,7 @@ export default function ItemCard({ item }: { item: Item }) {
               }}
             >
               <DrawerTrigger asChild>
-                <Button type="submit">Buy</Button>
+                <Button type="submit">Add to cart</Button>
               </DrawerTrigger>
             </form>
           </CardFooter>

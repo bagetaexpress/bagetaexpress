@@ -10,11 +10,13 @@ export default async function Store() {
   }
   const items = await getItemsBySchool(sesstion.user.schoolId);
   return (
-    <div className="p-5">
-      <h1 className="text-2xl font-semibold">Store</h1>
-      {items.map((item) => (
-        <ItemCard key={item.id} item={item} />
-      ))}
+    <div>
+      <h1 className="text-2xl font-semibold pt-2">Store</h1>
+      <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
+        {items.map((item) => (
+          <ItemCard key={item.id} item={item} />
+        ))}
+      </div>
     </div>
   );
 }

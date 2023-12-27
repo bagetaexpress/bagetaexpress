@@ -1,27 +1,32 @@
+"use client";
+
 import { Item } from "@/db/controllers/itemController";
-import { updateOrderItemQuantity } from "@/db/controllers/orderItemController";
-import { Button } from "./ui/button";
-import { revalidatePath } from "next/cache";
+import { saveUpdateOrderItemQuantity } from "@/db/controllers/orderItemController";
 import { Minus, Plus } from "lucide-react";
+import { useOptimistic } from "react";
 
 export default function CartItemRow({
   quantity,
   cartId,
   ...item
 }: Item & { quantity: number; cartId: number }) {
+  const [q, updateQ] = useOptimistic<number, number>(
+    quantity,
+    (_, updated) => updated
+  );
+
   async function handleDescrease() {
-    "use server";
-    if (quantity === 1) {
-      return;
-    }
-    await updateOrderItemQuantity(cartId, item.id, quantity - 1);
-    revalidatePath("/auth/cart");
+    updateQ(q - 1);
+    await saveUpdateOrderItemQuantity(cartId, item.id, q - 1);
   }
 
   async function handleIncrease() {
-    "use server";
-    await updateOrderItemQuantity(cartId, item.id, quantity + 1);
-    revalidatePath("/auth/cart");
+    updateQ(q + 1);
+    await saveUpdateOrderItemQuantity(cartId, item.id, q + 1);
+  }
+
+  if (q <= 0 || quantity <= 0) {
+    return null;
   }
 
   return (
@@ -32,7 +37,7 @@ export default function CartItemRow({
       </div>
       <div className="flex justify-center text-center gap-2 flex-col">
         <p className=" font-bold text-xl">
-          {(parseFloat(item.price) * quantity).toFixed(2)}€
+          {(parseFloat(item.price) * q).toFixed(2)}€
         </p>
         <div className="flex items-center">
           <form action={handleDescrease}>
@@ -40,7 +45,7 @@ export default function CartItemRow({
               <Minus className="w-5 h-5 text-white" />
             </button>
           </form>
-          <p className="text-xl px-2">{quantity}</p>
+          <p className="text-xl px-2">{q}</p>
           <form action={handleIncrease}>
             <button type="submit" className=" bg-red-500 rounded-md p-1">
               <Plus className="w-5 h-5 text-white" />

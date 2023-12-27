@@ -8,8 +8,7 @@ export default async function CartPage() {
 
   return (
     <div>
-      <h1>Cart</h1>
-
+      <h1 className="text-2xl font-semibold pt-2">Cart</h1>
       <div className="grid grid-cols-1 divide-y-2">
         {data.map((item, i) => (
           <CartItemRow

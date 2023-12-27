@@ -3,6 +3,7 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "..";
 import { orderItem } from "../schema";
+import { revalidatePath } from "next/cache";
 
 export type OrderItem = {
   orderId: number;
@@ -37,9 +38,26 @@ async function updateOrderItemQuantity(orderId: number, itemId: number, quantity
   }).where(and(eq(orderItem.orderId, orderId), eq(orderItem.itemId, itemId)));
 }
 
+async function saveUpdateOrderItemQuantity(orderId: number, itemId: number, quantity: number) {
+  const found = await getOrderItemByOrderIdAndItemId(orderId, itemId);
+  if (found === null) {
+    throw new Error("Order item not found");
+  }
+  if (found.quantity === quantity) {
+    return;
+  }
+  if (quantity <= 0) {
+    await db.delete(orderItem).where(and(eq(orderItem.orderId, orderId), eq(orderItem.itemId, itemId)));
+  }else {
+    await updateOrderItemQuantity(orderId, itemId, quantity);
+  }
+  revalidatePath("/auth/cart", "page");
+}
+
 export {
   createOrderItem,
   getOrderItemsByOrderId,
   getOrderItemByOrderIdAndItemId,
   updateOrderItemQuantity,
+  saveUpdateOrderItemQuantity,
 }
