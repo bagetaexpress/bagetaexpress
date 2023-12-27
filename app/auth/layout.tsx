@@ -37,7 +37,7 @@ export default async function authLayout({
               <Button variant="ghost">Home</Button>
             </a>
             <a href="/auth/cart">
-              <Button variant="ghost">
+              <Button variant="ghost" className="hidden sm:flex">
                 Shopping car
                 <ShoppingCart className="ml-2 h-5 w-5" />
               </Button>
