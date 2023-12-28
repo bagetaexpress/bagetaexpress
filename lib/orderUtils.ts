@@ -1,10 +1,26 @@
 "use server"
 
 import { getCart } from "@/db/controllers/cartController";
-import getCartItems from "./cart/getCartItems";
 import { createOrderItems, deleteOrderItems } from "@/db/controllers/orderItemController";
+import { getCartItems } from "./cartUtils";
+import { createOrder, getOrderByPin } from "@/db/controllers/orderController";
+import { getCustomer } from "@/db/controllers/customerController";
 
-async function createOrder(userId: number): Promise<number> {
+function generatePin(length: number): string {
+  const chars = "0123456789";
+  let pin = "";
+  for (let i = 0; i < length; i++) {
+    pin += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return pin;
+}
+
+async function createOrderFromCart(userId: number): Promise<number> {
+  const customer = await getCustomer(userId);  
+  if (!customer) {
+    throw new Error("Customer not found");
+  }
+
   const cart = await getCart(userId);
   if (!cart) {
     throw new Error("Cart not found");
@@ -15,7 +31,15 @@ async function createOrder(userId: number): Promise<number> {
     throw new Error("Cart is empty");
   }
 
-  const orderId = await createOrder(userId);
+  // Create order with unique pin
+  let pin: string;
+  let orderId: number;
+  let found: any;
+  do {
+    pin = generatePin(4);
+    orderId = await createOrder(userId, pin);
+    found = await getOrderByPin(pin, customer.schoolId);
+  } while (found != null)
 
   try {
     await createOrderItems(

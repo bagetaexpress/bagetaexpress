@@ -1,6 +1,6 @@
 import { db } from '@/db';
-import { order } from '../schema';
-import { eq } from 'drizzle-orm';
+import { customer, order, user } from '../schema';
+import { eq, and } from 'drizzle-orm';
 
 export type OrderStatus = 'ordered' | 'pickedup' | 'unpicked' | 'cancelled';
 
@@ -12,14 +12,44 @@ export type Order = {
   updatedAt: Date;
 };
 
-async function createOrder(userId: number, status: OrderStatus = 'ordered'): Promise<number> {
+async function createOrder(
+  userId: number, pin: string, status: OrderStatus = 'ordered'
+): Promise<number> {
   const newOrder = await db.insert(order).values({
     userId,
+    pin,
     status
   });
   const orderId = parseInt(newOrder.insertId);
 
   return orderId;
+}
+
+async function getOrderByPin(
+  pin: string, 
+  schoolId?: number,
+  status: OrderStatus = 'ordered',
+): Promise<Order | null> {
+  let orders: Order[];
+
+  if (schoolId) {
+    orders = (await db.select({order}).from(order)
+        .innerJoin(customer, eq(order.userId, customer.userId))
+        .where(and(
+          eq(order.pin, pin), 
+          eq(order.status, status),
+          eq(customer.schoolId, schoolId)
+        ))
+      ).map(row => row.order);
+  }else{
+    orders = await db.select().from(order)
+      .where(and(eq(order.pin, pin), eq(order.status, status)));
+  }
+
+  if (orders.length === 0) {
+    return null;
+  }
+  return orders[0];
 }
 
 async function deleteOrder(orderId: number): Promise<void> {
@@ -53,6 +83,7 @@ async function updateOrderStatus(orderId: number, status: OrderStatus): Promise<
 export {
   createOrder,
   deleteOrder,
+  getOrderByPin,
   getOrder,
   getOrders,
   updateOrderStatus
