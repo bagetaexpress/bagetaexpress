@@ -1,5 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import ItemCard from "@/components/itemCard";
+import ItemCard from "@/app/auth/(customer)/store/_components/itemCard";
 import { Button } from "@/components/ui/button";
 import { getItemsBySchool } from "@/db/controllers/itemController";
 import { ShoppingCart } from "lucide-react";

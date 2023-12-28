@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import UserDropdown from "@/components/userDropdown";
+import UserDropdown from "@/app/auth/(customer)/_components/userDropdown";
 import { ShoppingCart, User } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { ReactNode } from "react";

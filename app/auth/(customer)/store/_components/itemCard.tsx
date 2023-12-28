@@ -8,8 +8,8 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "./ui/card";
-import { Button } from "./ui/button";
+} from "../../../../../components/ui/card";
+import { Button } from "../../../../../components/ui/button";
 import {
   Drawer,
   DrawerTrigger,
@@ -19,7 +19,7 @@ import {
   DrawerDescription,
   DrawerFooter,
   DrawerClose,
-} from "./ui/drawer";
+} from "../../../../../components/ui/drawer";
 import { addToCart } from "@/lib/cartUtils";
 
 export default function ItemCard({ item }: { item: Item }) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "./ui/button";
+import { Button } from "../../../../../components/ui/button";
 import {
   Drawer,
   DrawerTrigger,
@@ -9,7 +9,7 @@ import {
   DrawerTitle,
   DrawerFooter,
   DrawerClose,
-} from "./ui/drawer";
+} from "../../../../../components/ui/drawer";
 import { Item } from "@/db/controllers/itemController";
 
 interface ICheckout {
