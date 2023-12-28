@@ -1,3 +1,5 @@
+"use server"
+
 import { eq } from "drizzle-orm"
 import { cartItem, item, orderItem, schoolStore, store } from "../schema"
 import { db } from "@/db"

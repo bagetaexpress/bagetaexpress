@@ -22,7 +22,13 @@ import {
 } from "../../../../../components/ui/drawer";
 import { addToCart } from "@/lib/cartUtils";
 
-export default function ItemCard({ item }: { item: Item }) {
+export default function ItemCard({
+  item,
+  disabled,
+}: {
+  item: Item;
+  disabled: boolean;
+}) {
   return (
     <div>
       <Drawer>
@@ -41,7 +47,9 @@ export default function ItemCard({ item }: { item: Item }) {
               }}
             >
               <DrawerTrigger asChild>
-                <Button type="submit">Add to cart</Button>
+                <Button disabled={disabled} type="submit">
+                  Add to cart
+                </Button>
               </DrawerTrigger>
             </form>
           </CardFooter>

@@ -27,7 +27,13 @@ async function createCart(userId: number): Promise<number> {
   return parseInt(newCart.insertId);
 }
 
+async function deleteCart(userId: number): Promise<void> {
+  await db.delete(cart)
+    .where(eq(cart.userId, userId));
+}
+
 export {
   getCart,
   createCart,
+  deleteCart,
 }

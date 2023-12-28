@@ -1,3 +1,5 @@
+"use server"
+
 import { db } from '@/db';
 import { customer, order, user } from '../schema';
 import { eq, and } from 'drizzle-orm';
@@ -8,6 +10,7 @@ export type Order = {
   id: number;
   userId: number;
   status: OrderStatus;
+  pin: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -57,6 +60,12 @@ async function deleteOrder(orderId: number): Promise<void> {
     .where(eq(order.id, orderId));
 }
 
+async function getOrdersByUserId(userId: number, status: OrderStatus): Promise<Order[]> {
+  const orders = await db.select().from(order)
+    .where(and(eq(order.userId, userId), eq(order.status, status)));
+  return orders;
+}
+
 async function getOrder(orderId: number): Promise<Order | null> {
   const orders = await db.select().from(order)
     .where(eq(order.id, orderId));
@@ -86,5 +95,6 @@ export {
   getOrderByPin,
   getOrder,
   getOrders,
-  updateOrderStatus
+  updateOrderStatus,
+  getOrdersByUserId,
 }

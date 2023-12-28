@@ -1,9 +1,9 @@
 "use server"
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getCart, createCart } from "@/db/controllers/cartController";
-import { getCartItem, createCartItem, updateCartItem, getCartItemsByCartId, deleteCartItem } from "@/db/controllers/cartItemController";
-import { getItemById, getItemsFromCart } from "@/db/controllers/itemController";
+import { getCart, createCart, deleteCart } from "@/db/controllers/cartController";
+import { getCartItem, createCartItem, updateCartItem, deleteCartItem, deleteCartItems } from "@/db/controllers/cartItemController";
+import { getItemsFromCart } from "@/db/controllers/itemController";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
@@ -14,7 +14,7 @@ async function addToCart(
 
   const orderItem = await getCartItem(cartId, itemId);
   if (orderItem === null) {
-    // create new order item
+    // create new cart item
     await createCartItem(cartId, itemId, quantity);
     return;
   }
@@ -64,9 +64,15 @@ async function saveUpdateCartItem(cartId: number, itemId: number, quantity: numb
   revalidatePath("/auth/cart", "page");
 }
 
+async function deleteCartAndItems(cartId: number) {
+  await deleteCartItems(cartId);
+  await deleteCart(cartId);
+}
+
 export {
   addToCart,
   getCartItems,
+  deleteCartAndItems,
   getCartId,
   saveUpdateCartItem
 }

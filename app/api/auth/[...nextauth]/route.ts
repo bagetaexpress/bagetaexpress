@@ -1,12 +1,9 @@
 import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { db } from "@/db"
-import { customer, employee, user } from "@/db/schema"
-import { and, eq } from "drizzle-orm"
 import bcrypt from "bcrypt";
 import { getUserByEmail } from "@/db/controllers/userController"
 
-export interface BeUser {
+export type BeUser = {
   id: string
   email: string
   isAdmin: boolean

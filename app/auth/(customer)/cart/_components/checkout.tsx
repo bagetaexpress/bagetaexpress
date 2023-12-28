@@ -1,5 +1,6 @@
 "use client";
 
+import { createOrderFromCart } from "@/lib/orderUtils";
 import { Button } from "../../../../../components/ui/button";
 import {
   Drawer,
@@ -11,16 +12,18 @@ import {
   DrawerClose,
 } from "../../../../../components/ui/drawer";
 import { Item } from "@/db/controllers/itemController";
+import { useRouter } from "next/navigation";
 
 interface ICheckout {
   items: {
     item: Item;
     quantity: number;
   }[];
-  orderId: number;
+  cartId: number;
 }
 
-export default function Cheackout({ items, orderId }: ICheckout) {
+export default function Cheackout({ items, cartId }: ICheckout) {
+  const router = useRouter();
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -62,8 +65,9 @@ export default function Cheackout({ items, orderId }: ICheckout) {
               <Button variant="outline">Cancel</Button>
             </DrawerClose>
             <Button
-              onClick={() => {
-                // addToCart(orderId, items);
+              onClick={async () => {
+                await createOrderFromCart(cartId);
+                router.push("/auth/order");
               }}
             >
               Confirm

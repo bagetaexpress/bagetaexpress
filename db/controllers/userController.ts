@@ -5,17 +5,17 @@ import { db } from "../index";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
-type Customer = {
+export type Customer = {
   userId: number
   schoolId: number
 }
 
-type Employee = {
+export type Employee = {
   userId: number
   storeId: number
 }
 
-type User = {
+export type User = {
   id: number
   email: string
   password: string

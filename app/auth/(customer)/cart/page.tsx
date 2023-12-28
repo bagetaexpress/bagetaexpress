@@ -3,7 +3,7 @@ import Cheackout from "@/app/auth/(customer)/cart/_components/checkout";
 import { getCartId, getCartItems } from "@/lib/cartUtils";
 
 export default async function CartPage() {
-  const orderId = await getCartId();
+  const cartId = await getCartId();
   const data = await getCartItems();
 
   if (data.length === 0) {
@@ -25,7 +25,7 @@ export default async function CartPage() {
               key={item.item.id + "-" + i}
               {...item.item}
               quantity={item.quantity}
-              cartId={orderId}
+              cartId={cartId}
             />
           ))}
         </div>
@@ -44,7 +44,7 @@ export default async function CartPage() {
         </div>
       </div>
       <div className="flex justify-end">
-        <Cheackout items={data} orderId={orderId} />
+        <Cheackout items={data} cartId={cartId} />
       </div>
     </div>
   );

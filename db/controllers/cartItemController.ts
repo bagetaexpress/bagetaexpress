@@ -42,8 +42,13 @@ async function deleteCartItem(cartId: number, itemId: number) {
   .where(and(eq(cartItem.cartId, cartId), eq(cartItem.itemId, itemId)));
 }
 
+async function deleteCartItems(cartId: number) {
+  await db.delete(cartItem).where(eq(cartItem.cartId, cartId));
+}
+
 export {
   deleteCartItem,
+  deleteCartItems,
   createCartItem,
   getCartItemsByCartId,
   getCartItem,

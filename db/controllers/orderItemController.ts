@@ -3,7 +3,6 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "..";
 import { orderItem } from "../schema";
-import { revalidatePath } from "next/cache";
 
 export type OrderItem = {
   orderId: number;
