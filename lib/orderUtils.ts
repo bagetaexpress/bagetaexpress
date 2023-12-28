@@ -15,6 +15,20 @@ function generatePin(length: number): string {
   return pin;
 }
 
+async function createUniqueOrder(): Promise<number> {
+  let pin: string;
+  let orderId: number;
+  let found: any;
+
+  do {
+    pin = generatePin(4);
+    orderId = await createOrder(1, pin);
+    found = await getOrderByPin(pin, 1);
+  } while (found != null)
+
+  return orderId;
+}
+
 async function createOrderFromCart(userId: number): Promise<number> {
   const customer = await getCustomer(userId);  
   if (!customer) {
@@ -31,15 +45,7 @@ async function createOrderFromCart(userId: number): Promise<number> {
     throw new Error("Cart is empty");
   }
 
-  // Create order with unique pin
-  let pin: string;
-  let orderId: number;
-  let found: any;
-  do {
-    pin = generatePin(4);
-    orderId = await createOrder(userId, pin);
-    found = await getOrderByPin(pin, customer.schoolId);
-  } while (found != null)
+  const orderId = await createUniqueOrder();
 
   try {
     await createOrderItems(
@@ -48,7 +54,6 @@ async function createOrderFromCart(userId: number): Promise<number> {
         ({ itemId: cartItem.item.id, quantity: cartItem.quantity })
       ));
   } catch (e) {
-    await deleteOrderItems(orderId);
     await deleteOrder(orderId);
     throw new Error("Failed to create order items");
   }
@@ -62,5 +67,6 @@ async function deleteOrder(orderId: number): Promise<void> {
 }
 
 export {
-  createOrder,
+  createOrderFromCart,
+  deleteOrder
 }
