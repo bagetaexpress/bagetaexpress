@@ -1,7 +1,6 @@
 import CartItemRow from "@/components/cartItemRow";
 import Cheackout from "@/components/checkout";
-import getCartId from "@/lib/cart/getCartId";
-import getCartItems from "@/lib/cart/getCartItems";
+import { getCartId, getCartItems } from "@/lib/cartUtils";
 
 export default async function CartPage() {
   const orderId = await getCartId();

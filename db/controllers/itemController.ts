@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm"
-import { item, schoolStore, store } from "../schema"
+import { cartItem, item, orderItem, schoolStore, store } from "../schema"
 import { db } from "@/db"
 
 export type Item = {
@@ -26,7 +26,23 @@ async function getItemById(id: number): Promise<Item | null> {
   return found[0]
 }
 
+async function getItemsFromCart(cartId: number) {
+  const items = await db.select({item, quantity: cartItem.quantity}).from(item)
+    .innerJoin(cartItem, eq(item.id, cartItem.itemId))
+    .where(eq(cartItem.cartId, cartId))
+  return items.map(item => ({item: item.item, quantity: item.quantity}))
+}
+
+async function getItemsFromOrder(orderId: number) {
+  const items = await db.select({item, quantity: orderItem.quantity}).from(item)
+    .innerJoin(orderItem, eq(item.id, orderItem.itemId))
+    .where(eq(orderItem.orderId, orderId))
+  return items.map(item => ({item: item.item, quantity: item.quantity}))
+}
+
 export {
   getItemsBySchool,
   getItemById,
+  getItemsFromCart,
+  getItemsFromOrder
 }

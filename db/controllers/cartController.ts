@@ -4,7 +4,6 @@ import { db } from "@/db";
 import { cart } from "../schema";
 import { and, eq } from "drizzle-orm";
 
-type CartStatus = "cart" | "carted" | "pickedup" | "unpicked" | "cancelled";
 
 export type Cart = {
   userId: number;
@@ -12,7 +11,7 @@ export type Cart = {
   updatedAt: Date;
 };
 
-async function getCartByUserId(userId: number): Promise<Cart | null> {
+async function getCart(userId: number): Promise<Cart | null> {
   const found = await db.select().from(cart)
     .where(eq(cart.userId, userId));
   if (found.length === 0) {
@@ -29,6 +28,6 @@ async function createCart(userId: number): Promise<number> {
 }
 
 export {
-  getCartByUserId,
+  getCart,
   createCart,
 }

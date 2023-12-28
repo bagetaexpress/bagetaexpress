@@ -20,7 +20,7 @@ import {
   DrawerFooter,
   DrawerClose,
 } from "./ui/drawer";
-import addToCart from "@/lib/cart/addToCart";
+import { addToCart } from "@/lib/cartUtils";
 
 export default function ItemCard({ item }: { item: Item }) {
   return (

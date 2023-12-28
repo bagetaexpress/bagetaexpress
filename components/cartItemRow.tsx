@@ -1,7 +1,7 @@
 "use client";
 
 import { Item } from "@/db/controllers/itemController";
-import { saveUpdateCartItemQuantity } from "@/db/controllers/cartItemController";
+import { saveUpdateCartItem } from "@/lib/cartUtils";
 import { Minus, Plus } from "lucide-react";
 import { useOptimistic } from "react";
 
@@ -17,12 +17,12 @@ export default function CartItemRow({
 
   async function handleDescrease() {
     updateQ(q - 1);
-    await saveUpdateCartItemQuantity(cartId, item.id, q - 1);
+    await saveUpdateCartItem(cartId, item.id, q - 1);
   }
 
   async function handleIncrease() {
     updateQ(q + 1);
-    await saveUpdateCartItemQuantity(cartId, item.id, q + 1);
+    await saveUpdateCartItem(cartId, item.id, q + 1);
   }
 
   if (q <= 0 || quantity <= 0) {
@@ -38,7 +38,7 @@ export default function CartItemRow({
       <div className="flex justify-center text-center gap-2 flex-col">
         <p className=" font-bold text-xl">
           {/* {(parseFloat(item.price) * q).toFixed(2)}€ */}
-          {item.price}€
+          {item.price} €
         </p>
         <div className="flex items-center">
           <form action={handleDescrease}>
