@@ -1,4 +1,4 @@
-import { getCartItemsByCartId } from "@/db/controllers/orderItemController";
+import { getCartItemsByCartId } from "@/db/controllers/cartItemController";
 import getCartId from "./getCartId";
 import { getItemById } from "@/db/controllers/itemController";
 

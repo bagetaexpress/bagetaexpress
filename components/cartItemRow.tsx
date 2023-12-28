@@ -1,7 +1,7 @@
 "use client";
 
 import { Item } from "@/db/controllers/itemController";
-import { saveUpdateCartItemQuantity } from "@/db/controllers/orderItemController";
+import { saveUpdateCartItemQuantity } from "@/db/controllers/cartItemController";
 import { Minus, Plus } from "lucide-react";
 import { useOptimistic } from "react";
 

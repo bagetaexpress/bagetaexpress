@@ -4,7 +4,7 @@ import {
   createCartItem,
   getCartItemByCartIdAndItemId,
   updateCartItemQuantity
-} from "@/db/controllers/orderItemController";
+} from "@/db/controllers/cartItemController";
 import getCartId from "./getCartId";
 
 export default async function addToCart(
