@@ -1,12 +1,15 @@
 "use server"
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { BeUser, authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 
-type User = {
+export type User = {
   id: number;
   name: string;
   email: string;
+  isSeller: boolean;
+  isCustomer: boolean;
+  isEmployee: boolean;
   schoolId?: number;
   customerId?: number;
 };

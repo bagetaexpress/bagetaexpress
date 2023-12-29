@@ -13,7 +13,7 @@ export default async function authLayout({
   children: ReactNode;
 }) {
   const user = await getUser();
-  if (!user || !user.schoolId) {
+  if (!user || !user.isCustomer) {
     redirect("/");
   }
 

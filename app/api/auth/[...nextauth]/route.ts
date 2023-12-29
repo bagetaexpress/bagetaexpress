@@ -8,6 +8,8 @@ export type BeUser = {
   email: string
   isAdmin: boolean
   isSeller: boolean
+  isEmployee: boolean
+  isCustomer: boolean
   schoolId?: number
   storeId?: number
 }
@@ -58,6 +60,8 @@ export const authOptions: NextAuthOptions = {
           email: found.user.email,
           isAdmin: found.user.isAdmin,
           isSeller: found.seller != null,
+          isCustomer: found.customer != null,
+          isEmployee: found.employee != null,
           schoolId: found.customer?.schoolId,
           storeId: found.employee?.storeId,
         };
@@ -79,6 +83,9 @@ export const authOptions: NextAuthOptions = {
     session({ session, token }: { session: any; token: any }) {
       session.user.id = token.id;
       session.user.isAdmin = token.user.isAdmin;
+      session.user.isSeller = token.user.isSeller;
+      session.user.isCustomer = token.user.isCustomer;
+      session.user.isEmployee = token.user.isEmployee;
       session.user.schoolId = token.user.schoolId;
       session.user.storeId = token.user.storeId;
       session.user.email = token.user.email;

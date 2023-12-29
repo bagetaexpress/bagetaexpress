@@ -39,9 +39,9 @@ async function getUserByEmail(email: string): Promise<BeUser | null> {
   const found = await db
   .select().from(user)
   .where(eq(user.email, email))
-  .innerJoin(employee, eq(user.id, employee.userId))
-  .innerJoin(customer, eq(user.id, customer.userId))
-  .innerJoin(seller, eq(user.id, seller.userId))
+  .leftJoin(employee, eq(user.id, employee.userId))
+  .leftJoin(customer, eq(user.id, customer.userId))
+  .leftJoin(seller, eq(user.id, seller.userId))
   .limit(1);
   if (!found || found.length === 0) {
     return null;
