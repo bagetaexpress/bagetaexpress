@@ -1,17 +1,12 @@
 import { getItemsFromOrder } from "@/db/controllers/itemController";
-import { getOrdersByUserId } from "@/db/controllers/orderController";
-import { getUser } from "@/lib/userUtils";
-import QrCode from "./_components/qrCode";
 
-export default async function OrderPage() {
-  const currUser = await getUser();
-  if (!currUser) return null;
+interface IProps {
+  orderId: number;
+}
 
-  const foundOrders = await getOrdersByUserId(currUser.id, "ordered");
-  if (foundOrders.length === 0) return null;
-  const order = foundOrders[0];
+export default async function SummaryRow({ orderId }: IProps) {
+  const items = await getItemsFromOrder(orderId);
 
-  const items = await getItemsFromOrder(order.id);
   const total = items
     .reduce(
       (acc, { item, quantity }) => acc + parseFloat(item.price) * quantity,
@@ -21,16 +16,6 @@ export default async function OrderPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold pt-2">Order</h1>
-      <div className="flex justify-center">
-        <QrCode
-          pin={order.pin}
-          className=" flex-1 max-h-80 max-w-screen-sm aspect-square"
-        />
-      </div>
-      <h3 className="pb-3 text-center font-bold text-lg">
-        Order pin: {order.pin}
-      </h3>
       <div className="grid grid-cols-1 divide-y-2">
         {items.map(({ item, quantity }, i) => (
           <div key={i} className="flex justify-between p-1">
@@ -40,6 +25,7 @@ export default async function OrderPage() {
             </div>
             <div className="flex justify-center text-center gap-2 flex-col">
               <p className=" font-medium text-xl">
+                {/* {(parseFloat(item.price) * q).toFixed(2)}€ */}
                 {quantity}x{parseFloat(item.price).toFixed(2)}€
               </p>
             </div>

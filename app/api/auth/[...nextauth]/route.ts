@@ -1,18 +1,18 @@
-import NextAuth, { NextAuthOptions } from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-import { getUserByEmail } from "@/db/controllers/userController"
+import { getUserByEmail } from "@/db/controllers/userController";
 
 export type BeUser = {
-  id: string
-  email: string
-  isAdmin: boolean
-  isSeller: boolean
-  isEmployee: boolean
-  isCustomer: boolean
-  schoolId?: number
-  storeId?: number
-}
+  id: string;
+  email: string;
+  isAdmin: boolean;
+  isSeller: boolean;
+  isEmployee: boolean;
+  isCustomer: boolean;
+  schoolId?: number;
+  storeId?: number;
+};
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -62,8 +62,8 @@ export const authOptions: NextAuthOptions = {
           isSeller: found.seller != null,
           isCustomer: found.customer != null,
           isEmployee: found.employee != null,
-          schoolId: found.customer?.schoolId,
-          storeId: found.employee?.storeId,
+          schoolId: found.customer?.schoolId ?? found.seller?.schoolId,
+          storeId: found.employee?.storeId ?? found.seller?.storeId,
         };
         return user;
       },
@@ -93,8 +93,8 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-}
+};
 
-const handler = NextAuth(authOptions)
+const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST };

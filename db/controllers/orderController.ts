@@ -104,12 +104,25 @@ async function updateOrderStatus(
     .where(eq(order.id, orderId));
 }
 
+async function getOrdersBySchoolId(
+  schoolId: number,
+  status: OrderStatus
+): Promise<Order[]> {
+  const orders = await db
+    .select({ order })
+    .from(order)
+    .innerJoin(customer, eq(order.userId, customer.userId))
+    .where(and(eq(order.status, status), eq(customer.schoolId, schoolId)));
+  return orders.map((row) => row.order);
+}
+
 export {
   createOrder,
   deleteOrder,
   getOrderByPin,
   getOrder,
   getOrders,
+  getOrdersBySchoolId,
   updateOrderStatus,
   getOrdersByUserId,
 };
