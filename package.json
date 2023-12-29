@@ -11,6 +11,8 @@
     "migration:generate": "drizzle-kit generate:mysql --schema=./db/schema.ts",
     "migration:push": "node -r esbuild-register db/migrate.ts",
     "migration:pushc": "node -r esbuild-register db/migrate.ts --clear",
+    "migration:pushp": "node -r esbuild-register db/migrate.ts --populate",
+    "migration:pushcp": "node -r esbuild-register db/migrate.ts --clear --populate",
     "migration:studio": "drizzle-kit studio; drizzle-kit studio --port 3000; drizzle-kit studio --verbose "
   },
   "dependencies": {
