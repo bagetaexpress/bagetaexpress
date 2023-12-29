@@ -3,6 +3,7 @@ import { item } from "./item";
 import { employee } from "../user/employee";
 import { relations } from "drizzle-orm";
 import { schoolStore } from "../school/schoolStore";
+import { seller } from "../user/seller";
 
 export const store = mysqlTable('store', {
   id: serial('id').primaryKey(),
@@ -15,4 +16,5 @@ export const storeRelations = relations(store, ({ many }) => ({
   items: many(item),
   schools: many(schoolStore),
   employees: many(employee),
+  sellers: many(seller)
 }))

@@ -15,6 +15,13 @@
       "when": 1703766801547,
       "tag": "0001_wealthy_mongoose",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1703809293820,
+      "tag": "0002_dry_supreme_intelligence",
+      "breakpoints": true
     }
   ]
 }
