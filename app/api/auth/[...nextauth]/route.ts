@@ -7,6 +7,7 @@ export type BeUser = {
   id: string
   email: string
   isAdmin: boolean
+  isSeller: boolean
   schoolId?: number
   storeId?: number
 }
@@ -56,6 +57,7 @@ export const authOptions: NextAuthOptions = {
           id: found.user.id.toString(),
           email: found.user.email,
           isAdmin: found.user.isAdmin,
+          isSeller: found.seller != null,
           schoolId: found.customer?.schoolId,
           storeId: found.employee?.storeId,
         };

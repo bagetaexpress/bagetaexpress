@@ -1,6 +1,6 @@
 "use server"
 
-import { customer, employee, user } from "../schema";
+import { customer, employee, seller, user } from "../schema";
 import { db } from "../index";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
@@ -15,6 +15,12 @@ export type Employee = {
   storeId: number
 }
 
+export type Seller = {
+  storeId: number
+  schoolId: number
+  userId: number
+}
+
 export type User = {
   id: number
   email: string
@@ -26,6 +32,7 @@ export interface BeUser {
   user: User
   employee: Employee | null
   customer: Customer | null
+  seller: Seller | null
 }
 
 async function getUserByEmail(email: string): Promise<BeUser | null> {
@@ -34,6 +41,7 @@ async function getUserByEmail(email: string): Promise<BeUser | null> {
   .where(eq(user.email, email))
   .innerJoin(employee, eq(user.id, employee.userId))
   .innerJoin(customer, eq(user.id, customer.userId))
+  .innerJoin(seller, eq(user.id, seller.userId))
   .limit(1);
   if (!found || found.length === 0) {
     return null;
