@@ -1,6 +1,5 @@
-import UserDropdown from "@/app/auth/(customer)/_components/userDropdown";
-
 import { ReactNode } from "react";
+import UserDropdown from "./userDropdown";
 
 export default async function NavWrapper({
   children,

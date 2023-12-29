@@ -64,7 +64,7 @@ export default function ItemCard({
               <DrawerClose asChild>
                 <Button variant="outline">Continue shopping</Button>
               </DrawerClose>
-              <a href="/auth/cart" className="flex">
+              <a href="/auth/c/cart" className="flex">
                 <Button className="flex-1">View cart</Button>
               </a>
             </DrawerFooter>

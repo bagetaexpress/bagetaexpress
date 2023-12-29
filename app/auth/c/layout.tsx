@@ -1,13 +1,9 @@
-import { Button } from "@/components/ui/button";
-import UserDropdown from "@/app/auth/(customer)/_components/userDropdown";
-import { ShoppingCart, User } from "lucide-react";
-import { getServerSession } from "next-auth";
 import { ReactNode } from "react";
-import { authOptions } from "../api/auth/[...nextauth]/route";
-import { getUser } from "@/lib/userUtils";
+import { ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
+
+import { getUser } from "@/lib/userUtils";
 import { getOrdersByUserId } from "@/db/controllers/orderController";
-import { orderItem } from "@/db/schema";
 import NavWrapper from "@/components/nav/navWrapper";
 import NavButton from "@/components/nav/navButton";
 
@@ -27,10 +23,10 @@ export default async function authLayout({
   return (
     <div className="min-h-screen flex flex-col">
       <NavWrapper>
-        <NavButton href="/auth/store" text="Home" />
+        <NavButton href="/auth/c/store" text="Home" />
         {!hasOrder && (
           <NavButton
-            href="/auth/cart"
+            href="/auth/c/cart"
             text="Shopping cart"
             Icon={ShoppingCart}
             className="hidden sm:flex"
@@ -38,7 +34,7 @@ export default async function authLayout({
         )}
         {hasOrder && (
           <NavButton
-            href="/auth/order"
+            href="/auth/c/order"
             text="Order"
             className="hidden sm:flex"
           />

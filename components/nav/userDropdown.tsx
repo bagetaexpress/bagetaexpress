@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "../../../../components/ui/button";
+import { Button } from "../ui/button";
 import { User } from "lucide-react";
 import {
   DropdownMenu,
@@ -9,7 +9,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../../../components/ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 

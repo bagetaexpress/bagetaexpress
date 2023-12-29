@@ -1,5 +1,5 @@
-import CartItemRow from "@/app/auth/(customer)/cart/_components/cartItemRow";
-import Cheackout from "@/app/auth/(customer)/cart/_components/checkout";
+import CartItemRow from "@/app/auth/c/cart/_components/cartItemRow";
+import Cheackout from "@/app/auth/c/cart/_components/checkout";
 import { getCartId, getCartItems } from "@/lib/cartUtils";
 
 export default async function CartPage() {

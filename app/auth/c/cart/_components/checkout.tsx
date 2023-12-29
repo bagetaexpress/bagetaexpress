@@ -67,7 +67,7 @@ export default function Cheackout({ items, cartId }: ICheckout) {
             <Button
               onClick={async () => {
                 await createOrderFromCart(cartId);
-                router.push("/auth/order");
+                router.push("/auth/c/order");
               }}
             >
               Confirm

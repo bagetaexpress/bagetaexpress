@@ -61,7 +61,7 @@ async function saveUpdateCartItem(cartId: number, itemId: number, quantity: numb
   }else {
     await updateCartItem(cartId, itemId, quantity);
   }
-  revalidatePath("/auth/cart", "page");
+  revalidatePath("/auth/c/cart", "page");
 }
 
 async function deleteCartAndItems(cartId: number) {

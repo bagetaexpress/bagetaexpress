@@ -1,4 +1,4 @@
-import ItemCard from "@/app/auth/(customer)/store/_components/itemCard";
+import ItemCard from "@/app/auth/c/store/_components/itemCard";
 import { Button } from "@/components/ui/button";
 import { getItemsBySchool } from "@/db/controllers/itemController";
 import { getOrdersByUserId } from "@/db/controllers/orderController";
@@ -26,7 +26,7 @@ export default async function Store() {
       </div>
       {!hasOrder && (
         <a
-          href="/auth/cart"
+          href="/auth/c/cart"
           className=" absolute sm:hidden bottom-0 left-0 right-0"
         >
           <Button className="w-full m-1 justify-center">
@@ -37,7 +37,7 @@ export default async function Store() {
       )}
       {hasOrder && (
         <a
-          href="/auth/order"
+          href="/auth/c/order"
           className=" absolute sm:hidden bottom-0 left-0 right-0"
         >
           <Button className="w-full m-1 justify-center">Shor order</Button>

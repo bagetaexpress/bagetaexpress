@@ -50,7 +50,7 @@ export default function LoginForm() {
       router.push("?error=" + res.error);
       router.forward();
     } else {
-      router.push("/auth/store");
+      router.push("/auth/c/store");
       router.forward();
     }
   }
