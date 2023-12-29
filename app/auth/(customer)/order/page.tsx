@@ -12,16 +12,21 @@ export default async function OrderPage() {
   const order = foundOrders[0];
 
   const items = await getItemsFromOrder(order.id);
-  const total = items.reduce(
-    (acc, { item }) => acc + parseFloat(item.price),
-    0
-  );
+  const total = items
+    .reduce(
+      (acc, { item, quantity }) => acc + parseFloat(item.price) * quantity,
+      0
+    )
+    .toFixed(2);
 
   return (
     <div>
       <h1 className="text-2xl font-semibold pt-2">Order</h1>
       <div className="flex justify-center">
-        <QrCode pin={order.pin} />
+        <QrCode
+          pin={order.pin}
+          className=" flex-1 max-h-80 max-w-screen-sm aspect-square"
+        />
       </div>
       <h3 className="pb-3 text-center font-bold text-lg">
         Order pin: {order.pin}
@@ -44,15 +49,7 @@ export default async function OrderPage() {
       </div>
       <div className="flex justify-between py-4">
         <p className="font-semibold text-lg">Total</p>
-        <p className="font-semibold text-xl">
-          {items
-            .reduce(
-              (acc, item) => acc + parseFloat(item.item.price) * item.quantity,
-              0
-            )
-            .toFixed(2)}
-          €
-        </p>
+        <p className="font-semibold text-xl">{total}€</p>
       </div>
     </div>
   );
