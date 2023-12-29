@@ -1,10 +1,10 @@
-"use server"
+"use server";
 
-import { db } from '@/db';
-import { customer, order, user } from '../schema';
-import { eq, and } from 'drizzle-orm';
+import { db } from "@/db";
+import { customer, order, user } from "../schema";
+import { eq, and } from "drizzle-orm";
 
-export type OrderStatus = 'ordered' | 'pickedup' | 'unpicked' | 'cancelled';
+export type OrderStatus = "ordered" | "pickedup" | "unpicked" | "cancelled";
 
 export type Order = {
   id: number;
@@ -16,12 +16,14 @@ export type Order = {
 };
 
 async function createOrder(
-  userId: number, pin: string, status: OrderStatus = 'ordered'
+  userId: number,
+  pin: string,
+  status: OrderStatus = "ordered"
 ): Promise<number> {
   const newOrder = await db.insert(order).values({
     userId,
     pin,
-    status
+    status,
   });
   const orderId = parseInt(newOrder.insertId);
 
@@ -29,23 +31,30 @@ async function createOrder(
 }
 
 async function getOrderByPin(
-  pin: string, 
+  pin: string,
   schoolId?: number,
-  status: OrderStatus = 'ordered',
+  status: OrderStatus = "ordered"
 ): Promise<Order | null> {
   let orders: Order[];
 
   if (schoolId) {
-    orders = (await db.select({order}).from(order)
+    orders = (
+      await db
+        .select({ order })
+        .from(order)
         .innerJoin(customer, eq(order.userId, customer.userId))
-        .where(and(
-          eq(order.pin, pin), 
-          eq(order.status, status),
-          eq(customer.schoolId, schoolId)
-        ))
-      ).map(row => row.order);
-  }else{
-    orders = await db.select().from(order)
+        .where(
+          and(
+            eq(order.pin, pin),
+            eq(order.status, status),
+            eq(customer.schoolId, schoolId)
+          )
+        )
+    ).map((row) => row.order);
+  } else {
+    orders = await db
+      .select()
+      .from(order)
       .where(and(eq(order.pin, pin), eq(order.status, status)));
   }
 
@@ -56,19 +65,22 @@ async function getOrderByPin(
 }
 
 async function deleteOrder(orderId: number): Promise<void> {
-  await db.delete(order)
-    .where(eq(order.id, orderId));
+  await db.delete(order).where(eq(order.id, orderId));
 }
 
-async function getOrdersByUserId(userId: number, status: OrderStatus): Promise<Order[]> {
-  const orders = await db.select().from(order)
+async function getOrdersByUserId(
+  userId: number,
+  status: OrderStatus
+): Promise<Order[]> {
+  const orders = await db
+    .select()
+    .from(order)
     .where(and(eq(order.userId, userId), eq(order.status, status)));
   return orders;
 }
 
 async function getOrder(orderId: number): Promise<Order | null> {
-  const orders = await db.select().from(order)
-    .where(eq(order.id, orderId));
+  const orders = await db.select().from(order).where(eq(order.id, orderId));
   if (orders.length === 0) {
     return null;
   }
@@ -76,15 +88,18 @@ async function getOrder(orderId: number): Promise<Order | null> {
 }
 
 async function getOrders(userId: number): Promise<Order[]> {
-  const orders = await db.select().from(order)
-    .where(eq(order.userId, userId));
+  const orders = await db.select().from(order).where(eq(order.userId, userId));
   return orders;
 }
 
-async function updateOrderStatus(orderId: number, status: OrderStatus): Promise<void> {
-  await db.update(order)
+async function updateOrderStatus(
+  orderId: number,
+  status: OrderStatus
+): Promise<void> {
+  await db
+    .update(order)
     .set({
-      status
+      status,
     })
     .where(eq(order.id, orderId));
 }
@@ -97,4 +112,4 @@ export {
   getOrders,
   updateOrderStatus,
   getOrdersByUserId,
-}
+};

@@ -23,22 +23,7 @@ export default async function authLayout({
   return (
     <div className="min-h-screen flex flex-col">
       <NavWrapper>
-        <NavButton href="/auth/c/store" text="Home" />
-        {!hasOrder && (
-          <NavButton
-            href="/auth/c/cart"
-            text="Shopping cart"
-            Icon={ShoppingCart}
-            className="hidden sm:flex"
-          />
-        )}
-        {hasOrder && (
-          <NavButton
-            href="/auth/c/order"
-            text="Order"
-            className="hidden sm:flex"
-          />
-        )}
+        <NavButton href="/auth/s/summary" text="Summary" />
       </NavWrapper>
       <div className="p-2 flex-1 flex">
         <main className="max-w-screen-lg mx-auto flex-1">{children}</main>

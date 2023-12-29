@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { and, eq } from "drizzle-orm";
 import { db } from "..";
@@ -10,7 +10,11 @@ export type CartItem = {
   quantity: number;
 };
 
-async function createCartItem(cartId: number, itemId: number, quantity: number) {
+async function createCartItem(
+  cartId: number,
+  itemId: number,
+  quantity: number
+) {
   await db.insert(cartItem).values({
     cartId,
     itemId,
@@ -22,8 +26,13 @@ async function getCartItemsByCartId(cartId: number) {
   return await db.select().from(cartItem).where(eq(cartItem.cartId, cartId));
 }
 
-async function getCartItem(cartId: number, itemId: number): Promise<CartItem | null> {
-  const found = await db.select().from(cartItem)
+async function getCartItem(
+  cartId: number,
+  itemId: number
+): Promise<CartItem | null> {
+  const found = await db
+    .select()
+    .from(cartItem)
     .where(and(eq(cartItem.cartId, cartId), eq(cartItem.itemId, itemId)));
   if (found.length === 0) {
     return null;
@@ -31,15 +40,23 @@ async function getCartItem(cartId: number, itemId: number): Promise<CartItem | n
   return found[0];
 }
 
-async function updateCartItem(cartId: number, itemId: number, quantity: number) {
-  await db.update(cartItem).set({
-    quantity,
-  }).where(and(eq(cartItem.cartId, cartId), eq(cartItem.itemId, itemId)));
+async function updateCartItem(
+  cartId: number,
+  itemId: number,
+  quantity: number
+) {
+  await db
+    .update(cartItem)
+    .set({
+      quantity,
+    })
+    .where(and(eq(cartItem.cartId, cartId), eq(cartItem.itemId, itemId)));
 }
 
 async function deleteCartItem(cartId: number, itemId: number) {
-  await db.delete(cartItem)
-  .where(and(eq(cartItem.cartId, cartId), eq(cartItem.itemId, itemId)));
+  await db
+    .delete(cartItem)
+    .where(and(eq(cartItem.cartId, cartId), eq(cartItem.itemId, itemId)));
 }
 
 async function deleteCartItems(cartId: number) {
@@ -53,4 +70,4 @@ export {
   getCartItemsByCartId,
   getCartItem,
   updateCartItem,
-}
+};

@@ -1,15 +1,23 @@
-"use server"
+"use server";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getCart, createCart, deleteCart } from "@/db/controllers/cartController";
-import { getCartItem, createCartItem, updateCartItem, deleteCartItem, deleteCartItems } from "@/db/controllers/cartItemController";
+import {
+  getCart,
+  createCart,
+  deleteCart,
+} from "@/db/controllers/cartController";
+import {
+  getCartItem,
+  createCartItem,
+  updateCartItem,
+  deleteCartItem,
+  deleteCartItems,
+} from "@/db/controllers/cartItemController";
 import { getItemsFromCart } from "@/db/controllers/itemController";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
-async function addToCart(
-  itemId:number, quantity:number = 1
-): Promise<void> {
+async function addToCart(itemId: number, quantity: number = 1): Promise<void> {
   const cartId = await getCartId();
 
   const orderItem = await getCartItem(cartId, itemId);
@@ -33,7 +41,7 @@ async function getCartId(): Promise<number> {
   let cart = await getCart(userId);
   if (cart === null) {
     cartId = await createCart(userId);
-  }else {
+  } else {
     cartId = cart.userId;
   }
 
@@ -48,7 +56,11 @@ async function getCartItems(cartId?: number) {
   return await getItemsFromCart(cartId);
 }
 
-async function saveUpdateCartItem(cartId: number, itemId: number, quantity: number) {
+async function saveUpdateCartItem(
+  cartId: number,
+  itemId: number,
+  quantity: number
+) {
   const found = await getCartItem(cartId, itemId);
   if (found === null) {
     throw new Error("Item item not found");
@@ -58,7 +70,7 @@ async function saveUpdateCartItem(cartId: number, itemId: number, quantity: numb
   }
   if (quantity <= 0) {
     await deleteCartItem(cartId, itemId);
-  }else {
+  } else {
     await updateCartItem(cartId, itemId, quantity);
   }
   revalidatePath("/auth/c/cart", "page");
@@ -74,5 +86,5 @@ export {
   getCartItems,
   deleteCartAndItems,
   getCartId,
-  saveUpdateCartItem
-}
+  saveUpdateCartItem,
+};

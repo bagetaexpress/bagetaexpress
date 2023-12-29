@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { getUser } from "@/lib/userUtils";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -50,8 +50,24 @@ export default function LoginForm() {
       router.push("?error=" + res.error);
       router.forward();
     } else {
-      router.push("/auth/c/store");
-      router.forward();
+      const user = await getUser();
+      if (!user) {
+        return;
+      }
+      switch (true) {
+        case user.isCustomer:
+          router.push("/auth/c/store");
+          break;
+        case user.isEmployee:
+          router.push("/auth/e/");
+          break;
+        case user.isSeller:
+          router.push("/auth/s/summary");
+          break;
+        default:
+          router.push("/");
+          break;
+      }
     }
   }
 

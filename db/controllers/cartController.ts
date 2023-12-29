@@ -1,9 +1,8 @@
-"use server"
+"use server";
 
 import { db } from "@/db";
 import { cart } from "../schema";
 import { and, eq } from "drizzle-orm";
-
 
 export type Cart = {
   userId: number;
@@ -12,8 +11,7 @@ export type Cart = {
 };
 
 async function getCart(userId: number): Promise<Cart | null> {
-  const found = await db.select().from(cart)
-    .where(eq(cart.userId, userId));
+  const found = await db.select().from(cart).where(eq(cart.userId, userId));
   if (found.length === 0) {
     return null;
   }
@@ -28,12 +26,7 @@ async function createCart(userId: number): Promise<number> {
 }
 
 async function deleteCart(userId: number): Promise<void> {
-  await db.delete(cart)
-    .where(eq(cart.userId, userId));
+  await db.delete(cart).where(eq(cart.userId, userId));
 }
 
-export {
-  getCart,
-  createCart,
-  deleteCart,
-}
+export { getCart, createCart, deleteCart };

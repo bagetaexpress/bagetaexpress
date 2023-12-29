@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import * as cartCtrl from "@/db/controllers/cartController";
 import * as orderItemCtrl from "@/db/controllers/orderItemController";
@@ -22,22 +22,22 @@ async function createUniqueOrder(schoolId: number): Promise<number> {
   do {
     pin = generatePin(4);
     found = await orderCtrl.getOrderByPin(pin, schoolId);
-  } while (found != null)
+  } while (found != null);
   const orderId = await orderCtrl.createOrder(1, pin);
 
   return orderId;
 }
 
 async function createOrderFromCart(userId: number): Promise<number> {
-  const customer = await customerCtrl.getCustomer(userId);  
+  const customer = await customerCtrl.getCustomer(userId);
   if (!customer) {
     throw new Error("Customer not found");
   }
 
   const existingOrder = await orderCtrl.getOrdersByUserId(userId, "ordered");
   if (existingOrder.length > 0) {
-    await deleteCartAndItems(customer.userId);
-    return -1;
+    // await deleteCartAndItems(customer.userId);
+    // return -1;
     throw new Error("Order already exists");
   }
 
@@ -55,17 +55,19 @@ async function createOrderFromCart(userId: number): Promise<number> {
 
   try {
     await orderItemCtrl.createOrderItems(
-      orderId, 
-      cartItems.map(cartItem => 
-        ({ itemId: cartItem.item.id, quantity: cartItem.quantity })
-      ));
+      orderId,
+      cartItems.map((cartItem) => ({
+        itemId: cartItem.item.id,
+        quantity: cartItem.quantity,
+      }))
+    );
   } catch (e) {
     await deleteOrderAndItems(orderId);
     throw new Error("Failed to create order items");
   }
 
   await deleteCartAndItems(cart.userId);
-  
+
   return orderId;
 }
 
@@ -74,7 +76,4 @@ async function deleteOrderAndItems(orderId: number): Promise<void> {
   await orderCtrl.deleteOrder(orderId);
 }
 
-export {
-  createOrderFromCart,
-  deleteOrderAndItems
-}
+export { createOrderFromCart, deleteOrderAndItems };

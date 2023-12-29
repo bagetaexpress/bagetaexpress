@@ -20,7 +20,6 @@ import { cart, cartRelations } from "./cart/cart";
 import { cartItem, cartItemRelations } from "./cart/cartItem";
 import { seller, sellerRelations } from "./user/seller";
 
-
 export const tables = {
   order,
   orderItem,
@@ -34,7 +33,7 @@ export const tables = {
   cart,
   cartItem,
   seller,
-}
+};
 
 export const relations = {
   orderRelations,
@@ -48,7 +47,7 @@ export const relations = {
   cartRelations,
   cartItemRelations,
   sellerRelations,
-}
+};
 
 export {
   order,
@@ -63,7 +62,6 @@ export {
   cart,
   cartItem,
   seller,
-
   orderRelations,
   orderItemRelations,
   itemRelations,
@@ -75,4 +73,4 @@ export {
   cartRelations,
   cartItemRelations,
   sellerRelations,
-}
+};

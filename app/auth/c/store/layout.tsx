@@ -1,4 +1,3 @@
-import { getOrdersByUserId } from "@/db/controllers/orderController";
 import { getUser } from "@/lib/userUtils";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
