@@ -69,10 +69,12 @@ export default async function HandleOrder({
       </div>
       <div className=" flex gap-2 justify-end flex-col sm:flex-row">
         <form action={confirmAction}>
-          <Button type="submit">{confirmText}</Button>
+          <Button className="w-full" type="submit">
+            {confirmText}
+          </Button>
         </form>
         <form action={cancelAction}>
-          <Button type="submit" variant="outline">
+          <Button className="w-full" type="submit" variant="outline">
             Cancel
           </Button>
         </form>
