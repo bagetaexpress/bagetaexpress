@@ -64,10 +64,10 @@ async function getItemsStats(storeId: number) {
       unpicked: sql`COUNT(case when 'unpicked' = ${order.status} then 1 else null end)`,
     })
     .from(item)
-    .innerJoin(orderItem, eq(item.id, orderItem.itemId))
-    .innerJoin(order, eq(orderItem.orderId, order.id))
+    .leftJoin(orderItem, eq(item.id, orderItem.itemId))
+    .leftJoin(order, eq(orderItem.orderId, order.id))
     .where(eq(item.storeId, storeId))
-    .groupBy(item.id, order.status);
+    .groupBy(item.id);
 
   return items as {
     item: Item;
@@ -77,10 +77,38 @@ async function getItemsStats(storeId: number) {
   }[];
 }
 
+async function addItem(data: {
+  name: string;
+  storeId: number;
+  description: string;
+  price: string;
+}) {
+  const newItem = await db.insert(item).values(data);
+  return newItem.insertId;
+}
+
+async function removeItem(id: number) {
+  await db.delete(orderItem).where(eq(orderItem.itemId, id));
+  await db.delete(item).where(eq(item.id, id));
+}
+
+async function updateItem(data: {
+  id: number;
+  name?: string;
+  storeId?: number;
+  description?: string;
+  price?: string;
+}) {
+  await db.update(item).set(data).where(eq(item.id, data.id));
+}
+
 export {
   getItemsBySchool,
   getItemById,
   getItemsFromCart,
   getItemsFromOrder,
   getItemsStats,
+  addItem,
+  removeItem,
+  updateItem,
 };

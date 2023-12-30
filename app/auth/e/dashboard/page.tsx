@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -9,7 +10,11 @@ import {
 import { getItemsStats } from "@/db/controllers/itemController";
 import { getSchoolsOrderStats } from "@/db/controllers/schoolController";
 import { getUser } from "@/lib/userUtils";
+import { Plus } from "lucide-react";
 import { redirect } from "next/navigation";
+import AddItemForm from "./_components/addItem";
+import DeleteItemButtoin from "./_components/deleteItem";
+import DeleteItemButton from "./_components/deleteItem";
 
 export default async function DashboardPage() {
   const user = await getUser();
@@ -60,8 +65,23 @@ export default async function DashboardPage() {
                 <p>{stats.pickedup}</p>
               </div>
             </CardContent>
+            <CardFooter>
+              <div className="grid grid-cols-2 gap-1">
+                <DeleteItemButton item={item} />
+                <AddItemForm action="update" item={item}>
+                  <Button>Update</Button>
+                </AddItemForm>
+              </div>
+            </CardFooter>
           </Card>
         ))}
+        <Card className=" h-full w-full flex justify-center items-center p-4">
+          <AddItemForm action="add">
+            <Button size="icon">
+              <Plus />
+            </Button>
+          </AddItemForm>
+        </Card>
       </div>
     </div>
   );

@@ -33,7 +33,7 @@ async function getSchoolsOrderStats(storeId: number) {
     .innerJoin(customer, eq(school.id, customer.schoolId))
     .innerJoin(order, eq(customer.userId, order.userId))
     .where(eq(schoolStore.storeId, storeId))
-    .groupBy(school.id, order.status);
+    .groupBy(school.id);
 
   return schools as {
     school: School;
