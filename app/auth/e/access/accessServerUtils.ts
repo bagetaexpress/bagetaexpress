@@ -92,7 +92,6 @@ async function handleRemoveSeller(sellerId: number) {
 
   await deleteSeller(foundSeller?.userId ?? 0);
   revalidatePath("auth/e/access", "page");
-  redirect("/auth/e/access");
 }
 
 export {

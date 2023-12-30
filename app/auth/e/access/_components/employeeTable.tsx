@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/userUtils";
 import { getEmployeesByStoreId } from "@/db/controllers/userController";
+import { revalidatePath } from "next/cache";
 
 export default async function EmployeeTable({
   err,
@@ -49,7 +50,7 @@ export default async function EmployeeTable({
                     <form
                       action={async () => {
                         "use server";
-                        handleRemoveEmployee(user.id);
+                        await handleRemoveEmployee(user.id);
                       }}
                     >
                       <Button

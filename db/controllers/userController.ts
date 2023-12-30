@@ -151,11 +151,11 @@ async function createSeller(data: Seller): Promise<Seller> {
 }
 
 async function deleteSeller(sellerId: number): Promise<void> {
-  await db.delete(seller).where(eq(seller.userId, sellerId)).execute();
+  await db.delete(seller).where(eq(seller.userId, sellerId));
 }
 
 async function deleteEmployee(employeeId: number): Promise<void> {
-  await db.delete(employee).where(eq(employee.userId, employeeId)).execute();
+  await db.delete(employee).where(eq(employee.userId, employeeId));
 }
 
 async function getUserById(userId: number): Promise<User | null> {

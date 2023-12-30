@@ -34,13 +34,6 @@ export default async function AccessPage({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const currUser = await getUser();
-  if (!currUser || !currUser.isEmployee) {
-    redirect("/");
-  }
-
-  const sellers = await getSellersByStoreId(currUser.storeId ?? 0);
-
   return (
     <div className=" relative min-h-full">
       <h1 className="text-3xl font-semibold pt-2">Access manager</h1>

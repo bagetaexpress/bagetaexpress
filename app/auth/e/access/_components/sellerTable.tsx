@@ -59,7 +59,7 @@ export default async function SellerTable({
                     <form
                       action={async () => {
                         "use server";
-                        handleRemoveSeller(user.id);
+                        await handleRemoveSeller(user.id);
                       }}
                     >
                       <Button
