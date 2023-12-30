@@ -13,7 +13,6 @@ import { getUser } from "@/lib/userUtils";
 import { Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 import AddItemForm from "./_components/addItem";
-import DeleteItemButtoin from "./_components/deleteItem";
 import DeleteItemButton from "./_components/deleteItem";
 
 export default async function DashboardPage() {
@@ -28,7 +27,7 @@ export default async function DashboardPage() {
   return (
     <div className=" relative min-h-full">
       <h1 className="text-3xl font-semibold pt-2">Dashboard</h1>
-      <h1 className="text-2xl font-semibold pt-4">Schools</h1>
+      <h2 className="text-2xl font-semibold pt-4">Schools</h2>
       <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {schoolStats.map(({ school, ...stats }, i) => (
           <Card key={i}>
@@ -49,7 +48,7 @@ export default async function DashboardPage() {
           </Card>
         ))}
       </div>
-      <h1 className="text-2xl font-semibold pt-4">Items</h1>
+      <h2 className="text-2xl font-semibold pt-4">Items</h2>
       <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {itemStats.map(({ item, ...stats }, i) => (
           <Card key={i}>

@@ -1,9 +1,10 @@
 "use server";
 
-import { customer, employee, seller, user } from "../schema";
+import { customer, employee, school, seller, user } from "../schema";
 import { db } from "../index";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
+import { School } from "./schoolController";
 
 export type Customer = {
   userId: number;
@@ -68,23 +69,15 @@ async function createUser(email: string, password: string): Promise<User> {
 }
 
 interface ICreateEmployee {
-  email: string;
-  password: string;
+  userId: number;
   storeId: number;
 }
-async function createEmployee(data: ICreateEmployee): Promise<Employee> {
-  const newUser = await createUser(data.email, data.password);
-  await db
-    .insert(employee)
-    .values({
-      userId: newUser.id,
-      storeId: data.storeId,
-    })
-    .execute();
-  return {
-    userId: newUser.id,
+async function createEmployee(data: ICreateEmployee): Promise<number> {
+  const res = await db.insert(employee).values({
+    userId: data.userId,
     storeId: data.storeId,
-  };
+  });
+  return parseInt(res.insertId);
 }
 
 interface ICreateCustomer {
@@ -107,4 +100,105 @@ async function createCustomer(data: ICreateCustomer): Promise<Customer> {
   };
 }
 
-export { createUser, getUserByEmail, createEmployee, createCustomer };
+async function getEmployeesByStoreId(storeId: number): Promise<
+  | {
+      user: User;
+      employee: Employee;
+    }[]
+  | null
+> {
+  const found = await db
+    .select()
+    .from(employee)
+    .innerJoin(user, eq(employee.userId, user.id))
+    .where(eq(employee.storeId, storeId));
+  if (!found || found.length === 0) {
+    return null;
+  }
+  return found;
+}
+
+async function getSellersByStoreId(storeId: number): Promise<
+  | {
+      user: User;
+      seller: Seller;
+      school: School;
+    }[]
+  | null
+> {
+  const found = await db
+    .select()
+    .from(seller)
+    .innerJoin(user, eq(seller.userId, user.id))
+    .innerJoin(school, eq(seller.schoolId, school.id))
+    .where(eq(seller.storeId, storeId));
+  if (!found || found.length === 0) {
+    return null;
+  }
+  return found;
+}
+
+async function createSeller(data: Seller): Promise<Seller> {
+  await db
+    .insert(seller)
+    .values({
+      userId: data.userId,
+      storeId: data.storeId,
+      schoolId: data.schoolId,
+    })
+    .execute();
+  return data;
+}
+
+async function deleteSeller(sellerId: number): Promise<void> {
+  await db.delete(seller).where(eq(seller.userId, sellerId)).execute();
+}
+
+async function deleteEmployee(employeeId: number): Promise<void> {
+  await db.delete(employee).where(eq(employee.userId, employeeId)).execute();
+}
+
+async function getUserById(userId: number): Promise<User | null> {
+  const found = await db.select().from(user).where(eq(user.id, userId));
+  if (!found || found.length === 0) {
+    return null;
+  }
+  return found[0];
+}
+
+async function getEmployeeById(employeeId: number): Promise<Employee | null> {
+  const found = await db
+    .select()
+    .from(employee)
+    .where(eq(employee.userId, employeeId));
+  if (!found || found.length === 0) {
+    return null;
+  }
+  return found[0];
+}
+
+async function getSellerById(sellerId: number): Promise<Seller | null> {
+  const found = await db
+    .select()
+    .from(seller)
+    .where(eq(seller.userId, sellerId));
+  if (!found || found.length === 0) {
+    return null;
+  }
+  return found[0];
+}
+
+export {
+  getUserById,
+  getEmployeeById,
+  createUser,
+  getUserByEmail,
+  createEmployee,
+  createCustomer,
+  getEmployeesByStoreId,
+  getSellersByStoreId,
+  createSeller,
+  deleteSeller,
+  deleteEmployee,
+  getSellerById,
+};

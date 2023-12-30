@@ -11,7 +11,7 @@ export type School = {
   emailRegex: string;
 };
 
-async function getSchoolsByStoreId(storeId: number): Promise<any[]> {
+async function getSchoolsByStoreId(storeId: number): Promise<School[]> {
   const schools = await db
     .select({ school })
     .from(school)

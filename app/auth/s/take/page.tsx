@@ -1,4 +1,4 @@
-import Scanner from "../_components/scenner";
+import Scanner from "../_components/scanner";
 
 export default function TakePage() {
   return (
