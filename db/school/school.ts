@@ -6,7 +6,7 @@ import { seller } from "../user/seller";
 
 export const school = mysqlTable("school", {
   id: serial("id").primaryKey(),
-  name: varchar("same", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
   websiteUrl: varchar("website_url", { length: 255 }).notNull(),
   emailRegex: varchar("email_regex", { length: 255 }).notNull(),
 });

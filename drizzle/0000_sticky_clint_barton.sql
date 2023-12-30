@@ -36,6 +36,7 @@ CREATE TABLE `item` (
 CREATE TABLE `order` (
 	`id` serial AUTO_INCREMENT NOT NULL,
 	`user_id` int NOT NULL,
+	`pin` varchar(4) NOT NULL,
 	`status` enum('ordered','pickedup','unpicked','cancelled') NOT NULL,
 	`created_at` timestamp NOT NULL DEFAULT (now()),
 	`updated_at` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
@@ -51,16 +52,23 @@ CREATE TABLE `order_item` (
 --> statement-breakpoint
 CREATE TABLE `school` (
 	`id` serial AUTO_INCREMENT NOT NULL,
-	`same` varchar(255) NOT NULL,
+	`name` varchar(255) NOT NULL,
 	`website_url` varchar(255) NOT NULL,
 	`email_regex` varchar(255) NOT NULL,
 	CONSTRAINT `school_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `school_store` (
-	`order_id` int NOT NULL,
-	`item_id` int NOT NULL,
-	CONSTRAINT `school_store_order_id_item_id_pk` PRIMARY KEY(`order_id`,`item_id`)
+	`school_id` int NOT NULL,
+	`store_id` int NOT NULL,
+	CONSTRAINT `school_store_school_id_store_id_pk` PRIMARY KEY(`school_id`,`store_id`)
+);
+--> statement-breakpoint
+CREATE TABLE `seller` (
+	`user_id` int NOT NULL,
+	`store_id` int NOT NULL,
+	`school_id` int NOT NULL,
+	CONSTRAINT `seller_user_id` PRIMARY KEY(`user_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `store` (

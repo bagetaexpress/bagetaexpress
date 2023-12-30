@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "642df117-01f8-4ce7-8296-7b105109fe44",
+  "id": "26ec3098-26f9-465b-a07a-c9d67a2c012c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "cart": {
@@ -210,6 +210,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "pin": {
+          "name": "pin",
+          "type": "varchar(4)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "status": {
           "name": "status",
           "type": "enum('ordered','pickedup','unpicked','cancelled')",
@@ -332,15 +339,15 @@
     "school_store": {
       "name": "school_store",
       "columns": {
-        "order_id": {
-          "name": "order_id",
+        "school_id": {
+          "name": "school_id",
           "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "item_id": {
-          "name": "item_id",
+        "store_id": {
+          "name": "store_id",
           "type": "int",
           "primaryKey": false,
           "notNull": true,
@@ -350,11 +357,48 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "school_store_order_id_item_id_pk": {
-          "name": "school_store_order_id_item_id_pk",
+        "school_store_school_id_store_id_pk": {
+          "name": "school_store_school_id_store_id_pk",
           "columns": [
-            "order_id",
-            "item_id"
+            "school_id",
+            "store_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "seller": {
+      "name": "seller",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "store_id": {
+          "name": "store_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "school_id": {
+          "name": "school_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "seller_user_id": {
+          "name": "seller_user_id",
+          "columns": [
+            "user_id"
           ]
         }
       },

@@ -11,6 +11,7 @@ export type User = {
   isCustomer: boolean;
   isEmployee: boolean;
   schoolId?: number;
+  storeId?: number;
   customerId?: number;
 };
 

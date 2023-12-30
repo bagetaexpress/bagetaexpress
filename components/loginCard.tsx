@@ -45,7 +45,6 @@ export default function LoginForm() {
       callbackUrl: "/",
       redirect: false,
     });
-    console.log(res);
     if (res?.error) {
       router.push("?error=" + res.error);
       router.forward();
@@ -59,7 +58,7 @@ export default function LoginForm() {
           router.push("/auth/c/store");
           break;
         case user.isEmployee:
-          router.push("/auth/e/");
+          router.push("/auth/e/dashboard");
           break;
         case user.isSeller:
           router.push("/auth/s/summary");

@@ -1,7 +1,14 @@
 "use server";
 
-import { eq } from "drizzle-orm";
-import { cartItem, item, orderItem, schoolStore, store } from "../schema";
+import { eq, sql } from "drizzle-orm";
+import {
+  cartItem,
+  item,
+  order,
+  orderItem,
+  schoolStore,
+  store,
+} from "../schema";
 import { db } from "@/db";
 
 export type Item = {
@@ -48,4 +55,32 @@ async function getItemsFromOrder(orderId: number) {
   return items.map((item) => ({ item: item.item, quantity: item.quantity }));
 }
 
-export { getItemsBySchool, getItemById, getItemsFromCart, getItemsFromOrder };
+async function getItemsStats(storeId: number) {
+  const items = await db
+    .select({
+      item,
+      ordered: sql`COUNT(case when 'ordered' = ${order.status} then 1 else null end)`,
+      pickedup: sql`COUNT(case when 'pickedup' = ${order.status} then 1 else null end)`,
+      unpicked: sql`COUNT(case when 'unpicked' = ${order.status} then 1 else null end)`,
+    })
+    .from(item)
+    .innerJoin(orderItem, eq(item.id, orderItem.itemId))
+    .innerJoin(order, eq(orderItem.orderId, order.id))
+    .where(eq(item.storeId, storeId))
+    .groupBy(item.id, order.status);
+
+  return items as {
+    item: Item;
+    ordered: number;
+    pickedup: number;
+    unpicked: number;
+  }[];
+}
+
+export {
+  getItemsBySchool,
+  getItemById,
+  getItemsFromCart,
+  getItemsFromOrder,
+  getItemsStats,
+};

@@ -6,8 +6,8 @@ import { store } from "../store/store";
 export const schoolStore = mysqlTable(
   "school_store",
   {
-    schoolId: int("order_id").notNull(),
-    storeId: int("item_id").notNull(),
+    schoolId: int("school_id").notNull(),
+    storeId: int("store_id").notNull(),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.schoolId, table.storeId] }),

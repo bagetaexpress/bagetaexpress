@@ -1,1 +1,0 @@
-ALTER TABLE `order` ADD `pin` varchar(4) NOT NULL;
