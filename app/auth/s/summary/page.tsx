@@ -35,12 +35,9 @@ export default async function SummaryPage({
   return (
     <div className=" relative min-h-full">
       <h1 className="text-2xl font-semibold pt-2">Summary</h1>
-      <form action={handleFilterChange} className="flex py-2">
+      <form action={handleFilterChange} className="flex py-2 gap-2">
         <Select name="filter" defaultValue={filter}>
-          <SelectTrigger
-            style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
-            className="w-[180px]"
-          >
+          <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="ordered" />
           </SelectTrigger>
           <SelectContent>
@@ -49,11 +46,7 @@ export default async function SummaryPage({
             <SelectItem value="unpicked">Unpicked</SelectItem>
           </SelectContent>
         </Select>
-        <Button
-          type="submit"
-          style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-          size="icon"
-        >
+        <Button type="submit" size="icon">
           <Search />
         </Button>
       </form>
