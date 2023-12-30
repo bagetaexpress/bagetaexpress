@@ -8,7 +8,7 @@ import { getUser } from "@/lib/userUtils";
 import { redirect } from "next/navigation";
 import HandleOrder from "../../_components/handleOrder";
 
-export default async function TakePinPage({
+export default async function UnlockPinPage({
   params,
 }: {
   params: { pin: string };

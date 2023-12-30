@@ -12,7 +12,7 @@ export default function Scanner({ url }: { url: string }) {
 
   return (
     <>
-      <div className=" max-w-screen-sm mx-auto">
+      <div className="">
         <QrReader
           onResult={(result, error) => {
             if (!!error) return;

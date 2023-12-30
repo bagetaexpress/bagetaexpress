@@ -17,9 +17,6 @@ export default async function authLayout({
     redirect("/");
   }
 
-  const foundOrder = await getOrdersByUserId(user.id, "ordered");
-  const hasOrder = foundOrder.length > 0;
-
   return (
     <div className="min-h-screen flex flex-col">
       <NavWrapper>
