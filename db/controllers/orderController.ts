@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { customer, order, user } from "../schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 
 export type OrderStatus = "ordered" | "pickedup" | "unpicked" | "cancelled";
 
@@ -116,6 +116,14 @@ async function getOrdersBySchoolId(
   return orders.map((row) => row.order);
 }
 
+async function blockUnpickedOrders(schoolId: number): Promise<void> {
+  await db.execute(sql`
+    UPDATE \`order\`
+    INNER JOIN customer ON \`order\`.user_id = customer.user_id
+    SET \`order\`.status = "unpicked"
+    WHERE \`order\`.status = "ordered" AND customer.school_id = ${schoolId}`);
+}
+
 export {
   createOrder,
   deleteOrder,
@@ -125,4 +133,5 @@ export {
   getOrdersBySchoolId,
   updateOrderStatus,
   getOrdersByUserId,
+  blockUnpickedOrders,
 };
