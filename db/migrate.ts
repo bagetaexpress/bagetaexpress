@@ -63,15 +63,28 @@ async function populate(db: Database) {
       email: "customer@bageta.express",
       password: "$2b$10$3Pl5KENBH5ISt7WIPef/KuRJyRIKBsgW0OjXXKUhpJkyP7c1XRAQu",
     },
+    {
+      id: 5,
+      email: "gymn@bageta.express",
+      password: "$2b$10$3Pl5KENBH5ISt7WIPef/KuRJyRIKBsgW0OjXXKUhpJkyP7c1XRAQu",
+    },
   ]);
 
   // Adding schools
-  await db.insert(tables.school).values({
-    id: 1,
-    name: "SPST",
-    websiteUrl: "https://spst.edu.sk",
-    emailRegex: ".*@spstsnv.sk",
-  });
+  await db.insert(tables.school).values([
+    {
+      id: 1,
+      name: "SPST",
+      websiteUrl: "https://spst.edu.sk",
+      emailRegex: ".*@spstsnv.sk",
+    },
+    {
+      id: 2,
+      name: "Gymnázium",
+      websiteUrl: "https://gymnazium.edu.sk",
+      emailRegex: ".*@gymnazium.edu.sk",
+    },
+  ]);
 
   // Adding stores
   await db.insert(tables.store).values({
@@ -108,6 +121,10 @@ async function populate(db: Database) {
       userId: 4,
       schoolId: 1,
     },
+    {
+      userId: 5,
+      schoolId: 2,
+    },
   ]);
   await db.insert(tables.employee).values([
     {
@@ -132,10 +149,16 @@ async function populate(db: Database) {
     },
   ]);
 
-  await db.insert(tables.schoolStore).values({
-    schoolId: 1,
-    storeId: 1,
-  });
+  await db.insert(tables.schoolStore).values([
+    {
+      schoolId: 1,
+      storeId: 1,
+    },
+    {
+      schoolId: 2,
+      storeId: 1,
+    },
+  ]);
 
   // Adding orders
   await db.insert(tables.order).values([
@@ -150,6 +173,18 @@ async function populate(db: Database) {
       userId: 4,
       pin: "4321",
       status: "ordered",
+    },
+    {
+      id: 3,
+      userId: 5,
+      pin: "1111",
+      status: "ordered",
+    },
+    {
+      id: 4,
+      userId: 5,
+      pin: "2222",
+      status: "pickedup",
     },
   ]);
 
@@ -168,6 +203,16 @@ async function populate(db: Database) {
       orderId: 2,
       itemId: 1,
       quantity: 2,
+    },
+    {
+      orderId: 3,
+      itemId: 2,
+      quantity: 1,
+    },
+    {
+      orderId: 4,
+      itemId: 1,
+      quantity: 1,
     },
   ]);
 }
