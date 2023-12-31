@@ -18,7 +18,7 @@ export default function BlockPage() {
     <div className=" min-h-full flex justify-center items-center">
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button>Block unpicked</Button>
+          <Button size="lg">Block unpicked</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -40,7 +40,9 @@ export default function BlockPage() {
                 console.log("blocked");
               }}
             >
-              <AlertDialogAction type="submit">Continue</AlertDialogAction>
+              <AlertDialogAction type="submit" className="w-full">
+                Block unpicked
+              </AlertDialogAction>
             </form>
           </AlertDialogFooter>
         </AlertDialogContent>

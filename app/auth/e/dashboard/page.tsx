@@ -65,7 +65,7 @@ export default async function DashboardPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <div className="grid grid-cols-2 gap-1">
+              <div className="w-full grid grid-cols-2 gap-1">
                 <DeleteItemButton item={item} />
                 <AddItemForm action="update" item={item}>
                   <Button>Update</Button>

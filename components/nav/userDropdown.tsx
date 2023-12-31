@@ -35,6 +35,21 @@ export default async function UserDropdown() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
+          {user.isAdmin && (
+            <>
+              <DropdownMenuLabel>Admin</DropdownMenuLabel>
+              <a href="/auth/c/store">
+                <DropdownMenuItem>Customer</DropdownMenuItem>
+              </a>
+              <a href="/auth/s/summary">
+                <DropdownMenuItem>Seller</DropdownMenuItem>
+              </a>
+              <a href="/auth/e/dashboard">
+                <DropdownMenuItem>Employee</DropdownMenuItem>
+              </a>
+              <DropdownMenuSeparator />
+            </>
+          )}
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <AlertDialogTrigger asChild>
