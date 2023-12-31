@@ -41,9 +41,9 @@ export default function ItemCard({
           <CardFooter className="flex gap-2 justify-between">
             <p className="font-semibold text-lg">{item.price}€</p>
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                addToCart(item.id, 1);
+                await addToCart(item.id, 1);
               }}
             >
               <DrawerTrigger asChild>

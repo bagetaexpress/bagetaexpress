@@ -43,7 +43,7 @@ export default function DeleteItemButton({ item }: { item: Item }) {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <form action={handleDelete}>
             <AlertDialogAction asChild>
-              <Button variant="destructive" type="submit">
+              <Button className="w-full" variant="destructive" type="submit">
                 Delete
               </Button>
             </AlertDialogAction>
