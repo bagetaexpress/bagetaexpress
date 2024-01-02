@@ -24,7 +24,7 @@ export default async function authLayout({
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-full flex flex-col">
       <div className=" hidden sm:inline-block">
         <NavWrapper>
           <NavButton href="/auth/s/summary" text="Summary" />

@@ -13,6 +13,8 @@ import {
 } from "../../../../../components/ui/drawer";
 import { Item } from "@/db/controllers/itemController";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Loader } from "lucide-react";
 
 interface ICheckout {
   items: {
@@ -23,7 +25,16 @@ interface ICheckout {
 }
 
 export default function Cheackout({ items, cartId }: ICheckout) {
+  const [isCreatingOrder, setIsCreatingOrder] = useState(false);
   const router = useRouter();
+
+  async function handleCheckout() {
+    setIsCreatingOrder(true);
+    await createOrderFromCart(cartId);
+    router.push("/auth/c/order");
+    setIsCreatingOrder(false);
+  }
+
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -33,7 +44,6 @@ export default function Cheackout({ items, cartId }: ICheckout) {
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
             <DrawerTitle>Order summary</DrawerTitle>
-            {/* <DrawerDescription></DrawerDescription> */}
           </DrawerHeader>
           <div className="p-4">
             <div className="grid grid-cols-1 divide-y-2">
@@ -64,14 +74,16 @@ export default function Cheackout({ items, cartId }: ICheckout) {
             <DrawerClose asChild>
               <Button variant="outline">Cancel</Button>
             </DrawerClose>
-            <Button
-              onClick={async () => {
-                await createOrderFromCart(cartId);
-                router.push("/auth/c/order");
-              }}
-            >
-              Confirm
-            </Button>
+            {isCreatingOrder ? (
+              <Button disabled={isCreatingOrder} className="flex-1">
+                <Loader className="w-5 h-5 mr-2 animate-spin" />
+                Creating order...
+              </Button>
+            ) : (
+              <Button disabled={isCreatingOrder} onClick={handleCheckout}>
+                Confirm
+              </Button>
+            )}
           </DrawerFooter>
         </div>
       </DrawerContent>

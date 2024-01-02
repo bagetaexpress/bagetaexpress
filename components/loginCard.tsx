@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,8 @@ import { Card, CardContent, CardFooter } from "./ui/card";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { getUser } from "@/lib/userUtils";
+import { Loader } from "lucide-react";
+import { useState } from "react";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -29,6 +31,7 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -40,6 +43,7 @@ export default function LoginForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
     const res = await signIn("credentials", {
       ...values,
       callbackUrl: "/",
@@ -68,6 +72,7 @@ export default function LoginForm() {
           break;
       }
     }
+    setIsSubmitting(false);
   }
 
   return (
@@ -80,13 +85,10 @@ export default function LoginForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  {/* <FormDescription>
-                    This is your public display name.
-                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
@@ -100,14 +102,21 @@ export default function LoginForm() {
                   <FormControl>
                     <Input type="password" {...field} />
                   </FormControl>
-                  {/* <FormDescription>This is your password.</FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
             />
           </CardContent>
           <CardFooter>
-            <Button type="submit">Submit</Button>
+            {isSubmitting ? (
+              <Button disabled={isSubmitting} type="submit">
+                <Loader className="animate-spin w-5 h-5 mr-2" /> Loading...
+              </Button>
+            ) : (
+              <Button disabled={isSubmitting} type="submit">
+                Submit
+              </Button>
+            )}
           </CardFooter>
         </form>
       </Form>
