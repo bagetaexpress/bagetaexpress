@@ -6,7 +6,11 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { TabsList, TabsTrigger, TabsContent, Tabs } from "@/components/ui/tabs";
 import { Terminal } from "lucide-react";
 
-export default function Home() {
+export default function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   return (
     <div className="flex min-h-screen flex-col gap-4 items-center justify-center">
       <Alert className=" max-w-screen-sm">
@@ -43,7 +47,13 @@ export default function Home() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="login">
-          <LoginForm />
+          <LoginForm
+            error={
+              searchParams?.error != null
+                ? "Wrong email or password"
+                : undefined
+            }
+          />
         </TabsContent>
         <TabsContent value="register">
           <RegisterForm />

@@ -30,7 +30,7 @@ const formSchema = z.object({
   }),
 });
 
-export default function LoginForm() {
+export default function LoginForm({ error }: { error?: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
@@ -106,6 +106,9 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
+            {error && (
+              <p className="text-red-500 text-sm font-semibold">{error}</p>
+            )}
           </CardContent>
           <CardFooter>
             {isSubmitting ? (
