@@ -24,7 +24,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Loader } from "lucide-react";
 import { getUser } from "@/lib/userUtils";
 import { Item, addItem, updateItem } from "@/db/controllers/itemController";
 import { useState } from "react";
@@ -47,6 +47,7 @@ interface IPorps {
 
 export default function AddItemForm({ item, action, children }: IPorps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -63,6 +64,7 @@ export default function AddItemForm({ item, action, children }: IPorps) {
     if (!user || !user.storeId) {
       return;
     }
+    setIsProcessing(true);
     switch (action) {
       case "update":
         if (!item) return;
@@ -74,6 +76,7 @@ export default function AddItemForm({ item, action, children }: IPorps) {
       default:
         break;
     }
+    setIsProcessing(false);
     form.reset();
     router.refresh();
     setIsOpen(false);
@@ -84,7 +87,14 @@ export default function AddItemForm({ item, action, children }: IPorps) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New item</DialogTitle>
+          <DialogTitle>
+            {
+              {
+                add: "New item",
+                update: "Updating item",
+              }[action]
+            }
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -134,7 +144,15 @@ export default function AddItemForm({ item, action, children }: IPorps) {
               <Button variant="outline" onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
-              <Button type="submit">Submit</Button>
+              <Button disabled={isProcessing} type="submit">
+                {isProcessing && <Loader className="animate-spin" />}
+                {
+                  {
+                    add: "Add",
+                    update: "Update",
+                  }[action]
+                }
+              </Button>
             </DialogFooter>
           </form>
         </Form>
