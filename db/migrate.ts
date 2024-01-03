@@ -115,11 +115,13 @@ async function populate(db: Database) {
       id: 1,
       number: 1,
       name: "gluten",
+      storeId: 1,
     },
     {
       id: 2,
       number: 2,
       name: "milk",
+      storeId: 1,
     },
   ]);
   await db.insert(tables.ingredient).values([
@@ -127,11 +129,13 @@ async function populate(db: Database) {
       id: 1,
       number: 1,
       name: "maslo",
+      storeId: 1,
     },
     {
       id: 2,
       number: 2,
       name: "muka",
+      storeId: 1,
     },
   ]);
   await db.insert(tables.itemAllergen).values([
