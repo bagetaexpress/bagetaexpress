@@ -24,7 +24,7 @@ export default async function authLayout({
   }
 
   return (
-    <div className="min-h-full flex flex-col">
+    <div style={{ minHeight: "100dvh" }} className="flex flex-col">
       <div className=" hidden sm:inline-block">
         <NavWrapper>
           <NavButton href="/auth/s/summary" text="Summary" />

@@ -21,7 +21,7 @@ export default async function authLayout({
   const hasOrder = foundOrder.length > 0;
 
   return (
-    <div className="min-h-full flex flex-col">
+    <div style={{ minHeight: "100dvh" }} className="flex flex-col">
       <NavWrapper>
         <NavButton href="/auth/c/store" text="Home" />
         {!hasOrder && (
