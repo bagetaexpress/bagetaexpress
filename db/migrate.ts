@@ -110,6 +110,58 @@ async function populate(db: Database) {
       storeId: 1,
     },
   ]);
+  await db.insert(tables.allergen).values([
+    {
+      id: 1,
+      number: 1,
+      name: "gluten",
+    },
+    {
+      id: 2,
+      number: 2,
+      name: "milk",
+    },
+  ]);
+  await db.insert(tables.ingredient).values([
+    {
+      id: 1,
+      number: 1,
+      name: "maslo",
+    },
+    {
+      id: 2,
+      number: 2,
+      name: "muka",
+    },
+  ]);
+  await db.insert(tables.itemAllergen).values([
+    {
+      itemId: 1,
+      allergenId: 1,
+    },
+    {
+      itemId: 1,
+      allergenId: 2,
+    },
+    {
+      itemId: 2,
+      allergenId: 1,
+    },
+  ]);
+  await db.insert(tables.itemIngredient).values([
+    {
+      itemId: 1,
+      ingredientId: 1,
+    },
+    {
+      itemId: 1,
+      ingredientId: 2,
+    },
+    {
+      itemId: 2,
+      ingredientId: 1,
+    },
+  ]);
 
   // Adding relations
   await db.insert(tables.customer).values([
