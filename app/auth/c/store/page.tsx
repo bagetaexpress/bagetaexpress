@@ -21,7 +21,7 @@ export default async function Store() {
       <h1 className="text-2xl font-semibold pt-2">Store</h1>
       <div className="grid gap-1 mb-14 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {items.map((item) => (
-          <ItemCard key={item.id} item={item} disabled={hasOrder} />
+          <ItemCard key={item.item.id} item={item} disabled={hasOrder} />
         ))}
       </div>
       <div

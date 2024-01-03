@@ -2,8 +2,12 @@
 
 import { eq, sql } from "drizzle-orm";
 import {
+  allergen,
   cartItem,
+  ingredient,
   item,
+  itemAllergen,
+  itemIngredient,
   order,
   orderItem,
   schoolStore,
@@ -19,14 +23,47 @@ export type Item = {
   price: string;
 };
 
-async function getItemsBySchool(schoolId: number) {
-  const items = await db
+export type ExtendedItem = {
+  item: Item;
+  allergens?: { id: number; name: string }[];
+  ingredients?: { id: number; name: string }[];
+};
+
+async function getItemsBySchool(schoolId: number): Promise<ExtendedItem[]> {
+  const items: ExtendedItem[] = await db
     .select({ item })
     .from(item)
     .innerJoin(store, eq(item.storeId, store.id))
     .innerJoin(schoolStore, eq(store.id, schoolStore.storeId))
     .where(eq(schoolStore.schoolId, schoolId));
-  return items.map((item) => item.item);
+
+  for (const res of items) {
+    const allergens = await db
+      .select({ allergen })
+      .from(allergen)
+      .innerJoin(itemAllergen, eq(allergen.id, itemAllergen.allergenId))
+      .where(eq(itemAllergen.itemId, res.item.id));
+
+    res.allergens = allergens.map(({ allergen }) => ({
+      id: allergen.number,
+      name: allergen.name,
+    }));
+  }
+
+  for (const res of items) {
+    const ingredients = await db
+      .select({ ingredient })
+      .from(ingredient)
+      .innerJoin(itemIngredient, eq(ingredient.id, itemIngredient.ingredientId))
+      .where(eq(itemIngredient.itemId, res.item.id));
+
+    res.ingredients = ingredients.map(({ ingredient }) => ({
+      id: ingredient.id,
+      name: ingredient.name,
+    }));
+  }
+
+  return items;
 }
 
 async function getItemById(id: number): Promise<Item | null> {

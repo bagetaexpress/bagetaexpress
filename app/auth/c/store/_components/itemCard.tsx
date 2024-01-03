@@ -1,6 +1,6 @@
 "use client";
 
-import { Item } from "@/db/controllers/itemController";
+import { ExtendedItem, Item } from "@/db/controllers/itemController";
 import {
   Card,
   CardHeader,
@@ -22,12 +22,18 @@ import {
 } from "../../../../../components/ui/drawer";
 import { addToCart } from "@/lib/cartUtils";
 import { FormEvent, useRef, useState } from "react";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 export default function ItemCard({
-  item,
+  item: { item, allergens = [], ingredients = [] },
   disabled,
 }: {
-  item: Item;
+  item: ExtendedItem;
   disabled: boolean;
 }) {
   const drawerBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -48,7 +54,30 @@ export default function ItemCard({
           <CardTitle>{item.name}</CardTitle>
           <CardDescription>{item.description}</CardDescription>
         </CardHeader>
-        <CardContent></CardContent>
+        <CardContent className=" text-xs">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <div className="flex flex-wrap">
+                  <p className="font-semibold mr-1">Allergens:</p>
+                  <p className="italic">
+                    {allergens.map((a) => a.id).join(", ")}
+                  </p>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="italic">
+                  {allergens.map((a) => a.name).join(", ")}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <div className="flex flex-wrap">
+            <p className="font-semibold mr-1">Ingredients:</p>
+            <p>{ingredients.map((i) => i.name).join(", ")}</p>
+          </div>
+        </CardContent>
         <CardFooter className="flex gap-2 justify-between">
           <p className="font-semibold text-lg">{item.price}€</p>
           <form onSubmit={onSubmit}>
