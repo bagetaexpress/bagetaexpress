@@ -31,6 +31,7 @@ export default async function Store() {
           left: 0,
           right: 0,
           height: "100dvh",
+          pointerEvents: "none",
         }}
         className="flex flex-col justify-end sm:hidden"
       >
