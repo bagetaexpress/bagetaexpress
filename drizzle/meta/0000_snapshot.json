@@ -1,9 +1,46 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "26ec3098-26f9-465b-a07a-c9d67a2c012c",
+  "id": "2d0f4a60-fe45-4fd6-8927-4477bab30ea7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "allergen": {
+      "name": "allergen",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "number": {
+          "name": "number",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "allergen_id": {
+          "name": "allergen_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "cart": {
       "name": "cart",
       "columns": {
@@ -142,6 +179,43 @@
       },
       "uniqueConstraints": {}
     },
+    "ingredient": {
+      "name": "ingredient",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "number": {
+          "name": "number",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ingredient_id": {
+          "name": "ingredient_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "item": {
       "name": "item",
       "columns": {
@@ -188,6 +262,68 @@
           "name": "item_id",
           "columns": [
             "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "item_allergen": {
+      "name": "item_allergen",
+      "columns": {
+        "allergen_id": {
+          "name": "allergen_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "item_allergen_allergen_id_item_id_pk": {
+          "name": "item_allergen_allergen_id_item_id_pk",
+          "columns": [
+            "allergen_id",
+            "item_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "item_ingredient": {
+      "name": "item_ingredient",
+      "columns": {
+        "ingredient_id": {
+          "name": "ingredient_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "item_ingredient_ingredient_id_item_id_pk": {
+          "name": "item_ingredient_ingredient_id_item_id_pk",
+          "columns": [
+            "ingredient_id",
+            "item_id"
           ]
         }
       },
@@ -302,8 +438,8 @@
           "notNull": true,
           "autoincrement": true
         },
-        "same": {
-          "name": "same",
+        "name": {
+          "name": "name",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
@@ -414,8 +550,8 @@
           "notNull": true,
           "autoincrement": true
         },
-        "same": {
-          "name": "same",
+        "name": {
+          "name": "name",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,

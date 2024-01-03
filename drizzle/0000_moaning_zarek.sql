@@ -1,3 +1,10 @@
+CREATE TABLE `allergen` (
+	`id` serial AUTO_INCREMENT NOT NULL,
+	`number` int NOT NULL,
+	`name` varchar(255) NOT NULL,
+	CONSTRAINT `allergen_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
 CREATE TABLE `cart` (
 	`user_id` int NOT NULL,
 	`created_at` timestamp NOT NULL DEFAULT (now()),
@@ -24,6 +31,13 @@ CREATE TABLE `employee` (
 	CONSTRAINT `employee_user_id` PRIMARY KEY(`user_id`)
 );
 --> statement-breakpoint
+CREATE TABLE `ingredient` (
+	`id` serial AUTO_INCREMENT NOT NULL,
+	`number` int NOT NULL,
+	`name` varchar(255) NOT NULL,
+	CONSTRAINT `ingredient_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
 CREATE TABLE `item` (
 	`id` serial AUTO_INCREMENT NOT NULL,
 	`name` varchar(255) NOT NULL,
@@ -31,6 +45,18 @@ CREATE TABLE `item` (
 	`price` decimal(2) NOT NULL,
 	`store_id` int NOT NULL,
 	CONSTRAINT `item_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `item_allergen` (
+	`allergen_id` int NOT NULL,
+	`item_id` int NOT NULL,
+	CONSTRAINT `item_allergen_allergen_id_item_id_pk` PRIMARY KEY(`allergen_id`,`item_id`)
+);
+--> statement-breakpoint
+CREATE TABLE `item_ingredient` (
+	`ingredient_id` int NOT NULL,
+	`item_id` int NOT NULL,
+	CONSTRAINT `item_ingredient_ingredient_id_item_id_pk` PRIMARY KEY(`ingredient_id`,`item_id`)
 );
 --> statement-breakpoint
 CREATE TABLE `order` (
@@ -73,7 +99,7 @@ CREATE TABLE `seller` (
 --> statement-breakpoint
 CREATE TABLE `store` (
 	`id` serial AUTO_INCREMENT NOT NULL,
-	`same` varchar(255) NOT NULL,
+	`name` varchar(255) NOT NULL,
 	`website_url` varchar(255) NOT NULL,
 	`description` varchar(255) NOT NULL,
 	CONSTRAINT `store_id` PRIMARY KEY(`id`)

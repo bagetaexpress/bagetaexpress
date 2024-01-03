@@ -1,5 +1,5 @@
 import { mysqlTable, int, primaryKey } from "drizzle-orm/mysql-core";
-import { item } from "../store/item";
+import { item } from "../item/item";
 import { cart } from "./cart";
 import { relations } from "drizzle-orm";
 
