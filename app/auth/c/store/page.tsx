@@ -36,7 +36,11 @@ export default async function Store() {
         className="flex flex-col justify-end sm:hidden"
       >
         {!hasOrder && (
-          <a href="/auth/c/cart" className="m-2">
+          <a
+            href="/auth/c/cart"
+            className="m-2"
+            style={{ pointerEvents: "all" }}
+          >
             <Button className="w-full">
               Shopping car
               <ShoppingCart className="ml-2 h-5 w-5" />
@@ -44,7 +48,11 @@ export default async function Store() {
           </a>
         )}
         {hasOrder && (
-          <a href="/auth/c/order" className="m-2">
+          <a
+            href="/auth/c/order"
+            className="m-2"
+            style={{ pointerEvents: "all" }}
+          >
             <Button className="w-full">Shor order</Button>
           </a>
         )}
