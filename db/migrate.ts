@@ -128,13 +128,13 @@ async function populate(db: Database) {
     {
       id: 1,
       number: 1,
-      name: "maslo",
+      name: "tomato",
       storeId: 1,
     },
     {
       id: 2,
       number: 2,
-      name: "muka",
+      name: "cheese",
       storeId: 1,
     },
   ]);
