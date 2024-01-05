@@ -37,7 +37,7 @@ export default async function EditAllergens({ error }: { error?: string }) {
     "use server";
     const numberStr = formData.get("number") as string;
     const name = formData.get("name") as string;
-    console.log(numberStr, name);
+
     if (!numberStr || !name) return;
     if (isNaN(parseInt(numberStr))) return;
     if (!user || !user.storeId) return;
@@ -70,8 +70,10 @@ export default async function EditAllergens({ error }: { error?: string }) {
               </TableHeader>
               <TableBody>
                 {allergens.map((allergen, i) => (
-                  <TableRow key={i}>
-                    <TableCell className="font-medium">{allergen.id}</TableCell>
+                  <TableRow key={i + "editAllergen"}>
+                    <TableCell className="font-medium">
+                      {allergen.number}
+                    </TableCell>
                     <TableCell>{allergen.name}</TableCell>
                     <TableCell className="flex justify-center">
                       <form

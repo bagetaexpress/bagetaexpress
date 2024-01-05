@@ -72,7 +72,7 @@ export default async function EditIngredients({ error }: { error?: string }) {
                 {ingredients.map((ingredient, i) => (
                   <TableRow key={i}>
                     <TableCell className="font-medium">
-                      {ingredient.id}
+                      {ingredient.number}
                     </TableCell>
                     <TableCell>{ingredient.name}</TableCell>
                     <TableCell className="flex justify-center">

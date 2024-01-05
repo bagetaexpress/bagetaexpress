@@ -1,3 +1,5 @@
+"use server";
+
 import { and, eq } from "drizzle-orm";
 import { db } from "..";
 import { ingredient, itemIngredient } from "../schema";
@@ -75,7 +77,7 @@ async function createItemIngredient(itemId: number, ingredientId: number) {
     .insert(itemIngredient)
     .values([{ itemId, ingredientId }]);
 
-  return itemIngredient;
+  return res.insertId;
 }
 
 async function deleteItemIngredient(itemId: number, ingredientId: number) {

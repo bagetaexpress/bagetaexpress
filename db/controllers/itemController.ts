@@ -29,6 +29,32 @@ export type ExtendedItem = {
   ingredients?: { id: number; name: string }[];
 };
 
+async function getAllergensByItem(itemId: number) {
+  const allergens = await db
+    .select({ allergen })
+    .from(allergen)
+    .innerJoin(itemAllergen, eq(allergen.id, itemAllergen.allergenId))
+    .where(eq(itemAllergen.itemId, itemId));
+
+  return allergens.map(({ allergen }) => ({
+    id: allergen.number,
+    name: allergen.name,
+  }));
+}
+
+async function getIngredientsByItem(itemId: number) {
+  const ingredients = await db
+    .select({ ingredient })
+    .from(ingredient)
+    .innerJoin(itemIngredient, eq(ingredient.id, itemIngredient.ingredientId))
+    .where(eq(itemIngredient.itemId, itemId));
+
+  return ingredients.map(({ ingredient }) => ({
+    id: ingredient.id,
+    name: ingredient.name,
+  }));
+}
+
 async function getItemsBySchool(schoolId: number): Promise<ExtendedItem[]> {
   const items: ExtendedItem[] = await db
     .select({ item })
@@ -38,29 +64,8 @@ async function getItemsBySchool(schoolId: number): Promise<ExtendedItem[]> {
     .where(eq(schoolStore.schoolId, schoolId));
 
   for (const res of items) {
-    const allergens = await db
-      .select({ allergen })
-      .from(allergen)
-      .innerJoin(itemAllergen, eq(allergen.id, itemAllergen.allergenId))
-      .where(eq(itemAllergen.itemId, res.item.id));
-
-    res.allergens = allergens.map(({ allergen }) => ({
-      id: allergen.number,
-      name: allergen.name,
-    }));
-  }
-
-  for (const res of items) {
-    const ingredients = await db
-      .select({ ingredient })
-      .from(ingredient)
-      .innerJoin(itemIngredient, eq(ingredient.id, itemIngredient.ingredientId))
-      .where(eq(itemIngredient.itemId, res.item.id));
-
-    res.ingredients = ingredients.map(({ ingredient }) => ({
-      id: ingredient.id,
-      name: ingredient.name,
-    }));
+    res.allergens = await getAllergensByItem(res.item.id);
+    res.ingredients = await getIngredientsByItem(res.item.id);
   }
 
   return items;
@@ -92,8 +97,17 @@ async function getItemsFromOrder(orderId: number) {
   return items.map((item) => ({ item: item.item, quantity: item.quantity }));
 }
 
-async function getItemsStats(storeId: number) {
-  const items = await db
+export type ItemStats = {
+  item: Item & {
+    allergens: { id: number; name: string }[];
+    ingredients: { id: number; name: string }[];
+  };
+  ordered: number;
+  pickedup: number;
+  unpicked: number;
+};
+async function getItemsStats(storeId: number): Promise<ItemStats[]> {
+  const items = (await db
     .select({
       item,
       ordered: sql`COUNT(case when 'ordered' = ${order.status} then 1 else null end)`,
@@ -104,14 +118,14 @@ async function getItemsStats(storeId: number) {
     .leftJoin(orderItem, eq(item.id, orderItem.itemId))
     .leftJoin(order, eq(orderItem.orderId, order.id))
     .where(eq(item.storeId, storeId))
-    .groupBy(item.id);
+    .groupBy(item.id)) as ItemStats[];
 
-  return items as {
-    item: Item;
-    ordered: number;
-    pickedup: number;
-    unpicked: number;
-  }[];
+  for (const res of items) {
+    res.item.allergens = await getAllergensByItem(res.item.id);
+    res.item.ingredients = await getIngredientsByItem(res.item.id);
+  }
+
+  return items;
 }
 
 async function addItem(data: {
@@ -121,11 +135,14 @@ async function addItem(data: {
   price: string;
 }) {
   const newItem = await db.insert(item).values(data);
-  return newItem.insertId;
+  return parseInt(newItem.insertId);
 }
 
 async function removeItem(id: number) {
   await db.delete(orderItem).where(eq(orderItem.itemId, id));
+  await db.delete(cartItem).where(eq(cartItem.itemId, id));
+  await db.delete(itemAllergen).where(eq(itemAllergen.itemId, id));
+  await db.delete(itemIngredient).where(eq(itemIngredient.itemId, id));
   await db.delete(item).where(eq(item.id, id));
 }
 

@@ -16,6 +16,8 @@ import AddItemForm from "./_components/addItem";
 import DeleteItemButton from "./_components/deleteItem";
 import EditAllergens from "./_components/editAllergens";
 import EditIngredients from "./_components/editIngredients";
+import { getAllergensByStoreId } from "@/db/controllers/allergenController";
+import { getIngredientsByStoreId } from "@/db/controllers/ingredientController";
 
 export default async function DashboardPage({
   searchParams,
@@ -29,6 +31,8 @@ export default async function DashboardPage({
 
   const schoolStats = await getSchoolsOrderStats(user.storeId ?? 0);
   const itemStats = await getItemsStats(user.storeId ?? 0);
+  const allergens = await getAllergensByStoreId(user.storeId ?? 0);
+  const ingredients = await getIngredientsByStoreId(user.storeId ?? 0);
 
   return (
     <div className=" relative min-h-full">
@@ -85,7 +89,12 @@ export default async function DashboardPage({
             <CardFooter>
               <div className="w-full grid grid-cols-2 gap-1">
                 <DeleteItemButton item={item} />
-                <AddItemForm action="update" item={item}>
+                <AddItemForm
+                  allergens={allergens}
+                  ingredients={ingredients}
+                  action="update"
+                  item={item}
+                >
                   <Button>Update</Button>
                 </AddItemForm>
               </div>
@@ -93,7 +102,11 @@ export default async function DashboardPage({
           </Card>
         ))}
         <Card className=" h-full w-full flex justify-center items-center p-4">
-          <AddItemForm action="add">
+          <AddItemForm
+            allergens={allergens}
+            ingredients={ingredients}
+            action="add"
+          >
             <Button size="icon">
               <Plus />
             </Button>

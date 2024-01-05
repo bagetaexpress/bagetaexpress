@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
   Dialog,
@@ -24,10 +23,28 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Loader } from "lucide-react";
+import { Loader, X } from "lucide-react";
 import { getUser } from "@/lib/userUtils";
 import { Item, addItem, updateItem } from "@/db/controllers/itemController";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import {
+  Allergen,
+  createItemAllergen,
+  deleteItemAllergen,
+} from "@/db/controllers/allergenController";
+import {
+  Ingredient,
+  createItemIngredient,
+  deleteItemIngredient,
+} from "@/db/controllers/ingredientController";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -39,15 +56,50 @@ const formSchema = z.object({
   }),
 });
 
+type idName = {
+  id: number;
+  name: string;
+};
+
 interface IPorps {
-  item?: Item;
+  item?: Item & {
+    allergens: idName[];
+    ingredients: idName[];
+  };
   action: "add" | "update";
   children?: React.ReactNode;
+  allergens: Allergen[];
+  ingredients: Ingredient[];
 }
 
-export default function AddItemForm({ item, action, children }: IPorps) {
+export default function AddItemForm({
+  item,
+  action,
+  children,
+  allergens: allergenList,
+  ingredients: ingredientList,
+}: IPorps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [allergens, setAllergens] = useState<idName[]>(item?.allergens ?? []);
+  const [ingredients, setIngredients] = useState<idName[]>(
+    item?.ingredients ?? []
+  );
+
+  const filteredIngredients = useMemo(() => {
+    const res = ingredientList.filter(
+      (a) => !ingredients.find((b) => a.id === b.id)
+    );
+    return res;
+  }, [ingredients, ingredientList]);
+
+  const filteredAllergens = useMemo(() => {
+    const res = allergenList.filter(
+      (a) => !allergens.find((b) => a.id === b.id)
+    );
+    return res;
+  }, [allergens, allergenList]);
+
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -68,10 +120,39 @@ export default function AddItemForm({ item, action, children }: IPorps) {
     switch (action) {
       case "update":
         if (!item) return;
+
+        // remove allergens
+        for (const allergen of item.allergens) {
+          if (allergens.find((a) => a.id === allergen.id)) continue;
+          await deleteItemAllergen(item.id, allergen.id);
+        }
+        // add new allergens
+        for (const allergen of allergens) {
+          if (item.allergens.find((a) => a.id === allergen.id)) continue;
+          await createItemAllergen(item.id, allergen.id);
+        }
+
+        // remove ingredients
+        for (const ingredient of item.ingredients) {
+          if (ingredients.find((a) => a.id === ingredient.id)) continue;
+          await deleteItemIngredient(item.id, ingredient.id);
+        }
+        // add new ingredients
+        for (const ingredient of ingredients) {
+          if (item.ingredients.find((a) => a.id === ingredient.id)) continue;
+          await createItemIngredient(item.id, ingredient.id);
+        }
+
         await updateItem({ ...values, id: item.id });
         break;
       case "add":
-        await addItem({ ...values, storeId: user.storeId });
+        const id = await addItem({ ...values, storeId: user.storeId });
+        for (const allergen of allergens) {
+          await createItemAllergen(id, allergen.id);
+        }
+        for (const ingredient of ingredients) {
+          await createItemIngredient(id, ingredient.id);
+        }
         break;
       default:
         break;
@@ -140,6 +221,100 @@ export default function AddItemForm({ item, action, children }: IPorps) {
                 </FormItem>
               )}
             />
+            <div className="py-3">
+              <p className=" text-lg font-bold">Ingredients</p>
+              <div className="flex gap-2 py-2 pb-3">
+                {ingredients.map((ingredient, i) => (
+                  <Badge
+                    key={i + "removeAllergen"}
+                    className="flex gap-2 items-center"
+                  >
+                    {ingredient.name}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setIngredients((prev) =>
+                          prev.filter((a) => a.id !== ingredient.id)
+                        )
+                      }
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+              <Select
+                value=""
+                onValueChange={(v) => {
+                  if (!v) return;
+                  const id = parseInt(v);
+                  const ingredient = ingredientList.find((a) => a.id === id);
+                  if (!ingredient) return;
+                  setIngredients((prev) => [
+                    ...prev,
+                    { id, name: ingredient.name },
+                  ]);
+                }}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Add allergen" />
+                </SelectTrigger>
+                <SelectContent>
+                  {filteredIngredients.map((ingredient, i) => (
+                    <SelectItem key={i} value={ingredient.id.toString()}>
+                      {ingredient.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="py-3">
+              <p className=" text-lg font-bold">Allergens</p>
+              <div className="flex gap-2 py-2 pb-3">
+                {allergens.map((allergen, i) => (
+                  <Badge
+                    key={i + "removeAllergen"}
+                    className="flex gap-2 items-center"
+                  >
+                    {allergen.name}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setAllergens((prev) =>
+                          prev.filter((a) => a.id !== allergen.id)
+                        )
+                      }
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+              <Select
+                value=""
+                onValueChange={(v) => {
+                  if (!v) return;
+                  const id = parseInt(v);
+                  const allergen = allergenList.find((a) => a.id === id);
+                  if (!allergen) return;
+                  setAllergens((prev) => [
+                    ...prev,
+                    { id, name: allergen.name },
+                  ]);
+                }}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Add allergen" />
+                </SelectTrigger>
+                <SelectContent>
+                  {filteredAllergens.map((allergen, i) => (
+                    <SelectItem key={i} value={allergen.id.toString()}>
+                      {allergen.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsOpen(false)}>
                 Cancel
