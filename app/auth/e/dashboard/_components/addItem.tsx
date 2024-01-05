@@ -316,7 +316,11 @@ export default function AddItemForm({
               </Select>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsOpen(false)}
+              >
                 Cancel
               </Button>
               <Button disabled={isProcessing} type="submit">

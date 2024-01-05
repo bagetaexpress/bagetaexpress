@@ -59,63 +59,61 @@ export default async function EditIngredients({ error }: { error?: string }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit ingredients</DialogTitle>
-          <DialogDescription>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Id</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {ingredients.map((ingredient, i) => (
-                  <TableRow key={i}>
-                    <TableCell className="font-medium">
-                      {ingredient.number}
-                    </TableCell>
-                    <TableCell>{ingredient.name}</TableCell>
-                    <TableCell className="flex justify-center">
-                      <form
-                        action={async () => {
-                          "use server";
-                          await deleteIngredient(ingredient.id);
-                          revalidatePath("/auth/e/dashboard", "page");
-                        }}
-                      >
-                        <Button type="submit" size="icon">
-                          <Trash className="w-5 h-5" />
-                        </Button>
-                      </form>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-
-            <form action={handleCreateIngredient} className=" flex gap-1 mt-4">
-              <Input
-                // type="number"
-                pattern="[0-9]*"
-                required
-                name="number"
-                placeholder="Number"
-                className="w-32"
-              />
-              <Input
-                type="text"
-                name="name"
-                required
-                placeholder="Name"
-                className="flex-1"
-              />
-              <Button type="submit" size="icon" className=" aspect-square">
-                <Plus />
-              </Button>
-            </form>
-          </DialogDescription>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
-        <DialogFooter></DialogFooter>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Id</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {ingredients.map((ingredient, i) => (
+              <TableRow key={i}>
+                <TableCell className="font-medium p-2">
+                  {ingredient.number}
+                </TableCell>
+                <TableCell className="p-2">{ingredient.name}</TableCell>
+                <TableCell className="flex justify-center p-2">
+                  <form
+                    action={async () => {
+                      "use server";
+                      await deleteIngredient(ingredient.id);
+                      revalidatePath("/auth/e/dashboard", "page");
+                    }}
+                  >
+                    <Button type="submit" size="icon">
+                      <Trash className="w-5 h-5" />
+                    </Button>
+                  </form>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <DialogFooter>
+          <form action={handleCreateIngredient} className=" flex flex-1 gap-1">
+            <Input
+              pattern="[0-9]*"
+              required
+              name="number"
+              placeholder="Number"
+              className="w-32"
+            />
+            <Input
+              type="text"
+              name="name"
+              required
+              placeholder="Name"
+              className="flex-1"
+            />
+            <Button type="submit" size="icon" className=" aspect-square">
+              <Plus />
+            </Button>
+          </form>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
