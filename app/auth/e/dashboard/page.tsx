@@ -14,8 +14,14 @@ import { Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 import AddItemForm from "./_components/addItem";
 import DeleteItemButton from "./_components/deleteItem";
+import EditAllergens from "./_components/editAllergens";
+import EditIngredients from "./_components/editIngredients";
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const user = await getUser();
   if (!user || !user.isEmployee) {
     redirect("/");
@@ -26,7 +32,19 @@ export default async function DashboardPage() {
 
   return (
     <div className=" relative min-h-full">
-      <h1 className="text-3xl font-semibold pt-2">Dashboard</h1>
+      <h1 className="text-3xl font-semibold py-2">Dashboard</h1>
+      <div className="flex gap-2">
+        <EditAllergens
+          error={
+            (searchParams.allergenError ?? undefined) as string | undefined
+          }
+        />
+        <EditIngredients
+          error={
+            (searchParams.ingredientError ?? undefined) as string | undefined
+          }
+        />
+      </div>
       <h2 className="text-2xl font-semibold pt-4">Schools</h2>
       <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {schoolStats.map(({ school, ...stats }, i) => (
