@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -47,6 +47,7 @@ import {
 } from "@/components/ui/select";
 import { useUploadThing } from "@/lib/uploadthing";
 import Image from "next/image";
+import { deleteFile } from "@/lib/upladthingServer";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -91,7 +92,9 @@ export default function AddItemForm({
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStatus, setProcessingStatus] = useState<string>("");
   const [allergens, setAllergens] = useState<idName[]>(item?.allergens ?? []);
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(item?.imageUrl ?? "");
   const [ingredients, setIngredients] = useState<idName[]>(
     item?.ingredients ?? []
   );
@@ -123,6 +126,7 @@ export default function AddItemForm({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const user = await getUser();
+    let localUrl = imageUrl;
     if (!user || !user.storeId) {
       return;
     }
@@ -131,6 +135,26 @@ export default function AddItemForm({
       case "update":
         if (!item) return;
 
+        if (image && imageUrl !== item.imageUrl) {
+          setProcessingStatus("uploading image");
+          try {
+            await deleteFile(item.imageUrl);
+          } catch (e) {
+            setIsProcessing(false);
+            setError("Error deleting image");
+            return;
+          }
+          const res = await startUpload([image]);
+          if (!res) {
+            setIsProcessing(false);
+            setError("Error uploading image");
+            return;
+          }
+          console.log(res[0].url);
+          localUrl = res[0].url;
+        }
+
+        setProcessingStatus("updating allergents");
         // remove allergens
         for (const allergen of item.allergens) {
           if (allergens.find((a) => a.id === allergen.id)) continue;
@@ -142,6 +166,7 @@ export default function AddItemForm({
           await createItemAllergen(item.id, allergen.id);
         }
 
+        setProcessingStatus("updating ingredients");
         // remove ingredients
         for (const ingredient of item.ingredients) {
           if (ingredients.find((a) => a.id === ingredient.id)) continue;
@@ -153,10 +178,32 @@ export default function AddItemForm({
           await createItemIngredient(item.id, ingredient.id);
         }
 
-        await updateItem({ ...values, id: item.id });
+        setProcessingStatus("updating item");
+        await updateItem({ ...values, id: item.id, imageUrl: localUrl ?? "" });
         break;
       case "add":
-        const id = await addItem({ ...values, storeId: user.storeId });
+        if (!image) {
+          setIsProcessing(false);
+          setError("Please upload an image");
+          return;
+        }
+
+        setProcessingStatus("uploading image");
+        const res = await startUpload([image]);
+        if (!res) {
+          setIsProcessing(false);
+          setError("Error uploading image");
+          return;
+        }
+
+        setProcessingStatus("adding item");
+        const id = await addItem({
+          ...values,
+          storeId: user.storeId,
+          imageUrl: localUrl ?? "",
+        });
+
+        setProcessingStatus("adding allergens and ingredients");
         for (const allergen of allergens) {
           await createItemAllergen(id, allergen.id);
         }
@@ -167,15 +214,18 @@ export default function AddItemForm({
       default:
         break;
     }
-    setIsProcessing(false);
-    form.reset();
-    router.refresh();
+    handleReset();
     setIsOpen(false);
+    router.refresh();
   }
 
   function handleReset() {
     form.reset();
     setImage(null);
+    setImageUrl(null);
+    setIsProcessing(false);
+    setProcessingStatus("");
+    setError(null);
     setAllergens([]);
     setIngredients([]);
   }
@@ -209,7 +259,12 @@ export default function AddItemForm({
           >
             {image && (
               <div className="flex justify-center">
-                <Image src={image} alt="Item imgae" height={200} width={200} />
+                <Image
+                  src={imageUrl ?? ""}
+                  alt="Item imgae"
+                  height={200}
+                  width={200}
+                />
               </div>
             )}
             <Input
@@ -223,9 +278,8 @@ export default function AddItemForm({
                   e.target.value = "";
                   return;
                 }
-                const res = await startUpload([file]);
-                console.log(res);
-                setImage(URL.createObjectURL(file));
+                setImage(file);
+                setImageUrl(URL.createObjectURL(file));
               }}
             />
             <FormField
@@ -361,6 +415,7 @@ export default function AddItemForm({
                 </SelectContent>
               </Select>
             </div>
+            {error && <p className="text-red-500 text-center py-2">{error}</p>}
             <DialogFooter>
               <Button
                 type="button"
@@ -373,13 +428,14 @@ export default function AddItemForm({
                 Cancel
               </Button>
               <Button disabled={isProcessing} type="submit">
-                {isProcessing && <Loader className="animate-spin" />}
-                {
+                {isProcessing && <Loader className="animate-spin mr-2" />}
+                {/* {
                   {
                     add: "Add",
                     update: "Update",
                   }[action]
-                }
+                } */}
+                {processingStatus || "Submit"}
               </Button>
             </DialogFooter>
           </form>

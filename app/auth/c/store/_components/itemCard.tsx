@@ -28,6 +28,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
+import Image from "next/image";
 
 export default function ItemCard({
   item: { item, allergens = [], ingredients = [] },
@@ -55,6 +56,15 @@ export default function ItemCard({
           <CardDescription>{item.description}</CardDescription>
         </CardHeader>
         <CardContent className=" text-xs">
+          <div className="flex justify-center mb-2">
+            <Image
+              src={item.imageUrl}
+              width={200}
+              height={200}
+              alt="item image"
+              className="rounded-md"
+            />
+          </div>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>

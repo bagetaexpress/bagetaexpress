@@ -15,6 +15,13 @@
       "when": 1704313083127,
       "tag": "0001_many_daimon_hellstrom",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1704562397177,
+      "tag": "0002_strong_bullseye",
+      "breakpoints": true
     }
   ]
 }

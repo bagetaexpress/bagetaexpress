@@ -18,6 +18,7 @@ import EditAllergens from "./_components/editAllergens";
 import EditIngredients from "./_components/editIngredients";
 import { getAllergensByStoreId } from "@/db/controllers/allergenController";
 import { getIngredientsByStoreId } from "@/db/controllers/ingredientController";
+import Image from "next/image";
 
 export default async function DashboardPage({
   searchParams,
@@ -79,6 +80,15 @@ export default async function DashboardPage({
               <CardDescription>{item.description}</CardDescription>
             </CardHeader>
             <CardContent>
+              <div className="flex justify-center mb-2">
+                <Image
+                  src={item.imageUrl}
+                  width={200}
+                  height={200}
+                  alt="item image"
+                  className="rounded-md"
+                />
+              </div>
               <div className=" grid grid-cols-2">
                 <p>Ordered:</p>
                 <p>{stats.ordered}</p>

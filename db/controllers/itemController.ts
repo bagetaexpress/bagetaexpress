@@ -14,11 +14,13 @@ import {
   store,
 } from "../schema";
 import { db } from "@/db";
+import { deleteFile } from "@/lib/upladthingServer";
 
 export type Item = {
   id: number;
   name: string;
   storeId: number;
+  imageUrl: string;
   description: string;
   price: string;
 };
@@ -132,6 +134,7 @@ async function addItem(data: {
   name: string;
   storeId: number;
   description: string;
+  imageUrl: string;
   price: string;
 }) {
   const newItem = await db.insert(item).values(data);
@@ -139,6 +142,11 @@ async function addItem(data: {
 }
 
 async function removeItem(id: number) {
+  const found = await getItemById(id);
+  if (!found) {
+    throw new Error("Item not found");
+  }
+  await deleteFile(found.imageUrl);
   await db.delete(orderItem).where(eq(orderItem.itemId, id));
   await db.delete(cartItem).where(eq(cartItem.itemId, id));
   await db.delete(itemAllergen).where(eq(itemAllergen.itemId, id));
@@ -150,6 +158,7 @@ async function updateItem(data: {
   id: number;
   name?: string;
   storeId?: number;
+  imageUrl?: string;
   description?: string;
   price?: string;
 }) {

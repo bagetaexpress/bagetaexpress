@@ -100,6 +100,7 @@ async function populate(db: Database) {
       name: "bageta",
       description: "bageta popis",
       price: "3.99",
+      imageUrl: "",
       storeId: 1,
     },
     {
@@ -107,6 +108,7 @@ async function populate(db: Database) {
       name: "test bageta",
       description: "najelpsia omega top bageta",
       price: "3.99",
+      imageUrl: "",
       storeId: 1,
     },
   ]);
