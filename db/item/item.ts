@@ -16,7 +16,7 @@ export const item = mysqlTable("item", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   description: varchar("description", { length: 255 }).notNull(),
-  imageUrl: varchar("image_url", { length: 255 }).notNull(),
+  imageUrl: varchar("image_url", { length: 255 }).notNull().default(""),
   price: decimal("price", { precision: 2 }).notNull(),
   storeId: int("store_id").notNull(),
 });

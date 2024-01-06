@@ -2,6 +2,7 @@ CREATE TABLE `allergen` (
 	`id` serial AUTO_INCREMENT NOT NULL,
 	`number` int NOT NULL,
 	`name` varchar(255) NOT NULL,
+	`store_id` int NOT NULL,
 	CONSTRAINT `allergen_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -35,6 +36,7 @@ CREATE TABLE `ingredient` (
 	`id` serial AUTO_INCREMENT NOT NULL,
 	`number` int NOT NULL,
 	`name` varchar(255) NOT NULL,
+	`store_id` int NOT NULL,
 	CONSTRAINT `ingredient_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
@@ -42,6 +44,7 @@ CREATE TABLE `item` (
 	`id` serial AUTO_INCREMENT NOT NULL,
 	`name` varchar(255) NOT NULL,
 	`description` varchar(255) NOT NULL,
+	`image_url` varchar(255) NOT NULL DEFAULT '',
 	`price` decimal(2) NOT NULL,
 	`store_id` int NOT NULL,
 	CONSTRAINT `item_id` PRIMARY KEY(`id`)

@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "2d0f4a60-fe45-4fd6-8927-4477bab30ea7",
+  "id": "dd15773d-7a36-4de7-b78a-ad64a1256aaa",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "allergen": {
@@ -24,6 +24,13 @@
         "name": {
           "name": "name",
           "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "store_id": {
+          "name": "store_id",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -202,6 +209,13 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "store_id": {
+          "name": "store_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         }
       },
       "indexes": {},
@@ -239,6 +253,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
         },
         "price": {
           "name": "price",
