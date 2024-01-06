@@ -139,11 +139,7 @@ export default function AddItemForm({
           setProcessingStatus("uploading image");
           try {
             await deleteFile(item.imageUrl);
-          } catch (e) {
-            setIsProcessing(false);
-            setError("Error deleting image");
-            return;
-          }
+          } catch (e) {}
           const res = await startUpload([image]);
           if (!res) {
             setIsProcessing(false);
