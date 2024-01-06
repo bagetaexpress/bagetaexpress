@@ -86,6 +86,10 @@ export default function AddItemForm({
     onUploadError: () => {
       setProcessingStatus("error");
     },
+    onClientUploadComplete: () => {
+      alert("client upload complete");
+      setProcessingStatus("upload complete");
+    },
   });
 
   const [isOpen, setIsOpen] = useState(false);
