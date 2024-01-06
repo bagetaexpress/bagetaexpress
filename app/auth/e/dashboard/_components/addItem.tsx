@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -45,6 +45,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useUploadThing } from "@/lib/uploadthing";
+import Image from "next/image";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -79,9 +81,17 @@ export default function AddItemForm({
   allergens: allergenList,
   ingredients: ingredientList,
 }: IPorps) {
+  const { startUpload } = useUploadThing("imageUploader", {
+    onUploadError: () => {
+      setProcessingStatus("error");
+    },
+  });
+
   const [isOpen, setIsOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processingStatus, setProcessingStatus] = useState<string>("");
   const [allergens, setAllergens] = useState<idName[]>(item?.allergens ?? []);
+  const [image, setImage] = useState<string | null>(null);
   const [ingredients, setIngredients] = useState<idName[]>(
     item?.ingredients ?? []
   );
@@ -163,8 +173,23 @@ export default function AddItemForm({
     setIsOpen(false);
   }
 
+  function handleReset() {
+    form.reset();
+    setImage(null);
+    setAllergens([]);
+    setIngredients([]);
+  }
+
   return (
-    <Dialog open={isOpen} onOpenChange={() => setIsOpen((prev) => !prev)}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={() => {
+        if (isOpen) {
+          handleReset();
+        }
+        setIsOpen((prev) => !prev);
+      }}
+    >
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -182,6 +207,27 @@ export default function AddItemForm({
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-3"
           >
+            {image && (
+              <div className="flex justify-center">
+                <Image src={image} alt="Item imgae" height={200} width={200} />
+              </div>
+            )}
+            <Input
+              type="file"
+              name="image"
+              onChange={async (e) => {
+                if (!e.target.files) return;
+                const file = e.target.files[0];
+                if (!file) return;
+                if (!file.type.startsWith("image/")) {
+                  e.target.value = "";
+                  return;
+                }
+                const res = await startUpload([file]);
+                console.log(res);
+                setImage(URL.createObjectURL(file));
+              }}
+            />
             <FormField
               control={form.control}
               name="name"
@@ -319,7 +365,10 @@ export default function AddItemForm({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  handleReset();
+                  setIsOpen(false);
+                }}
               >
                 Cancel
               </Button>
