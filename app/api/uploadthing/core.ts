@@ -1,8 +1,11 @@
 import { getServerSession } from "next-auth";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { authOptions } from "../auth/[...nextauth]/route";
+import { UTApi } from "uploadthing/server";
 
 const f = createUploadthing();
+
+export const utapi = new UTApi();
 
 export const ourFileRouter = {
   imageUploader: f({ image: { maxFileSize: "4MB" } })
