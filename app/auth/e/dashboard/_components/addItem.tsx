@@ -142,12 +142,9 @@ export default function AddItemForm({
         if (image && imageUrl !== item.imageUrl) {
           setProcessingStatus("uploading image");
           try {
-            alert("deleting image");
             await deleteFile(item.imageUrl);
           } catch (e) {}
-          alert("uploading image");
           const res = await startUpload([image]);
-          alert("image uploaded");
           if (!res) {
             setIsProcessing(false);
             setError("Error uploading image");
