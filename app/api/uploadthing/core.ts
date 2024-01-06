@@ -10,13 +10,13 @@ export const utapi = new UTApi();
 export const ourFileRouter = {
   imageUploader: f({ image: { maxFileSize: "4MB" } })
     .middleware(async ({ req }) => {
-      // const sesstion = await getServerSession(authOptions);
-      // if (!sesstion) throw new Error("Unauthorized");
-      // if (!sesstion.user) throw new Error("Unauthorized");
-      // const user = sesstion.user;
-      // return `metadata`
-      // return { userId: user.id };
-      return { userId: "none" };
+      const sesstion = await getServerSession(authOptions);
+      if (!sesstion) throw new Error("Unauthorized");
+      if (!sesstion.user) throw new Error("Unauthorized");
+      const user = sesstion.user;
+      // return `metadata`;
+      return { userId: user.id };
+      // return { userId: "none" };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload

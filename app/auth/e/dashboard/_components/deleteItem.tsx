@@ -11,12 +11,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Item, removeItem } from "@/db/controllers/itemController";
+import { deleteFile } from "@/lib/upladthingServer";
 import { Trash } from "lucide-react";
 import { revalidatePath } from "next/cache";
 
 export default function DeleteItemButton({ item }: { item: Item }) {
   async function handleDelete() {
     "use server";
+    await deleteFile(item.imageUrl);
     await removeItem(item.id);
     revalidatePath("/auth/e/dashboard", "page");
   }

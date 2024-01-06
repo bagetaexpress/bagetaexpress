@@ -87,7 +87,6 @@ export default function AddItemForm({
       setProcessingStatus("error");
     },
     onClientUploadComplete: () => {
-      alert("client upload complete");
       setProcessingStatus("upload complete");
     },
   });
