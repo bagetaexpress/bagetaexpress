@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 
 import { getUser } from "@/lib/userUtils";
 import { getOrdersByUserId } from "@/db/controllers/orderController";
-import NavWrapper from "@/components/nav/NavWrapper";
 import NavButton from "@/components/nav/navButton";
+import NavWrapper from "@/components/nav/navWrapper";
 
 export default async function authLayout({
   children,
