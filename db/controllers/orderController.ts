@@ -19,15 +19,14 @@ async function createOrder(
   userId: number,
   pin: string,
   status: OrderStatus = "ordered"
-): Promise<number> {
+) {
   const newOrder = await db.insert(order).values({
     userId,
     pin,
     status,
   });
-  const orderId = parseInt(newOrder.insertId);
 
-  return orderId;
+  return newOrder;
 }
 
 async function getOrderByPin(

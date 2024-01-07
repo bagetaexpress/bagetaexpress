@@ -61,7 +61,7 @@ async function createUser(email: string, password: string): Promise<User> {
     })
     .execute();
   return {
-    id: parseInt(newUser.insertId),
+    id: parseInt(newUser.insertId), // TODO: fix this
     email: email,
     password: hash,
     isAdmin: false,
@@ -77,7 +77,7 @@ async function createEmployee(data: ICreateEmployee): Promise<number> {
     userId: data.userId,
     storeId: data.storeId,
   });
-  return parseInt(res.insertId);
+  return parseInt(res.insertId); // TODO: fix this
 }
 
 interface ICreateCustomer {

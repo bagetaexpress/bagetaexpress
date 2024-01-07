@@ -26,9 +26,13 @@ async function createUniqueOrder(
     pin = generatePin(4);
     found = await orderCtrl.getOrderByPin(pin, schoolId);
   } while (found != null);
-  const orderId = await orderCtrl.createOrder(userId, pin);
+  await orderCtrl.createOrder(userId, pin);
+  const order = await orderCtrl.getOrdersByUserId(userId, "ordered");
+  if (order.length === 0) {
+    throw new Error("Order not found");
+  }
 
-  return orderId;
+  return order[0].id;
 }
 
 async function createOrderFromCart(userId: number): Promise<number> {

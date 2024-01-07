@@ -72,7 +72,7 @@ async function getItemAllergen(itemId: number, allergenId: number) {
 async function createItemAllergen(itemId: number, allergenId: number) {
   const res = await db.insert(itemAllergen).values([{ itemId, allergenId }]);
 
-  return res.insertId;
+  return res;
 }
 
 async function deleteItemAllergen(itemId: number, allergenId: number) {

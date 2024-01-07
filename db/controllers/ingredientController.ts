@@ -44,7 +44,7 @@ async function getIngredientById(id: number) {
 async function createIngredient(number: number, name: string, storeId: number) {
   const res = await db.insert(ingredient).values([{ number, name, storeId }]);
 
-  return res.insertId;
+  return res;
 }
 
 async function updateIngredient(id: number, number: number, name: string) {
@@ -77,7 +77,7 @@ async function createItemIngredient(itemId: number, ingredientId: number) {
     .insert(itemIngredient)
     .values([{ itemId, ingredientId }]);
 
-  return res.insertId;
+  return res;
 }
 
 async function deleteItemIngredient(itemId: number, ingredientId: number) {

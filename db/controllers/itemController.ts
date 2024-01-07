@@ -138,7 +138,7 @@ async function addItem(data: {
   price: string;
 }) {
   const newItem = await db.insert(item).values(data);
-  return parseInt(newItem.insertId);
+  return newItem;
 }
 
 async function removeItem(id: number) {

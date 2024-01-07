@@ -19,10 +19,10 @@ async function getCart(userId: number): Promise<Cart | null> {
 }
 
 async function createCart(userId: number): Promise<number> {
-  const newCart = await db.insert(cart).values({
+  await db.insert(cart).values({
     userId,
   });
-  return parseInt(newCart.insertId);
+  return userId;
 }
 
 async function deleteCart(userId: number): Promise<void> {
