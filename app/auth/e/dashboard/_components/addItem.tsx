@@ -151,6 +151,8 @@ export default function AddItemForm({
           }
           console.log(res[0].url);
           localUrl = res[0].url;
+        } else {
+          localUrl = item.imageUrl;
         }
 
         setProcessingStatus("upravovanie alergénov");
@@ -427,7 +429,8 @@ export default function AddItemForm({
               </Button>
               <Button disabled={isProcessing} type="submit">
                 {isProcessing && <Loader className="animate-spin mr-2" />}
-                {processingStatus || "Pridať"}
+                {processingStatus ||
+                  { add: "Pridať", update: "Upraviť" }[action]}
               </Button>
             </DialogFooter>
           </form>
