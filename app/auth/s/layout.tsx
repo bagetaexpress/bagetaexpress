@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { redirect } from "next/navigation";
 
 import { getUser } from "@/lib/userUtils";
-import NavWrapper from "@/components/nav/NavWrapper.1";
+import NavWrapper from "@/components/nav/NavWrapper";
 import NavButton from "@/components/nav/navButton";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,10 +27,10 @@ export default async function authLayout({
     <div style={{ minHeight: "100dvh" }} className="flex flex-col">
       <div className=" hidden sm:inline-block">
         <NavWrapper>
-          <NavButton href="/auth/s/summary" text="Summary" />
-          <NavButton href="/auth/s/take" text="Take" />
-          <NavButton href="/auth/s/unblock" text="Unblock" />
-          <NavButton href="/auth/s/block" text="Block" />
+          <NavButton href="/auth/s/summary" text="Zhrnutie" />
+          <NavButton href="/auth/s/take" text="Prevziať" />
+          <NavButton href="/auth/s/unblock" text="Odblokovať" />
+          <NavButton href="/auth/s/block" text="Ukončiť predaj" />
         </NavWrapper>
       </div>
       <div className="sm:hidden">
@@ -43,16 +43,16 @@ export default async function authLayout({
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <a href="/auth/s/summary">
-                <DropdownMenuItem>Summary</DropdownMenuItem>
+                <DropdownMenuItem>Zhrnutie</DropdownMenuItem>
               </a>
               <a href="/auth/s/take">
-                <DropdownMenuItem>Take</DropdownMenuItem>
+                <DropdownMenuItem>Prevziať</DropdownMenuItem>
               </a>
               <a href="/auth/s/unblock">
-                <DropdownMenuItem>Unblock</DropdownMenuItem>
+                <DropdownMenuItem>Odblokovať</DropdownMenuItem>
               </a>
               <a href="/auth/s/block">
-                <DropdownMenuItem>Block</DropdownMenuItem>
+                <DropdownMenuItem>Ukončiť predaj</DropdownMenuItem>
               </a>
             </DropdownMenuContent>
           </DropdownMenu>

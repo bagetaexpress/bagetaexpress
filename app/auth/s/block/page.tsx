@@ -18,30 +18,28 @@ export default function BlockPage() {
     <div className=" min-h-full flex justify-center items-center">
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button size="lg">Block unpicked</Button>
+          <Button size="lg">Zablokovať nevyzdvihnuté</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>Ste si istý?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. It will ban all the users with
-              unpicked orders.
+              Táto akcia zablokuje všetky nevyzdvihnuté objednávky. Táto akcia
+              je nevratná.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Zrušiť</AlertDialogCancel>
             <form
               action={async () => {
                 "use server";
                 const user = await getUser();
                 if (!user || !user.schoolId) return;
-                console.log("blocking");
                 await blockUnpickedOrders(user.schoolId);
-                console.log("blocked");
               }}
             >
               <AlertDialogAction type="submit" className="w-full">
-                Block unpicked
+                Zablokovať
               </AlertDialogAction>
             </form>
           </AlertDialogFooter>

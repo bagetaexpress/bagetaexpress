@@ -3,6 +3,7 @@
 import { Item } from "@/db/controllers/itemController";
 import { saveUpdateCartItem } from "@/lib/cartUtils";
 import { Minus, Plus } from "lucide-react";
+import Image from "next/image";
 import { useOptimistic } from "react";
 
 export default function CartItemRow({
@@ -31,9 +32,18 @@ export default function CartItemRow({
 
   return (
     <div className="flex justify-between p-2 items-center">
-      <div>
-        <h3 className="font-semibold text-lg">{item.name}</h3>
-        <p className="font-light text-sm">{item.description}</p>
+      <div className="flex gap-1 items-center">
+        <Image
+          src={item.imageUrl}
+          width={150}
+          height={150}
+          alt="Obrázok produktu"
+          className="rounded-md max-w-24 object-contain"
+        />
+        <div>
+          <h3 className="font-semibold text-lg">{item.name}</h3>
+          <p className="font-light text-sm">{item.description}</p>
+        </div>
       </div>
       <div className="flex justify-center text-center gap-2 flex-col">
         <p className=" font-bold text-xl">

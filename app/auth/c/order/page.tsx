@@ -2,6 +2,7 @@ import { getItemsFromOrder } from "@/db/controllers/itemController";
 import { getOrdersByUserId } from "@/db/controllers/orderController";
 import { getUser } from "@/lib/userUtils";
 import QrCode from "./_components/qrCode";
+import Image from "next/image";
 
 export default async function OrderPage() {
   const currUser = await getUser();
@@ -21,7 +22,7 @@ export default async function OrderPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold pt-2">Order</h1>
+      <h1 className="text-2xl font-semibold pt-2">Objednávka</h1>
       <div className="flex justify-center">
         <QrCode
           pin={order.pin}
@@ -29,14 +30,23 @@ export default async function OrderPage() {
         />
       </div>
       <h3 className="pb-3 text-center font-bold text-lg">
-        Order pin: {order.pin}
+        Číslo objednávky: {order.pin}
       </h3>
       <div className="grid grid-cols-1 divide-y-2">
         {items.map(({ item, quantity }, i) => (
           <div key={i} className="flex justify-between p-1">
-            <div>
-              <h3 className="font-semibold text-lg">{item.name}</h3>
-              <p className="font-light text-sm">{item.description}</p>
+            <div className="flex gap-1">
+              <Image
+                src={item.imageUrl}
+                width={150}
+                height={150}
+                alt="Obrázok produktu"
+                className="rounded-md max-w-24 object-contain"
+              />
+              <div>
+                <h3 className="font-semibold text-lg">{item.name}</h3>
+                <p className="font-light text-sm">{item.description}</p>
+              </div>
             </div>
             <div className="flex justify-center text-center gap-2 flex-col">
               <p className=" font-medium text-xl">
@@ -47,7 +57,7 @@ export default async function OrderPage() {
         ))}
       </div>
       <div className="flex justify-between py-4">
-        <p className="font-semibold text-lg">Total</p>
+        <p className="font-semibold text-lg">Spolu</p>
         <p className="font-semibold text-xl">{total}€</p>
       </div>
     </div>

@@ -69,7 +69,7 @@ export default async function EmployeeTable({
         </TableBody>
       </Table>
       <form action={handleAddEmployee} className="flex flex-col gap-2 mt-2">
-        <Label htmlFor="employeeId">Add employee</Label>
+        <Label htmlFor="employeeId">Pridať zamestnanca</Label>
         <div className="flex gap-2">
           <Input
             name="employeeId"

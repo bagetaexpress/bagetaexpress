@@ -38,12 +38,12 @@ export default function Cheackout({ items, cartId }: ICheckout) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button className="flex-1 md:max-w-fit">Checkout</Button>
+        <Button className="flex-1 md:max-w-fit">Objedať</Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle>Order summary</DrawerTitle>
+            <DrawerTitle>Zhrnutie objednávky</DrawerTitle>
           </DrawerHeader>
           <div className="p-4">
             <div className="grid grid-cols-1 divide-y-2">
@@ -57,7 +57,7 @@ export default function Cheackout({ items, cartId }: ICheckout) {
               ))}
             </div>
             <div className="flex justify-between py-4">
-              <p className="font-semibold text-lg">Total</p>
+              <p className="font-semibold text-lg">Spolu</p>
               <p className="font-semibold text-xl">
                 {items
                   .reduce(
@@ -72,16 +72,16 @@ export default function Cheackout({ items, cartId }: ICheckout) {
           </div>
           <DrawerFooter>
             <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">Zrušiť</Button>
             </DrawerClose>
             {isCreatingOrder ? (
               <Button disabled={isCreatingOrder} className="flex-1">
                 <Loader className="w-5 h-5 mr-2 animate-spin" />
-                Creating order...
+                Vytváranie objednávky...
               </Button>
             ) : (
               <Button disabled={isCreatingOrder} onClick={handleCheckout}>
-                Confirm
+                Objedať
               </Button>
             )}
           </DrawerFooter>

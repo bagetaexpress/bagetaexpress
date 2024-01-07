@@ -139,21 +139,21 @@ export default function AddItemForm({
         if (!item) return;
 
         if (image && imageUrl !== item.imageUrl) {
-          setProcessingStatus("uploading image");
+          setProcessingStatus("nahrávanie obrázku");
           try {
             await deleteFile(item.imageUrl);
           } catch (e) {}
           const res = await startUpload([image]);
           if (!res) {
             setIsProcessing(false);
-            setError("Error uploading image");
+            setError("chyba pri nahrávaní obrázku");
             return;
           }
           console.log(res[0].url);
           localUrl = res[0].url;
         }
 
-        setProcessingStatus("updating allergents");
+        setProcessingStatus("upravovanie alergénov");
         // remove allergens
         for (const allergen of item.allergens) {
           if (allergens.find((a) => a.id === allergen.id)) continue;
@@ -165,7 +165,7 @@ export default function AddItemForm({
           await createItemAllergen(item.id, allergen.id);
         }
 
-        setProcessingStatus("updating ingredients");
+        setProcessingStatus("upravovanie ingrediencií");
         // remove ingredients
         for (const ingredient of item.ingredients) {
           if (ingredients.find((a) => a.id === ingredient.id)) continue;
@@ -177,32 +177,31 @@ export default function AddItemForm({
           await createItemIngredient(item.id, ingredient.id);
         }
 
-        setProcessingStatus("updating item");
+        setProcessingStatus("konečné upravovanie");
         await updateItem({ ...values, id: item.id, imageUrl: localUrl ?? "" });
         break;
       case "add":
         if (!image) {
           setIsProcessing(false);
-          setError("Please upload an image");
+          setError("Prosím nahrajte obrázok");
           return;
         }
 
-        setProcessingStatus("uploading image");
+        setProcessingStatus("nahrávanie obrázku");
         const res = await startUpload([image]);
         if (!res) {
           setIsProcessing(false);
-          setError("Error uploading image");
+          setError("Chyba pri nahrávaní obrázku");
           return;
         }
 
-        setProcessingStatus("adding item");
+        setProcessingStatus("Pridávanie produktu");
         const id = await addItem({
           ...values,
           storeId: user.storeId,
           imageUrl: localUrl ?? "",
         });
 
-        setProcessingStatus("adding allergens and ingredients");
         for (const allergen of allergens) {
           await createItemAllergen(id, allergen.id);
         }
@@ -245,8 +244,8 @@ export default function AddItemForm({
           <DialogTitle>
             {
               {
-                add: "New item",
-                update: "Updating item",
+                add: "Nový produkt",
+                update: "Upravovanie produktu",
               }[action]
             }
           </DialogTitle>
@@ -260,7 +259,7 @@ export default function AddItemForm({
               <div className="flex justify-center">
                 <Image
                   src={imageUrl ?? ""}
-                  alt="Item imgae"
+                  alt="Obrázok produktu"
                   height={200}
                   width={200}
                 />
@@ -286,7 +285,7 @@ export default function AddItemForm({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Názov</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -299,7 +298,7 @@ export default function AddItemForm({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Popis</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -312,7 +311,7 @@ export default function AddItemForm({
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>Cena</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -321,7 +320,7 @@ export default function AddItemForm({
               )}
             />
             <div className="py-3">
-              <p className=" text-lg font-bold">Ingredients</p>
+              <p className=" text-lg font-bold">Zloženie</p>
               <div className="flex gap-2 py-2 pb-3">
                 {ingredients.map((ingredient, i) => (
                   <Badge
@@ -356,7 +355,7 @@ export default function AddItemForm({
                 }}
               >
                 <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Add allergen" />
+                  <SelectValue placeholder="Pridať zložku" />
                 </SelectTrigger>
                 <SelectContent>
                   {filteredIngredients.map((ingredient, i) => (
@@ -368,7 +367,7 @@ export default function AddItemForm({
               </Select>
             </div>
             <div className="py-3">
-              <p className=" text-lg font-bold">Allergens</p>
+              <p className=" text-lg font-bold">Alergény</p>
               <div className="flex gap-2 py-2 pb-3">
                 {allergens.map((allergen, i) => (
                   <Badge
@@ -403,7 +402,7 @@ export default function AddItemForm({
                 }}
               >
                 <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Add allergen" />
+                  <SelectValue placeholder="Pridať alergén" />
                 </SelectTrigger>
                 <SelectContent>
                   {filteredAllergens.map((allergen, i) => (
@@ -424,17 +423,11 @@ export default function AddItemForm({
                   setIsOpen(false);
                 }}
               >
-                Cancel
+                Zrušiť
               </Button>
               <Button disabled={isProcessing} type="submit">
                 {isProcessing && <Loader className="animate-spin mr-2" />}
-                {/* {
-                  {
-                    add: "Add",
-                    update: "Update",
-                  }[action]
-                } */}
-                {processingStatus || "Submit"}
+                {processingStatus || "Pridať"}
               </Button>
             </DialogFooter>
           </form>

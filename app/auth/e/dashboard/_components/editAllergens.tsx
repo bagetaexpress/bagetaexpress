@@ -54,18 +54,18 @@ export default async function EditAllergens({ error }: { error?: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Edit allergens</Button>
+        <Button>Upraviť alergény</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit allergens</DialogTitle>
+          <DialogTitle>Upraviť alergény</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Id</TableHead>
-              <TableHead>Name</TableHead>
+              <TableHead>Číslo</TableHead>
+              <TableHead>Názov</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -99,14 +99,14 @@ export default async function EditAllergens({ error }: { error?: string }) {
               pattern="[0-9]*"
               required
               name="number"
-              placeholder="Number"
+              placeholder="Číslo"
               className="w-32"
             />
             <Input
               type="text"
               name="name"
               required
-              placeholder="Name"
+              placeholder="Názov"
               className="flex-1"
             />
             <Button type="submit" size="icon" className=" aspect-square">

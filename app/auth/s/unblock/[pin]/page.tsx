@@ -36,7 +36,7 @@ export default async function UnlockPinPage({
   return (
     <HandleOrder
       pin={params.pin}
-      confirmText="Unblock"
+      confirmText="Odblokovať"
       confirmAction={confirmOrder}
       cancelAction={cancleAction}
     />

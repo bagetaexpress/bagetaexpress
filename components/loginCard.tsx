@@ -98,7 +98,7 @@ export default function LoginForm({ error }: { error?: string }) {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Heslo</FormLabel>
                   <FormControl>
                     <Input type="password" {...field} />
                   </FormControl>

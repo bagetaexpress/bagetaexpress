@@ -18,7 +18,7 @@ export default async function Store() {
   const items = await getItemsBySchool(user.schoolId);
   return (
     <div className="h-full relative">
-      <h1 className="text-2xl font-semibold pt-2">Store</h1>
+      <h1 className="text-2xl font-semibold pt-2">Obchod</h1>
       <div className="grid gap-1 mb-14 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {items.map((item) => (
           <ItemCard key={item.item.id} item={item} disabled={hasOrder} />
@@ -42,7 +42,7 @@ export default async function Store() {
             style={{ pointerEvents: "all" }}
           >
             <Button className="w-full">
-              Shopping car
+              Nákupný košík
               <ShoppingCart className="ml-2 h-5 w-5" />
             </Button>
           </a>
@@ -53,7 +53,7 @@ export default async function Store() {
             className="m-2"
             style={{ pointerEvents: "all" }}
           >
-            <Button className="w-full">Shor order</Button>
+            <Button className="w-full">Zobraziť objednávku</Button>
           </a>
         )}
       </div>

@@ -39,21 +39,21 @@ export default async function UserDropdown() {
             <>
               <DropdownMenuLabel>Admin</DropdownMenuLabel>
               <a href="/auth/c/store">
-                <DropdownMenuItem>Customer</DropdownMenuItem>
+                <DropdownMenuItem>Zákazník</DropdownMenuItem>
               </a>
               <a href="/auth/s/summary">
-                <DropdownMenuItem>Seller</DropdownMenuItem>
+                <DropdownMenuItem>Predajca</DropdownMenuItem>
               </a>
               <a href="/auth/e/dashboard">
-                <DropdownMenuItem>Employee</DropdownMenuItem>
+                <DropdownMenuItem>Zamestnanec</DropdownMenuItem>
               </a>
               <DropdownMenuSeparator />
             </>
           )}
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>Môj účet</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <AlertDialogTrigger asChild>
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem>Profil</DropdownMenuItem>
           </AlertDialogTrigger>
           <DropdownMenuSeparator />
           <LogoutMenuItem />
@@ -61,14 +61,14 @@ export default async function UserDropdown() {
       </DropdownMenu>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>User profile</AlertDialogTitle>
+          <AlertDialogTitle>Užívateľký účet</AlertDialogTitle>
         </AlertDialogHeader>
         <div>
-          <p>Account id: {user.id}</p>
+          <p>Číslo účtu: {user.id}</p>
           <p>Email: {user.email}</p>
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel>Close</AlertDialogCancel>
+          <AlertDialogCancel>Zatvoriť</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

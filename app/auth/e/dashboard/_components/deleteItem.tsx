@@ -30,23 +30,24 @@ export default function DeleteItemButton({ item }: { item: Item }) {
           variant="outline"
           className="flex justify-center items-center gap-2"
         >
-          Delete <Trash className="w-5 h-5" />
+          <Trash className="w-5 h-5" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>Ste si určite istý?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete
-            <span className="font-semibold"> {item.name}</span>.
+            Táto akcia je nevratná.
+            <span className="font-semibold"> {item.name}</span> sa nenávratne
+            zmaže.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Zrušiť</AlertDialogCancel>
           <form action={handleDelete}>
             <AlertDialogAction asChild>
               <Button className="w-full" variant="destructive" type="submit">
-                Delete
+                Zmazať
               </Button>
             </AlertDialogAction>
           </form>

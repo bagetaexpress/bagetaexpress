@@ -15,7 +15,29 @@ export default function Home({
     <div className="flex min-h-screen flex-col gap-4 items-center justify-center">
       <Alert className=" max-w-screen-sm">
         <Terminal className="h-4 w-4" />
-        <AlertTitle>This is a test version!</AlertTitle>
+        <AlertTitle>Toto je testovacia verzia!</AlertTitle>
+        <AlertDescription>
+          Registrácia je zakázaná, dostupné účty:
+          <br />
+          <ul>
+            <li>
+              <span className=" font-semibold">customer@bageta.express</span> -
+              heslo: <b>x</b>
+            </li>
+            <li>
+              <span className=" font-semibold">seller@bageta.express</span> -
+              heslo: <b>x</b>
+            </li>
+            <li>
+              <span className=" font-semibold">employee@bageta.express</span> -
+              heslo: <b>x</b>
+            </li>
+          </ul>
+          <br />
+          Ak nájdete nejaké chyby, prosím kontaktujte ma na discorde:{" "}
+          <b> tomas197</b>
+        </AlertDescription>
+        {/* <AlertTitle>This is a test version!</AlertTitle>
         <AlertDescription>
           Registration is disabled, avalible accounts:
           <br />
@@ -35,23 +57,21 @@ export default function Home({
           </ul>
           <br />
           If you find any bugs, please contact me on discord: <b>tomas197</b>
-        </AlertDescription>
+        </AlertDescription> */}
       </Alert>
       <Tabs defaultValue="login" className="w-[400px]">
         <TabsList className="flex">
           <TabsTrigger className="flex-1" value="login">
-            Login
+            Prihásiť sa
           </TabsTrigger>
           <TabsTrigger className="flex-1" value="register">
-            Register
+            Registrovať sa
           </TabsTrigger>
         </TabsList>
         <TabsContent value="login">
           <LoginForm
             error={
-              searchParams?.error != null
-                ? "Wrong email or password"
-                : undefined
+              searchParams?.error != null ? "Zlý email alebo heslo" : undefined
             }
           />
         </TabsContent>

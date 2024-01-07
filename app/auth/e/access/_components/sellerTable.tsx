@@ -43,7 +43,7 @@ export default async function SellerTable({
           <TableRow>
             <TableHead className="w-[100px]">ID</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>School</TableHead>
+            <TableHead>Škola</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
@@ -78,7 +78,7 @@ export default async function SellerTable({
         </TableBody>
       </Table>
       <form action={handleAddSeller} className="flex flex-col gap-2 mt-2">
-        <Label htmlFor="sellerId">Add employee</Label>
+        <Label htmlFor="sellerId">Pridať predajcu</Label>
         <div className="flex gap-2">
           <Input
             name="sellerId"

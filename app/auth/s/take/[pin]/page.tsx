@@ -33,7 +33,7 @@ export default async function TakePinPage({
   return (
     <HandleOrder
       pin={params.pin}
-      confirmText="Confirm"
+      confirmText="Potvrdiť"
       confirmAction={confirmOrder}
       cancelAction={cancleAction}
     />

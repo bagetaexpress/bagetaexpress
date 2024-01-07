@@ -27,9 +27,9 @@ export default async function HandleOrder({
   if (!order) {
     return (
       <div className="min-h-full flex justify-center items-center flex-col gap-2">
-        <h1 className="text-2xl font-semibold">Order not found</h1>
+        <h1 className="text-2xl font-semibold">Objednávka nebola nájdená</h1>
         <a href="/auth/s/take">
-          <Button>Return</Button>
+          <Button>Vrátiť sa</Button>
         </a>
       </div>
     );
@@ -46,7 +46,9 @@ export default async function HandleOrder({
   return (
     <div className=" min-h-full flex flex-col justify-between sm:justify-start">
       <div>
-        <h1 className="text-2xl font-semibold pt-2">Order {order.pin}</h1>
+        <h1 className="text-2xl font-semibold pt-2">
+          Č. objednávky:{order.pin}
+        </h1>
         <div className="grid grid-cols-1 divide-y-2">
           {items.map(({ item, quantity }, i) => (
             <div key={i} className="flex justify-between p-1">
@@ -63,7 +65,7 @@ export default async function HandleOrder({
           ))}
         </div>
         <div className="flex justify-between py-4">
-          <p className="font-semibold text-lg">Total</p>
+          <p className="font-semibold text-lg">Spolu</p>
           <p className="font-semibold text-xl">{total}€</p>
         </div>
       </div>
@@ -75,7 +77,7 @@ export default async function HandleOrder({
         </form>
         <form action={cancelAction}>
           <Button className="w-full" type="submit" variant="outline">
-            Cancel
+            Zrušiť
           </Button>
         </form>
       </div>

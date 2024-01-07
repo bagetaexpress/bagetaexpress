@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { getUser } from "@/lib/userUtils";
 import { getOrdersByUserId } from "@/db/controllers/orderController";
-import NavWrapper from "@/components/nav/NavWrapper.1";
+import NavWrapper from "@/components/nav/NavWrapper";
 import NavButton from "@/components/nav/navButton";
 
 export default async function authLayout({
@@ -23,11 +23,11 @@ export default async function authLayout({
   return (
     <div style={{ minHeight: "100dvh" }} className="flex flex-col">
       <NavWrapper>
-        <NavButton href="/auth/c/store" text="Home" />
+        <NavButton href="/auth/c/store" text="Domov" />
         {!hasOrder && (
           <NavButton
             href="/auth/c/cart"
-            text="Shopping cart"
+            text="Košík"
             Icon={ShoppingCart}
             className="hidden sm:flex"
           />
@@ -35,7 +35,7 @@ export default async function authLayout({
         {hasOrder && (
           <NavButton
             href="/auth/c/order"
-            text="Order"
+            text="Objednávka"
             className="hidden sm:flex"
           />
         )}

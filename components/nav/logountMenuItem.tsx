@@ -14,7 +14,7 @@ export default function LogoutMenuItem() {
         void signOut({ callbackUrl: "/" });
       }}
     >
-      Logout
+      Odhlásiť sa
     </DropdownMenuItem>
   );
 }

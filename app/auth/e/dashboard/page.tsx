@@ -50,7 +50,7 @@ export default async function DashboardPage({
           }
         />
       </div>
-      <h2 className="text-2xl font-semibold pt-4">Schools</h2>
+      <h2 className="text-2xl font-semibold pt-4">Školy</h2>
       <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {schoolStats.map(({ school, ...stats }, i) => (
           <Card key={i}>
@@ -60,18 +60,18 @@ export default async function DashboardPage({
             </CardHeader>
             <CardContent>
               <div className=" grid grid-cols-2">
-                <p>Ordered:</p>
+                <p>Objednávky:</p>
                 <p>{stats.ordered}</p>
-                <p>Delivered:</p>
+                <p>Doručené:</p>
                 <p>{stats.pickedup}</p>
-                <p>Blocked:</p>
+                <p>Zablokované:</p>
                 <p>{stats.unpicked}</p>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
-      <h2 className="text-2xl font-semibold pt-4">Items</h2>
+      <h2 className="text-2xl font-semibold pt-4">Produkty</h2>
       <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {itemStats.map(({ item, ...stats }, i) => (
           <Card key={i}>
@@ -90,9 +90,9 @@ export default async function DashboardPage({
                 />
               </div>
               <div className=" grid grid-cols-2">
-                <p>Ordered:</p>
+                <p>Objednané:</p>
                 <p>{stats.ordered}</p>
-                <p>Delivered:</p>
+                <p>Doručené:</p>
                 <p>{stats.pickedup}</p>
               </div>
             </CardContent>
@@ -105,7 +105,7 @@ export default async function DashboardPage({
                   action="update"
                   item={item}
                 >
-                  <Button>Update</Button>
+                  <Button>Upraviť</Button>
                 </AddItemForm>
               </div>
             </CardFooter>

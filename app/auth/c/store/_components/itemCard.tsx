@@ -61,7 +61,7 @@ export default function ItemCard({
               src={item.imageUrl}
               width={200}
               height={200}
-              alt="item image"
+              alt="Obrázok produktu"
               className="rounded-md"
             />
           </div>
@@ -69,7 +69,7 @@ export default function ItemCard({
             <Tooltip>
               <TooltipTrigger>
                 <div className="flex flex-wrap">
-                  <p className="font-semibold mr-1">Allergens:</p>
+                  <p className="font-semibold mr-1">Alergény:</p>
                   <p className="italic">
                     {allergens.map((a) => a.id).join(", ")}
                   </p>
@@ -84,7 +84,7 @@ export default function ItemCard({
           </TooltipProvider>
 
           <div className="flex flex-wrap">
-            <p className="font-semibold mr-1">Ingredients:</p>
+            <p className="font-semibold mr-1">Obsahuje:</p>
             <p>{ingredients.map((i) => i.name).join(", ")}</p>
           </div>
         </CardContent>
@@ -96,7 +96,7 @@ export default function ItemCard({
               className="hidden"
             ></DrawerTrigger>
             <Button disabled={disabled || isAdding} type="submit">
-              {isAdding ? "Adding..." : "Add to cart"}
+              {isAdding ? "Pridáva sa..." : "Pridať do košíka"}
             </Button>
           </form>
         </CardFooter>
@@ -104,16 +104,25 @@ export default function ItemCard({
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle>{item.name} added to cart!</DrawerTitle>
-            <DrawerDescription>Want to order</DrawerDescription>
+            <DrawerTitle>Pridané do košíka!</DrawerTitle>
+            <DrawerDescription>{item.name}</DrawerDescription>
           </DrawerHeader>
+          <div className="flex justify-center mb-2">
+            <Image
+              src={item.imageUrl}
+              width={250}
+              height={250}
+              alt="Obrázok produktu"
+              className="rounded-md"
+            />
+          </div>
           <DrawerFooter>
             <DrawerClose asChild>
-              <Button variant="outline">Continue shopping</Button>
+              <Button variant="outline">Pokračovať ďalej</Button>
             </DrawerClose>
             <a href="/auth/c/cart" className="flex">
               <Button disabled={isAdding} className="flex-1">
-                View cart
+                Prejsť do košíka
               </Button>
             </a>
           </DrawerFooter>

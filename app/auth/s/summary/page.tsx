@@ -34,16 +34,16 @@ export default async function SummaryPage({
 
   return (
     <div className=" relative min-h-full">
-      <h1 className="text-2xl font-semibold pt-2">Summary</h1>
+      <h1 className="text-2xl font-semibold pt-2">Zhrnutie</h1>
       <form action={handleFilterChange} className="flex py-2 gap-2">
         <Select name="filter" defaultValue={filter}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="ordered" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="ordered">Ordered</SelectItem>
-            <SelectItem value="pickedup">Pickedup</SelectItem>
-            <SelectItem value="unpicked">Unpicked</SelectItem>
+            <SelectItem value="ordered">Aktuálne</SelectItem>
+            <SelectItem value="pickedup">Prevzané</SelectItem>
+            <SelectItem value="unpicked">Nevyzdvihnuté</SelectItem>
           </SelectContent>
         </Select>
         <Button type="submit" size="icon">
@@ -55,7 +55,7 @@ export default async function SummaryPage({
           <AccordionItem key={order.id} value={order.pin}>
             <AccordionTrigger>
               <div className="flex justify-between">
-                <span>Order num: {order.pin}</span>
+                <span>Č. obj.: {order.pin}</span>
               </div>
             </AccordionTrigger>
             <AccordionContent>

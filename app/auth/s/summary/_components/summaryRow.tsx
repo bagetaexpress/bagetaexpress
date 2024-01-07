@@ -33,7 +33,7 @@ export default async function SummaryRow({ orderId }: IProps) {
         ))}
       </div>
       <div className="flex justify-between py-4">
-        <p className="font-semibold text-lg">Total</p>
+        <p className="font-semibold text-lg">Zhrnutie</p>
         <p className="font-semibold text-xl">{total}€</p>
       </div>
     </div>
