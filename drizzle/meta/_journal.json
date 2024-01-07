@@ -8,6 +8,13 @@
       "when": 1704570210994,
       "tag": "0000_wide_major_mapleleaf",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1704666718662,
+      "tag": "0001_spotty_stellaris",
+      "breakpoints": true
     }
   ]
 }
