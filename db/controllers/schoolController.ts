@@ -20,10 +20,19 @@ async function getSchoolsByStoreId(storeId: number): Promise<School[]> {
   return schools.map((school) => school.school);
 }
 
+export type SchoolStats = {
+  school: School;
+  orderClose: Date;
+  ordered: number;
+  pickedup: number;
+  unpicked: number;
+};
+
 async function getSchoolsOrderStats(storeId: number) {
   const schools = await db
     .select({
       school,
+      orderClose: schoolStore.orderClose,
       ordered: sql`COUNT(case when ${order.status} = 'ordered' then 1 end)`,
       pickedup: sql`COUNT(case when ${order.status} = 'pickedup' then 1 end)`,
       unpicked: sql`COUNT(case when ${order.status} = 'unpicked' then 1 end)`,
@@ -35,12 +44,7 @@ async function getSchoolsOrderStats(storeId: number) {
     .where(eq(schoolStore.storeId, storeId))
     .groupBy(school.id);
 
-  return schools as {
-    school: School;
-    ordered: number;
-    pickedup: number;
-    unpicked: number;
-  }[];
+  return schools as SchoolStats[];
 }
 
 export { getSchoolsByStoreId, getSchoolsOrderStats };
