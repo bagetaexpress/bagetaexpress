@@ -136,9 +136,10 @@ async function addItem(data: {
   description: string;
   imageUrl: string;
   price: string;
-}) {
-  const newItem = await db.insert(item).values(data);
-  return newItem;
+}): Promise<number> {
+  const res = await db.insert(item).values(data);
+  const id = res.insertId;
+  return parseInt(id);
 }
 
 async function removeItem(id: number) {
