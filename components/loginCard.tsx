@@ -113,11 +113,12 @@ export default function LoginForm({ error }: { error?: string }) {
           <CardFooter>
             {isSubmitting ? (
               <Button disabled={isSubmitting} type="submit">
-                <Loader className="animate-spin w-5 h-5 mr-2" /> Loading...
+                <Loader className="animate-spin w-5 h-5 mr-2" /> Prihlasuje
+                sa...
               </Button>
             ) : (
               <Button disabled={isSubmitting} type="submit">
-                Submit
+                Prihlásiť sa
               </Button>
             )}
           </CardFooter>
