@@ -149,7 +149,6 @@ export default function AddItemForm({
             setError("chyba pri nahrávaní obrázku");
             return;
           }
-          console.log(res[0].url);
           localUrl = res[0].url;
         } else {
           localUrl = item.imageUrl;
