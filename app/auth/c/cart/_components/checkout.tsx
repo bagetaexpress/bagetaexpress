@@ -30,7 +30,13 @@ export default function Cheackout({ items, cartId }: ICheckout) {
 
   async function handleCheckout() {
     setIsCreatingOrder(true);
-    await createOrderFromCart(cartId);
+    console.log("creating order");
+    try {
+      await createOrderFromCart(cartId);
+    } catch (error) {
+      console.log(error);
+      return;
+    }
     router.push("/auth/c/order");
     setIsCreatingOrder(false);
   }

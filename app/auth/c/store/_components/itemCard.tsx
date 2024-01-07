@@ -1,6 +1,6 @@
 "use client";
 
-import { ExtendedItem, Item } from "@/db/controllers/itemController";
+import { ExtendedItem } from "@/db/controllers/itemController";
 import {
   Card,
   CardHeader,
@@ -43,7 +43,7 @@ export default function ItemCard({
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsAdding(true);
-    await addToCart(item.id, 1);
+    await addToCart(item.id);
     drawerBtnRef.current?.click();
     setIsAdding(false);
   }

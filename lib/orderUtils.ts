@@ -15,7 +15,10 @@ function generatePin(length: number): string {
   return pin;
 }
 
-async function createUniqueOrder(schoolId: number): Promise<number> {
+async function createUniqueOrder(
+  schoolId: number,
+  userId: number
+): Promise<number> {
   let pin: string;
   let found: any;
 
@@ -23,7 +26,7 @@ async function createUniqueOrder(schoolId: number): Promise<number> {
     pin = generatePin(4);
     found = await orderCtrl.getOrderByPin(pin, schoolId);
   } while (found != null);
-  const orderId = await orderCtrl.createOrder(1, pin);
+  const orderId = await orderCtrl.createOrder(userId, pin);
 
   return orderId;
 }
@@ -51,7 +54,7 @@ async function createOrderFromCart(userId: number): Promise<number> {
     throw new Error("Cart is empty");
   }
 
-  const orderId = await createUniqueOrder(customer.schoolId);
+  const orderId = await createUniqueOrder(customer.schoolId, userId);
 
   try {
     await orderItemCtrl.createOrderItems(
@@ -62,6 +65,7 @@ async function createOrderFromCart(userId: number): Promise<number> {
       }))
     );
   } catch (e) {
+    console.error(e);
     await deleteOrderAndItems(orderId);
     throw new Error("Failed to create order items");
   }

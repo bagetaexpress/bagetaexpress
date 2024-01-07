@@ -21,7 +21,7 @@ async function addToCart(itemId: number, quantity: number = 1): Promise<void> {
   const cartId = await getCartId();
 
   const orderItem = await getCartItem(cartId, itemId);
-  if (orderItem === null) {
+  if (orderItem == null) {
     // create new cart item
     await createCartItem(cartId, itemId, quantity);
     return;
@@ -32,20 +32,17 @@ async function addToCart(itemId: number, quantity: number = 1): Promise<void> {
 
 async function getCartId(): Promise<number> {
   const session = await getServerSession(authOptions);
-  if (session === null) {
+  if (session == null) {
     throw new Error("User is not authenticated");
   }
   const userId = session.user.id;
 
-  let cartId: number;
   let cart = await getCart(userId);
-  if (cart === null) {
-    cartId = await createCart(userId);
-  } else {
-    cartId = cart.userId;
+  if (cart == null) {
+    await createCart(userId);
+    return userId;
   }
-
-  return cartId;
+  return cart.userId;
 }
 
 async function getCartItems(cartId?: number) {
