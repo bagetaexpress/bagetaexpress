@@ -17,7 +17,7 @@ export const item = mysqlTable("item", {
   name: varchar("name", { length: 255 }).notNull(),
   description: varchar("description", { length: 255 }).notNull(),
   imageUrl: varchar("image_url", { length: 255 }).notNull().default(""),
-  price: decimal("price", { precision: 2 }).notNull(),
+  price: decimal("price", { precision: 4, scale: 2 }).notNull(),
   storeId: int("store_id").notNull(),
 });
 

@@ -15,6 +15,13 @@
       "when": 1704666718662,
       "tag": "0001_spotty_stellaris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1704735532798,
+      "tag": "0002_rare_jasper_sitwell",
+      "breakpoints": true
     }
   ]
 }
