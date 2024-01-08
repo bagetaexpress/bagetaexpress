@@ -195,6 +195,7 @@ export default function AddItemForm({
           setError("Chyba pri nahrávaní obrázku");
           return;
         }
+        localUrl = res[0].url;
 
         setProcessingStatus("Pridávanie produktu");
         const id = await addItem({
