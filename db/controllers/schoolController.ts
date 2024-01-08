@@ -1,6 +1,6 @@
 "use server";
 
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "..";
 import { customer, order, school, schoolStore } from "../schema";
 
@@ -47,4 +47,21 @@ async function getSchoolsOrderStats(storeId: number) {
   return schools as SchoolStats[];
 }
 
-export { getSchoolsByStoreId, getSchoolsOrderStats };
+async function updateSchoolStoreOrderClose(
+  schoolId: number,
+  storeId: number,
+  orderClose: Date
+) {
+  await db
+    .update(schoolStore)
+    .set({ orderClose })
+    .where(
+      and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId))
+    );
+}
+
+export {
+  getSchoolsByStoreId,
+  getSchoolsOrderStats,
+  updateSchoolStoreOrderClose,
+};

@@ -25,7 +25,6 @@ import {
   getIngredientsByStoreId,
 } from "@/db/controllers/ingredientController";
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
 import SchoolCard from "./_components/schoolCard";
 
 export default async function DashboardPage({

@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { SchoolStats } from "@/db/controllers/schoolController";
 import EditOrderClose from "./editOrderClose";
 
@@ -35,7 +34,7 @@ export default function SchoolCard({
         </div>
       </CardContent>
       <CardFooter>
-        <EditOrderClose />
+        <EditOrderClose orderClose={orderClose} schoolId={school.id} />
       </CardFooter>
     </Card>
   );
