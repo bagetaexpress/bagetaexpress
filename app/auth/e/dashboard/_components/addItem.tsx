@@ -323,7 +323,7 @@ export default function AddItemForm({
             />
             <div className="py-3">
               <p className=" text-lg font-bold">Zloženie</p>
-              <div className="flex gap-2 py-2 pb-3">
+              <div className="flex gap-2 py-2 pb-3 flex-wrap">
                 {ingredients.map((ingredient, i) => (
                   <Badge
                     key={i + "removeAllergen"}
@@ -371,7 +371,7 @@ export default function AddItemForm({
             </div>
             <div className="py-3">
               <p className=" text-lg font-bold">Alergény</p>
-              <div className="flex gap-2 py-2 pb-3">
+              <div className="flex gap-2 py-2 pb-3 flex-wrap">
                 {allergens.map((allergen, i) => (
                   <Badge
                     key={i + "removeAllergen"}
