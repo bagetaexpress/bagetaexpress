@@ -345,6 +345,7 @@ export default function AddItemForm({
               </div>
               <Select
                 value=""
+                disabled={filteredIngredients.length <= 0}
                 onValueChange={(v) => {
                   if (!v) return;
                   const id = parseInt(v);
@@ -392,6 +393,7 @@ export default function AddItemForm({
               </div>
               <Select
                 value=""
+                disabled={filteredAllergens.length <= 0}
                 onValueChange={(v) => {
                   if (!v) return;
                   const id = parseInt(v);
