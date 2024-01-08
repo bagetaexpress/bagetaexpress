@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/card";
 import { SchoolStats } from "@/db/controllers/schoolController";
 import EditOrderClose from "./editOrderClose";
+import { Button } from "@/components/ui/button";
+import { Printer } from "lucide-react";
 
 export default function SchoolCard({
   school,
@@ -34,7 +36,17 @@ export default function SchoolCard({
         </div>
       </CardContent>
       <CardFooter>
-        <EditOrderClose orderClose={orderClose} schoolId={school.id} />
+        <div className="flex w-full gap-1">
+          <EditOrderClose orderClose={orderClose} schoolId={school.id} />
+          <Button
+            variant="outline"
+            type="button"
+            size="icon"
+            className="aspect-square"
+          >
+            <Printer />
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );

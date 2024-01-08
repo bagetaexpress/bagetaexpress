@@ -51,7 +51,7 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
       }}
     >
       <DialogTrigger asChild>
-        <Button>Upraviť dátum</Button>
+        <Button className="flex-1">Upraviť dátum</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
