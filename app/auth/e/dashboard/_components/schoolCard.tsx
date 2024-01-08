@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { SchoolStats } from "@/db/controllers/schoolController";
+import EditOrderClose from "./editOrderClose";
 
 export default function SchoolCard({
   school,
@@ -34,15 +35,7 @@ export default function SchoolCard({
         </div>
       </CardContent>
       <CardFooter>
-        {/* <div className="w-full grid grid-cols-2 gap-1">
-          <Input
-            type="date"
-            name="orderClose"
-            value={orderClose.toISOString().substring(0, 10)}
-            className="col-span-2"
-            required
-          />
-        </div> */}
+        <EditOrderClose />
       </CardFooter>
     </Card>
   );
