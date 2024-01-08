@@ -18,7 +18,8 @@ export default async function authLayout({
   }
 
   const foundOrder = await getOrdersByUserId(user.id, "ordered");
-  const hasOrder = foundOrder.length > 0;
+  const foundUnpicked = await getOrdersByUserId(user.id, "unpicked");
+  const hasOrder = foundOrder.length > 0 || foundUnpicked.length > 0;
 
   return (
     <div style={{ minHeight: "100dvh" }} className="flex flex-col">

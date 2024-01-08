@@ -9,8 +9,9 @@ export default async function OrderPage() {
   if (!currUser) return null;
 
   const foundOrders = await getOrdersByUserId(currUser.id, "ordered");
-  if (foundOrders.length === 0) return null;
-  const order = foundOrders[0];
+  const foundUnpicked = await getOrdersByUserId(currUser.id, "unpicked");
+
+  const order = foundOrders[0] ?? foundUnpicked[0];
 
   const items = await getItemsFromOrder(order.id);
   const total = items
@@ -60,6 +61,12 @@ export default async function OrderPage() {
         <p className="font-semibold text-lg">Spolu</p>
         <p className="font-semibold text-xl">{total}€</p>
       </div>
+      {foundUnpicked.length > 0 && (
+        <p className="text-center font-semibold text-lg text-destructive">
+          Objednávka je nevyzdvihnutá, prosím, dostavte sa k školskému
+          predajcovi
+        </p>
+      )}
     </div>
   );
 }

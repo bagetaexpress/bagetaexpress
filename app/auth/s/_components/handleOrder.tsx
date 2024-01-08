@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { getItemsFromOrder } from "@/db/controllers/itemController";
 import {
+  OrderStatus,
   getOrderByPin,
   updateOrderStatus,
 } from "@/db/controllers/orderController";
@@ -10,6 +11,7 @@ import { redirect } from "next/navigation";
 interface IProps {
   pin: string;
   confirmText: string;
+  orderStatus?: OrderStatus;
   confirmAction: () => void;
   cancelAction: () => void;
 }
@@ -17,18 +19,21 @@ interface IProps {
 export default async function HandleOrder({
   pin,
   confirmText = "Confirm",
+  orderStatus = "ordered",
   confirmAction,
   cancelAction,
 }: IProps) {
   const currUser = await getUser();
   if (!currUser) return null;
 
-  const order = await getOrderByPin(pin, currUser.schoolId, "ordered");
+  const order = await getOrderByPin(pin, currUser.schoolId, orderStatus);
   if (!order) {
     return (
       <div className="min-h-full flex justify-center items-center flex-col gap-2">
         <h1 className="text-2xl font-semibold">Objednávka nebola nájdená</h1>
-        <a href="/auth/s/take">
+        <a
+          href={orderStatus === "ordered" ? "/auth/s/take" : "/auth/s/unblock"}
+        >
           <Button>Vrátiť sa</Button>
         </a>
       </div>

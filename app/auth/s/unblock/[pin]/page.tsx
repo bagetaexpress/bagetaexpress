@@ -39,6 +39,7 @@ export default async function UnlockPinPage({
       confirmText="Odblokovať"
       confirmAction={confirmOrder}
       cancelAction={cancleAction}
+      orderStatus="unpicked"
     />
   );
 }

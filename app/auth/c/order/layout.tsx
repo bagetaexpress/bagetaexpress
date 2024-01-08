@@ -13,7 +13,8 @@ export default async function CartLayout({
     redirect("/");
   }
   const foundOrder = await getOrdersByUserId(user.id, "ordered");
-  if (foundOrder.length === 0) {
+  const foundUnpicked = await getOrdersByUserId(user.id, "unpicked");
+  if (foundOrder.length === 0 && foundUnpicked.length === 0) {
     redirect("/auth/c/store");
   }
 

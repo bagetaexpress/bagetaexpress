@@ -13,7 +13,8 @@ export default async function Store() {
   }
 
   const foundOrder = await getOrdersByUserId(user.id, "ordered");
-  const hasOrder = foundOrder.length > 0;
+  const foundUnpicked = await getOrdersByUserId(user.id, "unpicked");
+  const hasOrder = foundOrder.length > 0 || foundUnpicked.length > 0;
 
   const items = await getItemsBySchool(user.schoolId);
   return (
