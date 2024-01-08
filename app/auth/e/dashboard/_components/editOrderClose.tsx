@@ -81,7 +81,7 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
               selected={date}
               onSelect={setDate}
               initialFocus
-              disabled={(date) => date < new Date()}
+              // disabled={(date) => date < new Date()}
             />
             <div className="p-3 border-t border-border">
               <TimePickerHourMinute setDate={setDate} date={date} />

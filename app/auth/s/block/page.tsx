@@ -11,6 +11,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { blockUnpickedOrders } from "@/db/controllers/orderController";
+import {
+  getSchoolStores,
+  updateSchoolStoreOrderClose,
+} from "@/db/controllers/schoolController";
 import { getUser } from "@/lib/userUtils";
 
 export default function BlockPage() {
@@ -35,6 +39,31 @@ export default function BlockPage() {
                 "use server";
                 const user = await getUser();
                 if (!user || !user.schoolId) return;
+
+                const schoolStores = await getSchoolStores(user.schoolId);
+                for (const schoolStore of schoolStores) {
+                  if (schoolStore.orderClose > new Date()) continue;
+
+                  const date = schoolStore.orderClose;
+                  const dayOfWeek = date.getDay();
+                  let daysToAdd: number;
+
+                  if (dayOfWeek === 5) {
+                    daysToAdd = 3;
+                  } else if (dayOfWeek === 6) {
+                    daysToAdd = 2;
+                  } else {
+                    daysToAdd = 1;
+                  }
+                  date.setDate(date.getDate() + daysToAdd);
+
+                  await updateSchoolStoreOrderClose(
+                    user.schoolId,
+                    schoolStore.storeId,
+                    date
+                  );
+                }
+
                 await blockUnpickedOrders(user.schoolId);
               }}
             >

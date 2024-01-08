@@ -33,14 +33,19 @@ import Image from "next/image";
 export default function ItemCard({
   item: { item, allergens = [], ingredients = [] },
   disabled,
+  orderClose,
 }: {
   item: ExtendedItem;
   disabled: boolean;
+  orderClose: Date;
 }) {
   const drawerBtnRef = useRef<HTMLButtonElement | null>(null);
   const [isAdding, setIsAdding] = useState(false);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    if (orderClose < new Date()) {
+      return;
+    }
     e.preventDefault();
     setIsAdding(true);
     await addToCart(item.id);

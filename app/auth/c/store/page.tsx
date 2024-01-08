@@ -2,6 +2,7 @@ import ItemCard from "@/app/auth/c/store/_components/itemCard";
 import { Button } from "@/components/ui/button";
 import { getItemsBySchool } from "@/db/controllers/itemController";
 import { getOrdersByUserId } from "@/db/controllers/orderController";
+import { getFirstOrderClose } from "@/db/controllers/schoolController";
 import { getUser } from "@/lib/userUtils";
 import { ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
@@ -17,12 +18,30 @@ export default async function Store() {
   const hasOrder = foundOrder.length > 0 || foundUnpicked.length > 0;
 
   const items = await getItemsBySchool(user.schoolId);
+  const orderClose = await getFirstOrderClose(user.schoolId);
   return (
     <div className="h-full relative">
       <h1 className="text-2xl font-semibold pt-2">Obchod</h1>
+      {orderClose > new Date() ? (
+        <div className="text-sm text-gray-500 mb-4">
+          Objednávky sa uzatvárajú:{" "}
+          <span className="font-semibold text-primary-foreground">
+            {orderClose.toLocaleString()}
+          </span>
+        </div>
+      ) : (
+        <div className="text-sm text-gray-500 mb-4">
+          Objednávky sú uzatvorené
+        </div>
+      )}
       <div className="grid gap-1 mb-14 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {items.map((item) => (
-          <ItemCard key={item.item.id} item={item} disabled={hasOrder} />
+          <ItemCard
+            key={item.item.id}
+            item={item}
+            orderClose={orderClose}
+            disabled={hasOrder || orderClose <= new Date()}
+          />
         ))}
       </div>
       <div

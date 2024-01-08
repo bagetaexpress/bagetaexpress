@@ -22,15 +22,19 @@ interface ICheckout {
     quantity: number;
   }[];
   cartId: number;
+  orderClose: Date;
 }
 
-export default function Cheackout({ items, cartId }: ICheckout) {
+export default function Cheackout({ items, cartId, orderClose }: ICheckout) {
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
   const router = useRouter();
 
   async function handleCheckout() {
+    if (orderClose < new Date()) {
+      router.refresh();
+      return;
+    }
     setIsCreatingOrder(true);
-    console.log("creating order");
     try {
       await createOrderFromCart(cartId);
     } catch (error) {

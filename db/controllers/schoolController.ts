@@ -11,6 +11,12 @@ export type School = {
   emailRegex: string;
 };
 
+export type SchoolStore = {
+  schoolId: number;
+  storeId: number;
+  orderClose: Date;
+};
+
 async function getSchoolsByStoreId(storeId: number): Promise<School[]> {
   const schools = await db
     .select({ school })
@@ -60,8 +66,28 @@ async function updateSchoolStoreOrderClose(
     );
 }
 
+async function getFirstOrderClose(schoolId: number) {
+  const res = await db
+    .select({ orderClose: schoolStore.orderClose })
+    .from(schoolStore)
+    .where(eq(schoolStore.schoolId, schoolId))
+    .orderBy(schoolStore.orderClose)
+    .limit(1);
+  return res[0].orderClose;
+}
+
+async function getSchoolStores(schoolId: number): Promise<SchoolStore[]> {
+  const res = await db
+    .select({ schoolStore })
+    .from(schoolStore)
+    .where(eq(schoolStore.schoolId, schoolId));
+  return res.map((r) => r.schoolStore);
+}
+
 export {
   getSchoolsByStoreId,
+  getFirstOrderClose,
+  getSchoolStores,
   getSchoolsOrderStats,
   updateSchoolStoreOrderClose,
 };

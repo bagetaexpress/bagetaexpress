@@ -1,6 +1,8 @@
 import CartItemRow from "@/app/auth/c/cart/_components/cartItemRow";
 import Cheackout from "@/app/auth/c/cart/_components/checkout";
+import { getFirstOrderClose } from "@/db/controllers/schoolController";
 import { getCartId, getCartItems } from "@/lib/cartUtils";
+import { getUser } from "@/lib/userUtils";
 import { redirect } from "next/navigation";
 
 export default async function CartPage() {
@@ -21,6 +23,10 @@ export default async function CartPage() {
       </div>
     );
   }
+
+  const user = await getUser();
+  if (!user || !user.schoolId) return;
+  const orderClose = await getFirstOrderClose(user.schoolId);
 
   return (
     <div className="h-full flex flex-col justify-between md:justify-start">
@@ -51,7 +57,13 @@ export default async function CartPage() {
         </div>
       </div>
       <div className="flex justify-end">
-        <Cheackout items={data} cartId={cartId} />
+        {orderClose > new Date() ? (
+          <Cheackout orderClose={orderClose} items={data} cartId={cartId} />
+        ) : (
+          <p className="text-xl font-semibold text-red-500">
+            Objednávky sú uzavreté
+          </p>
+        )}
       </div>
     </div>
   );
