@@ -1,6 +1,6 @@
 "use server";
 
-import { InferInsertModel, eq, sql } from "drizzle-orm";
+import { InferInsertModel, eq, sql, and } from "drizzle-orm";
 import {
   Allergen,
   Cart,
@@ -8,8 +8,10 @@ import {
   Item,
   Order,
   School,
+  Store,
   allergen,
   cartItem,
+  customer,
   ingredient,
   item,
   itemAllergen,
@@ -151,7 +153,40 @@ async function updateItem(
   await db.update(item).set(data).where(eq(item.id, data.id));
 }
 
+async function getOrderItemsByStoreAndSchool(
+  storeId: Store["id"],
+  schoolId: School["id"],
+  orderStatus: Order["status"] = "ordered"
+): Promise<Array<ExtendedItem & { quantity: number }>> {
+  // @ts-expect-error hydrating needed fields below
+  const items: Array<ExtendedItem & { quantity: number }> = await db
+    .select({
+      item,
+      quantity: sql<number>`SUM(order_item.quantity)`,
+    })
+    .from(item)
+    .innerJoin(orderItem, eq(item.id, orderItem.itemId))
+    .innerJoin(order, eq(orderItem.orderId, order.id))
+    .innerJoin(customer, eq(order.userId, customer.userId))
+    .where(
+      and(
+        eq(item.storeId, storeId),
+        eq(order.status, orderStatus),
+        eq(customer.schoolId, schoolId)
+      )
+    )
+    .groupBy(item.id);
+
+  for (const it of items) {
+    it.allergens = await getAllergensByItem(it.item.id);
+    it.ingredients = await getIngredientsByItem(it.item.id);
+  }
+
+  return items;
+}
+
 export {
+  getOrderItemsByStoreAndSchool,
   getItemsBySchool,
   getItemById,
   getItemsFromCart,

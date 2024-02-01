@@ -8,15 +8,26 @@ import {
 } from "@/components/ui/card";
 import { SchoolStats } from "@/db/controllers/schoolController";
 import EditOrderClose from "./editOrderClose";
-import { Button } from "@/components/ui/button";
-import { Printer } from "lucide-react";
 import PrintOrderLabels from "./printOrderLabels";
+import { getOrderItemsByStoreAndSchool } from "@/db/controllers/itemController";
+import { getUser } from "@/lib/userUtils";
+import { getStore } from "@/db/controllers/storeController";
 
-export default function SchoolCard({
+export default async function SchoolCard({
   school,
   orderClose,
   ...stats
 }: SchoolStats) {
+  const user = await getUser();
+  if (!user) {
+    return null;
+  }
+  const orders = await getOrderItemsByStoreAndSchool(
+    user.storeId ?? 0,
+    school.id
+  );
+  const store = await getStore(user.storeId ?? 0);
+
   return (
     <Card>
       <CardHeader>
@@ -39,7 +50,7 @@ export default function SchoolCard({
       <CardFooter>
         <div className="flex w-full gap-1">
           <EditOrderClose orderClose={orderClose} schoolId={school.id} />
-          <PrintOrderLabels schoolId={school.id} />
+          <PrintOrderLabels orders={orders} store={store} />
         </div>
       </CardFooter>
     </Card>
