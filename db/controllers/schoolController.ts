@@ -40,9 +40,9 @@ async function getSchoolsOrderStats(storeId: SchoolStore["storeId"]) {
       unpicked: sql`COUNT(case when ${order.status} = 'unpicked' then 1 end)`,
     })
     .from(school)
-    .innerJoin(schoolStore, eq(school.id, schoolStore.schoolId))
-    .innerJoin(customer, eq(school.id, customer.schoolId))
-    .innerJoin(order, eq(customer.userId, order.userId))
+    .leftJoin(schoolStore, eq(school.id, schoolStore.schoolId))
+    .leftJoin(customer, eq(school.id, customer.schoolId))
+    .leftJoin(order, eq(customer.userId, order.userId))
     .where(eq(schoolStore.storeId, storeId))
     .groupBy(school.id);
 

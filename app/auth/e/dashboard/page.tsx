@@ -33,6 +33,7 @@ export default async function DashboardPage({
   }
 
   const schoolStats = await getSchoolsOrderStats(user.storeId ?? 0);
+  console.log("schoolStats", schoolStats);
   const itemStats = await getItemsStats(user.storeId ?? 0);
   const allergens = await getAllergensByStoreId(user.storeId ?? 0);
   const ingredients = await getIngredientsByStoreId(user.storeId ?? 0);
