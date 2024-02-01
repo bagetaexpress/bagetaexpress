@@ -5,13 +5,13 @@ import { db } from "..";
 import { cartItem } from "../schema";
 
 export type CartItem = {
-  cartId: number;
+  cartId: string;
   itemId: number;
   quantity: number;
 };
 
 async function createCartItem(
-  cartId: number,
+  cartId: string,
   itemId: number,
   quantity: number
 ) {
@@ -22,12 +22,12 @@ async function createCartItem(
   });
 }
 
-async function getCartItemsByCartId(cartId: number) {
+async function getCartItemsByCartId(cartId: string) {
   return await db.select().from(cartItem).where(eq(cartItem.cartId, cartId));
 }
 
 async function getCartItem(
-  cartId: number,
+  cartId: string,
   itemId: number
 ): Promise<CartItem | null> {
   const found = await db
@@ -41,7 +41,7 @@ async function getCartItem(
 }
 
 async function updateCartItem(
-  cartId: number,
+  cartId: string,
   itemId: number,
   quantity: number
 ) {
@@ -53,13 +53,13 @@ async function updateCartItem(
     .where(and(eq(cartItem.cartId, cartId), eq(cartItem.itemId, itemId)));
 }
 
-async function deleteCartItem(cartId: number, itemId: number) {
+async function deleteCartItem(cartId: string, itemId: number) {
   await db
     .delete(cartItem)
     .where(and(eq(cartItem.cartId, cartId), eq(cartItem.itemId, itemId)));
 }
 
-async function deleteCartItems(cartId: number) {
+async function deleteCartItems(cartId: string) {
   await db.delete(cartItem).where(eq(cartItem.cartId, cartId));
 }
 

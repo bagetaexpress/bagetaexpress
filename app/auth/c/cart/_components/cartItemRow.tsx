@@ -11,7 +11,7 @@ export default function CartItemRow({
   quantity,
   cartId,
   ...item
-}: Item & { quantity: number; cartId: number }) {
+}: Item & { quantity: number; cartId: string }) {
   const [q, updateQ] = useOptimistic<number, number>(
     quantity,
     (_, updated) => updated

@@ -21,7 +21,7 @@ interface ICheckout {
     item: Item;
     quantity: number;
   }[];
-  cartId: number;
+  cartId: string;
   orderClose: Date;
 }
 

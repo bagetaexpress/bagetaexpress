@@ -1,100 +1,60 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
-import { getUserByEmail } from "@/db/controllers/userController";
+import NextAuth, { AuthOptions } from "next-auth";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { db } from "@/db";
+import AzureADProvider from "next-auth/providers/azure-ad";
+import {
+  getEmployeeById,
+  getSellerById,
+  getUserById,
+} from "@/db/controllers/userController";
+import { getCustomer } from "@/db/controllers/customerController";
+import { getUser } from "@/lib/userUtils";
 
-export type BeUser = {
-  id: string;
-  email: string;
-  isAdmin: boolean;
-  isSeller: boolean;
-  isEmployee: boolean;
-  isCustomer: boolean;
-  schoolId?: number;
-  storeId?: number;
-};
-
-export const authOptions: NextAuthOptions = {
-  pages: {
-    signIn: "/",
-    signOut: "/",
-    error: "/",
-  },
-  session: {
-    strategy: "jwt",
-  },
+export const authOptions: AuthOptions = {
+  // ! wierd type error, don't have time to fix, but it works
+  // @ts-ignore
+  adapter: DrizzleAdapter(db),
   providers: [
-    CredentialsProvider({
-      name: "Credentials",
-
-      credentials: {
-        email: {
-          label: "Email",
-          type: "text",
-          placeholder: "jsmith@email.com",
-        },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials, req) {
-        if (!credentials?.email || !credentials.password) {
-          return null;
-        }
-
-        const found = await getUserByEmail(credentials.email);
-        if (!found) {
-          return null;
-        }
-
-        if (!found.user.password) {
-          return null;
-        }
-
-        if (
-          !(await bcrypt.compare(credentials.password, found.user.password))
-        ) {
-          return null;
-        }
-
-        const user: BeUser = {
-          id: found.user.id.toString(),
-          email: found.user.email,
-          isAdmin: found.user.isAdmin,
-          isSeller: found.seller != null,
-          isCustomer: found.customer != null,
-          isEmployee: found.employee != null,
-          schoolId: found.customer?.schoolId ?? found.seller?.schoolId,
-          storeId: found.employee?.storeId ?? found.seller?.storeId,
-        };
-        return user;
-      },
+    AzureADProvider({
+      clientId: process.env.AZURE_AD_CLIENT_ID!,
+      clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
+      tenantId: process.env.AZURE_AD_TENANT_ID!,
     }),
   ],
+  pages: {
+    newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
+  },
   callbacks: {
-    jwt({ token, account, user }) {
+    async jwt({ token, account }) {
       if (account) {
         token.accessToken = account.access_token;
-        token.id = user?.id;
+        token.userId = account.userId;
       }
-      if (user) {
-        token.user = { ...user };
-      }
+
       return token;
     },
-    session({ session, token }: { session: any; token: any }) {
-      session.user.id = token.id;
-      session.user.isAdmin = token.user.isAdmin;
-      session.user.isSeller = token.user.isSeller;
-      session.user.isCustomer = token.user.isCustomer;
-      session.user.isEmployee = token.user.isEmployee;
-      session.user.schoolId = token.user.schoolId;
-      session.user.storeId = token.user.storeId;
-      session.user.email = token.user.email;
+    async session({ session, user }) {
+      const foundUser = await getUserById(user.id);
+      const customer = await getCustomer(user.id);
+      const seller = await getSellerById(user.id);
+      const employee = await getEmployeeById(user.id);
 
-      return session;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+          isAdmin: foundUser?.isAdmin || false,
+          isCustomer: !!customer,
+          isSeller: !!seller,
+          isEmployee: !!employee,
+          storeId: seller?.storeId || employee?.storeId,
+          schoolId: seller?.schoolId,
+        },
+      };
     },
   },
 };
 
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };

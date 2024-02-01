@@ -40,36 +40,6 @@ async function clearDatabase(db: Database) {
 }
 
 async function populate(db: Database) {
-  // Adding users
-  await db.insert(tables.user).values([
-    {
-      id: 1,
-      email: "admin@bageta.express",
-      password: "$2b$10$3Pl5KENBH5ISt7WIPef/KuRJyRIKBsgW0OjXXKUhpJkyP7c1XRAQu",
-      isAdmin: true,
-    },
-    {
-      id: 2,
-      email: "seller@bageta.express",
-      password: "$2b$10$3Pl5KENBH5ISt7WIPef/KuRJyRIKBsgW0OjXXKUhpJkyP7c1XRAQu",
-    },
-    {
-      id: 3,
-      email: "employee@bageta.express",
-      password: "$2b$10$3Pl5KENBH5ISt7WIPef/KuRJyRIKBsgW0OjXXKUhpJkyP7c1XRAQu",
-    },
-    {
-      id: 4,
-      email: "customer@bageta.express",
-      password: "$2b$10$3Pl5KENBH5ISt7WIPef/KuRJyRIKBsgW0OjXXKUhpJkyP7c1XRAQu",
-    },
-    {
-      id: 5,
-      email: "gymn@bageta.express",
-      password: "$2b$10$3Pl5KENBH5ISt7WIPef/KuRJyRIKBsgW0OjXXKUhpJkyP7c1XRAQu",
-    },
-  ]);
-
   // Adding schools
   await db.insert(tables.school).values([
     {
@@ -169,44 +139,6 @@ async function populate(db: Database) {
     },
   ]);
 
-  // Adding relations
-  await db.insert(tables.customer).values([
-    {
-      userId: 1,
-      schoolId: 1,
-    },
-    {
-      userId: 4,
-      schoolId: 1,
-    },
-    {
-      userId: 5,
-      schoolId: 2,
-    },
-  ]);
-  await db.insert(tables.employee).values([
-    {
-      userId: 1,
-      storeId: 1,
-    },
-    {
-      userId: 3,
-      storeId: 1,
-    },
-  ]);
-  await db.insert(tables.seller).values([
-    {
-      userId: 1,
-      storeId: 1,
-      schoolId: 1,
-    },
-    {
-      userId: 2,
-      storeId: 1,
-      schoolId: 1,
-    },
-  ]);
-
   await db.insert(tables.schoolStore).values([
     {
       schoolId: 1,
@@ -215,62 +147,6 @@ async function populate(db: Database) {
     {
       schoolId: 2,
       storeId: 1,
-    },
-  ]);
-
-  // Adding orders
-  await db.insert(tables.order).values([
-    {
-      id: 1,
-      userId: 1,
-      pin: "1234",
-      status: "ordered",
-    },
-    {
-      id: 2,
-      userId: 4,
-      pin: "4321",
-      status: "ordered",
-    },
-    {
-      id: 3,
-      userId: 5,
-      pin: "1111",
-      status: "ordered",
-    },
-    {
-      id: 4,
-      userId: 5,
-      pin: "2222",
-      status: "pickedup",
-    },
-  ]);
-
-  await db.insert(tables.orderItem).values([
-    {
-      orderId: 1,
-      itemId: 1,
-      quantity: 1,
-    },
-    {
-      orderId: 1,
-      itemId: 2,
-      quantity: 2,
-    },
-    {
-      orderId: 2,
-      itemId: 1,
-      quantity: 2,
-    },
-    {
-      orderId: 3,
-      itemId: 2,
-      quantity: 1,
-    },
-    {
-      orderId: 4,
-      itemId: 1,
-      quantity: 1,
     },
   ]);
 }

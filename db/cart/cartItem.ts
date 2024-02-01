@@ -1,4 +1,4 @@
-import { mysqlTable, int, primaryKey } from "drizzle-orm/mysql-core";
+import { mysqlTable, int, primaryKey, varchar } from "drizzle-orm/mysql-core";
 import { item } from "../item/item";
 import { cart } from "./cart";
 import { relations } from "drizzle-orm";
@@ -6,7 +6,7 @@ import { relations } from "drizzle-orm";
 export const cartItem = mysqlTable(
   "cart_item",
   {
-    cartId: int("cart_id").notNull(),
+    cartId: varchar("cart_id", { length: 255 }).notNull(),
     itemId: int("item_id").notNull(),
     quantity: int("quantity").notNull(),
   },

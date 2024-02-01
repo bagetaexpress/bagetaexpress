@@ -16,6 +16,7 @@
     "migration:studio": "drizzle-kit studio; drizzle-kit studio --port 3000; drizzle-kit studio --verbose "
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^0.4.0",
     "@hookform/resolvers": "^3.3.2",
     "@planetscale/database": "^1.13.0",
     "@radix-ui/react-accordion": "^1.1.2",
@@ -37,9 +38,10 @@
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "cookies-next": "^4.1.1",
     "date-fns": "^3.1.0",
     "dotenv": "^16.3.1",
-    "drizzle-orm": "^0.29.1",
+    "drizzle-orm": "^0.29.3",
     "lucide-react": "^0.301.0",
     "mysql2": "^3.6.5",
     "next": "14.0.4",

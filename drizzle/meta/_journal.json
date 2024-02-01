@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1704570210994,
-      "tag": "0000_wide_major_mapleleaf",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1704666718662,
-      "tag": "0001_spotty_stellaris",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1704735532798,
-      "tag": "0002_rare_jasper_sitwell",
+      "when": 1706782189670,
+      "tag": "0000_dashing_venus",
       "breakpoints": true
     }
   ]

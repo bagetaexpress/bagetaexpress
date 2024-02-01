@@ -2,7 +2,7 @@ import { order } from "./order/order";
 import { orderItem } from "./order/orderItem";
 import { school } from "./school/school";
 import { schoolStore } from "./school/schoolStore";
-import { user } from "./user/user";
+import { account, session, user, verificationToken } from "./user/user";
 import { employee } from "./user/employee";
 import { customer } from "./user/customer";
 import { item } from "./item/item";
@@ -24,12 +24,39 @@ import { itemAllergen, itemAllergenRelations } from "./item/itemAllergen";
 import { ingredient, ingredientRelations } from "./item/ingredient";
 import { itemIngredient, itemIngredientRelations } from "./item/itemIngredient";
 
+/*
+DROP TABLE IF EXISTS 
+  `__drizzle_migrations`,
+  `order`,
+  `order_item`,
+  `school`,
+  `school_store`,
+  `user`,
+  `account`,
+  `session`,
+  `verificationToken`,
+  `employee`,
+  `customer`,
+  `item`,
+  `store`,
+  `cart`,
+  `cart_item`,
+  `seller`,
+  `allergen`,
+  `item_allergen`,
+  `ingredient`,
+  `item_ingredient`;
+*/
+
 export const tables = {
   order,
   orderItem,
   school,
   schoolStore,
   user,
+  account,
+  session,
+  verificationToken,
   employee,
   customer,
   item,
@@ -67,6 +94,9 @@ export {
   school,
   schoolStore,
   user,
+  account,
+  session,
+  verificationToken,
   employee,
   customer,
   item,

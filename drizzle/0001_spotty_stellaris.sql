@@ -1,1 +1,0 @@
-ALTER TABLE `school_store` ADD `order_close` datetime DEFAULT CURRENT_TIMESTAMP NOT NULL;

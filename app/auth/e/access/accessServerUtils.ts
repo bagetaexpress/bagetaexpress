@@ -25,7 +25,7 @@ async function handleAddEmployee(formData: any) {
     redirect("/auth/e/access?EmpError=Invalid employee id");
   }
 
-  const foundUser = await getUserById(parseInt(employeeId));
+  const foundUser = await getUserById(employeeId);
   if (!foundUser) {
     redirect("/auth/e/access?EmpError=Employee not found");
   }
@@ -43,13 +43,13 @@ async function handleAddEmployee(formData: any) {
   redirect("/auth/e/access");
 }
 
-async function handleRemoveEmployee(employeeId: number) {
+async function handleRemoveEmployee(employeeId: string) {
   const foundEmployee = await getEmployeeById(employeeId);
   if (!foundEmployee) {
     revalidatePath("auth/e/access", "page");
   }
 
-  await deleteEmployee(foundEmployee?.userId ?? 0);
+  await deleteEmployee(foundEmployee?.userId ?? "");
   revalidatePath("auth/e/access", "page");
 }
 
@@ -65,7 +65,7 @@ async function handleAddSeller(formData: any) {
     redirect("/auth/e/access?SellerError=Invalid seller id");
   }
 
-  const foundUser = await getUserById(parseInt(sellerId));
+  const foundUser = await getUserById(sellerId);
   if (!foundUser) {
     redirect("/auth/e/access?SellerError=Seller not found");
   }
@@ -84,13 +84,13 @@ async function handleAddSeller(formData: any) {
   redirect("/auth/e/access");
 }
 
-async function handleRemoveSeller(sellerId: number) {
+async function handleRemoveSeller(sellerId: string) {
   const foundSeller = await getSellerById(sellerId);
   if (!foundSeller) {
     revalidatePath("auth/e/access", "page");
   }
 
-  await deleteSeller(foundSeller?.userId ?? 0);
+  await deleteSeller(foundSeller?.userId ?? "");
   revalidatePath("auth/e/access", "page");
 }
 

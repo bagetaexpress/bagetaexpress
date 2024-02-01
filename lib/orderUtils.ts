@@ -17,7 +17,7 @@ function generatePin(length: number): string {
 
 async function createUniqueOrder(
   schoolId: number,
-  userId: number
+  userId: string
 ): Promise<number> {
   let pin: string;
   let found: any;
@@ -35,7 +35,7 @@ async function createUniqueOrder(
   return order[0].id;
 }
 
-async function createOrderFromCart(userId: number): Promise<number> {
+async function createOrderFromCart(userId: string): Promise<number> {
   const customer = await customerCtrl.getCustomer(userId);
   if (!customer) {
     throw new Error("Customer not found");

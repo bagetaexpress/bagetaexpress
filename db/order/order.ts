@@ -12,7 +12,7 @@ import { orderItem } from "./orderItem";
 
 export const order = mysqlTable("order", {
   id: serial("id").primaryKey(),
-  userId: int("user_id").notNull(),
+  userId: varchar("user_id", { length: 255 }).notNull(),
   pin: varchar("pin", { length: 4 }).notNull(),
   status: mysqlEnum("status", [
     "ordered",

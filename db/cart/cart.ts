@@ -1,10 +1,10 @@
-import { mysqlTable, int, timestamp } from "drizzle-orm/mysql-core";
+import { mysqlTable, int, timestamp, varchar } from "drizzle-orm/mysql-core";
 import { user } from "../user/user";
 import { relations } from "drizzle-orm";
 import { cartItem } from "./cartItem";
 
 export const cart = mysqlTable("cart", {
-  userId: int("user_id").notNull().primaryKey(),
+  userId: varchar("user_id", { length: 255 }).notNull().primaryKey(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 });

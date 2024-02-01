@@ -8,7 +8,7 @@ export type OrderStatus = "ordered" | "pickedup" | "unpicked" | "cancelled";
 
 export type Order = {
   id: number;
-  userId: number;
+  userId: string;
   status: OrderStatus;
   pin: string;
   createdAt: Date;
@@ -16,7 +16,7 @@ export type Order = {
 };
 
 async function createOrder(
-  userId: number,
+  userId: string,
   pin: string,
   status: OrderStatus = "ordered"
 ) {
@@ -68,7 +68,7 @@ async function deleteOrder(orderId: number): Promise<void> {
 }
 
 async function getOrdersByUserId(
-  userId: number,
+  userId: string,
   status: OrderStatus
 ): Promise<Order[]> {
   const orders = await db
@@ -86,7 +86,7 @@ async function getOrder(orderId: number): Promise<Order | null> {
   return orders[0];
 }
 
-async function getOrders(userId: number): Promise<Order[]> {
+async function getOrders(userId: string): Promise<Order[]> {
   const orders = await db.select().from(order).where(eq(order.userId, userId));
   return orders;
 }

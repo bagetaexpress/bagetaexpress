@@ -1,10 +1,10 @@
-import { int, mysqlTable } from "drizzle-orm/mysql-core";
+import { int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 import { user } from "./user";
 import { store } from "../store/store";
 import { relations } from "drizzle-orm";
 
 export const seller = mysqlTable("seller", {
-  userId: int("user_id").notNull().primaryKey(),
+  userId: varchar("user_id", { length: 255 }).notNull().primaryKey(),
   storeId: int("store_id").notNull(),
   schoolId: int("school_id").notNull(),
 });

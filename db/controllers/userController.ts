@@ -2,31 +2,32 @@
 
 import { customer, employee, school, seller, user } from "../schema";
 import { db } from "../index";
-import { eq } from "drizzle-orm";
-import bcrypt from "bcrypt";
+import { eq, sql } from "drizzle-orm";
 import { School } from "./schoolController";
 
 export type Customer = {
-  userId: number;
+  userId: string;
   schoolId: number;
 };
 
 export type Employee = {
-  userId: number;
+  userId: string;
   storeId: number;
 };
 
 export type Seller = {
   storeId: number;
   schoolId: number;
-  userId: number;
+  userId: string;
 };
 
 export type User = {
-  id: number;
-  email: string;
-  password: string;
+  id: string;
+  name: string | null;
   isAdmin: boolean;
+  email: string;
+  emailVerified: Date | null;
+  image: string | null;
 };
 
 export interface BeUser {
@@ -51,53 +52,28 @@ async function getUserByEmail(email: string): Promise<BeUser | null> {
   return found[0];
 }
 
-async function createUser(email: string, password: string): Promise<User> {
-  const hash = await bcrypt.hash(password, 10);
-  const newUser = await db
-    .insert(user)
-    .values({
-      email: email,
-      password: hash,
-    })
-    .execute();
-  return {
-    id: parseInt(newUser.insertId), // TODO: fix this
-    email: email,
-    password: hash,
-    isAdmin: false,
-  };
-}
-
 interface ICreateEmployee {
-  userId: number;
+  userId: string;
   storeId: number;
 }
-async function createEmployee(data: ICreateEmployee): Promise<number> {
-  const res = await db.insert(employee).values({
+async function createEmployee(data: ICreateEmployee): Promise<string> {
+  await db.insert(employee).values({
     userId: data.userId,
     storeId: data.storeId,
   });
-  return parseInt(res.insertId); // TODO: fix this
+  return data.userId;
 }
 
 interface ICreateCustomer {
-  email: string;
-  password: string;
+  userId: string;
   schoolId: number;
 }
-async function createCustomer(data: ICreateCustomer): Promise<Customer> {
-  const newUser = await createUser(data.email, data.password);
-  await db
-    .insert(customer)
-    .values({
-      userId: newUser.id,
-      schoolId: data.schoolId,
-    })
-    .execute();
-  return {
-    userId: newUser.id,
+async function createCustomer(data: ICreateCustomer): Promise<string> {
+  await db.insert(customer).values({
+    userId: data.userId,
     schoolId: data.schoolId,
-  };
+  });
+  return data.userId;
 }
 
 async function getEmployeesByStoreId(storeId: number): Promise<
@@ -150,15 +126,15 @@ async function createSeller(data: Seller): Promise<Seller> {
   return data;
 }
 
-async function deleteSeller(sellerId: number): Promise<void> {
+async function deleteSeller(sellerId: string): Promise<void> {
   await db.delete(seller).where(eq(seller.userId, sellerId));
 }
 
-async function deleteEmployee(employeeId: number): Promise<void> {
+async function deleteEmployee(employeeId: string): Promise<void> {
   await db.delete(employee).where(eq(employee.userId, employeeId));
 }
 
-async function getUserById(userId: number): Promise<User | null> {
+async function getUserById(userId: string): Promise<User | null> {
   const found = await db.select().from(user).where(eq(user.id, userId));
   if (!found || found.length === 0) {
     return null;
@@ -166,7 +142,7 @@ async function getUserById(userId: number): Promise<User | null> {
   return found[0];
 }
 
-async function getEmployeeById(employeeId: number): Promise<Employee | null> {
+async function getEmployeeById(employeeId: string): Promise<Employee | null> {
   const found = await db
     .select()
     .from(employee)
@@ -177,7 +153,7 @@ async function getEmployeeById(employeeId: number): Promise<Employee | null> {
   return found[0];
 }
 
-async function getSellerById(sellerId: number): Promise<Seller | null> {
+async function getSellerById(sellerId: string): Promise<Seller | null> {
   const found = await db
     .select()
     .from(seller)
@@ -191,12 +167,11 @@ async function getSellerById(sellerId: number): Promise<Seller | null> {
 export {
   getUserById,
   getEmployeeById,
-  createUser,
   getUserByEmail,
-  createEmployee,
-  createCustomer,
   getEmployeesByStoreId,
   getSellersByStoreId,
+  createCustomer,
+  createEmployee,
   createSeller,
   deleteSeller,
   deleteEmployee,

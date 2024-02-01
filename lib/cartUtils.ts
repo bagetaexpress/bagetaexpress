@@ -30,7 +30,7 @@ async function addToCart(itemId: number, quantity: number = 1): Promise<void> {
   await updateCartItem(cartId, itemId, orderItem.quantity + quantity);
 }
 
-async function getCartId(): Promise<number> {
+async function getCartId(): Promise<string> {
   const session = await getServerSession(authOptions);
   if (session == null) {
     throw new Error("User is not authenticated");
@@ -45,7 +45,7 @@ async function getCartId(): Promise<number> {
   return cart.userId;
 }
 
-async function getCartItems(cartId?: number) {
+async function getCartItems(cartId?: string) {
   if (!cartId) {
     cartId = await getCartId();
   }
@@ -54,7 +54,7 @@ async function getCartItems(cartId?: number) {
 }
 
 async function saveUpdateCartItem(
-  cartId: number,
+  cartId: string,
   itemId: number,
   quantity: number
 ) {
@@ -73,7 +73,7 @@ async function saveUpdateCartItem(
   revalidatePath("/auth/c/cart", "page");
 }
 
-async function deleteCartAndItems(cartId: number) {
+async function deleteCartAndItems(cartId: string) {
   await deleteCartItems(cartId);
   await deleteCart(cartId);
 }

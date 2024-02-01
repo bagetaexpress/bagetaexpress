@@ -1,10 +1,9 @@
 "use client";
 
-import LoginForm from "@/components/loginCard";
-import RegisterForm from "@/components/registerCard";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { TabsList, TabsTrigger, TabsContent, Tabs } from "@/components/ui/tabs";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
+
+import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Home({
   searchParams,
@@ -16,69 +15,32 @@ export default function Home({
       <Alert className=" max-w-screen-sm">
         <Terminal className="h-4 w-4" />
         <AlertTitle>Toto je testovacia verzia!</AlertTitle>
-        <AlertDescription>
-          Registrácia je zakázaná, dostupné účty:
-          <br />
-          <ul>
-            <li>
-              <span className=" font-semibold">customer@bageta.express</span> -
-              heslo: <b>x</b>
-            </li>
-            <li>
-              <span className=" font-semibold">seller@bageta.express</span> -
-              heslo: <b>x</b>
-            </li>
-            <li>
-              <span className=" font-semibold">employee@bageta.express</span> -
-              heslo: <b>x</b>
-            </li>
-          </ul>
-          <br />
-          Ak nájdete nejaké chyby, prosím kontaktujte ma na discorde:{" "}
-          <b> tomas197</b>
-        </AlertDescription>
-        {/* <AlertTitle>This is a test version!</AlertTitle>
-        <AlertDescription>
-          Registration is disabled, avalible accounts:
-          <br />
-          <ul>
-            <li>
-              <span className=" font-semibold">customer@bageta.express</span> -
-              password: <b>x</b>
-            </li>
-            <li>
-              <span className=" font-semibold">seller@bageta.express</span> -
-              password: <b>x</b>
-            </li>
-            <li>
-              <span className=" font-semibold">employee@bageta.express</span> -
-              password: <b>x</b>
-            </li>
-          </ul>
-          <br />
-          If you find any bugs, please contact me on discord: <b>tomas197</b>
-        </AlertDescription> */}
       </Alert>
-      <Tabs defaultValue="login" className="w-[400px]">
-        <TabsList className="flex">
-          <TabsTrigger className="flex-1" value="login">
-            Prihásiť sa
-          </TabsTrigger>
-          <TabsTrigger className="flex-1" value="register">
-            Registrovať sa
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="login">
-          <LoginForm
-            error={
-              searchParams?.error != null ? "Zlý email alebo heslo" : undefined
-            }
-          />
-        </TabsContent>
-        <TabsContent value="register">
-          <RegisterForm />
-        </TabsContent>
-      </Tabs>
+      <LoginButton />
     </div>
   );
 }
+
+const LoginButton = () => {
+  const { data: session } = useSession();
+  if (session) {
+    return (
+      <>
+        Signed in as {session?.user?.email} <br />
+        <button onClick={() => signOut()}>Sign out</button>
+      </>
+    );
+  }
+  return (
+    <>
+      Not signed in <br />
+      <button
+        onClick={() => {
+          signIn("azure-ad", { callbackUrl: "/auth/redirect" });
+        }}
+      >
+        Sign in with Azure AD
+      </button>
+    </>
+  );
+};

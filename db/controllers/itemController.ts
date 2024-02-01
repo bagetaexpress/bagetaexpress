@@ -81,7 +81,7 @@ async function getItemById(id: number): Promise<Item | null> {
   return found[0];
 }
 
-async function getItemsFromCart(cartId: number) {
+async function getItemsFromCart(cartId: string) {
   const items = await db
     .select({ item, quantity: cartItem.quantity })
     .from(item)

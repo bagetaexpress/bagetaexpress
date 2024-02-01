@@ -2,15 +2,15 @@
 
 import { db } from "@/db";
 import { cart } from "../schema";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 export type Cart = {
-  userId: number;
+  userId: string;
   createdAt: Date;
   updatedAt: Date;
 };
 
-async function getCart(userId: number): Promise<Cart | null> {
+async function getCart(userId: string): Promise<Cart | null> {
   const found = await db.select().from(cart).where(eq(cart.userId, userId));
   if (found.length === 0) {
     return null;
@@ -18,14 +18,14 @@ async function getCart(userId: number): Promise<Cart | null> {
   return found[0];
 }
 
-async function createCart(userId: number): Promise<number> {
+async function createCart(userId: string): Promise<string> {
   await db.insert(cart).values({
     userId,
   });
   return userId;
 }
 
-async function deleteCart(userId: number): Promise<void> {
+async function deleteCart(userId: string): Promise<void> {
   await db.delete(cart).where(eq(cart.userId, userId));
 }
 

@@ -5,11 +5,11 @@ import { db } from "..";
 import { customer } from "../schema";
 
 export type Customer = {
-  userId: number;
+  userId: string;
   schoolId: number;
 };
 
-async function getCustomer(userId: number): Promise<Customer | null> {
+async function getCustomer(userId: string): Promise<Customer | null> {
   const customers = await db
     .select()
     .from(customer)

@@ -1,23 +1,35 @@
-import { acceptCookies } from "@/lib/utils/cookiesUtils";
 import NextAuth from "next-auth";
 
-interface User {
-  id: string;
-  isAdmin?: boolean;
-}
+// export interface User {
+//   id: string;
+//   name: string;
+//   email: string;
+//   image?: string;
+//   isAdmin: boolean;
+//   isCustomer: boolean;
+//   isSeller: boolean;
+//   isEmployee: boolean;
+//   storeId?: string;
+//   schoolId?: string;
+// }
 
 declare module "next-auth" {
+  /**
+   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
   interface Session {
-    user: User & DefaultSession["user"];
+    user: User;
   }
-}
-
-declare module "next-auth/jwt" {
-  interface JWT {
+  interface User {
     id: string;
-    isAdmin?: boolean;
-    user?: User;
-    accessToken?: string;
-    [key: string]: string;
+    name: string;
+    email: string;
+    image?: string;
+    isAdmin: boolean;
+    isCustomer: boolean;
+    isSeller: boolean;
+    isEmployee: boolean;
+    storeId?: number;
+    schoolId?: number;
   }
 }

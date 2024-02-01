@@ -1,1 +1,0 @@
-ALTER TABLE `item` MODIFY COLUMN `price` decimal(4,2) NOT NULL;
