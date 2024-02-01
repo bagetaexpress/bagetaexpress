@@ -16,16 +16,11 @@ import AddItemForm from "./_components/addItem";
 import DeleteItemButton from "./_components/deleteItem";
 import EditAllergens from "./_components/editAllergens";
 import EditIngredients from "./_components/editIngredients";
-import {
-  Allergen,
-  getAllergensByStoreId,
-} from "@/db/controllers/allergenController";
-import {
-  Ingredient,
-  getIngredientsByStoreId,
-} from "@/db/controllers/ingredientController";
+import { getAllergensByStoreId } from "@/db/controllers/allergenController";
+import { getIngredientsByStoreId } from "@/db/controllers/ingredientController";
 import Image from "next/image";
 import SchoolCard from "./_components/schoolCard";
+import { Allergen, Ingredient } from "@/db/schema";
 
 export default async function DashboardPage({
   searchParams,

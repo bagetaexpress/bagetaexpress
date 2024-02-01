@@ -1,34 +1,19 @@
 "use server";
 
-import { customer, employee, school, seller, user } from "../schema";
+import {
+  Customer,
+  Employee,
+  School,
+  Seller,
+  User,
+  customer,
+  employee,
+  school,
+  seller,
+  user,
+} from "../schema";
 import { db } from "../index";
-import { eq, sql } from "drizzle-orm";
-import { School } from "./schoolController";
-
-export type Customer = {
-  userId: string;
-  schoolId: number;
-};
-
-export type Employee = {
-  userId: string;
-  storeId: number;
-};
-
-export type Seller = {
-  storeId: number;
-  schoolId: number;
-  userId: string;
-};
-
-export type User = {
-  id: string;
-  name: string | null;
-  isAdmin: boolean;
-  email: string;
-  emailVerified: Date | null;
-  image: string | null;
-};
+import { eq } from "drizzle-orm";
 
 export interface BeUser {
   user: User;
@@ -53,8 +38,8 @@ async function getUserByEmail(email: string): Promise<BeUser | null> {
 }
 
 interface ICreateEmployee {
-  userId: string;
-  storeId: number;
+  userId: Employee["userId"];
+  storeId: Employee["storeId"];
 }
 async function createEmployee(data: ICreateEmployee): Promise<string> {
   await db.insert(employee).values({
@@ -65,8 +50,8 @@ async function createEmployee(data: ICreateEmployee): Promise<string> {
 }
 
 interface ICreateCustomer {
-  userId: string;
-  schoolId: number;
+  userId: Customer["userId"];
+  schoolId: Customer["schoolId"];
 }
 async function createCustomer(data: ICreateCustomer): Promise<string> {
   await db.insert(customer).values({
@@ -76,7 +61,7 @@ async function createCustomer(data: ICreateCustomer): Promise<string> {
   return data.userId;
 }
 
-async function getEmployeesByStoreId(storeId: number): Promise<
+async function getEmployeesByStoreId(storeId: Employee["storeId"]): Promise<
   | {
       user: User;
       employee: Employee;
@@ -94,7 +79,7 @@ async function getEmployeesByStoreId(storeId: number): Promise<
   return found;
 }
 
-async function getSellersByStoreId(storeId: number): Promise<
+async function getSellersByStoreId(storeId: Seller["storeId"]): Promise<
   | {
       user: User;
       seller: Seller;
@@ -126,15 +111,15 @@ async function createSeller(data: Seller): Promise<Seller> {
   return data;
 }
 
-async function deleteSeller(sellerId: string): Promise<void> {
-  await db.delete(seller).where(eq(seller.userId, sellerId));
+async function deleteSeller(userId: Seller["userId"]): Promise<void> {
+  await db.delete(seller).where(eq(seller.userId, userId));
 }
 
-async function deleteEmployee(employeeId: string): Promise<void> {
-  await db.delete(employee).where(eq(employee.userId, employeeId));
+async function deleteEmployee(userId: Seller["userId"]): Promise<void> {
+  await db.delete(employee).where(eq(employee.userId, userId));
 }
 
-async function getUserById(userId: string): Promise<User | null> {
+async function getUserById(userId: User["id"]): Promise<User | null> {
   const found = await db.select().from(user).where(eq(user.id, userId));
   if (!found || found.length === 0) {
     return null;
@@ -142,22 +127,21 @@ async function getUserById(userId: string): Promise<User | null> {
   return found[0];
 }
 
-async function getEmployeeById(employeeId: string): Promise<Employee | null> {
+async function getEmployeeById(
+  userId: Employee["userId"]
+): Promise<Employee | null> {
   const found = await db
     .select()
     .from(employee)
-    .where(eq(employee.userId, employeeId));
+    .where(eq(employee.userId, userId));
   if (!found || found.length === 0) {
     return null;
   }
   return found[0];
 }
 
-async function getSellerById(sellerId: string): Promise<Seller | null> {
-  const found = await db
-    .select()
-    .from(seller)
-    .where(eq(seller.userId, sellerId));
+async function getSellerById(userId: Seller["userId"]): Promise<Seller | null> {
+  const found = await db.select().from(seller).where(eq(seller.userId, userId));
   if (!found || found.length === 0) {
     return null;
   }

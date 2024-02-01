@@ -23,6 +23,7 @@ import { allergen, allergenRelations } from "./item/allergen";
 import { itemAllergen, itemAllergenRelations } from "./item/itemAllergen";
 import { ingredient, ingredientRelations } from "./item/ingredient";
 import { itemIngredient, itemIngredientRelations } from "./item/itemIngredient";
+import { InferSelectModel } from "drizzle-orm";
 
 /*
 DROP TABLE IF EXISTS 
@@ -47,6 +48,26 @@ DROP TABLE IF EXISTS
   `ingredient`,
   `item_ingredient`;
 */
+
+export type Order = InferSelectModel<typeof order>;
+export type OrderItem = InferSelectModel<typeof orderItem>;
+export type School = InferSelectModel<typeof school>;
+export type SchoolStore = InferSelectModel<typeof schoolStore>;
+export type User = InferSelectModel<typeof user>;
+export type Account = InferSelectModel<typeof account>;
+export type Session = InferSelectModel<typeof session>;
+export type VerificationToken = InferSelectModel<typeof verificationToken>;
+export type Employee = InferSelectModel<typeof employee>;
+export type Customer = InferSelectModel<typeof customer>;
+export type Item = InferSelectModel<typeof item>;
+export type Store = InferSelectModel<typeof store>;
+export type Cart = InferSelectModel<typeof cart>;
+export type CartItem = InferSelectModel<typeof cartItem>;
+export type Seller = InferSelectModel<typeof seller>;
+export type Allergen = InferSelectModel<typeof allergen>;
+export type ItemAllergen = InferSelectModel<typeof itemAllergen>;
+export type Ingredient = InferSelectModel<typeof ingredient>;
+export type ItemIngredient = InferSelectModel<typeof itemIngredient>;
 
 export const tables = {
   order,

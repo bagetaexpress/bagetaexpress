@@ -8,7 +8,7 @@ export const school = mysqlTable("school", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   websiteUrl: varchar("website_url", { length: 255 }).notNull(),
-  emailRegex: varchar("email_regex", { length: 255 }).notNull(),
+  emailDomain: varchar("email_domain", { length: 255 }).notNull(),
 });
 
 export const schoolRelations = relations(school, ({ many }) => ({

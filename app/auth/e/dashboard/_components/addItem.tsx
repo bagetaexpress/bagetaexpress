@@ -25,15 +25,13 @@ import {
 } from "@/components/ui/dialog";
 import { Loader, X } from "lucide-react";
 import { getUser } from "@/lib/userUtils";
-import { Item, addItem, updateItem } from "@/db/controllers/itemController";
+import { addItem, updateItem } from "@/db/controllers/itemController";
 import { useMemo, useState } from "react";
 import {
-  Allergen,
   createItemAllergen,
   deleteItemAllergen,
 } from "@/db/controllers/allergenController";
 import {
-  Ingredient,
   createItemIngredient,
   deleteItemIngredient,
 } from "@/db/controllers/ingredientController";
@@ -48,6 +46,7 @@ import {
 import { useUploadThing } from "@/lib/uploadthing";
 import Image from "next/image";
 import { deleteFile } from "@/lib/upladthingServer";
+import { Allergen, Ingredient, Item } from "@/db/schema";
 
 const formSchema = z.object({
   name: z.string().min(3, {

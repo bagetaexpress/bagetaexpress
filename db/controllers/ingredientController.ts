@@ -2,21 +2,9 @@
 
 import { and, eq } from "drizzle-orm";
 import { db } from "..";
-import { ingredient, itemIngredient } from "../schema";
+import { Ingredient, Item, ingredient, itemIngredient } from "../schema";
 
-export type Ingredient = {
-  id: number;
-  number: number;
-  name: string;
-  storeId: number;
-};
-
-export type ItemIngredient = {
-  ingredientId: number;
-  itemId: number;
-};
-
-async function getIngredientsByStoreId(storeId: number) {
+async function getIngredientsByStoreId(storeId: Ingredient["storeId"]) {
   const ingredients = await db
     .select()
     .from(ingredient)
@@ -25,7 +13,7 @@ async function getIngredientsByStoreId(storeId: number) {
   return ingredients;
 }
 
-async function getIngredientsByItemId(itemId: number) {
+async function getIngredientsByItemId(itemId: Item["id"]) {
   const ingredients = await db
     .select()
     .from(ingredient)
@@ -35,30 +23,44 @@ async function getIngredientsByItemId(itemId: number) {
   return ingredients;
 }
 
-async function getIngredientById(id: number) {
-  const found = await db.select().from(ingredient).where(eq(ingredient.id, id));
+async function getIngredientById(itemId: Ingredient["id"]) {
+  const found = await db
+    .select()
+    .from(ingredient)
+    .where(eq(ingredient.id, itemId));
 
   return found;
 }
 
-async function createIngredient(number: number, name: string, storeId: number) {
+async function createIngredient(
+  number: Ingredient["number"],
+  name: Ingredient["name"],
+  storeId: Ingredient["storeId"]
+) {
   const res = await db.insert(ingredient).values([{ number, name, storeId }]);
 
   return res;
 }
 
-async function updateIngredient(id: number, number: number, name: string) {
+async function updateIngredient(
+  ingredientId: Ingredient["id"],
+  number: Ingredient["number"],
+  name: Ingredient["name"]
+) {
   await db
     .update(ingredient)
     .set({ number, name })
-    .where(eq(ingredient.id, id));
+    .where(eq(ingredient.id, ingredientId));
 }
 
-async function deleteIngredient(id: number) {
-  await db.delete(ingredient).where(eq(ingredient.id, id));
+async function deleteIngredient(ingredientId: Ingredient["id"]) {
+  await db.delete(ingredient).where(eq(ingredient.id, ingredientId));
 }
 
-async function getItemIngredient(itemId: number, ingredientId: number) {
+async function getItemIngredient(
+  itemId: Item["id"],
+  ingredientId: Ingredient["id"]
+) {
   const found = await db
     .select()
     .from(itemIngredient)
@@ -72,7 +74,10 @@ async function getItemIngredient(itemId: number, ingredientId: number) {
   return found;
 }
 
-async function createItemIngredient(itemId: number, ingredientId: number) {
+async function createItemIngredient(
+  itemId: Item["id"],
+  ingredientId: Ingredient["id"]
+) {
   const res = await db
     .insert(itemIngredient)
     .values([{ itemId, ingredientId }]);
@@ -80,7 +85,10 @@ async function createItemIngredient(itemId: number, ingredientId: number) {
   return res;
 }
 
-async function deleteItemIngredient(itemId: number, ingredientId: number) {
+async function deleteItemIngredient(
+  itemId: Item["id"],
+  ingredientId: Ingredient["id"]
+) {
   await db
     .delete(itemIngredient)
     .where(

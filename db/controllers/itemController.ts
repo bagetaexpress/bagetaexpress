@@ -1,7 +1,13 @@
 "use server";
 
-import { eq, sql } from "drizzle-orm";
+import { InferInsertModel, eq, sql } from "drizzle-orm";
 import {
+  Allergen,
+  Cart,
+  Ingredient,
+  Item,
+  Order,
+  School,
   allergen,
   cartItem,
   ingredient,
@@ -14,24 +20,14 @@ import {
   store,
 } from "../schema";
 import { db } from "@/db";
-import { deleteFile } from "@/lib/upladthingServer";
-
-export type Item = {
-  id: number;
-  name: string;
-  storeId: number;
-  imageUrl: string;
-  description: string;
-  price: string;
-};
 
 export type ExtendedItem = {
   item: Item;
-  allergens?: { id: number; name: string }[];
-  ingredients?: { id: number; name: string }[];
+  allergens: { id: Allergen["number"]; name: Allergen["name"] }[];
+  ingredients: { id: Ingredient["number"]; name: Ingredient["name"] }[];
 };
 
-async function getAllergensByItem(itemId: number) {
+async function getAllergensByItem(itemId: Item["id"]) {
   const allergens = await db
     .select({ allergen })
     .from(allergen)
@@ -44,7 +40,7 @@ async function getAllergensByItem(itemId: number) {
   }));
 }
 
-async function getIngredientsByItem(itemId: number) {
+async function getIngredientsByItem(itemId: Item["id"]) {
   const ingredients = await db
     .select({ ingredient })
     .from(ingredient)
@@ -57,7 +53,10 @@ async function getIngredientsByItem(itemId: number) {
   }));
 }
 
-async function getItemsBySchool(schoolId: number): Promise<ExtendedItem[]> {
+async function getItemsBySchool(
+  schoolId: School["id"]
+): Promise<ExtendedItem[]> {
+  // @ts-expect-error hydrating needed fields below
   const items: ExtendedItem[] = await db
     .select({ item })
     .from(item)
@@ -73,15 +72,15 @@ async function getItemsBySchool(schoolId: number): Promise<ExtendedItem[]> {
   return items;
 }
 
-async function getItemById(id: number): Promise<Item | null> {
-  const found = await db.select().from(item).where(eq(item.id, id));
+async function getItemById(itemId: Item["id"]): Promise<Item | null> {
+  const found = await db.select().from(item).where(eq(item.id, itemId));
   if (found.length === 0) {
     return null;
   }
   return found[0];
 }
 
-async function getItemsFromCart(cartId: string) {
+async function getItemsFromCart(cartId: Cart["userId"]) {
   const items = await db
     .select({ item, quantity: cartItem.quantity })
     .from(item)
@@ -90,7 +89,7 @@ async function getItemsFromCart(cartId: string) {
   return items.map((item) => ({ item: item.item, quantity: item.quantity }));
 }
 
-async function getItemsFromOrder(orderId: number) {
+async function getItemsFromOrder(orderId: Order["id"]) {
   const items = await db
     .select({ item, quantity: orderItem.quantity })
     .from(item)
@@ -100,15 +99,14 @@ async function getItemsFromOrder(orderId: number) {
 }
 
 export type ItemStats = {
-  item: Item & {
-    allergens: { id: number; name: string }[];
-    ingredients: { id: number; name: string }[];
-  };
+  item: Item &
+    Pick<ExtendedItem, "allergens"> &
+    Pick<ExtendedItem, "ingredients">;
   ordered: number;
   pickedup: number;
   unpicked: number;
 };
-async function getItemsStats(storeId: number): Promise<ItemStats[]> {
+async function getItemsStats(storeId: Item["storeId"]): Promise<ItemStats[]> {
   const items = (await db
     .select({
       item,
@@ -130,34 +128,26 @@ async function getItemsStats(storeId: number): Promise<ItemStats[]> {
   return items;
 }
 
-async function addItem(data: {
-  name: string;
-  storeId: number;
-  description: string;
-  imageUrl: string;
-  price: string;
-}): Promise<number> {
+async function addItem(
+  data: InferInsertModel<typeof item>
+): Promise<Item["id"]> {
   const res = await db.insert(item).values(data);
-  const id = res.insertId;
-  return parseInt(id);
+  return parseInt(res.insertId);
 }
 
-async function removeItem(id: number) {
-  await db.delete(orderItem).where(eq(orderItem.itemId, id));
-  await db.delete(cartItem).where(eq(cartItem.itemId, id));
-  await db.delete(itemAllergen).where(eq(itemAllergen.itemId, id));
-  await db.delete(itemIngredient).where(eq(itemIngredient.itemId, id));
-  await db.delete(item).where(eq(item.id, id));
+async function removeItem(itemId: Item["id"]) {
+  await db.delete(orderItem).where(eq(orderItem.itemId, itemId));
+  await db.delete(cartItem).where(eq(cartItem.itemId, itemId));
+  await db.delete(itemAllergen).where(eq(itemAllergen.itemId, itemId));
+  await db.delete(itemIngredient).where(eq(itemIngredient.itemId, itemId));
+  await db.delete(item).where(eq(item.id, itemId));
 }
 
-async function updateItem(data: {
-  id: number;
-  name?: string;
-  storeId?: number;
-  imageUrl?: string;
-  description?: string;
-  price?: string;
-}) {
+async function updateItem(
+  data: {
+    id: number;
+  } & Partial<Item>
+) {
   await db.update(item).set(data).where(eq(item.id, data.id));
 }
 

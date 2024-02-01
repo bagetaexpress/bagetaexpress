@@ -2,21 +2,9 @@
 
 import { and, eq } from "drizzle-orm";
 import { db } from "..";
-import { allergen, itemAllergen } from "../schema";
+import { Allergen, Item, Store, allergen, itemAllergen } from "../schema";
 
-export type Allergen = {
-  id: number;
-  number: number;
-  name: string;
-  storeId: number;
-};
-
-export type ItemAllergen = {
-  allergenId: number;
-  itemId: number;
-};
-
-async function getAllergensByStoreId(storeId: number) {
+async function getAllergensByStoreId(storeId: Store["id"]) {
   const allergens = await db
     .select()
     .from(allergen)
@@ -25,7 +13,7 @@ async function getAllergensByStoreId(storeId: number) {
   return allergens;
 }
 
-async function getAllergensByItemId(itemId: number) {
+async function getAllergensByItemId(itemId: Item["id"]) {
   const allergens = await db
     .select()
     .from(allergen)
@@ -35,27 +23,41 @@ async function getAllergensByItemId(itemId: number) {
   return allergens;
 }
 
-async function getAllergenById(id: number) {
-  const found = await db.select().from(allergen).where(eq(allergen.id, id));
+async function getAllergenById(allergenId: Allergen["id"]) {
+  const found = await db
+    .select()
+    .from(allergen)
+    .where(eq(allergen.id, allergenId));
 
   return found;
 }
 
-async function createAllergen(number: number, name: string, storeId: number) {
+async function createAllergen(
+  number: Allergen["number"],
+  name: Allergen["name"],
+  storeId: Store["id"]
+) {
   const res = await db.insert(allergen).values([{ number, name, storeId }]);
 
   return res.insertId;
 }
 
-async function updateAllergen(id: number, number: number, name: string) {
-  await db.update(allergen).set({ number, name }).where(eq(allergen.id, id));
+async function updateAllergen(
+  allergenId: Allergen["id"],
+  number: number,
+  name: string
+) {
+  await db
+    .update(allergen)
+    .set({ number, name })
+    .where(eq(allergen.id, allergenId));
 }
 
-async function deleteAllergen(id: number) {
-  await db.delete(allergen).where(eq(allergen.id, id));
+async function deleteAllergen(allergenId: Allergen["id"]) {
+  await db.delete(allergen).where(eq(allergen.id, allergenId));
 }
 
-async function getItemAllergen(itemId: number, allergenId: number) {
+async function getItemAllergen(itemId: Item["id"], allergenId: Allergen["id"]) {
   const found = await db
     .select()
     .from(itemAllergen)
@@ -69,13 +71,16 @@ async function getItemAllergen(itemId: number, allergenId: number) {
   return found;
 }
 
-async function createItemAllergen(itemId: number, allergenId: number) {
+async function createItemAllergen(itemId: Item["id"], allergenId: number) {
   const res = await db.insert(itemAllergen).values([{ itemId, allergenId }]);
 
   return res;
 }
 
-async function deleteItemAllergen(itemId: number, allergenId: number) {
+async function deleteItemAllergen(
+  itemId: Item["id"],
+  allergenId: Allergen["id"]
+) {
   await db
     .delete(itemAllergen)
     .where(

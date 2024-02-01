@@ -4,10 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  OrderStatus,
-  getOrdersBySchoolId,
-} from "@/db/controllers/orderController";
+import { getOrdersBySchoolId } from "@/db/controllers/orderController";
 import { getUser } from "@/lib/userUtils";
 import SummaryRow from "./_components/summaryRow";
 import { redirect } from "next/navigation";
@@ -21,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { handleFilterChange } from "./serverUtil";
+import { Order } from "@/db/schema";
 
 export default async function SummaryPage({
   searchParams,
@@ -29,7 +27,7 @@ export default async function SummaryPage({
 }) {
   const user = await getUser();
   if (!user || !user.schoolId) return null;
-  const filter = (searchParams.filter ?? "ordered") as OrderStatus;
+  const filter = (searchParams.filter ?? "ordered") as Order["status"];
   const orders = await getOrdersBySchoolId(user.schoolId, filter);
 
   return (

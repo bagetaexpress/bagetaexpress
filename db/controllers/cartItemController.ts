@@ -2,18 +2,12 @@
 
 import { and, eq } from "drizzle-orm";
 import { db } from "..";
-import { cartItem } from "../schema";
-
-export type CartItem = {
-  cartId: string;
-  itemId: number;
-  quantity: number;
-};
+import { CartItem, cartItem } from "../schema";
 
 async function createCartItem(
-  cartId: string,
-  itemId: number,
-  quantity: number
+  cartId: CartItem["cartId"],
+  itemId: CartItem["itemId"],
+  quantity: CartItem["quantity"]
 ) {
   await db.insert(cartItem).values({
     cartId,
@@ -22,13 +16,13 @@ async function createCartItem(
   });
 }
 
-async function getCartItemsByCartId(cartId: string) {
+async function getCartItemsByCartId(cartId: CartItem["cartId"]) {
   return await db.select().from(cartItem).where(eq(cartItem.cartId, cartId));
 }
 
 async function getCartItem(
-  cartId: string,
-  itemId: number
+  cartId: CartItem["cartId"],
+  itemId: CartItem["itemId"]
 ): Promise<CartItem | null> {
   const found = await db
     .select()
@@ -41,9 +35,9 @@ async function getCartItem(
 }
 
 async function updateCartItem(
-  cartId: string,
-  itemId: number,
-  quantity: number
+  cartId: CartItem["cartId"],
+  itemId: CartItem["itemId"],
+  quantity: CartItem["quantity"]
 ) {
   await db
     .update(cartItem)
@@ -53,13 +47,16 @@ async function updateCartItem(
     .where(and(eq(cartItem.cartId, cartId), eq(cartItem.itemId, itemId)));
 }
 
-async function deleteCartItem(cartId: string, itemId: number) {
+async function deleteCartItem(
+  cartId: CartItem["cartId"],
+  itemId: CartItem["itemId"]
+) {
   await db
     .delete(cartItem)
     .where(and(eq(cartItem.cartId, cartId), eq(cartItem.itemId, itemId)));
 }
 
-async function deleteCartItems(cartId: string) {
+async function deleteCartItems(cartId: CartItem["cartId"]) {
   await db.delete(cartItem).where(eq(cartItem.cartId, cartId));
 }
 

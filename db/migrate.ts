@@ -46,13 +46,13 @@ async function populate(db: Database) {
       id: 1,
       name: "SPST",
       websiteUrl: "https://spst.edu.sk",
-      emailRegex: ".*@spstsnv.sk",
+      emailDomain: "spstsnv.sk",
     },
     {
       id: 2,
       name: "Gymnázium",
       websiteUrl: "https://gymnazium.edu.sk",
-      emailRegex: ".*@gymnazium.edu.sk",
+      emailDomain: "gymnazium.edu.sk",
     },
   ]);
 

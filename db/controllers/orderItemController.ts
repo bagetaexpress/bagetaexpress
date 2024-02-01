@@ -2,18 +2,12 @@
 
 import { and, eq } from "drizzle-orm";
 import { db } from "..";
-import { orderItem } from "../schema";
-
-export type OrderItem = {
-  orderId: number;
-  itemId: number;
-  quantity: number;
-};
+import { OrderItem, orderItem } from "../schema";
 
 async function createOrderItem(
-  orderId: number,
-  itemId: number,
-  quantity: number
+  orderId: OrderItem["orderId"],
+  itemId: OrderItem["itemId"],
+  quantity: OrderItem["quantity"]
 ) {
   await db.insert(orderItem).values({
     orderId,
@@ -23,8 +17,11 @@ async function createOrderItem(
 }
 
 async function createOrderItems(
-  orderId: number,
-  items: { itemId: number; quantity: number }[]
+  orderId: OrderItem["orderId"],
+  items: {
+    itemId: OrderItem["itemId"];
+    quantity: OrderItem["quantity"];
+  }[]
 ) {
   await db.insert(orderItem).values(
     items.map((item) => ({
@@ -35,17 +32,20 @@ async function createOrderItems(
   );
 }
 
-async function deleteOrderItem(orderId: number, itemId: number) {
+async function deleteOrderItem(
+  orderId: OrderItem["orderId"],
+  itemId: OrderItem["itemId"]
+) {
   await db
     .delete(orderItem)
     .where(and(eq(orderItem.orderId, orderId), eq(orderItem.itemId, itemId)));
 }
 
-async function deleteOrderItems(orderId: number) {
+async function deleteOrderItems(orderId: OrderItem["orderId"]) {
   await db.delete(orderItem).where(eq(orderItem.orderId, orderId));
 }
 
-async function getOrderItems(orderId: number) {
+async function getOrderItems(orderId: OrderItem["orderId"]) {
   return await db
     .select()
     .from(orderItem)
@@ -53,8 +53,8 @@ async function getOrderItems(orderId: number) {
 }
 
 async function getOrderItem(
-  orderId: number,
-  itemId: number
+  orderId: OrderItem["orderId"],
+  itemId: OrderItem["itemId"]
 ): Promise<OrderItem | null> {
   const found = await db
     .select()
@@ -67,9 +67,9 @@ async function getOrderItem(
 }
 
 async function updateOrderItem(
-  orderId: number,
-  itemId: number,
-  quantity: number
+  orderId: OrderItem["orderId"],
+  itemId: OrderItem["itemId"],
+  quantity: OrderItem["quantity"]
 ) {
   await db
     .update(orderItem)

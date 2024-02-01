@@ -10,7 +10,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Item, removeItem } from "@/db/controllers/itemController";
+import { removeItem } from "@/db/controllers/itemController";
+import { Item } from "@/db/schema";
 import { deleteFile } from "@/lib/upladthingServer";
 import { Trash } from "lucide-react";
 import { revalidatePath } from "next/cache";

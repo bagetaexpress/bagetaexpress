@@ -1,17 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { getItemsFromOrder } from "@/db/controllers/itemController";
-import {
-  OrderStatus,
-  getOrderByPin,
-  updateOrderStatus,
-} from "@/db/controllers/orderController";
+import { getOrderByPin } from "@/db/controllers/orderController";
+import { Order } from "@/db/schema";
 import { getUser } from "@/lib/userUtils";
-import { redirect } from "next/navigation";
 
 interface IProps {
   pin: string;
   confirmText: string;
-  orderStatus?: OrderStatus;
+  orderStatus?: Order["status"];
   confirmAction: () => void;
   cancelAction: () => void;
 }

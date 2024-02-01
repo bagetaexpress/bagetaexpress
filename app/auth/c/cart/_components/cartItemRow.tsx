@@ -1,6 +1,6 @@
 "use client";
 
-import { Item } from "@/db/controllers/itemController";
+import { Item } from "@/db/schema";
 import { saveUpdateCartItem } from "@/lib/cartUtils";
 import { cn } from "@/lib/utils";
 import { Minus, Plus, Trash } from "lucide-react";

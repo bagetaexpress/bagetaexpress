@@ -2,22 +2,18 @@
 
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "..";
-import { customer, order, school, schoolStore } from "../schema";
+import {
+  School,
+  SchoolStore,
+  customer,
+  order,
+  school,
+  schoolStore,
+} from "../schema";
 
-export type School = {
-  id: number;
-  name: string;
-  websiteUrl: string;
-  emailRegex: string;
-};
-
-export type SchoolStore = {
-  schoolId: number;
-  storeId: number;
-  orderClose: Date;
-};
-
-async function getSchoolsByStoreId(storeId: number): Promise<School[]> {
+async function getSchoolsByStoreId(
+  storeId: SchoolStore["storeId"]
+): Promise<School[]> {
   const schools = await db
     .select({ school })
     .from(school)
@@ -34,7 +30,7 @@ export type SchoolStats = {
   unpicked: number;
 };
 
-async function getSchoolsOrderStats(storeId: number) {
+async function getSchoolsOrderStats(storeId: SchoolStore["storeId"]) {
   const schools = await db
     .select({
       school,
@@ -54,8 +50,8 @@ async function getSchoolsOrderStats(storeId: number) {
 }
 
 async function updateSchoolStoreOrderClose(
-  schoolId: number,
-  storeId: number,
+  schoolId: SchoolStore["schoolId"],
+  storeId: SchoolStore["storeId"],
   orderClose: Date
 ) {
   await db
@@ -66,7 +62,7 @@ async function updateSchoolStoreOrderClose(
     );
 }
 
-async function getFirstOrderClose(schoolId: number) {
+async function getFirstOrderClose(schoolId: SchoolStore["schoolId"]) {
   const res = await db
     .select({ orderClose: schoolStore.orderClose })
     .from(schoolStore)

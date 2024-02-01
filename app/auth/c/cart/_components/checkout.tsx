@@ -11,10 +11,10 @@ import {
   DrawerFooter,
   DrawerClose,
 } from "../../../../../components/ui/drawer";
-import { Item } from "@/db/controllers/itemController";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader } from "lucide-react";
+import { Item } from "@/db/schema";
 
 interface ICheckout {
   items: {

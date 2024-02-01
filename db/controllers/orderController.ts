@@ -1,24 +1,13 @@
 "use server";
 
 import { db } from "@/db";
-import { customer, order, user } from "../schema";
+import { customer, order, Order, School } from "../schema";
 import { eq, and, sql } from "drizzle-orm";
 
-export type OrderStatus = "ordered" | "pickedup" | "unpicked" | "cancelled";
-
-export type Order = {
-  id: number;
-  userId: string;
-  status: OrderStatus;
-  pin: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
 async function createOrder(
-  userId: string,
-  pin: string,
-  status: OrderStatus = "ordered"
+  userId: Order["userId"],
+  pin: Order["pin"],
+  status: Order["status"] = "ordered"
 ) {
   const newOrder = await db.insert(order).values({
     userId,
@@ -30,9 +19,9 @@ async function createOrder(
 }
 
 async function getOrderByPin(
-  pin: string,
-  schoolId?: number,
-  status: OrderStatus = "ordered"
+  pin: Order["pin"],
+  schoolId?: School["id"],
+  status: Order["status"] = "ordered"
 ): Promise<Order | null> {
   let orders: Order[];
 
@@ -63,13 +52,13 @@ async function getOrderByPin(
   return orders[0];
 }
 
-async function deleteOrder(orderId: number): Promise<void> {
+async function deleteOrder(orderId: Order["id"]): Promise<void> {
   await db.delete(order).where(eq(order.id, orderId));
 }
 
 async function getOrdersByUserId(
-  userId: string,
-  status: OrderStatus
+  userId: Order["userId"],
+  status: Order["status"]
 ): Promise<Order[]> {
   const orders = await db
     .select()
@@ -78,7 +67,7 @@ async function getOrdersByUserId(
   return orders;
 }
 
-async function getOrder(orderId: number): Promise<Order | null> {
+async function getOrder(orderId: Order["id"]): Promise<Order | null> {
   const orders = await db.select().from(order).where(eq(order.id, orderId));
   if (orders.length === 0) {
     return null;
@@ -86,14 +75,14 @@ async function getOrder(orderId: number): Promise<Order | null> {
   return orders[0];
 }
 
-async function getOrders(userId: string): Promise<Order[]> {
+async function getOrders(userId: Order["userId"]): Promise<Order[]> {
   const orders = await db.select().from(order).where(eq(order.userId, userId));
   return orders;
 }
 
 async function updateOrderStatus(
-  orderId: number,
-  status: OrderStatus
+  orderId: Order["id"],
+  status: Order["status"]
 ): Promise<void> {
   await db
     .update(order)
@@ -104,8 +93,8 @@ async function updateOrderStatus(
 }
 
 async function getOrdersBySchoolId(
-  schoolId: number,
-  status: OrderStatus
+  schoolId: School["id"],
+  status: Order["status"]
 ): Promise<Order[]> {
   const orders = await db
     .select({ order })
@@ -115,7 +104,7 @@ async function getOrdersBySchoolId(
   return orders.map((row) => row.order);
 }
 
-async function blockUnpickedOrders(schoolId: number): Promise<void> {
+async function blockUnpickedOrders(schoolId: School["id"]): Promise<void> {
   await db.execute(sql`
     UPDATE \`order\`
     INNER JOIN customer ON \`order\`.user_id = customer.user_id
