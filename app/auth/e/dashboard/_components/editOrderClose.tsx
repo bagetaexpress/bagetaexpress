@@ -35,10 +35,6 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    console.log(date);
-  }, [date]);
-
   return (
     <Dialog
       open={isOpen}
