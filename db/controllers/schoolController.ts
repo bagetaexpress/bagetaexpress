@@ -72,7 +72,9 @@ async function getFirstOrderClose(schoolId: SchoolStore["schoolId"]) {
   return res[0].orderClose;
 }
 
-async function getSchoolStores(schoolId: number): Promise<SchoolStore[]> {
+async function getSchoolStores(
+  schoolId: SchoolStore["schoolId"]
+): Promise<SchoolStore[]> {
   const res = await db
     .select({ schoolStore })
     .from(schoolStore)
@@ -80,10 +82,24 @@ async function getSchoolStores(schoolId: number): Promise<SchoolStore[]> {
   return res.map((r) => r.schoolStore);
 }
 
+async function getSchoolByDomain(
+  domain: School["emailDomain"]
+): Promise<School | undefined> {
+  const res = await db
+    .select({ school })
+    .from(school)
+    .where(eq(school.emailDomain, domain));
+  if (res.length === 0) {
+    return undefined;
+  }
+  return res[0].school;
+}
+
 export {
   getSchoolsByStoreId,
   getFirstOrderClose,
   getSchoolStores,
+  getSchoolByDomain,
   getSchoolsOrderStats,
   updateSchoolStoreOrderClose,
 };

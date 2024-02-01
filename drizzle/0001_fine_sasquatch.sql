@@ -1,0 +1,1 @@
+ALTER TABLE `school` RENAME COLUMN `email_regex` TO `email_domain`;

@@ -13,7 +13,7 @@ import {
   user,
 } from "../schema";
 import { db } from "../index";
-import { eq } from "drizzle-orm";
+import { InferInsertModel, eq } from "drizzle-orm";
 
 export interface BeUser {
   user: User;
@@ -37,11 +37,9 @@ async function getUserByEmail(email: string): Promise<BeUser | null> {
   return found[0];
 }
 
-interface ICreateEmployee {
-  userId: Employee["userId"];
-  storeId: Employee["storeId"];
-}
-async function createEmployee(data: ICreateEmployee): Promise<string> {
+async function createEmployee(
+  data: InferInsertModel<typeof employee>
+): Promise<string> {
   await db.insert(employee).values({
     userId: data.userId,
     storeId: data.storeId,
@@ -49,11 +47,9 @@ async function createEmployee(data: ICreateEmployee): Promise<string> {
   return data.userId;
 }
 
-interface ICreateCustomer {
-  userId: Customer["userId"];
-  schoolId: Customer["schoolId"];
-}
-async function createCustomer(data: ICreateCustomer): Promise<string> {
+async function createCustomer(
+  data: InferInsertModel<typeof customer>
+): Promise<string> {
   await db.insert(customer).values({
     userId: data.userId,
     schoolId: data.schoolId,
@@ -99,7 +95,9 @@ async function getSellersByStoreId(storeId: Seller["storeId"]): Promise<
   return found;
 }
 
-async function createSeller(data: Seller): Promise<Seller> {
+async function createSeller(
+  data: InferInsertModel<typeof seller>
+): Promise<Seller> {
   await db
     .insert(seller)
     .values({

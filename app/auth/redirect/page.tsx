@@ -1,4 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { Button } from "@/components/ui/button";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -14,14 +15,21 @@ export default async function RedirectPage() {
     redirect("/auth/s/summary");
   }
   if (session.user.isCustomer) {
-    redirect("/auth/c/shop");
+    redirect("/auth/c/store");
   }
 
-  // redirect("/");
-
   return (
-    <div>
-      <h1>Redirecting...</h1>
+    <div
+      style={{ minHeight: "100dvh" }}
+      className="flex flex-col justify-center items-center"
+    >
+      <div className="flex flex-col">
+        <h1 className=" font-semibold text-xl">Nenašla sa škola k účtu</h1>
+        <h2 className=" text-lg">Prihlálste sa cez váš škoský účet</h2>
+        <Button>
+          <a href="/">Prihlásiť sa</a>
+        </Button>
+      </div>
     </div>
   );
 }

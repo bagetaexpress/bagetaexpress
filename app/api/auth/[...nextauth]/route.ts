@@ -49,7 +49,7 @@ export const authOptions: AuthOptions = {
           isSeller: !!seller,
           isEmployee: !!employee,
           storeId: seller?.storeId || employee?.storeId,
-          schoolId: seller?.schoolId,
+          schoolId: customer?.schoolId,
         },
       };
     },
