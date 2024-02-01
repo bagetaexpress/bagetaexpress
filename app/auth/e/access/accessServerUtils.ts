@@ -17,11 +17,7 @@ async function handleAddEmployee(formData: any) {
   const currUser = await getUser();
   if (!currUser || !currUser.storeId) return;
   const employeeId = formData.get("employeeId");
-  if (
-    !employeeId ||
-    typeof employeeId !== "string" ||
-    !employeeId.match(/^\d+$/)
-  ) {
+  if (!employeeId || typeof employeeId !== "string") {
     redirect("/auth/e/access?EmpError=Invalid employee id");
   }
 
@@ -61,7 +57,7 @@ async function handleAddSeller(formData: any) {
   if (!schoolId || typeof schoolId !== "string" || !schoolId.match(/^\d+$/)) {
     redirect("/auth/e/access?SellerError=Invalid school id");
   }
-  if (!sellerId || typeof sellerId !== "string" || !sellerId.match(/^\d+$/)) {
+  if (!sellerId || typeof sellerId !== "string") {
     redirect("/auth/e/access?SellerError=Invalid seller id");
   }
 
