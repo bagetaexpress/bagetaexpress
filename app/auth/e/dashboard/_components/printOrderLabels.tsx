@@ -19,15 +19,21 @@ export default function PrintOrderLabels({ orders, store }: IProps) {
   const toPrintRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useCallback(() => {
-    if (toPrintRef.current) {
-      const originalContents = Array.from(document.body.childNodes);
-      const cloned = toPrintRef.current.cloneNode(true);
+    (async () => {
+      if (toPrintRef.current) {
+        const originalContents = Array.from(document.body.childNodes);
+        const cloned = toPrintRef.current.cloneNode(true);
 
-      document.body.replaceChildren(cloned);
-      // window.print();
+        document.body.replaceChildren(cloned);
 
-      // document.body.replaceChildren(...originalContents);
-    }
+        await new Promise((resolve) => {
+          setTimeout(resolve, 0);
+        });
+        window.print();
+
+        document.body.replaceChildren(...originalContents);
+      }
+    })();
   }, [toPrintRef]);
 
   return (
