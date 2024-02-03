@@ -36,45 +36,45 @@ export default function PrintOrderLabels({ orders, store }: IProps) {
           </Button>
         )}
       />
-      <div className="printable">
-        <div
-          ref={toPrintRef}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "1rem",
-            padding: "1rem",
-          }}
-        >
-          {orders.map((order, i) => {
-            const items = [];
-            for (let j = 0; j < order.quantity; j++) {
-              items.push(
-                <div key={i.toString() + j.toString()}>
-                  <p
-                    style={{
-                      fontSize: "1.125rem",
-                      textAlign: "center",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {store.name}
-                  </p>
-                  <p style={{ fontWeight: "bold" }}>{order.item.name}</p>
-                  <p style={{ fontSize: "0.75rem" }}>
-                    Zloženie: {order.ingredients.map((x) => x.name).join(", ")}
-                    <br />
-                    Obsahuje: {order.allergens.map((x) => x.name).join(", ")}
-                    <br />
-                    Skladujte pri teplote do 6°C
-                  </p>
-                </div>
-              );
-            }
-            return items;
-          })}
-        </div>
+      {/* <div className="hidden"> */}
+      <div
+        ref={toPrintRef}
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "1rem",
+          padding: "1rem",
+        }}
+      >
+        {orders.map((order, i) => {
+          const items = [];
+          for (let j = 0; j < order.quantity; j++) {
+            items.push(
+              <div key={i.toString() + j.toString()}>
+                <p
+                  style={{
+                    fontSize: "1.125rem",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {store.name}
+                </p>
+                <p style={{ fontWeight: "bold" }}>{order.item.name}</p>
+                <p style={{ fontSize: "0.75rem" }}>
+                  Zloženie: {order.ingredients.map((x) => x.name).join(", ")}
+                  <br />
+                  Obsahuje: {order.allergens.map((x) => x.name).join(", ")}
+                  <br />
+                  Skladujte pri teplote do 6°C
+                </p>
+              </div>
+            );
+          }
+          return items;
+        })}
       </div>
+      {/* </div> */}
     </>
   );
 }

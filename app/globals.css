@@ -58,13 +58,7 @@
   }
 }
 
-.printable {
-  display: none !important;
-}
 @media print {
-  .printable {
-    display: block !important;
-  }
   table {
     border-collapse: collapse;
     width: 100%;
