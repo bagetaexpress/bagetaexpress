@@ -27,35 +27,10 @@ export default function PrintOrderLabels({ orders, store }: IProps) {
         className="aspect-square"
         onClick={() => {
           if (toPrintRef.current) {
-            const printWindow = window.open(
-              "",
-              "PRINT",
-              "height=600,width=800"
-            );
-
-            if (printWindow) {
-              printWindow.document.write(`
-              <html>
-                <head>
-                  <style>
-                    *{
-                      font-family: 'Roboto', sans-serif;
-                      padding:0;
-                      margin:0;
-                    }
-                  </style>
-                </head>
-                <body>
-                  ${toPrintRef.current.outerHTML}
-                </body>
-              </html>`);
-
-              printWindow.document.close(); // necessary for IE >= 10
-              printWindow.focus(); // necessary for IE >= 10*/
-
-              printWindow.print();
-              printWindow.close();
-            }
+            const cloned = toPrintRef.current.cloneNode(true);
+            document.body.appendChild(cloned);
+            window.print();
+            document.body.removeChild(cloned);
           }
         }}
       >
@@ -63,6 +38,7 @@ export default function PrintOrderLabels({ orders, store }: IProps) {
       </Button>
       <div className="hidden">
         <div
+          className="printable"
           ref={toPrintRef}
           style={{
             display: "grid",

@@ -28,49 +28,10 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
         className="aspect-square"
         onClick={() => {
           if (toPrintRef.current) {
-            const printWindow = window.open(
-              "",
-              "PRINT",
-              "height=600,width=800"
-            );
-
-            if (printWindow) {
-              printWindow.document.write(`
-              <html>
-                <head>
-                  <style>
-                    *{
-                      font-family: 'Roboto', sans-serif;
-                      padding:0;
-                      margin:0;
-                    }
-                    table {
-                      border-collapse: collapse;
-                      width: 100%;
-                    }
-                    th, td {
-                      border: 2px solid black;
-                      border-collapse: collapse;
-                      border-color: #000000;
-                      padding: 8px;
-                      text-align: center;
-                    }
-                    tr:nth-child(even) {
-                      background-color: 'red';
-                    }
-                  </style>
-                </head>
-                <body>
-                  ${toPrintRef.current.outerHTML}
-                </body>
-              </html>`);
-
-              printWindow.document.close(); // necessary for IE >= 10
-              printWindow.focus(); // necessary for IE >= 10*/
-
-              printWindow.print();
-              printWindow.close();
-            }
+            const cloned = toPrintRef.current.cloneNode(true);
+            document.body.appendChild(cloned);
+            window.print();
+            document.body.removeChild(cloned);
           }
         }}
       >
@@ -78,13 +39,14 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
       </Button>
       <div className="hidden">
         <div
+          className="printable"
           ref={toPrintRef}
           style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
         >
-          <h1>{store.name}</h1>
+          <h1 className="font-bold text-4xl">{store.name}</h1>
           <div>
-            <p style={{ fontWeight: "bold" }}>Odoberateľ:</p>
-            <h3>{school.name}</h3>
+            <p className=" font-bold text-sm">Odoberateľ:</p>
+            <h3 className=" text-2xl">{school.name}</h3>
           </div>
           <table>
             <thead>
