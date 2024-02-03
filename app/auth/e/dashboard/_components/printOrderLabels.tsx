@@ -19,14 +19,16 @@ export default function PrintOrderLabels({ orders, store }: IProps) {
   const toPrintRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useCallback(() => {
-    (async () => {
-      if (toPrintRef.current) {
-        const cloned = toPrintRef.current.cloneNode(true);
-        document.body.appendChild(cloned);
-        await window.print();
-        document.body.removeChild(cloned);
-      }
-    })();
+    if (toPrintRef.current) {
+      // const cloned = toPrintRef.current.cloneNode(true);
+      // document.body.appendChild(cloned);
+      // window.print();
+      // document.body.removeChild(cloned);
+      let originalContents = document.body.innerHTML;
+      document.body.innerHTML = toPrintRef.current.innerHTML;
+      window.print();
+      document.body.innerHTML = originalContents;
+    }
   }, [toPrintRef]);
 
   return (
@@ -40,42 +42,44 @@ export default function PrintOrderLabels({ orders, store }: IProps) {
       >
         <Printer />
       </Button>
-      <div
-        className="printable"
-        ref={toPrintRef}
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "2rem",
-        }}
-      >
-        {orders.map((order, i) => {
-          const items = [];
-          for (let j = 0; j < order.quantity; j++) {
-            items.push(
-              <div key={i.toString() + j.toString()}>
-                <p
-                  style={{
-                    fontSize: "1.125rem",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {store.name}
-                </p>
-                <p style={{ fontWeight: "bold" }}>{order.item.name}</p>
-                <p style={{ fontSize: "0.75rem" }}>
-                  Zloženie: {order.ingredients.map((x) => x.name).join(", ")}
-                  <br />
-                  Obsahuje: {order.allergens.map((x) => x.name).join(", ")}
-                  <br />
-                  Skladujte pri teplote do 6°C
-                </p>
-              </div>
-            );
-          }
-          return items;
-        })}
+      <div className="hidden">
+        <div
+          // className="printable"
+          ref={toPrintRef}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "2rem",
+          }}
+        >
+          {orders.map((order, i) => {
+            const items = [];
+            for (let j = 0; j < order.quantity; j++) {
+              items.push(
+                <div key={i.toString() + j.toString()}>
+                  <p
+                    style={{
+                      fontSize: "1.125rem",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {store.name}
+                  </p>
+                  <p style={{ fontWeight: "bold" }}>{order.item.name}</p>
+                  <p style={{ fontSize: "0.75rem" }}>
+                    Zloženie: {order.ingredients.map((x) => x.name).join(", ")}
+                    <br />
+                    Obsahuje: {order.allergens.map((x) => x.name).join(", ")}
+                    <br />
+                    Skladujte pri teplote do 6°C
+                  </p>
+                </div>
+              );
+            }
+            return items;
+          })}
+        </div>
       </div>
     </>
   );
