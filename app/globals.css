@@ -58,9 +58,12 @@
   }
 }
 
+.printable {
+  display: none !important;
+}
 @media print {
   body *:not(.printable, .printable *) {
-    display: none;
+    display: none !important;
   }
   table {
     border-collapse: collapse;
