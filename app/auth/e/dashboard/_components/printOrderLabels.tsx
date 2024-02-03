@@ -33,7 +33,7 @@ export default function PrintOrderLabels({ orders, store }: IProps) {
         window.print();
 
         await new Promise((resolve) => {
-          setTimeout(resolve, 1000);
+          setTimeout(resolve, 0);
         });
 
         document.body.replaceChildren(...originalContents);
