@@ -32,7 +32,7 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
         });
         window.print();
         await new Promise((resolve) => {
-          setTimeout(resolve, 0);
+          setTimeout(resolve, 100);
         });
 
         document.body.replaceChildren(...originalContents);
