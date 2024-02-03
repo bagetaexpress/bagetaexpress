@@ -5,6 +5,7 @@ import { ExtendedItem } from "@/db/controllers/itemController";
 import { School, Store } from "@/db/schema";
 import { TableProperties } from "lucide-react";
 import { useCallback, useRef } from "react";
+import ReactToPrint from "react-to-print";
 
 interface IProps {
   orders: Array<
@@ -19,43 +20,32 @@ interface IProps {
 export default function PrintOrderList({ orders, store, school }: IProps) {
   const toPrintRef = useRef<HTMLDivElement>(null);
 
-  const handlePrint = useCallback(() => {
-    (async () => {
-      if (toPrintRef.current) {
-        const originalContents = Array.from(document.body.childNodes);
-        const cloned = toPrintRef.current.cloneNode(true);
-
-        document.body.replaceChildren(cloned);
-
-        await new Promise((resolve) => {
-          setTimeout(resolve, 100);
-        });
-        window.print();
-        await new Promise((resolve) => {
-          setTimeout(resolve, 1000);
-        });
-
-        document.body.replaceChildren(...originalContents);
-      }
-    })();
-  }, [toPrintRef]);
-
   return (
     <>
-      <Button
-        variant="outline"
-        type="button"
-        size="icon"
-        className="aspect-square"
-        onClick={handlePrint}
-      >
-        <TableProperties />
-      </Button>
+      <ReactToPrint
+        content={() => toPrintRef.current as HTMLElement}
+        documentTitle="Objednávkový list"
+        removeAfterPrint
+        trigger={() => (
+          <Button
+            variant="outline"
+            type="button"
+            size="icon"
+            className="aspect-square"
+          >
+            <TableProperties />
+          </Button>
+        )}
+      />
       <div className="hidden">
         <div
-          // className="printable"
           ref={toPrintRef}
-          style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            padding: "1rem",
+          }}
         >
           <h1 className="font-bold text-4xl">{store.name}</h1>
           <div>

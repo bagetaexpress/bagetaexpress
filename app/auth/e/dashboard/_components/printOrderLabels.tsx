@@ -5,6 +5,7 @@ import { ExtendedItem } from "@/db/controllers/itemController";
 import { Store } from "@/db/schema";
 import { Printer } from "lucide-react";
 import { useCallback, useRef } from "react";
+import ReactToPrint from "react-to-print";
 
 interface IProps {
   orders: Array<
@@ -18,38 +19,23 @@ interface IProps {
 export default function PrintOrderLabels({ orders, store }: IProps) {
   const toPrintRef = useRef<HTMLDivElement>(null);
 
-  const handlePrint = useCallback(() => {
-    (async () => {
-      if (toPrintRef.current) {
-        const originalContents = Array.from(document.body.childNodes);
-        const cloned = toPrintRef.current.cloneNode(true);
-
-        document.body.replaceChildren(cloned);
-
-        await new Promise((resolve) => {
-          setTimeout(resolve, 0);
-        });
-        window.print();
-        await new Promise((resolve) => {
-          setTimeout(resolve, 1000);
-        });
-
-        document.body.replaceChildren(...originalContents);
-      }
-    })();
-  }, [toPrintRef]);
-
   return (
     <>
-      <Button
-        variant="outline"
-        type="button"
-        size="icon"
-        className="aspect-square"
-        onClick={handlePrint}
-      >
-        <Printer />
-      </Button>
+      <ReactToPrint
+        content={() => toPrintRef.current as HTMLElement}
+        documentTitle="Objednávkové štítky"
+        removeAfterPrint
+        trigger={() => (
+          <Button
+            variant="outline"
+            type="button"
+            size="icon"
+            className="aspect-square"
+          >
+            <Printer />
+          </Button>
+        )}
+      />
       <div className="hidden">
         <div
           // className="printable"
@@ -57,7 +43,8 @@ export default function PrintOrderLabels({ orders, store }: IProps) {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "2rem",
+            gap: "1rem",
+            padding: "1rem",
           }}
         >
           {orders.map((order, i) => {
