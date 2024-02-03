@@ -26,9 +26,9 @@ export default function PrintOrderLabels({ orders, store }: IProps) {
 
         document.body.replaceChildren(cloned);
 
-        // await new Promise((resolve) => {
-        //   setTimeout(resolve, 0);
-        // });
+        await new Promise((resolve) => {
+          setTimeout(resolve, 100);
+        });
         window.print();
         await new Promise((resolve) => {
           setTimeout(resolve, 100);
