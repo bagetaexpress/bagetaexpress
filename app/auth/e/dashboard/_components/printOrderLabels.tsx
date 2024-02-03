@@ -24,9 +24,9 @@ export default function PrintOrderLabels({ orders, store }: IProps) {
       const cloned = toPrintRef.current.cloneNode(true);
 
       document.body.replaceChildren(cloned);
-      window.print();
+      // window.print();
 
-      document.body.replaceChildren(...originalContents);
+      // document.body.replaceChildren(...originalContents);
     }
   }, [toPrintRef]);
 

@@ -21,7 +21,7 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
 
   const handlePrint = useCallback(() => {
     if (toPrintRef.current) {
-      const originalContents = Array.from(document.body.childNodes);
+      const originalContents = [...document.body.childNodes];
       const cloned = toPrintRef.current.cloneNode(true);
 
       document.body.replaceChildren(cloned);
