@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ExtendedItem } from "@/db/controllers/itemController";
 import { Store } from "@/db/schema";
 import { Printer } from "lucide-react";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 
 interface IProps {
   orders: Array<
@@ -18,6 +18,15 @@ interface IProps {
 export default function PrintOrderLabels({ orders, store }: IProps) {
   const toPrintRef = useRef<HTMLDivElement>(null);
 
+  const handlePrint = useCallback(() => {
+    if (toPrintRef.current) {
+      const cloned = toPrintRef.current.cloneNode(true);
+      document.body.appendChild(cloned);
+      window.print();
+      document.body.removeChild(cloned);
+    }
+  }, [toPrintRef]);
+
   return (
     <>
       <Button
@@ -25,14 +34,7 @@ export default function PrintOrderLabels({ orders, store }: IProps) {
         type="button"
         size="icon"
         className="aspect-square"
-        onClick={() => {
-          if (toPrintRef.current) {
-            const cloned = toPrintRef.current.cloneNode(true);
-            document.body.appendChild(cloned);
-            window.print();
-            document.body.removeChild(cloned);
-          }
-        }}
+        onClick={handlePrint}
       >
         <Printer />
       </Button>
