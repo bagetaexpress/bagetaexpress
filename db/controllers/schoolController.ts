@@ -22,6 +22,17 @@ async function getSchoolsByStoreId(
   return schools.map((school) => school.school);
 }
 
+async function getSchool(schoolId: School["id"]): Promise<School> {
+  const res = await db
+    .select({ school })
+    .from(school)
+    .where(eq(school.id, schoolId));
+  if (res.length === 0) {
+    throw new Error("School not found");
+  }
+  return res[0].school;
+}
+
 export type SchoolStats = {
   school: School;
   orderClose: Date;
@@ -102,4 +113,5 @@ export {
   getSchoolByDomain,
   getSchoolsOrderStats,
   updateSchoolStoreOrderClose,
+  getSchool,
 };

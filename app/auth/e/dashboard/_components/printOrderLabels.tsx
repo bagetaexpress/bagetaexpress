@@ -1,19 +1,8 @@
 "use client";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { ExtendedItem } from "@/db/controllers/itemController";
-import { Item, Store } from "@/db/schema";
+import { Store } from "@/db/schema";
 import { Printer } from "lucide-react";
 import { useRef } from "react";
 
