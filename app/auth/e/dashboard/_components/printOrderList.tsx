@@ -20,12 +20,14 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
   const toPrintRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useCallback(() => {
-    if (toPrintRef.current) {
-      const cloned = toPrintRef.current.cloneNode(true);
-      document.body.appendChild(cloned);
-      window.print();
-      document.body.removeChild(cloned);
-    }
+    (async () => {
+      if (toPrintRef.current) {
+        const cloned = toPrintRef.current.cloneNode(true);
+        document.body.appendChild(cloned);
+        await window.print();
+        document.body.removeChild(cloned);
+      }
+    })();
   }, [toPrintRef]);
 
   return (
