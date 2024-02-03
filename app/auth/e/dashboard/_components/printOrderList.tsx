@@ -28,11 +28,11 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
         document.body.replaceChildren(cloned);
 
         await new Promise((resolve) => {
-          setTimeout(resolve, 10);
+          setTimeout(resolve, 100);
         });
         window.print();
         await new Promise((resolve) => {
-          setTimeout(resolve, 100);
+          setTimeout(resolve, 1000);
         });
 
         document.body.replaceChildren(...originalContents);
