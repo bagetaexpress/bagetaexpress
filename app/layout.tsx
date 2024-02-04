@@ -19,6 +19,17 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="bagetaEXPRESS" />
+      <meta property="og:url" content="bageta.express" />
+      <meta
+        property="og:image"
+        content="https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png"
+      />
+      <meta
+        property="og:description"
+        content="Objednaj si desiatu už teraz!"
+      ></meta>
       <body className={inter.className}>
         <MainLayoutWrapper>{children}</MainLayoutWrapper>
         <SpeedInsights />
