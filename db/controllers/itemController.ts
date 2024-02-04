@@ -153,6 +153,24 @@ async function updateItem(
   await db.update(item).set(data).where(eq(item.id, data.id));
 }
 
+async function getOrderItemsByStore(
+  storeId: Store["id"],
+  orderStatus: Order["status"] = "ordered"
+) {
+  const items = await db
+    .select({
+      item,
+      quantity: sql<number>`SUM(order_item.quantity)`,
+    })
+    .from(item)
+    .innerJoin(orderItem, eq(item.id, orderItem.itemId))
+    .innerJoin(order, eq(orderItem.orderId, order.id))
+    .where(and(eq(order.status, orderStatus), eq(item.storeId, storeId)))
+    .groupBy(item.id);
+
+  return items;
+}
+
 async function getOrderItemsByStoreAndSchool(
   storeId: Store["id"],
   schoolId: School["id"],
@@ -187,6 +205,7 @@ async function getOrderItemsByStoreAndSchool(
 
 export {
   getOrderItemsByStoreAndSchool,
+  getOrderItemsByStore,
   getItemsBySchool,
   getItemById,
   getItemsFromCart,

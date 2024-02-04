@@ -21,6 +21,7 @@ import { getIngredientsByStoreId } from "@/db/controllers/ingredientController";
 import Image from "next/image";
 import SchoolCard from "./_components/schoolCard";
 import { Allergen, Ingredient } from "@/db/schema";
+import OrderSummary from "./_components/orderSummary";
 
 export default async function DashboardPage({
   searchParams,
@@ -52,6 +53,7 @@ export default async function DashboardPage({
             (searchParams.ingredientError ?? undefined) as string | undefined
           }
         />
+        <OrderSummary />
       </div>
 
       <h2 className="text-2xl font-semibold pt-4">Školy</h2>
