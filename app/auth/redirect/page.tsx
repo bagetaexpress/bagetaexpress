@@ -1,7 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { Button } from "@/components/ui/button";
 import { getServerSession } from "next-auth";
-import { signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
 import LogoutBtn from "./_components/LogoutBtn";
 
