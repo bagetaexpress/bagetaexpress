@@ -12,11 +12,9 @@ export default function LoginServices() {
 
   if (session) {
     return (
-      <Button
-        className="w-full"
-        title="Prejsť do aplikácie"
-        onClick={() => router.push("/auth/redirect")}
-      />
+      <Button className="w-full" onClick={() => router.push("/auth/redirect")}>
+        Prejsť do aplikácie
+      </Button>
     );
   }
 
