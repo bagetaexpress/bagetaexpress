@@ -52,7 +52,7 @@ async function populate(db: Database) {
       id: 2,
       name: "Gymnázium",
       websiteUrl: "https://gymnazium.edu.sk",
-      emailDomain: "gymnazium.edu.sk",
+      emailDomain: "gmail.com",
     },
   ]);
 
