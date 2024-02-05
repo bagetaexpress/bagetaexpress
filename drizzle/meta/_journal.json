@@ -22,6 +22,20 @@
       "when": 1707146455947,
       "tag": "0002_nifty_wallop",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1707166602687,
+      "tag": "0003_silly_stardust",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1707166827967,
+      "tag": "0004_cold_black_crow",
+      "breakpoints": true
     }
   ]
 }

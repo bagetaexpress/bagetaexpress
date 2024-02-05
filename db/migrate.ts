@@ -73,6 +73,8 @@ async function populate(db: Database) {
       description: "bageta popis",
       price: "3.99",
       imageUrl: "",
+      weight: 170,
+      deleted: false,
       storeId: 1,
     },
     {
@@ -81,6 +83,8 @@ async function populate(db: Database) {
       description: "najelpsia omega top bageta",
       price: "3.99",
       imageUrl: "",
+      weight: 150,
+      deleted: false,
       storeId: 1,
     },
   ]);

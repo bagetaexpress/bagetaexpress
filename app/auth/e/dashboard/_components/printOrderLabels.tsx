@@ -76,8 +76,10 @@ export default function PrintOrderLabels({ orders, store }: IProps) {
                       {store.name}
                     </p>
                   )}
-                  <p style={{ fontWeight: "bold" }}>{order.item.name}</p>
-                  <p style={{ fontSize: "0.75rem" }}>
+                  <p style={{ fontWeight: "bold" }}>
+                    {order.item.name} {order.item.weight}g
+                  </p>
+                  <p style={{ fontSize: "0.75rem", lineHeight: "0.8rem" }}>
                     Zloženie: {order.ingredients.map((x) => x.name).join(", ")}
                     <br />
                     Obsahuje: {order.allergens.map((x) => x.name).join(", ")}
