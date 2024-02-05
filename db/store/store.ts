@@ -13,7 +13,7 @@ export const store = mysqlTable("store", {
   websiteUrl: varchar("website_url", { length: 255 }).notNull(),
   adress: varchar("adress", { length: 255 }).notNull(),
   imageUrl: varchar("image_url", { length: 255 }).notNull(),
-  desctiption: varchar("description", { length: 255 }).notNull(),
+  description: varchar("description", { length: 255 }).notNull(),
 });
 
 export const storeRelations = relations(store, ({ many }) => ({

@@ -20,8 +20,10 @@ import { getAllergensByStoreId } from "@/db/controllers/allergenController";
 import { getIngredientsByStoreId } from "@/db/controllers/ingredientController";
 import Image from "next/image";
 import SchoolCard from "./_components/schoolCard";
-import { Allergen, Ingredient } from "@/db/schema";
+import { Allergen, Ingredient, store } from "@/db/schema";
 import OrderSummary from "./_components/orderSummary";
+import EditStore from "./_components/editStore";
+import { getStore } from "@/db/controllers/storeController";
 
 export default async function DashboardPage({
   searchParams,
@@ -37,6 +39,7 @@ export default async function DashboardPage({
   const itemStats = await getItemsStats(user.storeId ?? 0);
   const allergens = await getAllergensByStoreId(user.storeId ?? 0);
   const ingredients = await getIngredientsByStoreId(user.storeId ?? 0);
+  const store = await getStore(user.storeId ?? 0);
 
   return (
     <div className=" relative min-h-full">
@@ -54,6 +57,7 @@ export default async function DashboardPage({
           }
         />
         <OrderSummary />
+        <EditStore store={store} />
       </div>
 
       <h2 className="text-2xl font-semibold pt-4">Školy</h2>
