@@ -1,4 +1,4 @@
-import { int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { boolean, int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
 import { user } from "./user";
 import { store } from "../store/store";
 import { relations } from "drizzle-orm";
@@ -6,6 +6,7 @@ import { relations } from "drizzle-orm";
 export const employee = mysqlTable("employee", {
   userId: varchar("user_id", { length: 255 }).notNull().primaryKey(),
   storeId: int("store_id").notNull(),
+  isOwner: boolean("is_owner").notNull().default(false),
 });
 
 export const employeeRelations = relations(employee, ({ one }) => ({
