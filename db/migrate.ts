@@ -60,8 +60,10 @@ async function populate(db: Database) {
   await db.insert(tables.store).values({
     id: 1,
     name: "Školský obchod",
+    imageUrl: "",
+    adress: "adresa 1",
     websiteUrl: "https://skolskyobchod.sk",
-    desctiption: "Školský obchod popis",
+    description: "Školský obchod popis",
   });
   // Adding items
   await db.insert(tables.item).values([

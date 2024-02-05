@@ -61,15 +61,17 @@ export default function ItemCard({
           <CardDescription>{item.description}</CardDescription>
         </CardHeader>
         <CardContent className=" text-xs">
-          <div className="flex justify-center mb-2">
-            <Image
-              src={item.imageUrl}
-              width={200}
-              height={200}
-              alt="Obrázok produktu"
-              className="rounded-md"
-            />
-          </div>
+          {item.imageUrl !== "" && item.imageUrl !== null ? (
+            <div className="flex justify-center mb-2">
+              <Image
+                src={item.imageUrl}
+                width={200}
+                height={200}
+                alt="Obrázok produktu"
+                className="rounded-md"
+              />
+            </div>
+          ) : null}
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
