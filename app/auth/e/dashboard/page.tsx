@@ -109,15 +109,17 @@ function ItemCard({
         <CardDescription>{item.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex justify-center mb-2">
-          <Image
-            src={item.imageUrl}
-            width={200}
-            height={200}
-            alt="item image"
-            className="rounded-md"
-          />
-        </div>
+        {item.imageUrl != null && item.imageUrl != "" ? (
+          <div className="flex justify-center mb-2">
+            <Image
+              src={item.imageUrl}
+              width={200}
+              height={200}
+              alt="item image"
+              className="rounded-md"
+            />
+          </div>
+        ) : null}
         <div className=" grid grid-cols-2">
           <p>Objednané:</p>
           <p>{stats.ordered}</p>

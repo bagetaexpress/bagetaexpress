@@ -35,15 +35,17 @@ export default async function OrderPage() {
       </h3>
       <div className="grid grid-cols-1 divide-y-2">
         {items.map(({ item, quantity }, i) => (
-          <div key={i} className="flex justify-between p-1">
+          <div key={item.id} className="flex justify-between p-1">
             <div className="flex gap-1">
-              <Image
-                src={item.imageUrl}
-                width={150}
-                height={150}
-                alt="Obrázok produktu"
-                className="rounded-md max-w-24 object-contain"
-              />
+              {item.imageUrl != null && item.imageUrl != "" ? (
+                <Image
+                  src={item.imageUrl}
+                  width={150}
+                  height={150}
+                  alt="Obrázok produktu"
+                  className="rounded-md max-w-24 object-contain"
+                />
+              ) : null}
               <div>
                 <h3 className="font-semibold text-lg">{item.name}</h3>
                 <p className="font-light text-sm">{item.description}</p>

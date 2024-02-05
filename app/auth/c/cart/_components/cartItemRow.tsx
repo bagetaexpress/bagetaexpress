@@ -34,13 +34,15 @@ export default function CartItemRow({
   return (
     <div className="flex justify-between p-2 items-center">
       <div className="flex gap-1 items-center">
-        <Image
-          src={item.imageUrl}
-          width={150}
-          height={150}
-          alt="Obrázok produktu"
-          className="rounded-md max-w-24 object-contain"
-        />
+        {item.imageUrl != null && item.imageUrl != "" ? (
+          <Image
+            src={item.imageUrl}
+            width={150}
+            height={150}
+            alt="Obrázok produktu"
+            className="rounded-md max-w-24 object-contain"
+          />
+        ) : null}
         <div>
           <h3 className="font-semibold text-lg">{item.name}</h3>
           <p className="font-light text-sm">{item.description}</p>
