@@ -46,14 +46,14 @@ export default function BlockPage() {
 
                   const date = schoolStore.orderClose;
                   const dayOfWeek = date.getDay();
-                  let daysToAdd: number;
+                  let daysToAdd: number = 1;
 
                   if (dayOfWeek === 5) {
-                    daysToAdd = 3;
-                  } else if (dayOfWeek === 6) {
                     daysToAdd = 2;
-                  } else {
+                  } else if (dayOfWeek === 6) {
                     daysToAdd = 1;
+                  } else {
+                    daysToAdd = 0;
                   }
                   date.setDate(date.getDate() + daysToAdd);
 
