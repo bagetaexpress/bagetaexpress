@@ -19,7 +19,16 @@ import { getUser } from "@/lib/userUtils";
 
 export default function BlockPage() {
   return (
-    <div className=" min-h-full flex justify-center items-center">
+    <div className=" min-h-full flex flex-col gap-2 justify-center items-center">
+      <div>
+        <h1 className=" font-semibold text-2xl">Ukončenie predaja</h1>
+        <p>
+          Po zablokovaní nevyzdvihnutých objednávok sa posunie dátum uzavretia o
+          jeden deň,
+          <br />
+          ak je dátum uzavretia v piatok, tak sa posunie na nedeľu.
+        </p>
+      </div>
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button size="lg">Zablokovať nevyzdvihnuté</Button>
