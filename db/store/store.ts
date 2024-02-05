@@ -11,8 +11,8 @@ export const store = mysqlTable("store", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   websiteUrl: varchar("website_url", { length: 255 }).notNull(),
-  adress: varchar("adress", { length: 255 }).notNull(),
-  imageUrl: varchar("image_url", { length: 255 }).notNull(),
+  adress: varchar("adress", { length: 255 }).notNull().default(""),
+  imageUrl: varchar("image_url", { length: 255 }).notNull().default(""),
   description: varchar("description", { length: 255 }).notNull(),
 });
 
