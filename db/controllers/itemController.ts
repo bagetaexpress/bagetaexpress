@@ -64,7 +64,7 @@ async function getItemsBySchool(
     .from(item)
     .innerJoin(store, eq(item.storeId, store.id))
     .innerJoin(schoolStore, eq(store.id, schoolStore.storeId))
-    .where(eq(schoolStore.schoolId, schoolId));
+    .where(and(eq(schoolStore.schoolId, schoolId), eq(item.deleted, false)));
 
   for (const res of items) {
     res.allergens = await getAllergensByItem(res.item.id);
@@ -119,7 +119,7 @@ async function getItemsStats(storeId: Item["storeId"]): Promise<ItemStats[]> {
     .from(item)
     .leftJoin(orderItem, eq(item.id, orderItem.itemId))
     .leftJoin(order, eq(orderItem.orderId, order.id))
-    .where(eq(item.storeId, storeId))
+    .where(and(eq(item.storeId, storeId), eq(item.deleted, false)))
     .groupBy(item.id)) as ItemStats[];
 
   for (const res of items) {
