@@ -54,7 +54,7 @@ export default async function EditIngredients({ error }: { error?: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Upraviť ingrediencie</Button>
+        <Button className="flex-1 sm:grow-0">Upraviť ingrediencie</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

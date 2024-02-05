@@ -54,7 +54,7 @@ export default async function EditAllergens({ error }: { error?: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Upraviť alergény</Button>
+        <Button className="flex-1 sm:grow-0">Upraviť alergény</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

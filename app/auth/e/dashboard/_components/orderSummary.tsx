@@ -29,7 +29,9 @@ export default async function OrderSummary() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Zhrnutie objednávok</Button>
+        <Button className="flex-1 sm:grow-0" variant="outline">
+          Zhrnutie objednávok
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

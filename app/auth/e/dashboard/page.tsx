@@ -42,7 +42,7 @@ export default async function DashboardPage({
     <div className=" relative min-h-full">
       <h1 className="text-3xl font-semibold py-2">Dashboard</h1>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         <EditAllergens
           error={
             (searchParams.allergenError ?? undefined) as string | undefined
