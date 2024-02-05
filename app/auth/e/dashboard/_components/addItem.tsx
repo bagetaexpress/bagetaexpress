@@ -23,10 +23,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Loader, X } from "lucide-react";
+import { Loader, Trash2, X } from "lucide-react";
 import { getUser } from "@/lib/userUtils";
 import { addItem, updateItem } from "@/db/controllers/itemController";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   createItemAllergen,
   deleteItemAllergen,
@@ -53,6 +53,7 @@ const formSchema = z.object({
     message: "Name must be at least 3 characters.",
   }),
   description: z.string(),
+  weight: z.number(),
   price: z.string().regex(/^\d+(\.\d{1,2})?$/, {
     message: "Price must be a valid number.",
   }),
@@ -81,6 +82,7 @@ export default function AddItemForm({
   allergens: allergenList,
   ingredients: ingredientList,
 }: IPorps) {
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const { startUpload } = useUploadThing("imageUploader", {
     onUploadError: () => {
       setProcessingStatus("error");
@@ -121,6 +123,7 @@ export default function AddItemForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: item?.name ?? "",
+      weight: item?.weight ?? undefined,
       description: item?.description ?? "",
       price: item?.price ?? "",
     },
@@ -240,7 +243,7 @@ export default function AddItemForm({
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className=" max-h-dvh overflow-auto">
         <DialogHeader>
           <DialogTitle>
             {
@@ -269,6 +272,7 @@ export default function AddItemForm({
             <Input
               type="file"
               name="image"
+              ref={imageInputRef}
               onChange={async (e) => {
                 if (!e.target.files) return;
                 const file = e.target.files[0];
@@ -281,12 +285,41 @@ export default function AddItemForm({
                 setImageUrl(URL.createObjectURL(file));
               }}
             />
+            {imageUrl != null && imageUrl !== "" && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  if (imageInputRef != null && imageInputRef.current != null) {
+                    imageInputRef.current.value = "";
+                  }
+                  setImage(null);
+                  setImageUrl(null);
+                }}
+              >
+                Zmazať fotku
+                <Trash2 className="w-4 h-4 ml-2" />
+              </Button>
+            )}
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Názov</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="weight"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Váha (g)</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -307,6 +340,7 @@ export default function AddItemForm({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="price"
