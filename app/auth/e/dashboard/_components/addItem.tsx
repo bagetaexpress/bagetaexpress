@@ -50,12 +50,14 @@ import { Allergen, Ingredient, Item } from "@/db/schema";
 
 const formSchema = z.object({
   name: z.string().min(3, {
-    message: "Name must be at least 3 characters.",
+    message: "Názov musí mať aspoň 3 znaky.",
   }),
   description: z.string(),
-  weight: z.number(),
+  weight: z.string().regex(/^\d+$/, {
+    message: "Váha musí byť celé číslo.",
+  }),
   price: z.string().regex(/^\d+(\.\d{1,2})?$/, {
-    message: "Price must be a valid number.",
+    message: "Cena musí byť číslo s maximálne dvoma desatinnými miestami.",
   }),
 });
 
@@ -123,7 +125,7 @@ export default function AddItemForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: item?.name ?? "",
-      weight: item?.weight ?? undefined,
+      weight: item?.weight ? item.weight.toString() : undefined,
       description: item?.description ?? "",
       price: item?.price ?? "",
     },
@@ -181,7 +183,12 @@ export default function AddItemForm({
         }
 
         setProcessingStatus("konečné upravovanie");
-        await updateItem({ ...values, id: item.id, imageUrl: localUrl ?? "" });
+        await updateItem({
+          ...values,
+          weight: parseInt(values.weight),
+          id: item.id,
+          imageUrl: localUrl ?? "",
+        });
         break;
       case "add":
         if (!image) {
@@ -202,6 +209,7 @@ export default function AddItemForm({
         setProcessingStatus("Pridávanie produktu");
         const id = await addItem({
           ...values,
+          weight: parseInt(values.weight),
           storeId: user.storeId,
           imageUrl: localUrl ?? "",
         });
