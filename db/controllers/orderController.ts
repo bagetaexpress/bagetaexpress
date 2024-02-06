@@ -1,7 +1,16 @@
 "use server";
 
 import { db } from "@/db";
-import { customer, order, Order, School } from "../schema";
+import {
+  customer,
+  item,
+  order,
+  Order,
+  orderItem,
+  school,
+  School,
+  schoolStore,
+} from "../schema";
 import { eq, and, sql } from "drizzle-orm";
 
 async function createOrder(
@@ -92,6 +101,25 @@ async function updateOrderStatus(
     .where(eq(order.id, orderId));
 }
 
+async function getFirstOrderItemClose(orderId: Order["id"]): Promise<Date> {
+  const items = await db
+    .select({ orderClose: schoolStore.orderClose })
+    .from(order)
+    .innerJoin(customer, eq(order.userId, customer.userId))
+    .innerJoin(school, eq(customer.schoolId, school.id))
+    .innerJoin(schoolStore, eq(school.id, schoolStore.schoolId))
+    .innerJoin(orderItem, eq(order.id, orderItem.orderId))
+    .innerJoin(item, eq(orderItem.itemId, item.id))
+    .where(eq(order.id, orderId))
+    .orderBy(schoolStore.orderClose);
+
+  if (items.length === 0) {
+    return new Date();
+  }
+
+  return items[0].orderClose;
+}
+
 async function getOrdersBySchoolId(
   schoolId: School["id"],
   status: Order["status"]
@@ -122,4 +150,5 @@ export {
   updateOrderStatus,
   getOrdersByUserId,
   blockUnpickedOrders,
+  getFirstOrderItemClose,
 };

@@ -1,8 +1,26 @@
 import { getItemsFromOrder } from "@/db/controllers/itemController";
-import { getOrdersByUserId } from "@/db/controllers/orderController";
+import {
+  getFirstOrderItemClose,
+  getOrdersByUserId,
+} from "@/db/controllers/orderController";
 import { getUser } from "@/lib/userUtils";
 import QrCode from "./_components/qrCode";
 import Image from "next/image";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { deleteOrderAndItems } from "@/lib/orderUtils";
+import { Order } from "@/db/schema";
+import { Button } from "@/components/ui/button";
+import { revalidatePath } from "next/cache";
 
 export default async function OrderPage() {
   const currUser = await getUser();
@@ -12,6 +30,7 @@ export default async function OrderPage() {
   const foundUnpicked = await getOrdersByUserId(currUser.id, "unpicked");
 
   const order = foundOrders[0] ?? foundUnpicked[0];
+  const orderClose = await getFirstOrderItemClose(order.id);
 
   const items = await getItemsFromOrder(order.id);
   const total = items
@@ -69,6 +88,52 @@ export default async function OrderPage() {
           predajcovi
         </p>
       )}
+      <div className="flex justify-end">
+        {foundOrders.length > 0 && orderClose > new Date() && (
+          <DeleteOrder orderId={order.id} />
+        )}
+      </div>
     </div>
+  );
+}
+
+interface DeleteOrderProps {
+  orderId: Order["id"];
+}
+
+export async function DeleteOrder({ orderId }: DeleteOrderProps) {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive">Zrušiť objednávku</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Určite chcete zmazať objednávku?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Táto akcia je nevratná.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Vrátiť sa</AlertDialogCancel>
+          <form
+            action={async () => {
+              "use server";
+              const orderClose = await getFirstOrderItemClose(orderId);
+              if (orderClose > new Date()) {
+                await deleteOrderAndItems(orderId);
+              }
+              revalidatePath("/auth/c/order");
+            }}
+          >
+            <AlertDialogAction asChild>
+              <Button variant="destructive" type="submit">
+                Zrušiť objednávku
+              </Button>
+            </AlertDialogAction>
+          </form>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
