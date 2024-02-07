@@ -101,7 +101,7 @@ interface DeleteOrderProps {
   orderId: Order["id"];
 }
 
-export async function DeleteOrder({ orderId }: DeleteOrderProps) {
+async function DeleteOrder({ orderId }: DeleteOrderProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
