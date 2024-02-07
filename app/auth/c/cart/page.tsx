@@ -4,6 +4,7 @@ import { getFirstOrderClose } from "@/db/controllers/schoolController";
 import { getCartId, getCartItems } from "@/lib/cartUtils";
 import { getUser } from "@/lib/userUtils";
 import { redirect } from "next/navigation";
+import LocalCart from "./_components/localCart";
 
 export default async function CartPage() {
   const cartId = await getCartId();
@@ -30,32 +31,7 @@ export default async function CartPage() {
 
   return (
     <div className="h-full flex flex-col justify-between md:justify-start">
-      <div>
-        <h1 className="text-2xl font-semibold pt-2">Košík</h1>
-        <div className="grid grid-cols-1 divide-y-2">
-          {data.map((item, i) => (
-            <CartItemRow
-              key={item.item.id + "-" + i}
-              {...item.item}
-              quantity={item.quantity}
-              cartId={cartId}
-            />
-          ))}
-        </div>
-        <div className="flex justify-between py-4">
-          <p className="font-semibold text-lg">Spolu</p>
-          <p className="font-semibold text-xl">
-            {data
-              .reduce(
-                (acc, item) =>
-                  acc + parseFloat(item.item.price) * item.quantity,
-                0
-              )
-              .toFixed(2)}
-            €
-          </p>
-        </div>
-      </div>
+      <LocalCart data={data} cartId={cartId} />
       <div className="flex justify-end">
         {orderClose > new Date() ? (
           <Cheackout orderClose={orderClose} items={data} cartId={cartId} />

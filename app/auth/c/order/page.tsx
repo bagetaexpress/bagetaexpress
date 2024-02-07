@@ -125,9 +125,10 @@ async function DeleteOrder({ orderId }: DeleteOrderProps) {
               }
               revalidatePath("/auth/c/order");
             }}
+            className=" flex flex-1 sm:grow-0"
           >
             <AlertDialogAction asChild>
-              <Button variant="destructive" type="submit">
+              <Button variant="destructive" className="flex-1" type="submit">
                 Zrušiť objednávku
               </Button>
             </AlertDialogAction>
