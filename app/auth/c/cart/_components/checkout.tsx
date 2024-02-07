@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader } from "lucide-react";
 import { Item } from "@/db/schema";
+import { getCartItems } from "@/lib/cartUtils";
 
 interface ICheckout {
   items: {
@@ -25,7 +26,13 @@ interface ICheckout {
   orderClose: Date;
 }
 
-export default function Cheackout({ items, cartId, orderClose }: ICheckout) {
+export default function Cheackout({
+  items: defaultItems,
+  cartId,
+  orderClose,
+}: ICheckout) {
+  const [items, setItems] = useState(defaultItems);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
   const router = useRouter();
 
@@ -45,9 +52,23 @@ export default function Cheackout({ items, cartId, orderClose }: ICheckout) {
     setIsCreatingOrder(false);
   }
 
+  async function fetchCart() {
+    const data = await getCartItems(cartId);
+    if (data.length === 0) {
+      router.refresh();
+      return;
+    }
+    setItems(data);
+    setIsLoaded(true);
+  }
+
   return (
-    <Drawer>
-      <DrawerTrigger asChild>
+    <Drawer
+      onClose={() => {
+        setIsLoaded(false);
+      }}
+    >
+      <DrawerTrigger onClick={fetchCart} asChild>
         <Button className="flex-1 md:max-w-fit">Objedať</Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -85,12 +106,18 @@ export default function Cheackout({ items, cartId, orderClose }: ICheckout) {
               <Button variant="outline">Zrušiť</Button>
             </DrawerClose>
             {isCreatingOrder ? (
-              <Button disabled={isCreatingOrder} className="flex-1">
+              <Button
+                disabled={isCreatingOrder || !isLoaded}
+                className="flex-1"
+              >
                 <Loader className="w-5 h-5 mr-2 animate-spin" />
                 Vytváranie objednávky...
               </Button>
             ) : (
-              <Button disabled={isCreatingOrder} onClick={handleCheckout}>
+              <Button
+                disabled={isCreatingOrder || !isLoaded}
+                onClick={handleCheckout}
+              >
                 Objedať
               </Button>
             )}
