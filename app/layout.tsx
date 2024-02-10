@@ -9,7 +9,22 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "bagetaEXPRESS",
-  description: "order sandwiches fast and easy",
+  description: "Rýchle a jednoduché objednávanie bagiet pre študentov!",
+  keywords: ["bageta", "express", "objednávka", "študenti", "jedlo", "desiata"],
+  openGraph: {
+    type: "website",
+    url: "bageta.express",
+    title: "bagetaEXPRESS",
+    description: "Objednaj si desiatu už teraz!",
+    images: [
+      {
+        url: "https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png",
+        width: 800,
+        height: 600,
+        alt: "bagetaEXPRESS",
+      },
+    ],
+  },
 };
 
 export default async function RootLayout({
