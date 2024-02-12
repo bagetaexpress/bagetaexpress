@@ -6,8 +6,7 @@ import { Store } from "@/db/schema";
 import { printComponent } from "@/lib/utils";
 import { Printer } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useRef } from "react";
-import ReactToPrint from "react-to-print";
+import { useRef } from "react";
 
 interface IProps {
   orders: Array<

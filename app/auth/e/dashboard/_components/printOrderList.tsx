@@ -3,10 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { ExtendedItem } from "@/db/controllers/itemController";
 import { School, Store } from "@/db/schema";
-import { isMobile, printComponent } from "@/lib/utils";
+import { printComponent } from "@/lib/utils";
 import { TableProperties } from "lucide-react";
-import { useCallback, useRef } from "react";
-import ReactToPrint from "react-to-print";
+import { useRef } from "react";
 
 interface IProps {
   orders: Array<
