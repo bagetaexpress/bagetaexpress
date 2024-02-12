@@ -59,6 +59,9 @@
 }
 
 @media print {
+  /* body *:not(.printable .printable *) {
+    display: none !important;
+  } */
   table {
     border-collapse: collapse;
     width: 100%;
