@@ -56,7 +56,7 @@ export default async function EditAllergens({ error }: { error?: string }) {
       <DialogTrigger asChild>
         <Button className="flex-1 sm:grow-0">Upraviť alergény</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className=" max-h-dvh overflow-auto">
         <DialogHeader>
           <DialogTitle>Upraviť alergény</DialogTitle>
           <DialogDescription></DialogDescription>

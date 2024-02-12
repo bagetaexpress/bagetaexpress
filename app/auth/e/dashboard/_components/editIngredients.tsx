@@ -56,7 +56,7 @@ export default async function EditIngredients({ error }: { error?: string }) {
       <DialogTrigger asChild>
         <Button className="flex-1 sm:grow-0">Upraviť ingrediencie</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className=" max-h-dvh overflow-auto">
         <DialogHeader>
           <DialogTitle>Upraviť ingrediencie</DialogTitle>
           <DialogDescription></DialogDescription>
