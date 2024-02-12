@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ExtendedItem } from "@/db/controllers/itemController";
 import { Store } from "@/db/schema";
+import { printComponent } from "@/lib/utils";
 import { Printer } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useRef } from "react";
@@ -20,23 +21,22 @@ interface IProps {
 export default function PrintOrderLabels({ orders, store }: IProps) {
   const toPrintRef = useRef<HTMLDivElement>(null);
 
+  function handlePrint() {
+    if (!toPrintRef.current) return;
+    void printComponent(toPrintRef.current);
+  }
+
   return (
     <>
-      <ReactToPrint
-        content={() => toPrintRef.current as HTMLElement}
-        documentTitle="Objednávkové štítky"
-        removeAfterPrint
-        trigger={() => (
-          <Button
-            variant="outline"
-            type="button"
-            size="icon"
-            className="aspect-square"
-          >
-            <Printer />
-          </Button>
-        )}
-      />
+      <Button
+        variant="outline"
+        type="button"
+        size="icon"
+        className="aspect-square"
+        onClick={handlePrint}
+      >
+        <Printer />
+      </Button>
       <div className="hidden">
         <div
           ref={toPrintRef}
