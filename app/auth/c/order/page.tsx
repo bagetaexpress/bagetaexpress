@@ -42,7 +42,7 @@ export default async function OrderPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold pt-2">Objednávka</h1>
+      <h1 className="text-2xl font-semibold py-2">Objednávka</h1>
       <div className="flex justify-center">
         <QrCode
           pin={order.pin}

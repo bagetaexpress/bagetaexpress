@@ -17,7 +17,7 @@ import {
 } from "@/db/controllers/schoolController";
 import { getUser } from "@/lib/userUtils";
 
-export default function BlockPage() {
+export default async function BlockPage() {
   return (
     <div className=" min-h-full flex flex-col gap-2 justify-center items-center">
       <div>
@@ -35,10 +35,9 @@ export default function BlockPage() {
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Ste si istý?</AlertDialogTitle>
+            <AlertDialogTitle>Táto akcia je nevratná</AlertDialogTitle>
             <AlertDialogDescription>
-              Táto akcia zablokuje všetky nevyzdvihnuté objednávky. Táto akcia
-              je nevratná.
+              Všetky nevyzdvihnuté objednávky budú zablokované.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

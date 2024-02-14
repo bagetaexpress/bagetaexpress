@@ -26,6 +26,12 @@ export default async function UserDropdown() {
   const user = await getUser();
   if (!user) return null;
 
+  const permissionsSum =
+    (user.isAdmin ? 1 : 0) +
+    (user.isCustomer ? 1 : 0) +
+    (user.isEmployee ? 1 : 0) +
+    (user.isSeller ? 1 : 0);
+
   return (
     <AlertDialog>
       <DropdownMenu>
@@ -35,27 +41,30 @@ export default async function UserDropdown() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          {user.isAdmin && (
+          {permissionsSum >= 2 ? (
             <>
-              <DropdownMenuLabel>Admin</DropdownMenuLabel>
-              <a href="/auth/c/store">
-                <DropdownMenuItem>Zákazník</DropdownMenuItem>
-              </a>
-              <a href="/auth/s/summary">
-                <DropdownMenuItem>Predajca</DropdownMenuItem>
-              </a>
-              <a href="/auth/e/dashboard">
-                <DropdownMenuItem>Zamestnanec</DropdownMenuItem>
-              </a>
-              <DropdownMenuSeparator />
+              {user.isCustomer ? (
+                <a href="/auth/c/store">
+                  <DropdownMenuItem>Obchod</DropdownMenuItem>
+                </a>
+              ) : null}
+              {user.isSeller ? (
+                <a href="/auth/s/summary">
+                  <DropdownMenuItem>Prehľad</DropdownMenuItem>
+                </a>
+              ) : null}
+              {user.isEmployee ? (
+                <a href="/auth/e/dashboard">
+                  <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                </a>
+              ) : null}
             </>
-          )}
-          <DropdownMenuLabel>Môj účet</DropdownMenuLabel>
+          ) : null}
           <DropdownMenuSeparator />
+          <DropdownMenuLabel>Môj účet</DropdownMenuLabel>
           <AlertDialogTrigger asChild>
             <DropdownMenuItem>Profil</DropdownMenuItem>
           </AlertDialogTrigger>
-          <DropdownMenuSeparator />
           <LogoutMenuItem />
         </DropdownMenuContent>
       </DropdownMenu>

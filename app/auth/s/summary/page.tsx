@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { handleFilterChange } from "./serverUtil";
-import { Order } from "@/db/schema";
+import { Order, order } from "@/db/schema";
 
 export default async function SummaryPage({
   searchParams,
@@ -49,6 +49,9 @@ export default async function SummaryPage({
         </Button>
       </form>
       <Accordion type="multiple">
+        {orders.length === 0 && (
+          <div className="text-center text-gray-500">Žiadne objednávky</div>
+        )}
         {orders.map((order) => (
           <AccordionItem key={order.id} value={order.pin}>
             <AccordionTrigger>

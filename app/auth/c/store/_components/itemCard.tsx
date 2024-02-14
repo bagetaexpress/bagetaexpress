@@ -114,15 +114,17 @@ export default function ItemCard({
             <DrawerTitle>Pridané do košíka!</DrawerTitle>
             <DrawerDescription>{item.name}</DrawerDescription>
           </DrawerHeader>
-          <div className="flex justify-center mb-2">
-            <Image
-              src={item.imageUrl}
-              width={250}
-              height={250}
-              alt="Obrázok produktu"
-              className="rounded-md"
-            />
-          </div>
+          {item.imageUrl !== "" && item.imageUrl !== null ? (
+            <div className="flex justify-center mb-2">
+              <Image
+                src={item.imageUrl}
+                width={250}
+                height={250}
+                alt="Obrázok produktu"
+                className="rounded-md"
+              />
+            </div>
+          ) : null}
           <DrawerFooter>
             <DrawerClose asChild>
               <Button variant="outline">Pokračovať ďalej</Button>
