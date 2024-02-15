@@ -459,7 +459,7 @@ export default function AddItemForm({
               </Select>
             </div>
             {error && <p className="text-red-500 text-center py-2">{error}</p>}
-            <DialogFooter>
+            <DialogFooter className="gap-2">
               <Button
                 type="button"
                 variant="outline"
@@ -470,7 +470,11 @@ export default function AddItemForm({
               >
                 Zrušiť
               </Button>
-              <Button disabled={isProcessing} type="submit">
+              <Button
+                disabled={isProcessing}
+                style={{ marginLeft: 0 }}
+                type="submit"
+              >
                 {isProcessing && <Loader className="animate-spin mr-2" />}
                 {processingStatus ||
                   { add: "Pridať", update: "Upraviť" }[action]}

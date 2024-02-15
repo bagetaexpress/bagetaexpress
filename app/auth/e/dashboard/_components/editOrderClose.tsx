@@ -52,7 +52,9 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Upraviť dátum</DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription>
+            Upraviť dátum uzávierky objednávok
+          </DialogDescription>
         </DialogHeader>
         <Popover>
           <PopoverTrigger asChild>
@@ -86,7 +88,7 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
               <TimePickerHourMinute setDate={setDate} date={date} />
             </div>
           </PopoverContent>
-          <DialogFooter>
+          <DialogFooter className="gap-2">
             <Button
               variant="outline"
               onClick={() => {
@@ -97,6 +99,7 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
               Zrušiť
             </Button>
             <Button
+              style={{ marginLeft: 0 }}
               disabled={isProcessing}
               onClick={async () => {
                 if (!date) return;

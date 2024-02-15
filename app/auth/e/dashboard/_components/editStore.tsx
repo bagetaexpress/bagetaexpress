@@ -226,7 +226,7 @@ export default function EditStore({ store }: StoreProps) {
               )}
             />
             {error && <p className="text-red-500 text-center py-2">{error}</p>}
-            <DialogFooter>
+            <DialogFooter className="gap-2">
               <Button
                 type="button"
                 variant="outline"
@@ -237,7 +237,11 @@ export default function EditStore({ store }: StoreProps) {
               >
                 Zrušiť
               </Button>
-              <Button disabled={isProcessing} type="submit">
+              <Button
+                disabled={isProcessing}
+                type="submit"
+                style={{ marginLeft: 0 }}
+              >
                 {isProcessing && <Loader className="animate-spin mr-2" />}
                 {processingStatus || (isProcessing ? "Spracovávam" : "Uložiť")}
               </Button>
