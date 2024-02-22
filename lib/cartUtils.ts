@@ -26,6 +26,9 @@ async function addToCart(itemId: number, quantity: number = 1): Promise<void> {
     await createCartItem(cartId, itemId, quantity);
     return;
   }
+  if (orderItem.quantity >= 5) {
+    throw new Error("V košíku už máte maximálny počet kusov");
+  }
   // update quantity
   await updateCartItem(cartId, itemId, orderItem.quantity + quantity);
 }

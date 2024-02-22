@@ -41,6 +41,7 @@ export default function ItemCard({
 }) {
   const drawerBtnRef = useRef<HTMLButtonElement | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     if (orderClose < new Date()) {
@@ -48,7 +49,12 @@ export default function ItemCard({
     }
     e.preventDefault();
     setIsAdding(true);
-    await addToCart(item.id);
+    setError(null);
+    try {
+      await addToCart(item.id);
+    } catch (e: { message: string } | any) {
+      setError(e?.message ?? "Nastala chyba");
+    }
     drawerBtnRef.current?.click();
     setIsAdding(false);
   }
@@ -111,8 +117,12 @@ export default function ItemCard({
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle>Pridané do košíka!</DrawerTitle>
-            <DrawerDescription>{item.name}</DrawerDescription>
+            <DrawerTitle>
+              {error == null ? "Pridané do košíka!" : "Nepodarilo sa pridať!"}
+            </DrawerTitle>
+            <DrawerDescription>
+              {error == null ? item.name : error}
+            </DrawerDescription>
           </DrawerHeader>
           {item.imageUrl !== "" && item.imageUrl !== null ? (
             <div className="flex justify-center mb-2">
