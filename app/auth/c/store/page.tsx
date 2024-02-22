@@ -26,7 +26,7 @@ export default async function Store() {
         <div className="text-sm text-gray-500 mb-4">
           Objednávky sa uzatvárajú:{" "}
           <span className="font-semibold text-primary-foreground">
-            {orderClose.toLocaleString()}
+            {orderClose.toLocaleString("sk-SK")}
           </span>
         </div>
       ) : (

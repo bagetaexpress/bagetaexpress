@@ -35,7 +35,9 @@ export default async function SchoolCard({
         <CardTitle>{school.name}</CardTitle>
         <CardDescription>
           Ukončenie objednávok:{" "}
-          <span className="font-semibold">{orderClose.toLocaleString()}</span>
+          <span className="font-semibold">
+            {orderClose.toLocaleString("sk-SK")}
+          </span>
         </CardDescription>
       </CardHeader>
       <CardContent>
