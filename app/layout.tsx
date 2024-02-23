@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
-import MainLayoutWrapper from "../components/MainLayoutWrapper";
+import { MainLayoutWrapper } from "@/components/MainLayoutWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -46,7 +46,9 @@ export default async function RootLayout({
         content="Objednaj si desiatu už teraz!"
       ></meta>
       <body className={inter.className}>
-        <MainLayoutWrapper>{children}</MainLayoutWrapper>
+        <MainLayoutWrapper attribute="class" defaultTheme="light">
+          {children}
+        </MainLayoutWrapper>
         <SpeedInsights />
         <Analytics />
       </body>

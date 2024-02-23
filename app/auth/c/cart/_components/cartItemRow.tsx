@@ -56,7 +56,7 @@ export default function CartItemRow({
           <button
             onClick={handleDescrease}
             type="submit"
-            className=" bg-red-500 aspect-square rounded-md p-1"
+            className=" bg-destructive aspect-square rounded-md p-1"
           >
             {quantity === 1 ? (
               <Trash className="w-5 h-5 text-white" />

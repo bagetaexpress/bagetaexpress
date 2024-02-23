@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import UserDropdown from "./userDropdown";
-import logo from "@/assets/logomark.svg";
-import Image from "next/image";
+import LogomarkJS from "./logomarkJS";
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/userUtils";
 
@@ -36,9 +35,11 @@ export default async function NavWrapper({
           justify-between max-w-screen-lg mx-auto"
       >
         <div className="relative h-10 w-28">
-          {/* <p className="text-xl font-semibold">bagetaExpress</p> */}
           <a href={home}>
-            <Image src={logo} alt="bagetaExpress" fill className=" max-h-10" />
+            <LogomarkJS
+              style={{ fill: "hsl(var(--primary-foreground))" }}
+              className="max-h-10 flex-1"
+            />
           </a>
         </div>
         <div className="flex gap-1">

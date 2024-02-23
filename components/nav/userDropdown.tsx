@@ -21,6 +21,7 @@ import {
 } from "../ui/alert-dialog";
 import { getUser } from "@/lib/userUtils";
 import LogoutMenuItem from "./logountMenuItem";
+import { DarkModeToggle } from "../DarkModeToggle";
 
 export default async function UserDropdown() {
   const user = await getUser();
@@ -65,6 +66,9 @@ export default async function UserDropdown() {
           <AlertDialogTrigger asChild>
             <DropdownMenuItem>Profil</DropdownMenuItem>
           </AlertDialogTrigger>
+          <DropdownMenuItem>
+            <DarkModeToggle />
+          </DropdownMenuItem>
           <LogoutMenuItem />
         </DropdownMenuContent>
       </DropdownMenu>
