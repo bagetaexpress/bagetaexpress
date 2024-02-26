@@ -24,31 +24,24 @@ export function isMobile() {
 }
 
 export async function printComponent(node: HTMLElement) {
-  const currState = Array.from(window.document.body.childNodes);
+  node.classList.add("printable");
   const printContent = node.cloneNode(true);
+  node.classList.remove("printable");
 
-  window.document.body.replaceChildren(printContent);
+  window.document.body.appendChild(printContent);
   window.print();
 
   if (isMobile()) {
     let replaced = false;
-    void new Promise((resolve) =>
-      setTimeout(() => {
-        if (!replaced) {
-          window.document.body.replaceChildren(...currState);
-        }
-        resolve(true);
-      }, 1000)
-    );
     window.addEventListener(
       "focus",
       () => {
         replaced = true;
-        window.document.body.replaceChildren(...currState);
+        window.document.body.removeChild(printContent);
       },
       { once: true }
     );
   } else {
-    window.document.body.replaceChildren(...currState);
+    window.document.body.removeChild(printContent);
   }
 }

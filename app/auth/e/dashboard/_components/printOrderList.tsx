@@ -39,7 +39,6 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
       <div className="hidden">
         <div
           ref={toPrintRef}
-          className="printable"
           style={{
             display: "flex",
             flexDirection: "column",
