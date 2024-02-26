@@ -42,11 +42,19 @@ export async function printComponent(node: HTMLElement) {
     window.addEventListener(
       "focus",
       () => {
-        window.document.body.removeChild(printContent);
+        try {
+          window.document.body.removeChild(printContent);
+        } catch (e) {
+          console.error(e);
+        }
       },
       { once: true }
     );
   } else {
-    window.document.body.removeChild(printContent);
+    try {
+      window.document.body.removeChild(printContent);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
