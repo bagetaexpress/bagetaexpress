@@ -59,9 +59,16 @@
   }
 }
 
+body > .printable {
+  display: none;
+}
+
 @media print {
   body > *:not(.printable) {
     display: none;
+  }
+  body > .printable {
+    display: unset;
   }
   table {
     border-collapse: collapse;

@@ -24,6 +24,13 @@ export function isMobile() {
 }
 
 export async function printComponent(node: HTMLElement) {
+  // Remove any previous printable content
+  for (const child of window.document.body.children) {
+    if (child.classList.contains("printable")) {
+      window.document.body.removeChild(child);
+    }
+  }
+
   node.classList.add("printable");
   const printContent = node.cloneNode(true);
   node.classList.remove("printable");
@@ -32,11 +39,9 @@ export async function printComponent(node: HTMLElement) {
   window.print();
 
   if (isMobile()) {
-    let replaced = false;
     window.addEventListener(
       "focus",
       () => {
-        replaced = true;
         window.document.body.removeChild(printContent);
       },
       { once: true }
