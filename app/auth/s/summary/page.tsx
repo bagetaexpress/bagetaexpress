@@ -19,6 +19,10 @@ import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { handleFilterChange } from "./serverUtil";
 import { Order, order } from "@/db/schema";
+import PrintOrderList from "./_components/printOrderList";
+import { getSchool } from "@/db/controllers/schoolController";
+import { getOrderItemsByStoreAndSchool } from "@/db/controllers/itemController";
+import { getStore } from "@/db/controllers/storeController";
 
 export default async function SummaryPage({
   searchParams,
@@ -30,24 +34,31 @@ export default async function SummaryPage({
   const filter = (searchParams.filter ?? "ordered") as Order["status"];
   const orders = await getOrdersBySchoolId(user.schoolId, filter);
 
+  const currentOrders = await getOrderItemsByStoreAndSchool(1, user.schoolId);
+  const school = await getSchool(user.schoolId);
+  const store = await getStore(1);
+
   return (
     <div className=" relative min-h-full">
       <h1 className="text-2xl font-semibold pt-2">Zhrnutie</h1>
-      <form action={handleFilterChange} className="flex py-2 gap-2">
-        <Select name="filter" defaultValue={filter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="ordered" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="ordered">Aktuálne</SelectItem>
-            <SelectItem value="pickedup">Prevzané</SelectItem>
-            <SelectItem value="unpicked">Nevyzdvihnuté</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button type="submit" size="icon">
-          <Search />
-        </Button>
-      </form>
+      <div className="flex justify-between items-center">
+        <form action={handleFilterChange} className="flex py-2 gap-2">
+          <Select name="filter" defaultValue={filter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="ordered" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ordered">Aktuálne</SelectItem>
+              <SelectItem value="pickedup">Prevzané</SelectItem>
+              <SelectItem value="unpicked">Nevyzdvihnuté</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button type="submit" size="icon">
+            <Search />
+          </Button>
+        </form>
+        <PrintOrderList orders={currentOrders} store={store} school={school} />
+      </div>
       <Accordion type="multiple">
         {orders.length === 0 && (
           <div className="text-center text-gray-500">Žiadne objednávky</div>
