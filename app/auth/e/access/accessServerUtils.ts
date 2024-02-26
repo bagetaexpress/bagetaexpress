@@ -12,23 +12,26 @@ import {
 import { getUser } from "@/lib/userUtils";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { AddEmployeeErrors, AddSellerErrors } from "./page";
 
 async function handleAddEmployee(formData: any) {
   const currUser = await getUser();
   if (!currUser || !currUser.storeId) return;
   const employeeId = formData.get("employeeId");
   if (!employeeId || typeof employeeId !== "string") {
-    redirect("/auth/e/access?EmpError=Invalid employee id");
+    redirect("/auth/e/access?EmpError=" + AddEmployeeErrors.InvalidUserId);
   }
 
   const foundUser = await getUserById(employeeId);
   if (!foundUser) {
-    redirect("/auth/e/access?EmpError=Employee not found");
+    redirect("/auth/e/access?EmpError=" + AddEmployeeErrors.UserNotFound);
   }
 
   const foundEmployee = await getEmployeeById(foundUser.id);
   if (foundEmployee) {
-    redirect("/auth/e/access?EmpError=Employee is already an employee");
+    redirect(
+      "/auth/e/access?EmpError=" + AddEmployeeErrors.UserAlreadyEmployee
+    );
   }
 
   await createEmployee({
@@ -55,20 +58,20 @@ async function handleAddSeller(formData: any) {
   const sellerId = formData.get("sellerId");
   const schoolId = formData.get("schoolId");
   if (!schoolId || typeof schoolId !== "string" || !schoolId.match(/^\d+$/)) {
-    redirect("/auth/e/access?SellerError=Invalid school id");
+    redirect("/auth/e/access?SellerError=" + AddSellerErrors.InvalidSchoolId);
   }
   if (!sellerId || typeof sellerId !== "string") {
-    redirect("/auth/e/access?SellerError=Invalid seller id");
+    redirect("/auth/e/access?SellerError=" + AddSellerErrors.InvalidUserId);
   }
 
   const foundUser = await getUserById(sellerId);
   if (!foundUser) {
-    redirect("/auth/e/access?SellerError=Seller not found");
+    redirect("/auth/e/access?SellerError=" + AddSellerErrors.UserNotFound);
   }
 
   const foundSeller = await getSellerById(foundUser.id);
   if (foundSeller) {
-    redirect("/auth/e/access?SellerError=Seller is already an employee");
+    redirect("/auth/e/access?SellerError=" + AddSellerErrors.UserAlreadySeller);
   }
 
   await createSeller({

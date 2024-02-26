@@ -22,11 +22,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getSchoolsByStoreId } from "@/db/controllers/schoolController";
+import { AddSellerErrors } from "../page";
 
 export default async function SellerTable({
   err,
 }: {
-  err: string | undefined;
+  err: AddSellerErrors | undefined;
 }) {
   const currUser = await getUser();
   if (!currUser || !currUser.isEmployee) {
@@ -41,7 +42,7 @@ export default async function SellerTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
+            <TableHead className="w-[300px]">ID</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Škola</TableHead>
             <TableHead></TableHead>
@@ -80,15 +81,10 @@ export default async function SellerTable({
       <form action={handleAddSeller} className="flex flex-col gap-2 mt-2">
         <Label htmlFor="sellerId">Pridať predajcu</Label>
         <div className="flex gap-2">
-          <Input
-            name="sellerId"
-            id="sellerId"
-            placeholder="Account id"
-            required
-          />
+          <Input name="sellerId" id="sellerId" placeholder="ID účtu" required />
           <Select name="schoolId">
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="School" />
+              <SelectValue placeholder="Škola" />
             </SelectTrigger>
             <SelectContent>
               {schools?.map(({ id, name }) => (
@@ -102,7 +98,20 @@ export default async function SellerTable({
             <Plus />
           </Button>
         </div>
-        {err && <span className="text-red-500">{err}</span>}
+        {err && (
+          <span className="text-red-500">
+            {
+              {
+                [AddSellerErrors.InvalidUserId]: "Neplatné ID účtu",
+                [AddSellerErrors.UserNotFound]: "Používateľ neexistuje",
+                [AddSellerErrors.UserAlreadySeller]:
+                  "Používateľ už má priradenú rolu predajcu",
+                [AddSellerErrors.InvalidSchoolId]: "Zvolená škola neexistuje",
+                [AddSellerErrors.SchoolNotFound]: "Škola neexistuje",
+              }[err]
+            }
+          </span>
+        )}
       </form>
     </>
   );

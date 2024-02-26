@@ -71,7 +71,7 @@ export default async function UserDropdown() {
       </DropdownMenu>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Užívateľký účet</AlertDialogTitle>
+          <AlertDialogTitle>Používateľký účet</AlertDialogTitle>
         </AlertDialogHeader>
         <div>
           <p>Číslo účtu: {user.id}</p>

@@ -14,11 +14,12 @@ import { Input } from "@/components/ui/input";
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/userUtils";
 import { getEmployeesByStoreId } from "@/db/controllers/userController";
+import { AddEmployeeErrors } from "../page";
 
 export default async function EmployeeTable({
   err,
 }: {
-  err: string | undefined;
+  err: AddEmployeeErrors | undefined;
 }) {
   const currUser = await getUser();
   if (!currUser || !currUser.isEmployee) {
@@ -30,10 +31,9 @@ export default async function EmployeeTable({
   return (
     <>
       <Table>
-        {/* <TableCaption></TableCaption> */}
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
+            <TableHead className="w-[300px]">ID</TableHead>
             <TableHead>Email</TableHead>
             <TableHead></TableHead>
           </TableRow>
@@ -73,14 +73,25 @@ export default async function EmployeeTable({
           <Input
             name="employeeId"
             id="employeeId"
-            placeholder="Account id"
+            placeholder="ID účtu"
             required
           />
           <Button type="submit" size="icon" className=" aspect-square">
             <Plus />
           </Button>
         </div>
-        {err && <span className="text-red-500">{err}</span>}
+        {err && (
+          <span className="text-red-500">
+            {
+              {
+                [AddEmployeeErrors.InvalidUserId]: "Neplatné ID účtu",
+                [AddEmployeeErrors.UserNotFound]: "Účet neexistuje",
+                [AddEmployeeErrors.UserAlreadyEmployee]:
+                  "Účet už má priradenú rolu zamestnanca",
+              }[err]
+            }
+          </span>
+        )}
       </form>
     </>
   );
