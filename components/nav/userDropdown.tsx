@@ -66,9 +66,9 @@ export default async function UserDropdown() {
           <AlertDialogTrigger asChild>
             <DropdownMenuItem>Profil</DropdownMenuItem>
           </AlertDialogTrigger>
-          <DropdownMenuItem>
+          {/* <DropdownMenuItem>
             <DarkModeToggle />
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <LogoutMenuItem />
         </DropdownMenuContent>
       </DropdownMenu>
