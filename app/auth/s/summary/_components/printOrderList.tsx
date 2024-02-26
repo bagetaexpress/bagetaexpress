@@ -29,7 +29,7 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
     <>
       <Button
         variant="outline"
-        className=" gap-2"
+        className=" gap-2 flex-1 sm:grow-0"
         type="button"
         onClick={handlePrint}
       >

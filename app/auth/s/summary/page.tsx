@@ -41,7 +41,7 @@ export default async function SummaryPage({
   return (
     <div className=" relative min-h-full">
       <h1 className="text-2xl font-semibold pt-2">Zhrnutie</h1>
-      <div className="flex justify-between items-center">
+      <div className="flex gap-2 justify-between items-center flex-wrap">
         <form action={handleFilterChange} className="flex py-2 gap-2">
           <Select name="filter" defaultValue={filter}>
             <SelectTrigger className="w-[180px]">
