@@ -26,7 +26,7 @@ import {
 import { Loader, Trash2, X } from "lucide-react";
 import { getUser } from "@/lib/userUtils";
 import { addItem, updateItem } from "@/db/controllers/itemController";
-import { useMemo, useRef, useState } from "react";
+import { use, useEffect, useMemo, useRef, useState } from "react";
 import {
   createItemAllergen,
   deleteItemAllergen,
@@ -47,6 +47,7 @@ import { useUploadThing } from "@/lib/uploadthing";
 import Image from "next/image";
 import { deleteFile } from "@/lib/upladthingServer";
 import { Allergen, Ingredient, Item } from "@/db/schema";
+import React from "react";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -123,13 +124,27 @@ export default function AddItemForm({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: item?.name ?? "",
-      weight: item?.weight ? item.weight.toString() : undefined,
-      description: item?.description ?? "",
-      price: item?.price ?? "",
-    },
+    defaultValues: useMemo(
+      () => ({
+        name: item?.name ?? "",
+        weight: item?.weight ? item.weight.toString() : undefined,
+        description: item?.description ?? "",
+        price: item?.price ?? "",
+      }),
+      [item]
+    ),
   });
+
+  useEffect(() => {
+    if (!item) return;
+    form.reset({
+      name: item.name,
+      weight: item.weight.toString(),
+      description: item.description,
+      price: item.price,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const user = await getUser();
@@ -243,6 +258,10 @@ export default function AddItemForm({
       onOpenChange={() => {
         if (isOpen) {
           handleReset();
+        } else {
+          setImageUrl(item?.imageUrl ?? "");
+          setAllergens(item?.allergens ?? []);
+          setIngredients(item?.ingredients ?? []);
         }
         setIsOpen((prev) => !prev);
       }}
