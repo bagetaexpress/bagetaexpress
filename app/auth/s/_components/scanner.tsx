@@ -42,7 +42,12 @@ export default function Scanner({ url }: { url: string }) {
           }}
           className="flex justify-center items-center gap-2 mt-2"
         >
-          <Input name="pin" required onChange={() => setPinError("")} />
+          <Input
+            name="pin"
+            inputMode="numeric"
+            required
+            onChange={() => setPinError("")}
+          />
           <Button type="submit" size="icon" className=" aspect-square">
             <Search />
           </Button>

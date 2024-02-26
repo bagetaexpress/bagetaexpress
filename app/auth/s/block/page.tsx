@@ -57,12 +57,9 @@ export default async function BlockPage() {
                   let daysToAdd: number = 1;
 
                   if (dayOfWeek === 5) {
-                    daysToAdd = 2;
-                  } else if (dayOfWeek === 6) {
-                    daysToAdd = 1;
-                  } else {
-                    daysToAdd = 0;
+                    daysToAdd = 3;
                   }
+
                   date.setDate(date.getDate() + daysToAdd);
 
                   await updateSchoolStoreOrderClose(
