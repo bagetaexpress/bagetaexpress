@@ -1,3 +1,4 @@
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,11 +17,29 @@ import {
   updateSchoolStoreOrderClose,
 } from "@/db/controllers/schoolController";
 import { getUser } from "@/lib/userUtils";
+import { Check } from "lucide-react";
+import { redirect } from "next/navigation";
 
-export default async function BlockPage() {
+export default async function BlockPage({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   return (
     <div className=" min-h-full flex flex-col gap-2 justify-center items-center">
-      <div>
+      <div className="w-fit">
+        {searchParams.success === "true" && (
+          <Alert className=" mb-4 bg-green-300 border-green-500 bg-opacity-50">
+            <Check className="w-6 h-6" />
+            <AlertTitle>Predaj sa úspešne ukončil</AlertTitle>
+            <AlertDescription>
+              Všetci študenti, ktorý si nevyzdvihli objednávku, boli
+              zablokovaní.
+            </AlertDescription>
+          </Alert>
+        )}
         <h1 className=" font-semibold text-2xl">Ukončenie predaja</h1>
         <p>
           Po zablokovaní nevyzdvihnutých objednávok sa posunie dátum uzavretia o
@@ -31,7 +50,7 @@ export default async function BlockPage() {
       </div>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button size="lg">Zablokovať nevyzdvihnuté</Button>
+          <Button size="lg">Ukončiť predaj</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -70,6 +89,8 @@ export default async function BlockPage() {
                 }
 
                 await blockUnpickedOrders(user.schoolId);
+
+                redirect("/auth/s/block?success=true");
               }}
             >
               <AlertDialogAction type="submit" className="w-full">
