@@ -56,64 +56,53 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
             Upraviť dátum uzávierky objednávok
           </DialogDescription>
         </DialogHeader>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"outline"}
-              className={cn(
-                "w-[280px] justify-start text-left font-normal",
-                !date && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? (
-                format(date, "PPP HH:mm:ss")
-              ) : (
-                <span>Vybrať dátum a čas</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              initialFocus
-              // disabled={(date) => date < new Date()}
-              disabled={(date) =>
-                date < new Date(new Date().setDate(new Date().getDate() - 1))
-              }
-            />
-            <div className="p-3 border-t border-border">
-              <TimePickerHourMinute setDate={setDate} date={date} />
-            </div>
-          </PopoverContent>
-          <DialogFooter className="gap-2">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setDate(orderClose);
-                setIsOpen(false);
-              }}
-            >
-              Zrušiť
-            </Button>
-            <Button
-              style={{ marginLeft: 0 }}
-              disabled={isProcessing}
-              onClick={async () => {
-                if (!date) return;
-                setIsProcessing(true);
-                await updateOrderClose(schoolId, date);
-                setIsProcessing(false);
-                setIsOpen(false);
-              }}
-            >
-              {isProcessing && <Loader className="mr-2 animate-spin h-5 w-5" />}
-              Uložiť
-            </Button>
-          </DialogFooter>
-        </Popover>
+        <div className="flex flex-col gap-4 justify-center items-center">
+          <Calendar
+            mode="single"
+            selected={date}
+            className="rounded-md border w-fit"
+            onSelect={(val) => {
+              if (val == null) return;
+              const time = date == null ? "00:00" : format(date, "HH:mm");
+              const newDate = set(val, {
+                hours: parseInt(time.split(":")[0]),
+                minutes: parseInt(time.split(":")[1]),
+              });
+
+              setDate(newDate);
+            }}
+            initialFocus
+            disabled={(date) =>
+              date < new Date(new Date().setDate(new Date().getDate() - 1))
+            }
+          />
+          <TimePickerHourMinute setDate={setDate} date={date} />
+        </div>
+        <DialogFooter className="gap-2">
+          <Button
+            variant="outline"
+            onClick={() => {
+              setDate(orderClose);
+              setIsOpen(false);
+            }}
+          >
+            Zrušiť
+          </Button>
+          <Button
+            style={{ marginLeft: 0 }}
+            disabled={isProcessing}
+            onClick={async () => {
+              if (!date) return;
+              setIsProcessing(true);
+              await updateOrderClose(schoolId, date);
+              setIsProcessing(false);
+              setIsOpen(false);
+            }}
+          >
+            {isProcessing && <Loader className="mr-2 animate-spin h-5 w-5" />}
+            Uložiť
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
