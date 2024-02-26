@@ -8,7 +8,7 @@ import { type ThemeProviderProps } from "next-themes/dist/types";
 export function MainLayoutWrapper({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider {...props}>
-      <SessionProvider>{children}</SessionProvider>;
+      <SessionProvider>{children}</SessionProvider>
     </NextThemesProvider>
   );
 }

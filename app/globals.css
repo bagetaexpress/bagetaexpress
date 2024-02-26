@@ -60,9 +60,9 @@
 }
 
 @media print {
-  /* body *:not(.printable .printable *) {
+  body > *:not(.printable) {
     display: none;
-  } */
+  }
   table {
     border-collapse: collapse;
     width: 100%;
