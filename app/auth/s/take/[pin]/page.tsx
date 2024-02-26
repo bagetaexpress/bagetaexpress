@@ -15,14 +15,24 @@ export default async function TakePinPage({
 }) {
   async function confirmOrder() {
     "use server";
-    const currUser = await getUser();
-    if (!currUser) return null;
+    let success = true;
+    try {
+      const currUser = await getUser();
+      if (!currUser) throw new Error("User not found");
 
-    const order = await getOrderByPin(params.pin, currUser.schoolId, "ordered");
-    if (!order) return null;
+      const order = await getOrderByPin(
+        params.pin,
+        currUser.schoolId,
+        "ordered"
+      );
+      if (!order) throw new Error("Order not found");
 
-    await updateOrderStatus(order.id, "pickedup");
-    redirect("/auth/s/take?success=true");
+      await updateOrderStatus(order.id, "pickedup");
+    } catch (error) {
+      console.error(error);
+      success = false;
+    }
+    redirect("/auth/s/take?success=" + success);
   }
 
   async function cancleAction() {

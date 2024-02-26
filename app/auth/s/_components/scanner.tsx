@@ -34,7 +34,7 @@ export default function Scanner({ url }: { url: string }) {
             const pin = formData.get("pin") as string;
 
             if (pin.length !== 4 || pin.match(/\D/)) {
-              setPinError("Pin must be 4 digits");
+              setPinError("Kód musí obsahovať 4 čísla.");
               return;
             }
 

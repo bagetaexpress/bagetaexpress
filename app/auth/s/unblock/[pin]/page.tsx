@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { getItemsFromOrder } from "@/db/controllers/itemController";
 import {
   getOrderByPin,
   updateOrderStatus,
@@ -15,17 +13,24 @@ export default async function UnlockPinPage({
 }) {
   async function confirmOrder() {
     "use server";
-    const currUser = await getUser();
-    if (!currUser) return null;
+    let success = true;
+    try {
+      const currUser = await getUser();
+      if (!currUser) throw new Error("User not found");
 
-    const order = await getOrderByPin(
-      params.pin,
-      currUser.schoolId,
-      "unpicked"
-    );
-    if (!order) return null;
-    await updateOrderStatus(order.id, "cancelled");
-    redirect("/auth/s/unblock?success=true");
+      const order = await getOrderByPin(
+        params.pin,
+        currUser.schoolId,
+        "unpicked"
+      );
+      if (!order) throw new Error("Order not found");
+
+      await updateOrderStatus(order.id, "cancelled");
+    } catch (error) {
+      console.error(error);
+      success = false;
+    }
+    redirect("/auth/s/unblock?success=" + success);
   }
 
   async function cancleAction() {
