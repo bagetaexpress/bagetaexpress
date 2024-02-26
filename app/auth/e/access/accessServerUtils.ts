@@ -12,7 +12,7 @@ import {
 import { getUser } from "@/lib/userUtils";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { AddEmployeeErrors, AddSellerErrors } from "./page";
+import { AddEmployeeErrors, AddSellerErrors } from "./accessErrors";
 
 async function handleAddEmployee(formData: any) {
   const currUser = await getUser();

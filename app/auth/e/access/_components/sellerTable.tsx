@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getSchoolsByStoreId } from "@/db/controllers/schoolController";
-import { AddSellerErrors } from "../page";
+import { AddSellerErrors } from "../accessErrors";
 
 export default async function SellerTable({
   err,

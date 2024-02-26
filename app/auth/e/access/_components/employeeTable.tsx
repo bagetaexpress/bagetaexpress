@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/userUtils";
 import { getEmployeesByStoreId } from "@/db/controllers/userController";
-import { AddEmployeeErrors } from "../page";
+import { AddEmployeeErrors } from "../accessErrors";
 
 export default async function EmployeeTable({
   err,
