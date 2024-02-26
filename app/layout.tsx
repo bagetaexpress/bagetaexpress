@@ -41,10 +41,7 @@ export default async function RootLayout({
         property="og:image"
         content="https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png"
       />
-      <meta
-        property="og:description"
-        content="Objednaj si desiatu už teraz!"
-      ></meta>
+      <meta property="og:description" content="Objednaj si desiatu už teraz!" />
       <body className={inter.className}>
         <MainLayoutWrapper attribute="class" defaultTheme="light">
           {children}
