@@ -58,7 +58,11 @@ const formSchema = z.object({
     message: "Váha musí byť celé číslo.",
   }),
   price: z.string().regex(/^\d+(\.\d{1,2})?$/, {
-    message: "Cena musí byť číslo s maximálne dvoma desatinnými miestami.",
+    message:
+      "Cena musí byť číslo s maximálne dvoma desatinnými miestami oddelenými bodkov.",
+  }),
+  allergens: z.string().regex(/^\d+(,\d+)*$/, {
+    message: "Alergény musia byť zapísané vo formáte 1,2,3,...",
   }),
 });
 
@@ -98,7 +102,6 @@ export default function AddItemForm({
   const [isOpen, setIsOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStatus, setProcessingStatus] = useState<string>("");
-  const [allergens, setAllergens] = useState<idName[]>(item?.allergens ?? []);
   const [image, setImage] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(item?.imageUrl ?? "");
@@ -113,13 +116,6 @@ export default function AddItemForm({
     return res;
   }, [ingredients, ingredientList]);
 
-  const filteredAllergens = useMemo(() => {
-    const res = allergenList.filter(
-      (a) => !allergens.find((b) => a.id === b.id)
-    );
-    return res;
-  }, [allergens, allergenList]);
-
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -130,6 +126,7 @@ export default function AddItemForm({
         weight: item?.weight ? item.weight.toString() : undefined,
         description: item?.description ?? "",
         price: item?.price ?? "",
+        allergens: item?.allergens.map((a) => a.id).join(",") ?? "",
       }),
       [item]
     ),
@@ -142,6 +139,7 @@ export default function AddItemForm({
       weight: item.weight.toString(),
       description: item.description,
       price: item.price,
+      allergens: item.allergens.map((a) => a.id).join(","),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item]);
@@ -153,6 +151,23 @@ export default function AddItemForm({
       return;
     }
     setIsProcessing(true);
+
+    let notFound: number[] = [];
+    const allergens = values.allergens.split(",").map((val) => {
+      const id = parseInt(val);
+      const found = allergenList.find((a) => a.id === id);
+      if (!found) {
+        notFound.push(id);
+        return null;
+      }
+      return { id, name: found.name };
+    }) as idName[];
+    if (notFound.length > 0) {
+      setError(`Alergény s číslami ${notFound.join(", ")} neexistujú.`);
+      setIsProcessing(false);
+      return;
+    }
+
     switch (action) {
       case "update":
         if (!item) return;
@@ -199,7 +214,7 @@ export default function AddItemForm({
 
         setProcessingStatus("konečné upravovanie");
         await updateItem({
-          ...values,
+          ...(({ allergens, ...rest }) => rest)(values),
           weight: parseInt(values.weight),
           id: item.id,
           imageUrl: localUrl ?? "",
@@ -248,7 +263,6 @@ export default function AddItemForm({
     setIsProcessing(false);
     setProcessingStatus("");
     setError(null);
-    setAllergens([]);
     setIngredients([]);
   }
 
@@ -260,7 +274,6 @@ export default function AddItemForm({
           handleReset();
         } else {
           setImageUrl(item?.imageUrl ?? "");
-          setAllergens(item?.allergens ?? []);
           setIngredients(item?.ingredients ?? []);
         }
         setIsOpen((prev) => !prev);
@@ -378,6 +391,19 @@ export default function AddItemForm({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="allergens"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Alergény</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="py-3">
               <p className=" text-lg font-bold">Zloženie</p>
               <div className="flex gap-2 py-2 pb-3 flex-wrap">
@@ -421,54 +447,6 @@ export default function AddItemForm({
                   {filteredIngredients.map((ingredient, i) => (
                     <SelectItem key={i} value={ingredient.id.toString()}>
                       {ingredient.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="py-3">
-              <p className=" text-lg font-bold">Alergény</p>
-              <div className="flex gap-2 py-2 pb-3 flex-wrap">
-                {allergens.map((allergen, i) => (
-                  <Badge
-                    key={i + "removeAllergen"}
-                    className="flex gap-2 items-center"
-                  >
-                    {allergen.name}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setAllergens((prev) =>
-                          prev.filter((a) => a.id !== allergen.id)
-                        )
-                      }
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-              <Select
-                value=""
-                disabled={filteredAllergens.length <= 0}
-                onValueChange={(v) => {
-                  if (!v) return;
-                  const id = parseInt(v);
-                  const allergen = allergenList.find((a) => a.id === id);
-                  if (!allergen) return;
-                  setAllergens((prev) => [
-                    ...prev,
-                    { id, name: allergen.name },
-                  ]);
-                }}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Pridať alergén" />
-                </SelectTrigger>
-                <SelectContent>
-                  {filteredAllergens.map((allergen, i) => (
-                    <SelectItem key={i} value={allergen.id.toString()}>
-                      {allergen.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
