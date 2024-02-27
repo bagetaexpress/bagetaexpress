@@ -358,7 +358,7 @@ export default function AddItemForm({
                 <FormItem>
                   <FormLabel>Váha (g)</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} inputMode="numeric" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -385,7 +385,7 @@ export default function AddItemForm({
                 <FormItem>
                   <FormLabel>Cena</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} inputMode="numeric" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -398,7 +398,7 @@ export default function AddItemForm({
                 <FormItem>
                   <FormLabel>Alergény</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} inputMode="numeric" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
