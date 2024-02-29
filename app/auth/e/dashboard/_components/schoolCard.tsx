@@ -6,7 +6,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { SchoolStats, getSchool } from "@/db/controllers/schoolController";
+import {
+  SchoolStats,
+  getOrderClose,
+  getSchool,
+} from "@/db/controllers/schoolController";
 import EditOrderClose from "./editOrderClose";
 import PrintOrderLabels from "./printOrderLabels";
 import { getOrderItemsByStoreAndSchool } from "@/db/controllers/itemController";
@@ -20,13 +24,12 @@ export default async function SchoolCard({
   ...stats
 }: SchoolStats) {
   const user = await getUser();
-  if (!user) {
+  if (!user || !user.isEmployee || !user.storeId) {
     return null;
   }
-  const orders = await getOrderItemsByStoreAndSchool(
-    user.storeId ?? 0,
-    school.id
-  );
+
+  const orders = await getOrderItemsByStoreAndSchool(user.storeId, school.id);
+  const ordersClose = await getOrderClose(school.id, user.storeId);
   const store = await getStore(user.storeId ?? 0);
 
   return (
@@ -53,7 +56,11 @@ export default async function SchoolCard({
       <CardFooter>
         <div className="flex w-full gap-1">
           <EditOrderClose orderClose={orderClose} schoolId={school.id} />
-          <PrintOrderLabels orders={orders} store={store} />
+          <PrintOrderLabels
+            orders={orders}
+            store={store}
+            orderClose={orderClose ?? new Date()}
+          />
           <PrintOrderList school={school} orders={orders} store={store} />
         </div>
       </CardFooter>

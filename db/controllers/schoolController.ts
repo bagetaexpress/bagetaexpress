@@ -106,7 +106,21 @@ async function getSchoolByDomain(
   return res[0].school;
 }
 
+async function getOrderClose(
+  schoolId: School["id"],
+  storeId: SchoolStore["storeId"]
+): Promise<SchoolStore["orderClose"] | null> {
+  const res = await db
+    .select({ orderClose: schoolStore.orderClose })
+    .from(schoolStore)
+    .where(
+      and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId))
+    );
+  return res[0]?.orderClose ?? null;
+}
+
 export {
+  getOrderClose,
   getSchoolsByStoreId,
   getFirstOrderClose,
   getSchoolStores,
