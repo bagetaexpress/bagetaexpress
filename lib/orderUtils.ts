@@ -20,12 +20,14 @@ async function createUniqueOrder(
   userId: string
 ): Promise<number> {
   let pin: string;
-  let found: any;
-
+  let foundOrdered,
+    foundUnpicked = null;
   do {
     pin = generatePin(4);
-    found = await orderCtrl.getOrderByPin(pin, schoolId);
-  } while (found != null);
+    foundOrdered = await orderCtrl.getOrderByPin(pin, schoolId, "ordered");
+    foundUnpicked = await orderCtrl.getOrderByPin(pin, schoolId, "unpicked");
+  } while (foundOrdered == null && foundUnpicked == null);
+
   await orderCtrl.createOrder(userId, pin);
   const order = await orderCtrl.getOrdersByUserId(userId, "ordered");
   if (order.length === 0) {
@@ -43,8 +45,6 @@ async function createOrderFromCart(userId: string): Promise<number> {
 
   const existingOrder = await orderCtrl.getOrdersByUserId(userId, "ordered");
   if (existingOrder.length > 0) {
-    // await deleteCartAndItems(customer.userId);
-    // return -1;
     throw new Error("Order already exists");
   }
 
