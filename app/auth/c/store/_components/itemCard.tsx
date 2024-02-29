@@ -83,8 +83,11 @@ export default function ItemCard({
               <TooltipTrigger>
                 <div className="flex flex-wrap">
                   <p>
-                    <span className="font-semibold mr-1">Alergény:</span>
-                    <span className="italic">
+                    <span className="font-semibold mr-1 inline-block">
+                      Alergény:
+                    </span>
+                    <span className="italic inline-block">
+                      {allergens.length === 0 && "žiadne"}
                       {allergens.map((a) => a.id).join(", ")}
                     </span>
                   </p>
@@ -99,8 +102,10 @@ export default function ItemCard({
           </TooltipProvider>
 
           <div className="flex flex-wrap">
-            <p className="font-semibold mr-1">Obsahuje:</p>
-            <p>{ingredients.map((i) => i.name).join(", ")}</p>
+            <p>
+              <span className="inline-block font-semibold mr-1">Obsahuje:</span>
+              {ingredients.map((i) => i.name).join(", ")}
+            </p>
           </div>
         </CardContent>
         <CardFooter className="flex gap-2 justify-between">
