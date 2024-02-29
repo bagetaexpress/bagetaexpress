@@ -155,12 +155,12 @@ export default function AddItemForm({
     let notFound: number[] = [];
     const allergens = values.allergens.split(",").map((val) => {
       const id = parseInt(val);
-      const found = allergenList.find((a) => a.id === id);
+      const found = allergenList.find((a) => a.number === id);
       if (!found) {
         notFound.push(id);
         return null;
       }
-      return { id, name: found.name };
+      return { id: found.id, name: found.name };
     }) as idName[];
     if (notFound.length > 0) {
       setError(`Alergény s číslami ${notFound.join(", ")} neexistujú.`);
