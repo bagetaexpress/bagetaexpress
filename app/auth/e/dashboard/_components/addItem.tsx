@@ -233,9 +233,11 @@ export default function AddItemForm({
           imageUrl: localUrl ?? "",
         });
 
+        await deleteAllItemAllergens(id);
         for (const allergen of allergens) {
           await createItemAllergen(id, allergen.id);
         }
+        await deleteItemIngredients(id);
         for (const ingredient of ingredients) {
           await createItemIngredient(id, ingredient.id);
         }
