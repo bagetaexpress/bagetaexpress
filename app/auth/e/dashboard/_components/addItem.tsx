@@ -196,7 +196,7 @@ export default function AddItemForm({
         }
         // add new allergens
         for (const allergen of allergens) {
-          if (item.allergens.find((a) => a.id === allergen.id)) continue;
+          if (allergens.find((a) => a.id === allergen.id)) continue;
           await createItemAllergen(item.id, allergen.id);
         }
 
@@ -208,7 +208,7 @@ export default function AddItemForm({
         }
         // add new ingredients
         for (const ingredient of ingredients) {
-          if (item.ingredients.find((a) => a.id === ingredient.id)) continue;
+          if (ingredients.find((a) => a.id === ingredient.id)) continue;
           await createItemIngredient(item.id, ingredient.id);
         }
 
