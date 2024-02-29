@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import { User } from "lucide-react";
+import { Copy, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +22,7 @@ import {
 import { getUser } from "@/lib/userUtils";
 import LogoutMenuItem from "./logountMenuItem";
 import { DarkModeToggle } from "../DarkModeToggle";
+import CopyToClipboard from "../copyToClipboard";
 
 export default async function UserDropdown() {
   const user = await getUser();
@@ -74,8 +75,12 @@ export default async function UserDropdown() {
           <AlertDialogTitle>Používateľký účet</AlertDialogTitle>
         </AlertDialogHeader>
         <div>
-          <p>Číslo účtu: {user.id}</p>
+          <CopyToClipboard value={user.id} name="Číslo účtu">
+            ID: {user.id}
+            <Copy className="h-4 w-4 inline-block ml-1" />
+          </CopyToClipboard>
           <p>Email: {user.email}</p>
+          {user.name && <p>Meno: {user.name}</p>}
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel>Zatvoriť</AlertDialogCancel>
