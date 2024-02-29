@@ -190,25 +190,25 @@ export default function AddItemForm({
 
         setProcessingStatus("upravovanie alergénov");
         // remove allergens
-        for (const allergen of item.allergens) {
-          if (allergens.find((a) => a.id === allergen.id)) continue;
-          await deleteItemAllergen(item.id, allergen.id);
-        }
-        // add new allergens
         for (const allergen of allergens) {
-          if (allergens.find((a) => a.id === allergen.id)) continue;
+          // if (allergens.find((a) => a.id === allergen.id)) continue;
+          await deleteItemAllergen(item.id, allergen.id);
+        //}
+        // add new allergens
+        //for (const allergen of allergens) {
+          // if (allergens.find((a) => a.id === allergen.id)) continue;
           await createItemAllergen(item.id, allergen.id);
         }
 
         setProcessingStatus("upravovanie ingrediencií");
         // remove ingredients
-        for (const ingredient of item.ingredients) {
-          if (ingredients.find((a) => a.id === ingredient.id)) continue;
-          await deleteItemIngredient(item.id, ingredient.id);
-        }
-        // add new ingredients
         for (const ingredient of ingredients) {
-          if (ingredients.find((a) => a.id === ingredient.id)) continue;
+          //if (ingredients.find((a) => a.id === ingredient.id)) continue;
+          await deleteItemIngredient(item.id, ingredient.id);
+        //}
+        // add new ingredients
+        //for (const ingredient of ingredients) {
+          //if (ingredients.find((a) => a.id === ingredient.id)) continue;
           await createItemIngredient(item.id, ingredient.id);
         }
 
