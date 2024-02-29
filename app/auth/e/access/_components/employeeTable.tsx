@@ -15,6 +15,12 @@ import { redirect } from "next/navigation";
 import { getUser } from "@/lib/userUtils";
 import { getEmployeesByStoreId } from "@/db/controllers/userController";
 import { AddEmployeeErrors } from "../accessErrors";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export default async function EmployeeTable({
   err,
@@ -27,10 +33,13 @@ export default async function EmployeeTable({
   }
 
   const employees = await getEmployeesByStoreId(currUser.storeId ?? 0);
+  const filteredEmployees = employees?.filter(
+    ({ user }) => user.id !== currUser.id && !user.isAdmin
+  );
 
   return (
     <>
-      <Table>
+      <Table className="max-w-full hidden md:table">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[300px]">ID</TableHead>
@@ -39,34 +48,70 @@ export default async function EmployeeTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {employees?.map(
-            ({ user }) =>
-              user.id !== currUser.id && (
-                <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.id}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell className=" text-right">
-                    <form
-                      action={async () => {
-                        "use server";
-                        await handleRemoveEmployee(user.id);
-                      }}
-                    >
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        name="employeeId"
-                        value={user.id}
-                      >
-                        <Trash className="h-5 w-5" />
-                      </Button>
-                    </form>
-                  </TableCell>
-                </TableRow>
-              )
-          )}
+          {filteredEmployees?.map(({ user }) => (
+            <TableRow key={user.id}>
+              <TableCell className="font-medium">{user.id}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell className=" text-right">
+                <form
+                  action={async () => {
+                    "use server";
+                    await handleRemoveEmployee(user.id);
+                  }}
+                >
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    name="employeeId"
+                    value={user.id}
+                  >
+                    <Trash className="h-5 w-5" />
+                  </Button>
+                </form>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
+      {filteredEmployees?.length === 0 && (
+        <div className="text-center text-muted-foreground p-4">
+          Žiadni zamestnanci
+        </div>
+      )}
+      <Accordion type="multiple" className="max-w-full block md:hidden">
+        {filteredEmployees?.map(({ user }) => (
+          <AccordionItem key={user.id} value={user.email}>
+            <AccordionTrigger>{user.name ?? user.email}</AccordionTrigger>
+            <AccordionContent>
+              <div>
+                <span className="font-medium">ID: </span>
+                {user.id}
+              </div>
+              <div>
+                <span className="font-medium">Email: </span>
+                {user.email}
+              </div>
+              <form
+                action={async () => {
+                  "use server";
+                  await handleRemoveEmployee(user.id);
+                }}
+                className="flex pt-2"
+              >
+                <Button
+                  variant="outline"
+                  name="employeeId"
+                  className="flex-1 items-center justify-center gap-2"
+                  value={user.id}
+                >
+                  Odstrániť
+                  <Trash className="h-5 w-5" />
+                </Button>
+              </form>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
       <form action={handleAddEmployee} className="flex flex-col gap-2 mt-2">
         <Label htmlFor="employeeId">Pridať zamestnanca</Label>
         <div className="flex gap-2">
