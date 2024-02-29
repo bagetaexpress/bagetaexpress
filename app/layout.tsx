@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import { MainLayoutWrapper } from "@/components/MainLayoutWrapper";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -48,6 +49,7 @@ export default async function RootLayout({
         </MainLayoutWrapper>
         <SpeedInsights />
         <Analytics />
+        <Toaster />
       </body>
     </html>
   );
