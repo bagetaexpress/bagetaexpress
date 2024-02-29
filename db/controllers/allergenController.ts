@@ -91,6 +91,10 @@ async function deleteItemAllergen(
     );
 }
 
+async function deleteAllItemAllergens(itemId: Item["id"]) {
+  await db.delete(itemAllergen).where(eq(itemAllergen.itemId, itemId));
+}
+
 export {
   getAllergensByStoreId,
   getAllergensByItemId,
@@ -101,4 +105,5 @@ export {
   getItemAllergen,
   createItemAllergen,
   deleteItemAllergen,
+  deleteAllItemAllergens,
 };

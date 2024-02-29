@@ -29,11 +29,13 @@ import { addItem, updateItem } from "@/db/controllers/itemController";
 import { use, useEffect, useMemo, useRef, useState } from "react";
 import {
   createItemAllergen,
+  deleteAllItemAllergens,
   deleteItemAllergen,
 } from "@/db/controllers/allergenController";
 import {
   createItemIngredient,
   deleteItemIngredient,
+  deleteItemIngredients,
 } from "@/db/controllers/ingredientController";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -190,25 +192,15 @@ export default function AddItemForm({
 
         setProcessingStatus("upravovanie alergénov");
         // remove allergens
+        await deleteAllItemAllergens(item.id);
         for (const allergen of allergens) {
-          // if (allergens.find((a) => a.id === allergen.id)) continue;
-          await deleteItemAllergen(item.id, allergen.id);
-        //}
-        // add new allergens
-        //for (const allergen of allergens) {
-          // if (allergens.find((a) => a.id === allergen.id)) continue;
           await createItemAllergen(item.id, allergen.id);
         }
 
         setProcessingStatus("upravovanie ingrediencií");
         // remove ingredients
+        await deleteItemIngredients(item.id);
         for (const ingredient of ingredients) {
-          //if (ingredients.find((a) => a.id === ingredient.id)) continue;
-          await deleteItemIngredient(item.id, ingredient.id);
-        //}
-        // add new ingredients
-        //for (const ingredient of ingredients) {
-          //if (ingredients.find((a) => a.id === ingredient.id)) continue;
           await createItemIngredient(item.id, ingredient.id);
         }
 

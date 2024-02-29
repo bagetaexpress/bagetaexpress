@@ -99,6 +99,10 @@ async function deleteItemIngredient(
     );
 }
 
+async function deleteItemIngredients(itemId: Item["id"]) {
+  await db.delete(itemIngredient).where(eq(itemIngredient.itemId, itemId));
+}
+
 export {
   getIngredientsByStoreId,
   getIngredientsByItemId,
@@ -108,5 +112,6 @@ export {
   deleteIngredient,
   getItemIngredient,
   createItemIngredient,
+  deleteItemIngredients,
   deleteItemIngredient,
 };
