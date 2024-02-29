@@ -61,12 +61,12 @@ export default function ItemCard({
 
   return (
     <Drawer>
-      <Card className="flex-1">
-        <CardHeader>
+      <Card className="flex-1 flex flex-col">
+        <CardHeader className="pb-1">
           <CardTitle>{item.name}</CardTitle>
           <CardDescription>{item.description}</CardDescription>
         </CardHeader>
-        <CardContent className=" text-xs">
+        <CardContent className="text-xs flex-1 flex flex-col justify-end">
           {item.imageUrl !== "" && item.imageUrl !== null ? (
             <div className="flex justify-center mb-2">
               <Image
