@@ -103,12 +103,12 @@ function ItemCard({
   ingredients: Ingredient[];
 }) {
   return (
-    <Card>
+    <Card className="flex-1 flex flex-col">
       <CardHeader>
         <CardTitle>{item.name}</CardTitle>
         <CardDescription>{item.description}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="text-xs flex-1 flex flex-col justify-end">
         {item.imageUrl != null && item.imageUrl != "" ? (
           <div className="flex justify-center mb-2">
             <Image
