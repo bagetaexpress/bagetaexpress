@@ -82,9 +82,11 @@ export default function ItemCard({
             <Tooltip>
               <TooltipTrigger>
                 <div className="flex flex-wrap">
-                  <p className="font-semibold mr-1">Alergény:</p>
-                  <p className="italic">
-                    {allergens.map((a) => a.id).join(", ")}
+                  <p>
+                    <span className="font-semibold mr-1">Alergény:</span>
+                    <span className="italic">
+                      {allergens.map((a) => a.id).join(", ")}
+                    </span>
                   </p>
                 </div>
               </TooltipTrigger>
