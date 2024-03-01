@@ -20,13 +20,13 @@ async function createUniqueOrder(
   userId: string
 ): Promise<number> {
   let pin: string;
-  let foundOrdered,
-    foundUnpicked = null;
+  let foundOrdered, foundUnpicked;
+
   do {
     pin = generatePin(4);
     foundOrdered = await orderCtrl.getOrderByPin(pin, schoolId, "ordered");
     foundUnpicked = await orderCtrl.getOrderByPin(pin, schoolId, "unpicked");
-  } while (foundOrdered == null && foundUnpicked == null);
+  } while (foundOrdered != null && foundUnpicked != null);
 
   await orderCtrl.createOrder(userId, pin);
   const order = await orderCtrl.getOrdersByUserId(userId, "ordered");

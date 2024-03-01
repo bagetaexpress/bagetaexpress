@@ -55,10 +55,7 @@ async function getOrderByPin(
       .where(and(eq(order.pin, pin), eq(order.status, status)));
   }
 
-  if (orders.length === 0) {
-    return null;
-  }
-  return orders[0];
+  return orders[0] ?? null;
 }
 
 async function deleteOrder(orderId: Order["id"]): Promise<void> {

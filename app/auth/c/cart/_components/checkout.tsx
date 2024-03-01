@@ -34,6 +34,7 @@ export default function Cheackout({
   const [items, setItems] = useState(defaultItems);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
+  const [orderCreateError, setOrderCreateError] = useState(false);
   const router = useRouter();
 
   async function handleCheckout() {
@@ -42,10 +43,14 @@ export default function Cheackout({
       return;
     }
     setIsCreatingOrder(true);
+    setOrderCreateError(false);
+
     try {
       await createOrderFromCart(cartId);
     } catch (error) {
       console.log(error);
+      setOrderCreateError(true);
+      setIsCreatingOrder(false);
       return;
     }
     router.push("/auth/c/order");
@@ -100,6 +105,11 @@ export default function Cheackout({
                 €
               </p>
             </div>
+            {orderCreateError && (
+              <p className="text-red-500 text-center">
+                Nastala chyba pri vytváraní objednávky
+              </p>
+            )}
           </div>
           <DrawerFooter>
             <DrawerClose asChild>
