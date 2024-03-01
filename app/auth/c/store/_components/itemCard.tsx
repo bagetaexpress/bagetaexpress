@@ -29,6 +29,14 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 import Image from "next/image";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function ItemCard({
   item: { item, allergens = [], ingredients = [] },
@@ -40,14 +48,14 @@ export default function ItemCard({
   orderClose: Date;
 }) {
   const drawerBtnRef = useRef<HTMLButtonElement | null>(null);
+  const dialogBtnRef = useRef<HTMLButtonElement | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit() {
     if (orderClose < new Date()) {
       return;
     }
-    e.preventDefault();
     setIsAdding(true);
     setError(null);
     try {
@@ -60,13 +68,19 @@ export default function ItemCard({
   }
 
   return (
-    <Drawer>
+    <>
       <Card className="flex-1 flex flex-col">
-        <CardHeader className="pb-1">
+        <CardHeader
+          onClick={() => dialogBtnRef.current && dialogBtnRef.current.click()}
+          className="pb-1 cursor-pointer"
+        >
           <CardTitle>{item.name}</CardTitle>
           <CardDescription>{item.description}</CardDescription>
         </CardHeader>
-        <CardContent className="text-xs flex-1 flex flex-col justify-end">
+        <CardContent
+          onClick={() => dialogBtnRef.current && dialogBtnRef.current.click()}
+          className="text-xs flex-1 flex flex-col justify-end cursor-pointer"
+        >
           {item.imageUrl !== "" && item.imageUrl !== null ? (
             <div className="flex justify-center mb-2">
               <Image
@@ -110,50 +124,89 @@ export default function ItemCard({
         </CardContent>
         <CardFooter className="flex gap-2 justify-between">
           <p className="font-semibold text-lg">{item.price}€</p>
-          <form onSubmit={onSubmit}>
-            <DrawerTrigger
-              ref={drawerBtnRef}
-              className="hidden"
-            ></DrawerTrigger>
-            <Button disabled={disabled || isAdding} type="submit">
-              {isAdding ? "Pridáva sa..." : "Pridať do košíka"}
-            </Button>
-          </form>
+          {/* <form onSubmit={onSubmit}> */}
+          <Button
+            onClick={onSubmit}
+            disabled={disabled || isAdding}
+            type="submit"
+          >
+            {isAdding ? "Pridáva sa..." : "Pridať do košíka"}
+          </Button>
+          {/* </form> */}
         </CardFooter>
       </Card>
-      <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle>
-              {error == null ? "Pridané do košíka!" : "Nepodarilo sa pridať!"}
-            </DrawerTitle>
-            <DrawerDescription>
-              {error == null ? item.name : error}
-            </DrawerDescription>
-          </DrawerHeader>
-          {item.imageUrl !== "" && item.imageUrl !== null ? (
-            <div className="flex justify-center mb-2">
-              <Image
-                src={item.imageUrl}
-                width={250}
-                height={250}
-                alt="Obrázok produktu"
-                className="rounded-md"
-              />
-            </div>
-          ) : null}
-          <DrawerFooter>
-            <DrawerClose asChild>
-              <Button variant="outline">Pokračovať ďalej</Button>
-            </DrawerClose>
-            <a href="/auth/c/cart" className="flex">
-              <Button disabled={isAdding} className="flex-1">
-                Prejsť do košíka
-              </Button>
-            </a>
-          </DrawerFooter>
-        </div>
-      </DrawerContent>
-    </Drawer>
+
+      <Dialog>
+        <DialogTrigger ref={dialogBtnRef} className="hidden" />
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{item.name}</DialogTitle>
+            <DialogDescription>
+              <p>{item.description}</p>
+              {item.imageUrl !== "" && item.imageUrl !== null ? (
+                <div className="flex justify-center mb-2">
+                  <Image
+                    src={item.imageUrl}
+                    width={200}
+                    height={200}
+                    alt="Obrázok produktu"
+                    className="rounded-md"
+                  />
+                </div>
+              ) : null}
+              <p>
+                <span className="inline-block font-semibold mr-1">
+                  Alergény:
+                </span>
+                {allergens.map((a) => a.name).join(", ")}
+              </p>
+              <p>
+                <span className="inline-block font-semibold mr-1">
+                  Obsahuje:
+                </span>
+                {ingredients.map((i) => i.name).join(", ")}
+              </p>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      <Drawer>
+        <DrawerTrigger ref={drawerBtnRef} className="hidden" />
+        <DrawerContent>
+          <div className="mx-auto w-full max-w-sm">
+            <DrawerHeader>
+              <DrawerTitle>
+                {error == null ? "Pridané do košíka!" : "Nepodarilo sa pridať!"}
+              </DrawerTitle>
+              <DrawerDescription>
+                {error == null ? item.name : error}
+              </DrawerDescription>
+            </DrawerHeader>
+            {item.imageUrl !== "" && item.imageUrl !== null ? (
+              <div className="flex justify-center mb-2">
+                <Image
+                  src={item.imageUrl}
+                  width={250}
+                  height={250}
+                  alt="Obrázok produktu"
+                  className="rounded-md"
+                />
+              </div>
+            ) : null}
+            <DrawerFooter>
+              <DrawerClose asChild>
+                <Button variant="outline">Pokračovať ďalej</Button>
+              </DrawerClose>
+              <a href="/auth/c/cart" className="flex">
+                <Button disabled={isAdding} className="flex-1">
+                  Prejsť do košíka
+                </Button>
+              </a>
+            </DrawerFooter>
+          </div>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 }
