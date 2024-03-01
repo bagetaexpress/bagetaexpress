@@ -379,7 +379,7 @@ export default function AddItemForm({
                 <FormItem>
                   <FormLabel>Cena</FormLabel>
                   <FormControl>
-                    <Input {...field} inputMode="numeric" />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -392,7 +392,7 @@ export default function AddItemForm({
                 <FormItem>
                   <FormLabel>Alergény</FormLabel>
                   <FormControl>
-                    <Input {...field} inputMode="numeric" />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
