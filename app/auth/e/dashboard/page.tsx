@@ -20,7 +20,7 @@ import { getAllergensByStoreId } from "@/db/controllers/allergenController";
 import { getIngredientsByStoreId } from "@/db/controllers/ingredientController";
 import Image from "next/image";
 import SchoolCard from "./_components/schoolCard";
-import { Allergen, Ingredient, store } from "@/db/schema";
+import { Allergen, Ingredient } from "@/db/schema";
 import OrderSummary from "./_components/orderSummary";
 import EditStore from "./_components/editStore";
 import { getStore } from "@/db/controllers/storeController";
