@@ -75,7 +75,11 @@ export default async function UserDropdown() {
           <AlertDialogTitle>Používateľký účet</AlertDialogTitle>
         </AlertDialogHeader>
         <div>
-          <CopyToClipboard value={user.id} name="ID účtu">
+          <CopyToClipboard
+            value={user.id}
+            name="ID účtu"
+            className=" text-left"
+          >
             ID: {user.id}
             <Copy className="h-4 w-4 m-1 mt-0 inline-block" />
           </CopyToClipboard>
