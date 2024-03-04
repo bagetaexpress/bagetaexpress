@@ -12,11 +12,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ExtendedItem } from "@/db/controllers/itemController";
-import { Store } from "@/db/schema";
+import { Store, order } from "@/db/schema";
 import { printComponent } from "@/lib/utils";
 import { Printer } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { toast } from "sonner";
 import { date } from "zod";
 
 interface IProps {
@@ -41,7 +42,13 @@ export default function PrintOrderLabels({
   );
 
   function handlePrint() {
-    if (!toPrintRef.current) return;
+    if (!toPrintRef.current) {
+      toast.error("Tlač sa nepodarila", {
+        description: "Obnovte stránku a skúste znova alebo kontaktujte podporu",
+        action: { label: "Obnoviť stránku", onClick: () => location.reload() },
+      });
+      return;
+    }
     void printComponent(toPrintRef.current);
   }
 
