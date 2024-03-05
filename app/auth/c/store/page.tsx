@@ -1,6 +1,9 @@
 import ItemCard from "@/app/auth/c/store/_components/itemCard";
 import { Button } from "@/components/ui/button";
-import { getItemsBySchool } from "@/db/controllers/itemController";
+import {
+  ExtendedItem,
+  getItemsBySchool,
+} from "@/db/controllers/itemController";
 import { getOrdersByUserId } from "@/db/controllers/orderController";
 import { getFirstOrderClose } from "@/db/controllers/schoolController";
 import { getUser } from "@/lib/userUtils";
@@ -17,7 +20,21 @@ export default async function Store() {
   const foundUnpicked = await getOrdersByUserId(user.id, "unpicked");
   const hasOrder = foundOrder.length > 0 || foundUnpicked.length > 0;
 
-  const items = await getItemsBySchool(user.schoolId);
+  const items = (await fetch(
+    `${process.env.NEXTAUTH_URL}/api/client/items?schoolID=${user.schoolId}`,
+    {
+      next: {
+        revalidate: 3600,
+        tags: ["items"],
+      },
+    }
+  )
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log(err);
+      throw new Error("Failed to fetch items");
+    })) as ExtendedItem[];
+
   const orderClose = await getFirstOrderClose(user.schoolId);
   return (
     <div className="h-full relative">

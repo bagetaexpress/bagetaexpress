@@ -50,6 +50,8 @@ import Image from "next/image";
 import { deleteFile } from "@/lib/upladthingServer";
 import { Allergen, Ingredient, Item } from "@/db/schema";
 import React from "react";
+import { revalidateTag } from "next/cache";
+import { revalidateItems } from "@/lib/storeUtils";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -246,6 +248,7 @@ export default function AddItemForm({
         break;
     }
     handleReset();
+    revalidateItems();
     setIsOpen(false);
     router.refresh();
   }

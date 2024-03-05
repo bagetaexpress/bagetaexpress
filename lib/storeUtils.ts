@@ -2,7 +2,7 @@
 
 import { updateSchoolStoreOrderClose } from "@/db/controllers/schoolController";
 import { getUser } from "./userUtils";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 async function updateOrderClose(schoolId: number, date: Date) {
   const user = await getUser();
@@ -13,4 +13,8 @@ async function updateOrderClose(schoolId: number, date: Date) {
   revalidatePath("/auth/e/dashboard", "page");
 }
 
-export { updateOrderClose };
+function revalidateItems() {
+  revalidateTag("items");
+}
+
+export { updateOrderClose, revalidateItems };
