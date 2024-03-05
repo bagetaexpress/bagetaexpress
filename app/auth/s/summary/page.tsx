@@ -74,11 +74,14 @@ export default async function SummaryPage({
         {orders.length === 0 && (
           <div className="text-center text-gray-500">Žiadne objednávky</div>
         )}
-        {orders.map((order) => (
+        {orders.map(({ order, user }) => (
           <AccordionItem key={order.id} value={order.pin}>
             <AccordionTrigger>
               <div className="flex justify-between">
-                <span>Č. obj.: {order.pin}</span>
+                <p>
+                  <span>Č. obj.: {order.pin}, </span>
+                  <span>{user.name ?? user.email}</span>
+                </p>
               </div>
             </AccordionTrigger>
             <AccordionContent>

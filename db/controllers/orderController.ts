@@ -10,6 +10,8 @@ import {
   school,
   School,
   schoolStore,
+  User,
+  user,
 } from "../schema";
 import { eq, and, sql } from "drizzle-orm";
 
@@ -120,13 +122,14 @@ async function getFirstOrderItemClose(orderId: Order["id"]): Promise<Date> {
 async function getOrdersBySchoolId(
   schoolId: School["id"],
   status: Order["status"]
-): Promise<Order[]> {
+): Promise<{ order: Order; user: User }[]> {
   const orders = await db
-    .select({ order })
+    .select({ order, user })
     .from(order)
     .innerJoin(customer, eq(order.userId, customer.userId))
+    .innerJoin(user, eq(customer.userId, user.id))
     .where(and(eq(order.status, status), eq(customer.schoolId, schoolId)));
-  return orders.map((row) => row.order);
+  return orders.map((row) => ({ order: row.order, user: row.user }));
 }
 
 async function blockUnpickedOrders(schoolId: School["id"]): Promise<void> {
