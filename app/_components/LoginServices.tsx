@@ -10,9 +10,27 @@ export default function LoginServices() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  if (session) {
+  console.log(session);
+  if (session && session.user) {
     return (
-      <Button className="w-full" onClick={() => router.push("/auth/redirect")}>
+      <Button
+        className="w-full"
+        onClick={() => {
+          switch (true) {
+            case session.user.isEmployee:
+              router.push("/auth/e/dashboard");
+              break;
+            case session.user.isSeller:
+              router.push("/auth/s/summary");
+              break;
+            case session.user.isCustomer:
+              router.push("/auth/c/store");
+              break;
+            default:
+              router.push("/auth/redirect");
+          }
+        }}
+      >
         Prejsť do aplikácie
       </Button>
     );
