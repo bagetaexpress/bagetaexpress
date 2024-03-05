@@ -37,6 +37,20 @@ async function getUserByEmail(email: string): Promise<BeUser | null> {
   return found[0];
 }
 
+async function getFullUserById(userId: User["id"]): Promise<BeUser | null> {
+  const found = await db
+    .select()
+    .from(user)
+    .where(eq(user.id, userId))
+    .leftJoin(employee, eq(user.id, employee.userId))
+    .leftJoin(customer, eq(user.id, customer.userId))
+    .leftJoin(seller, eq(user.id, seller.userId));
+  if (!found || found.length === 0) {
+    return null;
+  }
+  return found[0];
+}
+
 async function createEmployee(
   data: InferInsertModel<typeof employee>
 ): Promise<string> {
@@ -158,4 +172,5 @@ export {
   deleteSeller,
   deleteEmployee,
   getSellerById,
+  getFullUserById,
 };
