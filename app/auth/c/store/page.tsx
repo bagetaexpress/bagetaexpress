@@ -20,6 +20,7 @@ export default async function Store() {
   const foundUnpicked = await getOrdersByUserId(user.id, "unpicked");
   const hasOrder = foundOrder.length > 0 || foundUnpicked.length > 0;
 
+  console.log("fetched from", process.env.NEXTAUTH_URL);
   const items = (await fetch(
     `${process.env.NEXTAUTH_URL}/api/client/items?schoolID=${user.schoolId}`,
     {
