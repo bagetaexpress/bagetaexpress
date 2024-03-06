@@ -44,7 +44,7 @@ export default async function RedirectPage() {
           <span className=" font-medium">{schoolDomains.join(", ")}</span>
         </p>
         <h2 className="text-lg font-semibold">Časté problémy</h2>
-        <Accordion type="single">
+        <Accordion type="single" defaultValue="Problem1">
           <AccordionItem value="Problem1">
             <AccordionTrigger>
               <p>Automaticky ma prihlasuje na tento účet</p>
