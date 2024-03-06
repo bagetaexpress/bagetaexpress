@@ -46,8 +46,8 @@ export default async function SummaryPage({
         {
           {
             ordered: "Aktuálne objednávky",
-            pickedup: "Prevzaté objednávky",
             unpicked: "Nevyzdvihnuté objednávky",
+            pickedup: "Prevzaté objednávky",
             cancelled: "Zrušené objednávky",
           }[filter]
         }
@@ -60,7 +60,6 @@ export default async function SummaryPage({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ordered">Aktuálne</SelectItem>
-              <SelectItem value="pickedup">Prevzané</SelectItem>
               <SelectItem value="unpicked">Nevyzdvihnuté</SelectItem>
             </SelectContent>
           </Select>
