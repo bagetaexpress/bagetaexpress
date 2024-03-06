@@ -31,7 +31,7 @@ export default async function RedirectPage() {
   return (
     <div
       style={{ minHeight: "100dvh" }}
-      className="flex flex-col justify-center items-center"
+      className="flex flex-col justify-center items-center p-2"
     >
       <div className="flex flex-col">
         <h1 className=" font-semibold text-xl">
