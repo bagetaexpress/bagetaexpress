@@ -1,10 +1,7 @@
 import ItemCard from "@/app/auth/c/store/_components/itemCard";
 import { Button } from "@/components/ui/button";
-import {
-  ExtendedItem,
-  getItemsBySchool,
-} from "@/db/controllers/itemController";
-import { getOrdersByUserId } from "@/db/controllers/orderController";
+import { ExtendedItem } from "@/db/controllers/itemController";
+import { hasActiveOrder } from "@/db/controllers/orderController";
 import { getFirstOrderClose } from "@/db/controllers/schoolController";
 import { getUser } from "@/lib/userUtils";
 import { ShoppingCart } from "lucide-react";
@@ -16,9 +13,8 @@ export default async function Store() {
     redirect("/");
   }
 
-  const foundOrder = await getOrdersByUserId(user.id, "ordered");
-  const foundUnpicked = await getOrdersByUserId(user.id, "unpicked");
-  const hasOrder = foundOrder.length > 0 || foundUnpicked.length > 0;
+  const hasOrder = await hasActiveOrder(user.id);
+  const orderClose = await getFirstOrderClose(user.schoolId);
 
   const items = (await fetch(
     `${process.env.NEXTAUTH_URL}/api/client/items?schoolID=${user.schoolId}`,
@@ -35,7 +31,6 @@ export default async function Store() {
       throw new Error("Failed to fetch items");
     })) as ExtendedItem[];
 
-  const orderClose = await getFirstOrderClose(user.schoolId);
   return (
     <div className="h-full relative">
       <h1 className="text-2xl font-semibold pt-2">Obchod</h1>

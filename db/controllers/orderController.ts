@@ -13,7 +13,7 @@ import {
   User,
   user,
 } from "../schema";
-import { eq, and, sql } from "drizzle-orm";
+import { eq, and, sql, or } from "drizzle-orm";
 
 async function createOrder(
   userId: Order["userId"],
@@ -73,6 +73,20 @@ async function getOrdersByUserId(
     .from(order)
     .where(and(eq(order.userId, userId), eq(order.status, status)));
   return orders;
+}
+
+async function hasActiveOrder(userId: Order["userId"]): Promise<boolean> {
+  const orders = await db
+    .select()
+    .from(order)
+    .where(
+      and(
+        eq(order.userId, userId),
+        or(eq(order.status, "ordered"), eq(order.status, "unpicked"))
+      )
+    )
+    .limit(1);
+  return orders.length > 0;
 }
 
 async function getOrder(orderId: Order["id"]): Promise<Order | null> {
@@ -151,4 +165,5 @@ export {
   getOrdersByUserId,
   blockUnpickedOrders,
   getFirstOrderItemClose,
+  hasActiveOrder,
 };
