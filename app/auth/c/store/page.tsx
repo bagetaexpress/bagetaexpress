@@ -24,7 +24,7 @@ export default async function Store() {
     `${process.env.NEXTAUTH_URL}/api/client/items?schoolID=${user.schoolId}`,
     {
       next: {
-        revalidate: 86400,
+        revalidate: 60 * 60 * 24 * 7,
         tags: ["items"],
       },
     }
