@@ -51,7 +51,7 @@ export default async function RedirectPage() {
             </AccordionTrigger>
             <AccordionContent>
               <p>
-                Ak pri prihlásení nemáte možnoť vybrania microsoft účtu <br />
+                Ak pri prihlásení nemáte možnosť vybrania microsoft účtu <br />
                 ale prihlási vás automaticky na tento, tak sa z neho musíte
                 odhlásiť <br />
                 cez{" "}
