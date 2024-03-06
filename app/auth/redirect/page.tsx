@@ -8,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Link } from "lucide-react";
+import { Facebook, Instagram, Link } from "lucide-react";
 import { getSchoolDomains } from "@/db/controllers/schoolController";
 
 export default async function RedirectPage() {
@@ -50,10 +50,9 @@ export default async function RedirectPage() {
               <p>Automaticky ma prihlasuje na tento účet</p>
             </AccordionTrigger>
             <AccordionContent>
-              <p>
-                Ak pri prihlásení nemáte možnosť vybrania microsoft účtu <br />
-                ale prihlási vás automaticky na tento, tak sa z neho musíte
-                odhlásiť <br />
+              <p className=" max-w-[55ch]">
+                Ak pri prihlásení nemáte možnosť vybrania microsoft účtu ale
+                prihlási vás automaticky na tento, tak sa z neho musíte odhlásiť
                 cez{" "}
                 <a
                   target="_blank"
@@ -71,16 +70,24 @@ export default async function RedirectPage() {
               <p>Niečo iné</p>
             </AccordionTrigger>
             <AccordionContent>
-              <p>
-                Napíšte nám správu na instagram{" "}
+              <p className=" max-w-[55ch]">
+                Napíšte nám správu na{" "}
                 <a
                   target="_blank"
                   href="https://www.instagram.com/bagetaexpress?igsh=Zmt0eTZqMXE5cnZx"
                   className=" underline text-blue-500 hover:text-blue-700"
                 >
-                  @bagetaexpress
-                </a>
-                <br />a my Vám s radosťou pomôžeme
+                  instagram @bagetaexpress
+                </a>{" "}
+                alebo{" "}
+                <a
+                  target="_blank"
+                  href="https://www.instagram.com/bagetaexpress?igsh=Zmt0eTZqMXE5cnZx"
+                  className=" underline text-blue-500 hover:text-blue-700"
+                >
+                  facebook Bagetaexpress
+                </a>{" "}
+                a my Vám s radosťou pomôžeme
               </p>
             </AccordionContent>
           </AccordionItem>
