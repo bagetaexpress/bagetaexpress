@@ -3,6 +3,7 @@ import { getItemsFromOrder } from "@/db/controllers/itemController";
 import { getOrderByPin } from "@/db/controllers/orderController";
 import { Order } from "@/db/schema";
 import { getUser } from "@/lib/userUtils";
+import ClientButton from "./ClientButton";
 
 interface IProps {
   pin: string;
@@ -71,11 +72,7 @@ export default async function HandleOrder({
         </div>
       </div>
       <div className=" flex gap-2 justify-end flex-col sm:flex-row">
-        <form action={confirmAction}>
-          <Button className="w-full" type="submit">
-            {confirmText}
-          </Button>
-        </form>
+        <ClientButton action={confirmAction} text={confirmText} />
         <form action={cancelAction}>
           <Button className="w-full" type="submit" variant="outline">
             Zrušiť
