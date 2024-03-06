@@ -106,6 +106,11 @@ async function getSchoolByDomain(
   return res[0].school;
 }
 
+async function getSchoolDomains(): Promise<School["emailDomain"][]> {
+  const res = await db.select({ emailDomain: school.emailDomain }).from(school);
+  return res.map((r) => r.emailDomain);
+}
+
 async function getOrderClose(
   schoolId: School["id"],
   storeId: SchoolStore["storeId"]
@@ -128,4 +133,5 @@ export {
   getSchoolsOrderStats,
   updateSchoolStoreOrderClose,
   getSchool,
+  getSchoolDomains,
 };
