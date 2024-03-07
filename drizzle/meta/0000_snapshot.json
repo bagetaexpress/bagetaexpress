@@ -919,10 +919,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "seller_school_id_store_id_fk": {
-          "name": "seller_school_id_store_id_fk",
+        "seller_school_id_school_id_fk": {
+          "name": "seller_school_id_school_id_fk",
           "tableFrom": "seller",
-          "tableTo": "store",
+          "tableTo": "school",
           "columnsFrom": [
             "school_id"
           ],

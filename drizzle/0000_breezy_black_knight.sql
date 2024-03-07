@@ -130,7 +130,7 @@ CREATE TABLE `seller` (
 	`school_id` integer NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`store_id`) REFERENCES `store`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`school_id`) REFERENCES `store`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`school_id`) REFERENCES `school`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `session` (
