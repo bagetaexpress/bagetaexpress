@@ -35,13 +35,15 @@ async function getSchool(schoolId: School["id"]): Promise<School> {
 
 export type SchoolStats = {
   school: School;
-  orderClose: Date;
+  orderClose: string;
   ordered: number;
   pickedup: number;
   unpicked: number;
 };
 
-async function getSchoolsOrderStats(storeId: SchoolStore["storeId"]) {
+async function getSchoolsOrderStats(
+  storeId: SchoolStore["storeId"]
+): Promise<SchoolStats[]> {
   const schools = await db
     .select({
       school,
@@ -63,7 +65,7 @@ async function getSchoolsOrderStats(storeId: SchoolStore["storeId"]) {
 async function updateSchoolStoreOrderClose(
   schoolId: SchoolStore["schoolId"],
   storeId: SchoolStore["storeId"],
-  orderClose: Date
+  orderClose: SchoolStore["orderClose"]
 ) {
   await db
     .update(schoolStore)

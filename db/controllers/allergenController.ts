@@ -2,7 +2,14 @@
 
 import { and, eq } from "drizzle-orm";
 import { db } from "..";
-import { Allergen, Item, Store, allergen, itemAllergen } from "../schema";
+import {
+  Allergen,
+  Item,
+  ItemAllergen,
+  Store,
+  allergen,
+  itemAllergen,
+} from "../schema";
 
 async function getAllergensByStoreId(storeId: Store["id"]) {
   const allergens = await db
@@ -36,28 +43,29 @@ async function createAllergen(
   number: Allergen["number"],
   name: Allergen["name"],
   storeId: Store["id"]
-) {
-  const res = await db.insert(allergen).values([{ number, name, storeId }]);
-
-  return res.insertId;
+): Promise<void> {
+  await db.insert(allergen).values([{ number, name, storeId }]);
 }
 
 async function updateAllergen(
   allergenId: Allergen["id"],
   number: number,
   name: string
-) {
+): Promise<void> {
   await db
     .update(allergen)
     .set({ number, name })
     .where(eq(allergen.id, allergenId));
 }
 
-async function deleteAllergen(allergenId: Allergen["id"]) {
+async function deleteAllergen(allergenId: Allergen["id"]): Promise<void> {
   await db.delete(allergen).where(eq(allergen.id, allergenId));
 }
 
-async function getItemAllergen(itemId: Item["id"], allergenId: Allergen["id"]) {
+async function getItemAllergen(
+  itemId: Item["id"],
+  allergenId: Allergen["id"]
+): Promise<ItemAllergen[]> {
   const found = await db
     .select()
     .from(itemAllergen)
@@ -91,7 +99,7 @@ async function deleteItemAllergen(
     );
 }
 
-async function deleteAllItemAllergens(itemId: Item["id"]) {
+async function deleteAllItemAllergens(itemId: Item["id"]): Promise<void> {
   await db.delete(itemAllergen).where(eq(itemAllergen.itemId, itemId));
 }
 

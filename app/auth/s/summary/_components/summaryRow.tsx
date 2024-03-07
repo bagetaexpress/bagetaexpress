@@ -8,10 +8,7 @@ export default async function SummaryRow({ orderId }: IProps) {
   const items = await getItemsFromOrder(orderId);
 
   const total = items
-    .reduce(
-      (acc, { item, quantity }) => acc + parseFloat(item.price) * quantity,
-      0
-    )
+    .reduce((acc, { item, quantity }) => acc + item.price * quantity, 0)
     .toFixed(2);
 
   return (
@@ -25,8 +22,8 @@ export default async function SummaryRow({ orderId }: IProps) {
             </div>
             <div className="flex justify-center text-center gap-2 flex-col">
               <p className=" font-medium text-xl">
-                {/* {(parseFloat(item.price) * q).toFixed(2)}€ */}
-                {quantity}x{parseFloat(item.price).toFixed(2)}€
+                {/* {(item.price * q).toFixed(2)}€ */}
+                {quantity}x{item.price.toFixed(2)}€
               </p>
             </div>
           </div>

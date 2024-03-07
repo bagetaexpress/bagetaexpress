@@ -130,7 +130,7 @@ async function getFirstOrderItemClose(orderId: Order["id"]): Promise<Date> {
     return new Date();
   }
 
-  return items[0].orderClose;
+  return new Date(items[0].orderClose);
 }
 
 async function getOrdersBySchoolId(
@@ -147,11 +147,17 @@ async function getOrdersBySchoolId(
 }
 
 async function blockUnpickedOrders(schoolId: School["id"]): Promise<void> {
-  await db.execute(sql`
-    UPDATE \`order\`
-    INNER JOIN customer ON \`order\`.user_id = customer.user_id
-    SET \`order\`.status = "unpicked"
-    WHERE \`order\`.status = "ordered" AND customer.school_id = ${schoolId}`);
+  await db
+    .update(order)
+    .set({ status: "unpicked" })
+    .where(
+      sql`status = "ordered" AND user_id IN (SELECT user_id FROM customer WHERE school_id = ${schoolId})`
+    );
+  // await db.execute(sql`
+  //   UPDATE \`order\`
+  //   INNER JOIN customer ON \`order\`.user_id = customer.user_id
+  //   SET \`order\`.status = "unpicked"
+  //   WHERE \`order\`.status = "ordered" AND customer.school_id = ${schoolId}`);
 }
 
 export {

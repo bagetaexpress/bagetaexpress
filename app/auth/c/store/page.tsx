@@ -14,7 +14,7 @@ export default async function Store() {
   }
 
   const hasOrder = await hasActiveOrder(user.id);
-  const orderClose = await getFirstOrderClose(user.schoolId);
+  const orderClose = new Date(await getFirstOrderClose(user.schoolId));
 
   const items = (await fetch(
     `${process.env.NEXTAUTH_URL}/api/client/items?schoolID=${user.schoolId}`,

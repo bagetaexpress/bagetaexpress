@@ -94,7 +94,7 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
             onClick={async () => {
               if (!date) return;
               setIsProcessing(true);
-              await updateOrderClose(schoolId, date);
+              await updateOrderClose(schoolId, date.toISOString());
               setIsProcessing(false);
               setIsOpen(false);
             }}

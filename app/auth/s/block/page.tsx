@@ -69,9 +69,9 @@ export default async function BlockPage({
 
                 const schoolStores = await getSchoolStores(user.schoolId);
                 for (const schoolStore of schoolStores) {
-                  if (schoolStore.orderClose > new Date()) continue;
+                  if (new Date(schoolStore.orderClose) > new Date()) continue;
 
-                  const date = schoolStore.orderClose;
+                  const date = new Date(schoolStore.orderClose);
                   const dayOfWeek = date.getDay();
                   let daysToAdd: number = 1;
 
@@ -84,7 +84,7 @@ export default async function BlockPage({
                   await updateSchoolStoreOrderClose(
                     user.schoolId,
                     schoolStore.storeId,
-                    date
+                    date.toISOString()
                   );
                 }
 

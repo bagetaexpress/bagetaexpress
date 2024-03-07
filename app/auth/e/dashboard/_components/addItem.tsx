@@ -129,7 +129,7 @@ export default function AddItemForm({
         name: item?.name ?? "",
         weight: item?.weight ? item.weight.toString() : undefined,
         description: item?.description ?? "",
-        price: item?.price ?? "",
+        price: item?.price ? item.price.toString() : "",
         allergens: item?.allergens.map((a) => a.id).join(",") ?? "",
       }),
       [item]
@@ -142,7 +142,7 @@ export default function AddItemForm({
       name: item.name,
       weight: item.weight.toString(),
       description: item.description,
-      price: item.price,
+      price: item.price ? item.price.toString() : "",
       allergens: item.allergens.map((a) => a.id).join(","),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -209,6 +209,7 @@ export default function AddItemForm({
         setProcessingStatus("konečné upravovanie");
         await updateItem({
           ...(({ allergens, ...rest }) => rest)(values),
+          price: parseFloat(values.price),
           weight: parseInt(values.weight),
           id: item.id,
           imageUrl: localUrl ?? "",
@@ -230,6 +231,7 @@ export default function AddItemForm({
         setProcessingStatus("Pridávanie produktu");
         const id = await addItem({
           ...values,
+          price: parseFloat(values.price),
           weight: parseInt(values.weight),
           storeId: user.storeId,
           imageUrl: localUrl ?? "",

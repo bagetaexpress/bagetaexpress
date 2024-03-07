@@ -97,8 +97,7 @@ export default function Cheackout({
               <p className="font-semibold text-xl">
                 {items
                   .reduce(
-                    (acc, item) =>
-                      acc + parseFloat(item.item.price) * item.quantity,
+                    (acc, item) => acc + item.item.price * item.quantity,
                     0
                   )
                   .toFixed(2)}
