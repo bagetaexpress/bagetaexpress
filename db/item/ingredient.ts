@@ -1,19 +1,11 @@
-import { mysqlTable, int, serial, varchar } from "drizzle-orm/mysql-core";
-import { relations } from "drizzle-orm";
-import { itemIngredient } from "./itemIngredient";
+import { sqliteTable, int, text } from "drizzle-orm/sqlite-core";
 import { store } from "../store/store";
 
-export const ingredient = mysqlTable("ingredient", {
-  id: serial("id").primaryKey(),
-  number: int("number").notNull(),
-  name: varchar("name", { length: 255 }).notNull(),
-  storeId: int("store_id").notNull(),
+export const ingredient = sqliteTable("ingredient", {
+  id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  number: int("number", { mode: "number" }).notNull(),
+  name: text("name").notNull(),
+  storeId: int("store_id", { mode: "number" })
+    .notNull()
+    .references(() => store.id),
 });
-
-export const ingredientRelations = relations(ingredient, ({ many, one }) => ({
-  itemIngredients: many(itemIngredient),
-  store: one(store, {
-    fields: [ingredient.storeId],
-    references: [store.id],
-  }),
-}));

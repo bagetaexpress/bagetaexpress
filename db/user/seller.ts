@@ -1,25 +1,16 @@
-import { int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { user } from "./user";
 import { store } from "../store/store";
-import { relations } from "drizzle-orm";
 
-export const seller = mysqlTable("seller", {
-  userId: varchar("user_id", { length: 255 }).notNull().primaryKey(),
-  storeId: int("store_id").notNull(),
-  schoolId: int("school_id").notNull(),
+export const seller = sqliteTable("seller", {
+  userId: text("user_id")
+    .notNull()
+    .primaryKey()
+    .references(() => user.id),
+  storeId: int("store_id", { mode: "number" })
+    .notNull()
+    .references(() => store.id),
+  schoolId: int("school_id", { mode: "number" })
+    .notNull()
+    .references(() => store.id),
 });
-
-export const sellerRelations = relations(seller, ({ one }) => ({
-  user: one(user, {
-    fields: [seller.userId],
-    references: [user.id],
-  }),
-  store: one(store, {
-    fields: [seller.storeId],
-    references: [store.id],
-  }),
-  school: one(store, {
-    fields: [seller.schoolId],
-    references: [store.id],
-  }),
-}));

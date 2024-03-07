@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/popover";
 import { TimePickerHourMinute } from "./time-picker-hour-minute";
 
-export function DateTimePicker() {
+export function textPicker() {
   const [date, setDate] = React.useState<Date>();
 
   return (

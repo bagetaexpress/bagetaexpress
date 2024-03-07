@@ -44,7 +44,7 @@ export default function Scanner({ url }: { url: string }) {
         >
           <Input
             name="pin"
-            inputMode="numeric"
+            inputMode="text"
             required
             onChange={() => setPinError("")}
           />

@@ -355,7 +355,7 @@ export default function AddItemForm({
                 <FormItem>
                   <FormLabel>Váha (g)</FormLabel>
                   <FormControl>
-                    <Input {...field} inputMode="numeric" />
+                    <Input {...field} inputMode="text" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

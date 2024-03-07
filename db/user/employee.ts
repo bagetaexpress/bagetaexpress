@@ -1,21 +1,14 @@
-import { boolean, int, mysqlTable, varchar } from "drizzle-orm/mysql-core";
+import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { user } from "./user";
 import { store } from "../store/store";
-import { relations } from "drizzle-orm";
 
-export const employee = mysqlTable("employee", {
-  userId: varchar("user_id", { length: 255 }).notNull().primaryKey(),
-  storeId: int("store_id").notNull(),
-  isOwner: boolean("is_owner").notNull().default(false),
+export const employee = sqliteTable("employee", {
+  userId: text("user_id")
+    .notNull()
+    .primaryKey()
+    .references(() => user.id),
+  storeId: int("store_id", { mode: "number" })
+    .notNull()
+    .references(() => store.id),
+  isOwner: int("is_owner", { mode: "boolean" }).notNull().default(false),
 });
-
-export const employeeRelations = relations(employee, ({ one }) => ({
-  user: one(user, {
-    fields: [employee.userId],
-    references: [user.id],
-  }),
-  store: one(store, {
-    fields: [employee.storeId],
-    references: [store.id],
-  }),
-}));

@@ -1,33 +1,20 @@
-import {
-  mysqlTable,
-  serial,
-  int,
-  timestamp,
-  mysqlEnum,
-  varchar,
-} from "drizzle-orm/mysql-core";
+import { sqliteTable, int, text } from "drizzle-orm/sqlite-core";
 import { user } from "../user/user";
-import { relations } from "drizzle-orm";
-import { orderItem } from "./orderItem";
+import { sql } from "drizzle-orm";
 
-export const order = mysqlTable("order", {
-  id: serial("id").primaryKey(),
-  userId: varchar("user_id", { length: 255 }).notNull(),
-  pin: varchar("pin", { length: 4 }).notNull(),
-  status: mysqlEnum("status", [
-    "ordered",
-    "pickedup",
-    "unpicked",
-    "cancelled",
-  ]).notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+export const order = sqliteTable("order", {
+  id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id),
+  pin: text("pin", { length: 4 }).notNull(),
+  status: text("status", {
+    enum: ["ordered", "pickedup", "unpicked", "cancelled"],
+  }).notNull(),
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
 });
-
-export const orderRelations = relations(order, ({ one, many }) => ({
-  orderItems: many(orderItem),
-  user: one(user, {
-    fields: [order.userId],
-    references: [user.id],
-  }),
-}));
