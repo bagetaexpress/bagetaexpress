@@ -112,15 +112,15 @@ async function getSellersByStoreId(storeId: Seller["storeId"]): Promise<
 async function createSeller(
   data: InferInsertModel<typeof seller>
 ): Promise<Seller> {
-  await db
+  const res = await db
     .insert(seller)
     .values({
       userId: data.userId,
       storeId: data.storeId,
       schoolId: data.schoolId,
     })
-    .execute();
-  return data;
+    .returning();
+  return res[0];
 }
 
 async function deleteSeller(userId: Seller["userId"]): Promise<void> {

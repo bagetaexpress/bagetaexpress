@@ -1,6 +1,7 @@
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { user } from "./user";
 import { store } from "../store/store";
+import { school } from "../school/school";
 
 export const seller = sqliteTable("seller", {
   userId: text("user_id")
@@ -12,5 +13,5 @@ export const seller = sqliteTable("seller", {
     .references(() => store.id),
   schoolId: int("school_id", { mode: "number" })
     .notNull()
-    .references(() => store.id),
+    .references(() => school.id),
 });
