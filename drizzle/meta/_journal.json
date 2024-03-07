@@ -8,13 +8,7 @@
       "when": 1709849400944,
       "tag": "0000_breezy_black_knight",
       "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1709850016625,
-      "tag": "0001_regular_roxanne_simpson",
-      "breakpoints": true
     }
+    
   ]
 }
