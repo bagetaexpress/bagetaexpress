@@ -1,6 +1,3 @@
-// import { MySql2Database, drizzle } from "drizzle-orm/mysql2";
-// import { migrate } from "drizzle-orm/mysql2/migrator";
-// import { createConnection } from "mysql2";
 import { LibSQLDatabase, drizzle } from "drizzle-orm/libsql";
 import { migrate } from "drizzle-orm/libsql/migrator";
 
@@ -16,8 +13,8 @@ async function main() {
   }
 
   const turso = createClient({
-    url: process.env.TURSO_DATABASE_URL!,
-    authToken: process.env.TURSO_AUTH_TOKEN,
+    url: config.dbCredentials.url!,
+    authToken: config.dbCredentials.authToken!,
   });
   const db = drizzle(turso);
 
