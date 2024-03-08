@@ -1,4 +1,4 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { user } from "./user";
 import { store } from "../store/store";
 
@@ -7,8 +7,8 @@ export const employee = sqliteTable("employee", {
     .notNull()
     .primaryKey()
     .references(() => user.id),
-  storeId: int("store_id", { mode: "number" })
+  storeId: integer("store_id", { mode: "number" })
     .notNull()
     .references(() => store.id),
-  isOwner: int("is_owner", { mode: "boolean" }).notNull().default(false),
+  isOwner: integer("is_owner", { mode: "boolean" }).notNull().default(false),
 });

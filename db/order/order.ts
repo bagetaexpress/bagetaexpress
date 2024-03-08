@@ -1,9 +1,9 @@
-import { sqliteTable, int, text } from "drizzle-orm/sqlite-core";
+import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
 import { user } from "../user/user";
 import { sql } from "drizzle-orm";
 
 export const order = sqliteTable("order", {
-  id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   userId: text("user_id")
     .notNull()
     .references(() => user.id),

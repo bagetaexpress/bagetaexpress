@@ -1,14 +1,14 @@
-import { sqliteTable, int, primaryKey } from "drizzle-orm/sqlite-core";
+import { sqliteTable, integer, primaryKey } from "drizzle-orm/sqlite-core";
 import { item } from "./item";
 import { allergen } from "./allergen";
 
 export const itemAllergen = sqliteTable(
   "item_allergen",
   {
-    allergenId: int("allergen_id", { mode: "number" })
+    allergenId: integer("allergen_id", { mode: "number" })
       .notNull()
       .references(() => allergen.id),
-    itemId: int("item_id", { mode: "number" })
+    itemId: integer("item_id", { mode: "number" })
       .notNull()
       .references(() => item.id),
   },
