@@ -1,26 +1,10 @@
-import { mysqlTable, serial, varchar } from "drizzle-orm/mysql-core";
-import { item } from "../item/item";
-import { employee } from "../user/employee";
-import { relations } from "drizzle-orm";
-import { schoolStore } from "../school/schoolStore";
-import { seller } from "../user/seller";
-import { allergen } from "../item/allergen";
-import { ingredient } from "../item/ingredient";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const store = mysqlTable("store", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  websiteUrl: varchar("website_url", { length: 255 }).notNull(),
-  adress: varchar("adress", { length: 255 }).notNull().default(""),
-  imageUrl: varchar("image_url", { length: 255 }).notNull().default(""),
-  description: varchar("description", { length: 255 }).notNull(),
+export const store = sqliteTable("store", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  websiteUrl: text("website_url").notNull(),
+  adress: text("adress").notNull().default(""),
+  imageUrl: text("image_url").notNull().default(""),
+  description: text("description").notNull(),
 });
-
-export const storeRelations = relations(store, ({ many }) => ({
-  items: many(item),
-  schools: many(schoolStore),
-  employees: many(employee),
-  sellers: many(seller),
-  allergens: many(allergen),
-  ingredients: many(ingredient),
-}));

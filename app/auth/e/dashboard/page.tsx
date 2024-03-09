@@ -108,7 +108,7 @@ function ItemCard({
         <CardTitle>{item.name}</CardTitle>
         <CardDescription>{item.description}</CardDescription>
       </CardHeader>
-      <CardContent className="text-xs flex-1 flex flex-col justify-end">
+      <CardContent className="flex-1 flex flex-col justify-end">
         {item.imageUrl != null && item.imageUrl != "" ? (
           <div className="flex justify-center mb-2">
             <Image
@@ -120,12 +120,7 @@ function ItemCard({
             />
           </div>
         ) : null}
-        <div className=" grid grid-cols-2">
-          <p>Objednané:</p>
-          <p>{stats.ordered}</p>
-          <p>Doručené:</p>
-          <p>{stats.pickedup}</p>
-        </div>
+        <p>Doručené: {stats.pickedup}</p>
       </CardContent>
       <CardFooter>
         <div className="w-full grid grid-cols-2 gap-1">

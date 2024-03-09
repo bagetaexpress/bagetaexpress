@@ -86,11 +86,7 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
                     <td style={{ textAlign: "left" }}>{order.item.name}</td>
                     <td>{order.quantity}ks</td>
                     <td>{order.item.price}</td>
-                    <td>
-                      {(parseFloat(order.item.price) * order.quantity).toFixed(
-                        2
-                      )}
-                    </td>
+                    <td>{(order.item.price * order.quantity).toFixed(2)}</td>
                     <td>20%</td>
                   </tr>
                 ))}
@@ -114,8 +110,7 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
                   Celková suma:
                   {orders
                     .reduce(
-                      (acc, order) =>
-                        acc + parseFloat(order.item.price) * order.quantity,
+                      (acc, order) => acc + order.item.price * order.quantity,
                       0
                     )
                     .toFixed(2)}

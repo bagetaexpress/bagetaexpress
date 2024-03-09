@@ -27,7 +27,7 @@ export default async function CartPage() {
 
   const user = await getUser();
   if (!user || !user.schoolId) return;
-  const orderClose = await getFirstOrderClose(user.schoolId);
+  const orderClose = new Date(await getFirstOrderClose(user.schoolId));
 
   return (
     <div className="h-full flex flex-col justify-between md:justify-start">

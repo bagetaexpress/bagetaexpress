@@ -28,8 +28,8 @@ export default async function SchoolCard({
     return null;
   }
 
+  const orderCloseDate = new Date(orderClose ?? new Date());
   const orders = await getOrderItemsByStoreAndSchool(user.storeId, school.id);
-  const ordersClose = await getOrderClose(school.id, user.storeId);
   const store = await getStore(user.storeId ?? 0);
 
   return (
@@ -39,27 +39,25 @@ export default async function SchoolCard({
         <CardDescription>
           Ukončenie objednávok:{" "}
           <span className="font-semibold">
-            {orderClose.toLocaleString("sk-SK")}
+            {orderCloseDate.toLocaleString("sk-SK")}
           </span>
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className=" grid grid-cols-2">
-          <p>Objednávky:</p>
+          <p>Objednané:</p>
           <p>{stats.ordered}</p>
-          <p>Doručené:</p>
-          <p>{stats.pickedup}</p>
           <p>Zablokované:</p>
           <p>{stats.unpicked}</p>
         </div>
       </CardContent>
       <CardFooter>
         <div className="flex w-full gap-1">
-          <EditOrderClose orderClose={orderClose} schoolId={school.id} />
+          <EditOrderClose orderClose={orderCloseDate} schoolId={school.id} />
           <PrintOrderLabels
             orders={orders}
             store={store}
-            orderClose={orderClose ?? new Date()}
+            orderClose={orderCloseDate}
           />
           <PrintOrderList school={school} orders={orders} store={store} />
         </div>

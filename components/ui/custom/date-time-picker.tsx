@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/popover";
 import { TimePickerHourMinute } from "./time-picker-hour-minute";
 
-export function DateTimePicker() {
-  const [date, setDate] = React.useState<Date>();
+export default function TextPicker() {
+  const [date, setDate] = useState<Date>();
 
   return (
     <Popover>

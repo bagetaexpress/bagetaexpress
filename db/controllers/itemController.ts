@@ -133,8 +133,8 @@ async function getItemsStats(storeId: Item["storeId"]): Promise<ItemStats[]> {
 async function addItem(
   data: InferInsertModel<typeof item>
 ): Promise<Item["id"]> {
-  const res = await db.insert(item).values(data);
-  return parseInt(res.insertId);
+  const res = await db.insert(item).values(data).returning();
+  return res[0].id;
 }
 
 async function removeItem(itemId: Item["id"]) {

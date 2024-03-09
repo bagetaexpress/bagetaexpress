@@ -137,17 +137,17 @@ export function getValidNumber(
   value: string,
   { max, min = 0, loop = false }: GetValidNumberConfig
 ) {
-  let numericValue = parseInt(value, 10);
+  let textValue = parseInt(value, 10);
 
-  if (!isNaN(numericValue)) {
+  if (!isNaN(textValue)) {
     if (!loop) {
-      if (numericValue > max) numericValue = max;
-      if (numericValue < min) numericValue = min;
+      if (textValue > max) textValue = max;
+      if (textValue < min) textValue = min;
     } else {
-      if (numericValue > max) numericValue = min;
-      if (numericValue < min) numericValue = max;
+      if (textValue > max) textValue = min;
+      if (textValue < min) textValue = max;
     }
-    return numericValue.toString().padStart(2, "0");
+    return textValue.toString().padStart(2, "0");
   }
 
   return "00";
@@ -178,10 +178,10 @@ export function getValidArrowNumber(
   value: string,
   { min, max, step }: GetValidArrowNumberConfig
 ) {
-  let numericValue = parseInt(value, 10);
-  if (!isNaN(numericValue)) {
-    numericValue += step;
-    return getValidNumber(String(numericValue), { min, max, loop: true });
+  let textValue = parseInt(value, 10);
+  if (!isNaN(textValue)) {
+    textValue += step;
+    return getValidNumber(String(textValue), { min, max, loop: true });
   }
   return "00";
 }

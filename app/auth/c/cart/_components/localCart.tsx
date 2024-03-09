@@ -53,10 +53,7 @@ export default function LocalCart({
         <p className="font-semibold text-lg">Spolu</p>
         <p className="font-semibold text-xl">
           {data
-            .reduce(
-              (acc, item) => acc + parseFloat(item.item.price) * item.quantity,
-              0
-            )
+            .reduce((acc, item) => acc + item.item.price * item.quantity, 0)
             .toFixed(2)}
           €
         </p>

@@ -1,18 +1,22 @@
-import { MySql2Database, drizzle } from "drizzle-orm/mysql2";
-import { migrate } from "drizzle-orm/mysql2/migrator";
-import { createConnection } from "mysql2";
+import { LibSQLDatabase, drizzle } from "drizzle-orm/libsql";
+import { migrate } from "drizzle-orm/libsql/migrator";
+
 import { tables } from "./schema";
 import config from "@/drizzle.config";
+import { createClient } from "@libsql/client";
 
-type Database = MySql2Database<Record<string, never>>;
+type Database = LibSQLDatabase<Record<string, never>>;
 
 async function main() {
-  if (!config.dbCredentials.uri) {
+  if (!config.dbCredentials.url || !config.dbCredentials.authToken) {
     throw new Error("DATABASE_URL is not set");
   }
 
-  const connection = createConnection(config.dbCredentials.uri);
-  const db = drizzle(connection);
+  const turso = createClient({
+    url: config.dbCredentials.url!,
+    authToken: config.dbCredentials.authToken!,
+  });
+  const db = drizzle(turso);
 
   if (process.argv.includes("--clear")) {
     console.log("Clearing database");
@@ -30,7 +34,7 @@ async function main() {
     console.log("Database populated");
   }
 
-  connection.end();
+  turso.close();
 }
 
 async function clearDatabase(db: Database) {
@@ -71,7 +75,7 @@ async function populate(db: Database) {
       id: 1,
       name: "bageta",
       description: "bageta popis",
-      price: "3.99",
+      price: 3.99,
       imageUrl: "",
       weight: 170,
       deleted: false,
@@ -81,7 +85,7 @@ async function populate(db: Database) {
       id: 2,
       name: "test bageta",
       description: "najelpsia omega top bageta",
-      price: "3.99",
+      price: 3.99,
       imageUrl: "",
       weight: 150,
       deleted: false,

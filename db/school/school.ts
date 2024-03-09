@@ -1,18 +1,8 @@
-import { mysqlTable, serial, varchar } from "drizzle-orm/mysql-core";
-import { relations } from "drizzle-orm";
-import { customer } from "../user/customer";
-import { schoolStore } from "./schoolStore";
-import { seller } from "../user/seller";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const school = mysqlTable("school", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  websiteUrl: varchar("website_url", { length: 255 }).notNull(),
-  emailDomain: varchar("email_domain", { length: 255 }).notNull(),
+export const school = sqliteTable("school", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  websiteUrl: text("website_url").notNull(),
+  emailDomain: text("email_domain").notNull(),
 });
-
-export const schoolRelations = relations(school, ({ many }) => ({
-  students: many(customer),
-  schoolStores: many(schoolStore),
-  sellers: many(seller),
-}));

@@ -1,26 +1,18 @@
-import { mysqlTable, int, primaryKey } from "drizzle-orm/mysql-core";
+import { sqliteTable, integer, primaryKey } from "drizzle-orm/sqlite-core";
 import { item } from "./item";
 import { ingredient } from "./ingredient";
-import { relations } from "drizzle-orm";
 
-export const itemIngredient = mysqlTable(
+export const itemIngredient = sqliteTable(
   "item_ingredient",
   {
-    ingredientId: int("ingredient_id").notNull(),
-    itemId: int("item_id").notNull(),
+    ingredientId: integer("ingredient_id", { mode: "number" })
+      .notNull()
+      .references(() => ingredient.id),
+    itemId: integer("item_id", { mode: "number" })
+      .notNull()
+      .references(() => item.id),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.ingredientId, table.itemId] }),
   })
 );
-
-export const itemIngredientRelations = relations(itemIngredient, ({ one }) => ({
-  ingredient: one(ingredient, {
-    fields: [itemIngredient.ingredientId],
-    references: [ingredient.id],
-  }),
-  item: one(item, {
-    fields: [itemIngredient.itemId],
-    references: [item.id],
-  }),
-}));

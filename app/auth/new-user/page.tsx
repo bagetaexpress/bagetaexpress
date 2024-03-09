@@ -1,10 +1,8 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getSchoolByDomain } from "@/db/controllers/schoolController";
 import { createCustomer } from "@/db/controllers/userController";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import LoginBtn from "./_components/loginBtn";
-import { revalidatePath } from "next/cache";
+import { authOptions } from "@/lib/authOptions";
 
 export default async function NewUserPage() {
   const session = await getServerSession(authOptions);

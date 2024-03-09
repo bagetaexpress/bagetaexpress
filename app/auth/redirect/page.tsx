@@ -1,4 +1,3 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import LogoutBtn from "./_components/LogoutBtn";
@@ -10,6 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { Facebook, Instagram, Link } from "lucide-react";
 import { getSchoolDomains } from "@/db/controllers/schoolController";
+import { authOptions } from "@/lib/authOptions";
 
 export default async function RedirectPage() {
   const session = await getServerSession(authOptions);
