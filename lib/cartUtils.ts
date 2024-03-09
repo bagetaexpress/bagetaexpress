@@ -1,6 +1,5 @@
 "use server";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import {
   getCart,
   createCart,
@@ -16,6 +15,7 @@ import {
 import { getItemsFromCart } from "@/db/controllers/itemController";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { authOptions } from "./authOptions";
 
 async function addToCart(itemId: number, quantity: number = 1): Promise<void> {
   const cartId = await getCartId();
