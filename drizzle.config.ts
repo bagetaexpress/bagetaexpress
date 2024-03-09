@@ -1,7 +1,7 @@
 import type { Config } from "drizzle-kit";
 import "dotenv/config";
 
-if (!process.env.DATABASE_URL) {
+if (!process.env.TURSO_DATABASE_URL || !process.env.TURSO_AUTH_TOKEN) {
   throw new Error("DATABASE_URL is missing");
 }
 

@@ -1,1 +1,0 @@
-ALTER TABLE `account` DROP COLUMN `ext_expires_at`;
