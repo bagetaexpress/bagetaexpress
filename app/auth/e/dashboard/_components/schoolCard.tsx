@@ -47,6 +47,8 @@ export default async function SchoolCard({
         <div className=" grid grid-cols-2">
           <p>Objednané:</p>
           <p>{stats.ordered}</p>
+          <p>Doručené:</p>
+          <p>{stats.pickedup}</p>
           <p>Zablokované:</p>
           <p>{stats.unpicked}</p>
         </div>
