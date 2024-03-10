@@ -10,7 +10,6 @@ export default function LoginServices() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  console.log(session);
   if (session && session.user) {
     return (
       <Button

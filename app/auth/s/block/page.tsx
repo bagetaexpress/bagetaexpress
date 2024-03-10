@@ -67,6 +67,10 @@ export default async function BlockPage({
                 const user = await getUser();
                 if (!user || !user.schoolId) return;
 
+                console.info(
+                  `Blocking unpicked orders for school ${user.schoolId}`
+                );
+
                 const schoolStores = await getSchoolStores(user.schoolId);
                 for (const schoolStore of schoolStores) {
                   if (new Date(schoolStore.orderClose) > new Date()) continue;
