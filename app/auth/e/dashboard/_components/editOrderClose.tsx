@@ -12,18 +12,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { updateSchoolStoreOrderClose } from "@/db/controllers/schoolController";
 import { updateOrderClose } from "@/lib/storeUtils";
-import { getUser } from "@/lib/userUtils";
-import { cn } from "@/lib/utils";
 import { format, set } from "date-fns";
-import { Calendar as CalendarIcon, Loader } from "lucide-react";
-import React, { use } from "react";
+import { Loader } from "lucide-react";
+import React, { useEffect } from "react";
 
 interface IProps {
   orderClose: Date;
@@ -63,20 +55,25 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
             className="rounded-md border w-fit"
             onSelect={(val) => {
               if (val == null) return;
-              const time = date == null ? "00:00" : format(date, "HH:mm");
-              const newDate = set(val, {
-                hours: parseInt(time.split(":")[0]),
-                minutes: parseInt(time.split(":")[1]),
-              });
+              const time = format(date ?? new Date(), "HH:mm");
+              const newDate = format(val, "yyyy-MM-dd");
 
-              setDate(newDate);
+              setDate(new Date(`${newDate} ${time}`));
             }}
             initialFocus
             disabled={(date) =>
               date < new Date(new Date().setDate(new Date().getDate() - 1))
             }
           />
-          <TimePickerHourMinute setDate={setDate} date={date} />
+          <TimePickerHourMinute
+            setDate={(val) => {
+              if (val == null) return;
+              const newDate = format(date ?? new Date(), "yyyy-MM-dd");
+              const newTime = format(val, "HH:mm");
+              setDate(new Date(`${newDate} ${newTime}`));
+            }}
+            date={date}
+          />
         </div>
         <DialogFooter className="gap-2">
           <Button
@@ -94,7 +91,10 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
             onClick={async () => {
               if (!date) return;
               setIsProcessing(true);
-              await updateOrderClose(schoolId, date.toISOString());
+              await updateOrderClose(
+                schoolId,
+                format(date, "yyyy-MM-dd HH:mm:ss")
+              );
               setIsProcessing(false);
               setIsOpen(false);
             }}
