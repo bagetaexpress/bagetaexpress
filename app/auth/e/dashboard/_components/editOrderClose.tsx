@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { updateOrderClose } from "@/lib/storeUtils";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import { Loader } from "lucide-react";
 import React, { useEffect } from "react";
 

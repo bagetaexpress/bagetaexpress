@@ -17,6 +17,7 @@ import {
   updateSchoolStoreOrderClose,
 } from "@/db/controllers/schoolController";
 import { getUser } from "@/lib/userUtils";
+import { format } from "date-fns";
 import { Check } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -88,7 +89,7 @@ export default async function BlockPage({
                   await updateSchoolStoreOrderClose(
                     user.schoolId,
                     schoolStore.storeId,
-                    date.toISOString()
+                    format(new Date(date), "yyyy-MM-dd HH:mm:ss")
                   );
                 }
 
