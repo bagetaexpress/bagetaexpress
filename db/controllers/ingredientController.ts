@@ -35,7 +35,7 @@ async function getIngredientById(itemId: Ingredient["id"]) {
 async function createIngredient(
   number: Ingredient["number"],
   name: Ingredient["name"],
-  storeId: Ingredient["storeId"]
+  storeId: Ingredient["storeId"],
 ) {
   const res = await db.insert(ingredient).values([{ number, name, storeId }]);
 
@@ -45,7 +45,7 @@ async function createIngredient(
 async function updateIngredient(
   ingredientId: Ingredient["id"],
   number: Ingredient["number"],
-  name: Ingredient["name"]
+  name: Ingredient["name"],
 ) {
   await db
     .update(ingredient)
@@ -59,7 +59,7 @@ async function deleteIngredient(ingredientId: Ingredient["id"]) {
 
 async function getItemIngredient(
   itemId: Item["id"],
-  ingredientId: Ingredient["id"]
+  ingredientId: Ingredient["id"],
 ) {
   const found = await db
     .select()
@@ -67,8 +67,8 @@ async function getItemIngredient(
     .where(
       and(
         eq(itemIngredient.itemId, itemId),
-        eq(itemIngredient.ingredientId, ingredientId)
-      )
+        eq(itemIngredient.ingredientId, ingredientId),
+      ),
     );
 
   return found;
@@ -76,7 +76,7 @@ async function getItemIngredient(
 
 async function createItemIngredient(
   itemId: Item["id"],
-  ingredientId: Ingredient["id"]
+  ingredientId: Ingredient["id"],
 ) {
   const res = await db
     .insert(itemIngredient)
@@ -87,15 +87,15 @@ async function createItemIngredient(
 
 async function deleteItemIngredient(
   itemId: Item["id"],
-  ingredientId: Ingredient["id"]
+  ingredientId: Ingredient["id"],
 ) {
   await db
     .delete(itemIngredient)
     .where(
       and(
         eq(itemIngredient.itemId, itemId),
-        eq(itemIngredient.ingredientId, ingredientId)
-      )
+        eq(itemIngredient.ingredientId, ingredientId),
+      ),
     );
 }
 

@@ -111,7 +111,7 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
                   {orders
                     .reduce(
                       (acc, order) => acc + order.item.price * order.quantity,
-                      0
+                      0,
                     )
                     .toFixed(2)}
                   €

@@ -7,7 +7,7 @@ import { OrderItem, orderItem } from "../schema";
 async function createOrderItem(
   orderId: OrderItem["orderId"],
   itemId: OrderItem["itemId"],
-  quantity: OrderItem["quantity"]
+  quantity: OrderItem["quantity"],
 ) {
   await db.insert(orderItem).values({
     orderId,
@@ -21,20 +21,20 @@ async function createOrderItems(
   items: {
     itemId: OrderItem["itemId"];
     quantity: OrderItem["quantity"];
-  }[]
+  }[],
 ) {
   await db.insert(orderItem).values(
     items.map((item) => ({
       orderId,
       itemId: item.itemId,
       quantity: item.quantity,
-    }))
+    })),
   );
 }
 
 async function deleteOrderItem(
   orderId: OrderItem["orderId"],
-  itemId: OrderItem["itemId"]
+  itemId: OrderItem["itemId"],
 ) {
   await db
     .delete(orderItem)
@@ -54,7 +54,7 @@ async function getOrderItems(orderId: OrderItem["orderId"]) {
 
 async function getOrderItem(
   orderId: OrderItem["orderId"],
-  itemId: OrderItem["itemId"]
+  itemId: OrderItem["itemId"],
 ): Promise<OrderItem | null> {
   const found = await db
     .select()
@@ -69,7 +69,7 @@ async function getOrderItem(
 async function updateOrderItem(
   orderId: OrderItem["orderId"],
   itemId: OrderItem["itemId"],
-  quantity: OrderItem["quantity"]
+  quantity: OrderItem["quantity"],
 ) {
   await db
     .update(orderItem)

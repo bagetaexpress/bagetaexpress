@@ -15,5 +15,5 @@ export const orderItem = sqliteTable(
   },
   (table) => ({
     pk: primaryKey({ columns: [table.orderId, table.itemId] }),
-  })
+  }),
 );

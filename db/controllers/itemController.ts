@@ -56,7 +56,7 @@ async function getIngredientsByItem(itemId: Item["id"]) {
 }
 
 async function getItemsBySchool(
-  schoolId: School["id"]
+  schoolId: School["id"],
 ): Promise<ExtendedItem[]> {
   // @ts-expect-error hydrating needed fields below
   const items: ExtendedItem[] = await db
@@ -131,7 +131,7 @@ async function getItemsStats(storeId: Item["storeId"]): Promise<ItemStats[]> {
 }
 
 async function addItem(
-  data: InferInsertModel<typeof item>
+  data: InferInsertModel<typeof item>,
 ): Promise<Item["id"]> {
   const res = await db.insert(item).values(data).returning();
   return res[0].id;
@@ -148,14 +148,14 @@ async function removeItem(itemId: Item["id"]) {
 async function updateItem(
   data: {
     id: number;
-  } & Partial<Item>
+  } & Partial<Item>,
 ) {
   await db.update(item).set(data).where(eq(item.id, data.id));
 }
 
 async function getOrderItemsByStore(
   storeId: Store["id"],
-  orderStatus: Order["status"] = "ordered"
+  orderStatus: Order["status"] = "ordered",
 ) {
   const items = await db
     .select({
@@ -174,7 +174,7 @@ async function getOrderItemsByStore(
 async function getOrderItemsByStoreAndSchool(
   storeId: Store["id"],
   schoolId: School["id"],
-  orderStatus: Order["status"] = "ordered"
+  orderStatus: Order["status"] = "ordered",
 ): Promise<Array<ExtendedItem & { quantity: number }>> {
   // @ts-expect-error hydrating needed fields below
   const items: Array<ExtendedItem & { quantity: number }> = await db
@@ -190,8 +190,8 @@ async function getOrderItemsByStoreAndSchool(
       and(
         eq(item.storeId, storeId),
         eq(order.status, orderStatus),
-        eq(customer.schoolId, schoolId)
-      )
+        eq(customer.schoolId, schoolId),
+      ),
     )
     .groupBy(item.id);
 

@@ -30,7 +30,7 @@ async function handleAddEmployee(formData: any) {
   const foundEmployee = await getEmployeeById(foundUser.id);
   if (foundEmployee) {
     redirect(
-      "/auth/e/access?EmpError=" + AddEmployeeErrors.UserAlreadyEmployee
+      "/auth/e/access?EmpError=" + AddEmployeeErrors.UserAlreadyEmployee,
     );
   }
 

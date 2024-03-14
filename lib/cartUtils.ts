@@ -59,7 +59,7 @@ async function getCartItems(cartId?: string) {
 async function saveUpdateCartItem(
   cartId: string,
   itemId: number,
-  quantity: number
+  quantity: number,
 ) {
   const found = await getCartItem(cartId, itemId);
   if (found === null) {

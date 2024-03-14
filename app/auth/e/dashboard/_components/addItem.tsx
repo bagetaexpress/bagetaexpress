@@ -110,12 +110,12 @@ export default function AddItemForm({
   const [error, setError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(item?.imageUrl ?? "");
   const [ingredients, setIngredients] = useState<idName[]>(
-    item?.ingredients ?? []
+    item?.ingredients ?? [],
   );
 
   const filteredIngredients = useMemo(() => {
     const res = ingredientList.filter(
-      (a) => !ingredients.find((b) => a.id === b.id)
+      (a) => !ingredients.find((b) => a.id === b.id),
     );
     return res;
   }, [ingredients, ingredientList]);
@@ -132,7 +132,7 @@ export default function AddItemForm({
         price: item?.price ? item.price.toString() : "",
         allergens: item?.allergens.map((a) => a.id).join(",") ?? "",
       }),
-      [item]
+      [item],
     ),
   });
 
@@ -416,7 +416,7 @@ export default function AddItemForm({
                       type="button"
                       onClick={() =>
                         setIngredients((prev) =>
-                          prev.filter((a) => a.id !== ingredient.id)
+                          prev.filter((a) => a.id !== ingredient.id),
                         )
                       }
                     >

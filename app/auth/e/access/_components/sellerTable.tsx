@@ -44,7 +44,7 @@ export default async function SellerTable({
   const schools = await getSchoolsByStoreId(currUser.storeId ?? 0);
 
   const filteredSellers = sellers?.filter(
-    ({ user }) => user.id !== currUser.id && !user.isAdmin
+    ({ user }) => user.id !== currUser.id && !user.isAdmin,
   );
 
   return (

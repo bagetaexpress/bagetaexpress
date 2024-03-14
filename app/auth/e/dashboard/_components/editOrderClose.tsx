@@ -93,7 +93,7 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
               setIsProcessing(true);
               await updateOrderClose(
                 schoolId,
-                format(date, "yyyy-MM-dd HH:mm:ss")
+                format(date, "yyyy-MM-dd HH:mm:ss"),
               );
               setIsProcessing(false);
               setIsOpen(false);

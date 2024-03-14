@@ -71,7 +71,7 @@ export default function CartItemRow({
             disabled={quantity >= 5}
             className={cn(
               "rounded-md p-1 aspect-square",
-              quantity >= 5 ? "bg-gray-500" : "bg-green-500"
+              quantity >= 5 ? "bg-gray-500" : "bg-green-500",
             )}
           >
             <Plus className="w-5 h-5 text-white" />

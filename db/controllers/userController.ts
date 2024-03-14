@@ -52,7 +52,7 @@ async function getFullUserById(userId: User["id"]): Promise<BeUser | null> {
 }
 
 async function createEmployee(
-  data: InferInsertModel<typeof employee>
+  data: InferInsertModel<typeof employee>,
 ): Promise<string> {
   await db.insert(employee).values({
     userId: data.userId,
@@ -62,7 +62,7 @@ async function createEmployee(
 }
 
 async function createCustomer(
-  data: InferInsertModel<typeof customer>
+  data: InferInsertModel<typeof customer>,
 ): Promise<string> {
   await db.insert(customer).values({
     userId: data.userId,
@@ -110,7 +110,7 @@ async function getSellersByStoreId(storeId: Seller["storeId"]): Promise<
 }
 
 async function createSeller(
-  data: InferInsertModel<typeof seller>
+  data: InferInsertModel<typeof seller>,
 ): Promise<Seller> {
   const res = await db
     .insert(seller)
@@ -140,7 +140,7 @@ async function getUserById(userId: User["id"]): Promise<User | null> {
 }
 
 async function getEmployeeById(
-  userId: Employee["userId"]
+  userId: Employee["userId"],
 ): Promise<Employee | null> {
   const found = await db
     .select()

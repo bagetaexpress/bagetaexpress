@@ -34,7 +34,7 @@ export default async function EmployeeTable({
 
   const employees = await getEmployeesByStoreId(currUser.storeId ?? 0);
   const filteredEmployees = employees?.filter(
-    ({ user }) => user.id !== currUser.id && !user.isAdmin
+    ({ user }) => user.id !== currUser.id && !user.isAdmin,
   );
 
   return (

@@ -5,7 +5,7 @@ import { db } from "..";
 import { Customer, customer } from "../schema";
 
 async function getCustomer(
-  userId: Customer["userId"]
+  userId: Customer["userId"],
 ): Promise<Customer | null> {
   const customers = await db
     .select()

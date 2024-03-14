@@ -42,7 +42,7 @@ async function getAllergenById(allergenId: Allergen["id"]) {
 async function createAllergen(
   number: Allergen["number"],
   name: Allergen["name"],
-  storeId: Store["id"]
+  storeId: Store["id"],
 ): Promise<void> {
   await db.insert(allergen).values([{ number, name, storeId }]);
 }
@@ -50,7 +50,7 @@ async function createAllergen(
 async function updateAllergen(
   allergenId: Allergen["id"],
   number: number,
-  name: string
+  name: string,
 ): Promise<void> {
   await db
     .update(allergen)
@@ -64,7 +64,7 @@ async function deleteAllergen(allergenId: Allergen["id"]): Promise<void> {
 
 async function getItemAllergen(
   itemId: Item["id"],
-  allergenId: Allergen["id"]
+  allergenId: Allergen["id"],
 ): Promise<ItemAllergen[]> {
   const found = await db
     .select()
@@ -72,8 +72,8 @@ async function getItemAllergen(
     .where(
       and(
         eq(itemAllergen.itemId, itemId),
-        eq(itemAllergen.allergenId, allergenId)
-      )
+        eq(itemAllergen.allergenId, allergenId),
+      ),
     );
 
   return found;
@@ -87,15 +87,15 @@ async function createItemAllergen(itemId: Item["id"], allergenId: number) {
 
 async function deleteItemAllergen(
   itemId: Item["id"],
-  allergenId: Allergen["id"]
+  allergenId: Allergen["id"],
 ) {
   await db
     .delete(itemAllergen)
     .where(
       and(
         eq(itemAllergen.itemId, itemId),
-        eq(itemAllergen.allergenId, allergenId)
-      )
+        eq(itemAllergen.allergenId, allergenId),
+      ),
     );
 }
 

@@ -23,5 +23,5 @@ export const schoolStore = sqliteTable(
   },
   (table) => ({
     pk: primaryKey({ columns: [table.schoolId, table.storeId] }),
-  })
+  }),
 );

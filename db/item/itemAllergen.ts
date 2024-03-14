@@ -14,5 +14,5 @@ export const itemAllergen = sqliteTable(
   },
   (table) => ({
     pk: primaryKey({ columns: [table.allergenId, table.itemId] }),
-  })
+  }),
 );

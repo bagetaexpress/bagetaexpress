@@ -21,7 +21,7 @@ export default async function TakePinPage({
       const order = await getOrderByPin(
         params.pin,
         currUser.schoolId,
-        "ordered"
+        "ordered",
       );
       if (!order) throw new Error("Order not found");
 

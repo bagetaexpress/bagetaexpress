@@ -69,7 +69,7 @@ export default async function BlockPage({
                 if (!user || !user.schoolId) return;
 
                 console.info(
-                  `Blocking unpicked orders for school ${user.schoolId}`
+                  `Blocking unpicked orders for school ${user.schoolId}`,
                 );
 
                 const schoolStores = await getSchoolStores(user.schoolId);
@@ -89,7 +89,7 @@ export default async function BlockPage({
                   await updateSchoolStoreOrderClose(
                     user.schoolId,
                     schoolStore.storeId,
-                    format(new Date(date), "yyyy-MM-dd HH:mm:ss")
+                    format(new Date(date), "yyyy-MM-dd HH:mm:ss"),
                   );
                 }
 

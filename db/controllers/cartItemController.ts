@@ -7,7 +7,7 @@ import { CartItem, cartItem } from "../schema";
 async function createCartItem(
   cartId: CartItem["cartId"],
   itemId: CartItem["itemId"],
-  quantity: CartItem["quantity"]
+  quantity: CartItem["quantity"],
 ) {
   await db.insert(cartItem).values({
     cartId,
@@ -22,7 +22,7 @@ async function getCartItemsByCartId(cartId: CartItem["cartId"]) {
 
 async function getCartItem(
   cartId: CartItem["cartId"],
-  itemId: CartItem["itemId"]
+  itemId: CartItem["itemId"],
 ): Promise<CartItem | null> {
   const found = await db
     .select()
@@ -37,7 +37,7 @@ async function getCartItem(
 async function updateCartItem(
   cartId: CartItem["cartId"],
   itemId: CartItem["itemId"],
-  quantity: CartItem["quantity"]
+  quantity: CartItem["quantity"],
 ) {
   await db
     .update(cartItem)
@@ -49,7 +49,7 @@ async function updateCartItem(
 
 async function deleteCartItem(
   cartId: CartItem["cartId"],
-  itemId: CartItem["itemId"]
+  itemId: CartItem["itemId"],
 ) {
   await db
     .delete(cartItem)

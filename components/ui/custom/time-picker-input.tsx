@@ -34,7 +34,7 @@ const TimePickerInput = React.forwardRef<
       onRightFocus,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [flag, setFlag] = React.useState<boolean>(false);
 
@@ -54,7 +54,7 @@ const TimePickerInput = React.forwardRef<
 
     const calculatedValue = React.useMemo(
       () => getDateByType(date, picker),
-      [date, picker]
+      [date, picker],
     );
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -87,7 +87,7 @@ const TimePickerInput = React.forwardRef<
         name={name || picker}
         className={cn(
           "w-[48px] text-center font-mono text-base tabular-nums caret-transparent focus:bg-accent focus:text-accent-foreground [&::-webkit-inner-spin-button]:appearance-none",
-          className
+          className,
         )}
         value={value || calculatedValue}
         onChange={(e) => {
@@ -103,7 +103,7 @@ const TimePickerInput = React.forwardRef<
         {...props}
       />
     );
-  }
+  },
 );
 
 TimePickerInput.displayName = "TimePickerInput";
@@ -135,7 +135,7 @@ type GetValidNumberConfig = { max: number; min?: number; loop?: boolean };
 
 export function getValidNumber(
   value: string,
-  { max, min = 0, loop = false }: GetValidNumberConfig
+  { max, min = 0, loop = false }: GetValidNumberConfig,
 ) {
   let textValue = parseInt(value, 10);
 
@@ -176,7 +176,7 @@ type GetValidArrowNumberConfig = {
 
 export function getValidArrowNumber(
   value: string,
-  { min, max, step }: GetValidArrowNumberConfig
+  { min, max, step }: GetValidArrowNumberConfig,
 ) {
   let textValue = parseInt(value, 10);
   if (!isNaN(textValue)) {
@@ -243,7 +243,7 @@ export function getDateByType(date: Date, type: TimePickerType) {
 export function getArrowByType(
   value: string,
   step: number,
-  type: TimePickerType
+  type: TimePickerType,
 ) {
   switch (type) {
     case "minutes":

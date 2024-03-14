@@ -36,7 +36,7 @@ export const account = sqliteTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  })
+  }),
 );
 
 export const session = sqliteTable("session", {
@@ -56,5 +56,5 @@ export const verificationToken = sqliteTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );

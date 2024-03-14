@@ -7,7 +7,7 @@ import { SchoolStore } from "@/db/schema";
 
 async function updateOrderClose(
   schoolId: SchoolStore["schoolId"],
-  date: SchoolStore["orderClose"]
+  date: SchoolStore["orderClose"],
 ) {
   const user = await getUser();
   if (!user || !user.storeId) {

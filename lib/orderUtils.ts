@@ -17,7 +17,7 @@ function generatePin(length: number): string {
 
 async function createUniqueOrder(
   schoolId: number,
-  userId: string
+  userId: string,
 ): Promise<number> {
   let pin: string;
   let foundOrdered, foundUnpicked;
@@ -66,7 +66,7 @@ async function createOrderFromCart(userId: string): Promise<number> {
       cartItems.map((cartItem) => ({
         itemId: cartItem.item.id,
         quantity: cartItem.quantity,
-      }))
+      })),
     );
   } catch (e) {
     console.error(e);

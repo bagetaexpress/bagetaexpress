@@ -23,7 +23,7 @@ export default async function Store() {
         revalidate: 60 * 60 * 24 * 7,
         tags: ["items"],
       },
-    }
+    },
   )
     .then((res) => res.json())
     .catch((err) => {

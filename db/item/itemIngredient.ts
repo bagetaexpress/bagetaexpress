@@ -14,5 +14,5 @@ export const itemIngredient = sqliteTable(
   },
   (table) => ({
     pk: primaryKey({ columns: [table.ingredientId, table.itemId] }),
-  })
+  }),
 );

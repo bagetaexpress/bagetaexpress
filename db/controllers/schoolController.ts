@@ -12,7 +12,7 @@ import {
 } from "../schema";
 
 async function getSchoolsByStoreId(
-  storeId: SchoolStore["storeId"]
+  storeId: SchoolStore["storeId"],
 ): Promise<School[]> {
   const schools = await db
     .select({ school })
@@ -42,7 +42,7 @@ export type SchoolStats = {
 };
 
 async function getSchoolsOrderStats(
-  storeId: SchoolStore["storeId"]
+  storeId: SchoolStore["storeId"],
 ): Promise<SchoolStats[]> {
   const schools = await db
     .select({
@@ -65,13 +65,13 @@ async function getSchoolsOrderStats(
 async function updateSchoolStoreOrderClose(
   schoolId: SchoolStore["schoolId"],
   storeId: SchoolStore["storeId"],
-  orderClose: SchoolStore["orderClose"]
+  orderClose: SchoolStore["orderClose"],
 ) {
   await db
     .update(schoolStore)
     .set({ orderClose })
     .where(
-      and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId))
+      and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId)),
     );
 }
 
@@ -86,7 +86,7 @@ async function getFirstOrderClose(schoolId: SchoolStore["schoolId"]) {
 }
 
 async function getSchoolStores(
-  schoolId: SchoolStore["schoolId"]
+  schoolId: SchoolStore["schoolId"],
 ): Promise<SchoolStore[]> {
   const res = await db
     .select({ schoolStore })
@@ -96,7 +96,7 @@ async function getSchoolStores(
 }
 
 async function getSchoolByDomain(
-  domain: School["emailDomain"]
+  domain: School["emailDomain"],
 ): Promise<School | undefined> {
   const res = await db
     .select({ school })
@@ -115,13 +115,13 @@ async function getSchoolDomains(): Promise<School["emailDomain"][]> {
 
 async function getOrderClose(
   schoolId: School["id"],
-  storeId: SchoolStore["storeId"]
+  storeId: SchoolStore["storeId"],
 ): Promise<SchoolStore["orderClose"] | null> {
   const res = await db
     .select({ orderClose: schoolStore.orderClose })
     .from(schoolStore)
     .where(
-      and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId))
+      and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId)),
     );
   return res[0]?.orderClose ?? null;
 }

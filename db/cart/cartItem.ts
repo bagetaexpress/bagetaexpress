@@ -20,5 +20,5 @@ export const cartItem = sqliteTable(
   },
   (table) => ({
     pk: primaryKey({ columns: [table.cartId, table.itemId] }),
-  })
+  }),
 );
