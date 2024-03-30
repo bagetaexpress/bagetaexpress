@@ -5,6 +5,7 @@ import { getCartId, getCartItems } from "@/lib/cartUtils";
 import { getUser } from "@/lib/userUtils";
 import { redirect } from "next/navigation";
 import LocalCart from "./_components/localCart";
+import { getTotalOrderedItems } from "@/db/controllers/orderController";
 
 export default async function CartPage() {
   const cartId = await getCartId();
@@ -28,10 +29,11 @@ export default async function CartPage() {
   const user = await getUser();
   if (!user || !user.schoolId) return;
   const orderClose = new Date(await getFirstOrderClose(user.schoolId));
+  const totalOrders = await getTotalOrderedItems();
 
   return (
     <div className="h-full flex flex-col justify-between md:justify-start">
-      <LocalCart data={data} cartId={cartId} />
+      <LocalCart data={data} cartId={cartId} totalOrdered={totalOrders} />
       <div className="flex justify-end">
         {orderClose > new Date() ? (
           <Cheackout orderClose={orderClose} items={data} cartId={cartId} />

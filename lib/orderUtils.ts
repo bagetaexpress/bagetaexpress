@@ -5,6 +5,7 @@ import * as orderItemCtrl from "@/db/controllers/orderItemController";
 import * as orderCtrl from "@/db/controllers/orderController";
 import * as customerCtrl from "@/db/controllers/customerController";
 import { deleteCartAndItems, getCartItems } from "./cartUtils";
+import { getUser } from "./userUtils";
 
 function generatePin(length: number): string {
   const chars = "0123456789";
@@ -17,7 +18,7 @@ function generatePin(length: number): string {
 
 async function createUniqueOrder(
   schoolId: number,
-  userId: string,
+  userId: string
 ): Promise<number> {
   let pin: string;
   let foundOrdered, foundUnpicked;
@@ -66,7 +67,7 @@ async function createOrderFromCart(userId: string): Promise<number> {
       cartItems.map((cartItem) => ({
         itemId: cartItem.item.id,
         quantity: cartItem.quantity,
-      })),
+      }))
     );
   } catch (e) {
     console.error(e);
