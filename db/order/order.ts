@@ -1,4 +1,4 @@
-import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
+import { sqliteTable, integer, text, real } from "drizzle-orm/sqlite-core";
 import { user } from "../user/user";
 import { sql } from "drizzle-orm";
 
@@ -8,6 +8,7 @@ export const order = sqliteTable("order", {
     .notNull()
     .references(() => user.id),
   pin: text("pin", { length: 4 }).notNull(),
+  discount: real("discount").notNull().default(0),
   status: text("status", {
     enum: ["ordered", "pickedup", "unpicked", "cancelled"],
   }).notNull(),

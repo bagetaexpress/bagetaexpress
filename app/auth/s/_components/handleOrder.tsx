@@ -4,6 +4,7 @@ import { getOrderByPin } from "@/db/controllers/orderController";
 import { Order } from "@/db/schema";
 import { getUser } from "@/lib/userUtils";
 import ClientButton from "./ClientButton";
+import { Separator } from "@/components/ui/separator";
 
 interface IProps {
   pin: string;
@@ -38,9 +39,10 @@ export default async function HandleOrder({
   }
 
   const items = await getItemsFromOrder(order.id);
-  const total = items
-    .reduce((acc, { item, quantity }) => acc + item.price * quantity, 0)
-    .toFixed(2);
+  const total = items.reduce(
+    (acc, { item, quantity }) => acc + item.price * quantity,
+    0
+  );
 
   return (
     <div className=" min-h-full flex flex-col justify-between sm:justify-start">
@@ -63,10 +65,28 @@ export default async function HandleOrder({
             </div>
           ))}
         </div>
-        <div className="flex justify-between py-4">
+        <div className="flex justify-between py-3">
           <p className="font-semibold text-lg">Spolu</p>
-          <p className="font-semibold text-xl">{total}€</p>
+          <p className="font-semibold text-xl">{total.toFixed(2)}€</p>
         </div>
+        {order.discount > 0 && (
+          <>
+            <Separator />
+            <div className="flex justify-between py-3">
+              <p className="font-semibold text-lg">Zľava</p>
+              <p className="font-semibold text-xl">
+                {order.discount.toFixed(2)}€
+              </p>
+            </div>
+            <Separator />
+            <div className="flex justify-between py-3">
+              <p className="font-semibold text-lg">Celkom</p>
+              <p className="font-semibold text-xl">
+                {(total - order.discount).toFixed(2)}€
+              </p>
+            </div>
+          </>
+        )}
       </div>
       <div className=" flex gap-2 justify-end flex-col sm:flex-row">
         <ClientButton action={confirmAction} text={confirmText} />

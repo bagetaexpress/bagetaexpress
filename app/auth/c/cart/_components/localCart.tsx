@@ -2,7 +2,7 @@
 
 import { Item } from "@/db/schema";
 import CartItemRow from "./cartItemRow";
-import { use, useMemo, useState } from "react";
+import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import useFreeItems from "@/lib/hooks/useFreeItems";
 
@@ -70,18 +70,24 @@ export default function LocalCart({
         <p className="font-semibold text-lg">Spolu</p>
         <p className="font-semibold text-xl">{totalPrice.toFixed(2)}€</p>
       </div>
-      <Separator />
-      <div className="flex justify-between py-3">
-        <p className="font-semibold text-lg">Zľava</p>
-        <p className="font-semibold text-xl">{freeItemsPrice.toFixed(2)}€</p>
-      </div>
-      <Separator />
-      <div className="flex justify-between py-3">
-        <p className="font-semibold text-lg">Celkom</p>
-        <p className="font-semibold text-xl">
-          {(totalPrice - freeItemsPrice).toFixed(2)}€
-        </p>
-      </div>
+      {freeItemsNum > 0 && (
+        <>
+          <Separator />
+          <div className="flex justify-between py-3">
+            <p className="font-semibold text-lg">Zľava</p>
+            <p className="font-semibold text-xl">
+              {freeItemsPrice.toFixed(2)}€
+            </p>
+          </div>
+          <Separator />
+          <div className="flex justify-between py-3">
+            <p className="font-semibold text-lg">Celkom</p>
+            <p className="font-semibold text-xl">
+              {(totalPrice - freeItemsPrice).toFixed(2)}€
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 }

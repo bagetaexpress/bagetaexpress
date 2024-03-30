@@ -19,11 +19,13 @@ import { getUser } from "@/lib/userUtils";
 async function createOrder(
   userId: Order["userId"],
   pin: Order["pin"],
-  status: Order["status"] = "ordered"
+  status: Order["status"] = "ordered",
+  discount: Order["discount"] = 0
 ) {
   const newOrder = await db.insert(order).values({
     userId,
     pin,
+    discount,
     status,
   });
 

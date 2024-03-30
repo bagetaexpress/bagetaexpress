@@ -1,4 +1,3 @@
-import CartItemRow from "@/app/auth/c/cart/_components/cartItemRow";
 import Cheackout from "@/app/auth/c/cart/_components/checkout";
 import { getFirstOrderClose } from "@/db/controllers/schoolController";
 import { getCartId, getCartItems } from "@/lib/cartUtils";

@@ -55,7 +55,7 @@ export default function Cheackout({
     setOrderCreateError(false);
 
     try {
-      await createOrderFromCart(cartId);
+      await createOrderFromCart(cartId, freeItemsPrice);
     } catch (error) {
       console.log(error);
       setOrderCreateError(true);
@@ -105,20 +105,24 @@ export default function Cheackout({
               <p className="font-semibold text-lg">Spolu</p>
               <p className="font-semibold text-xl">{totalPrice.toFixed(2)}€</p>
             </div>
-            <Separator />
-            <div className="flex justify-between py-3">
-              <p className="font-semibold text-lg">Zľava</p>
-              <p className="font-semibold text-xl">
-                {freeItemsPrice.toFixed(2)}€
-              </p>
-            </div>
-            <Separator />
-            <div className="flex justify-between py-3">
-              <p className="font-semibold text-lg">Celkom</p>
-              <p className="font-semibold text-xl">
-                {(totalPrice - freeItemsPrice).toFixed(2)}€
-              </p>
-            </div>
+            {freeItemsPrice > 0 && (
+              <>
+                <Separator />
+                <div className="flex justify-between py-3">
+                  <p className="font-semibold text-lg">Zľava</p>
+                  <p className="font-semibold text-xl">
+                    {freeItemsPrice.toFixed(2)}€
+                  </p>
+                </div>
+                <Separator />
+                <div className="flex justify-between py-3">
+                  <p className="font-semibold text-lg">Celkom</p>
+                  <p className="font-semibold text-xl">
+                    {(totalPrice - freeItemsPrice).toFixed(2)}€
+                  </p>
+                </div>
+              </>
+            )}
             {orderCreateError && (
               <p className="text-red-500 text-center">
                 Nastala chyba pri vytváraní objednávky

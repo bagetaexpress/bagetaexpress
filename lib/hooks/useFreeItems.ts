@@ -41,8 +41,9 @@ export default function useFreeItems({
   const freeItemsPrice = useMemo(() => {
     const sortedData = data.toSorted((a, b) => b.item.price - a.item.price);
     let priceSum = 0;
-    let index = 1;
+    let index = 0;
     let quantity = sortedData[index].quantity;
+
     for (let i = 0; i < freeItemsNum; i++) {
       if (quantity <= 0) {
         index++;

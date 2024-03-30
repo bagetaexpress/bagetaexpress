@@ -5,7 +5,6 @@ import * as orderItemCtrl from "@/db/controllers/orderItemController";
 import * as orderCtrl from "@/db/controllers/orderController";
 import * as customerCtrl from "@/db/controllers/customerController";
 import { deleteCartAndItems, getCartItems } from "./cartUtils";
-import { getUser } from "./userUtils";
 
 function generatePin(length: number): string {
   const chars = "0123456789";
@@ -18,7 +17,8 @@ function generatePin(length: number): string {
 
 async function createUniqueOrder(
   schoolId: number,
-  userId: string
+  userId: string,
+  discount: number
 ): Promise<number> {
   let pin: string;
   let foundOrdered, foundUnpicked;
@@ -29,7 +29,7 @@ async function createUniqueOrder(
     foundUnpicked = await orderCtrl.getOrderByPin(pin, schoolId, "unpicked");
   } while (foundOrdered != null && foundUnpicked != null);
 
-  await orderCtrl.createOrder(userId, pin);
+  await orderCtrl.createOrder(userId, pin, "ordered", discount);
   const order = await orderCtrl.getOrdersByUserId(userId, "ordered");
   if (order.length === 0) {
     throw new Error("Order not found");
@@ -38,7 +38,10 @@ async function createUniqueOrder(
   return order[0].id;
 }
 
-async function createOrderFromCart(userId: string): Promise<number> {
+async function createOrderFromCart(
+  userId: string,
+  discount: number
+): Promise<number> {
   const customer = await customerCtrl.getCustomer(userId);
   if (!customer) {
     throw new Error("Customer not found");
@@ -59,7 +62,7 @@ async function createOrderFromCart(userId: string): Promise<number> {
     throw new Error("Cart is empty");
   }
 
-  const orderId = await createUniqueOrder(customer.schoolId, userId);
+  const orderId = await createUniqueOrder(customer.schoolId, userId, discount);
 
   try {
     await orderItemCtrl.createOrderItems(
