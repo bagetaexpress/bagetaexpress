@@ -16,6 +16,8 @@ import { useState } from "react";
 import { Loader } from "lucide-react";
 import { Item } from "@/db/schema";
 import { getCartItems } from "@/lib/cartUtils";
+import useFreeItems from "@/lib/hooks/useFreeItems";
+import { Separator } from "@/components/ui/separator";
 
 interface ICheckout {
   items: {
@@ -24,18 +26,25 @@ interface ICheckout {
   }[];
   cartId: string;
   orderClose: Date;
+  totalOrdered: number;
 }
 
 export default function Cheackout({
   items: defaultItems,
   cartId,
   orderClose,
+  totalOrdered,
 }: ICheckout) {
   const [items, setItems] = useState(defaultItems);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
   const [orderCreateError, setOrderCreateError] = useState(false);
   const router = useRouter();
+
+  const { totalPrice, freeItemsPrice } = useFreeItems({
+    data: items,
+    totalOrdered,
+  });
 
   async function handleCheckout() {
     if (orderClose < new Date()) {
@@ -92,16 +101,22 @@ export default function Cheackout({
                 </div>
               ))}
             </div>
-            <div className="flex justify-between py-4">
+            <div className="flex justify-between py-3">
               <p className="font-semibold text-lg">Spolu</p>
+              <p className="font-semibold text-xl">{totalPrice.toFixed(2)}€</p>
+            </div>
+            <Separator />
+            <div className="flex justify-between py-3">
+              <p className="font-semibold text-lg">Zľava</p>
               <p className="font-semibold text-xl">
-                {items
-                  .reduce(
-                    (acc, item) => acc + item.item.price * item.quantity,
-                    0,
-                  )
-                  .toFixed(2)}
-                €
+                {freeItemsPrice.toFixed(2)}€
+              </p>
+            </div>
+            <Separator />
+            <div className="flex justify-between py-3">
+              <p className="font-semibold text-lg">Celkom</p>
+              <p className="font-semibold text-xl">
+                {(totalPrice - freeItemsPrice).toFixed(2)}€
               </p>
             </div>
             {orderCreateError && (

@@ -36,7 +36,12 @@ export default async function CartPage() {
       <LocalCart data={data} cartId={cartId} totalOrdered={totalOrders} />
       <div className="flex justify-end">
         {orderClose > new Date() ? (
-          <Cheackout orderClose={orderClose} items={data} cartId={cartId} />
+          <Cheackout
+            orderClose={orderClose}
+            items={data}
+            cartId={cartId}
+            totalOrdered={totalOrders}
+          />
         ) : (
           <p className="text-xl font-semibold text-red-500">
             Objednávky sú uzavreté
