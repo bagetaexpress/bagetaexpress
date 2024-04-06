@@ -17,15 +17,14 @@ import {
   updateSchoolStoreOrderClose,
 } from "@/db/controllers/schoolController";
 import { getUser } from "@/lib/userUtils";
+import { getDate } from "@/lib/utils";
 import { format } from "date-fns";
 import { Check } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default async function BlockPage({
-  params,
   searchParams,
 }: {
-  params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   return (
@@ -74,9 +73,9 @@ export default async function BlockPage({
 
                 const schoolStores = await getSchoolStores(user.schoolId);
                 for (const schoolStore of schoolStores) {
-                  if (new Date(schoolStore.orderClose) > new Date()) continue;
+                  if (getDate(schoolStore.orderClose) > new Date()) continue;
 
-                  const date = new Date(schoolStore.orderClose);
+                  const date = getDate(schoolStore.orderClose);
                   const dayOfWeek = date.getDay();
                   let daysToAdd: number = 1;
 

@@ -5,6 +5,7 @@ import { ExtendedItem } from "@/db/controllers/itemController";
 import { hasActiveOrder } from "@/db/controllers/orderController";
 import { getFirstOrderClose } from "@/db/controllers/schoolController";
 import { getUser } from "@/lib/userUtils";
+import { getDate } from "@/lib/utils";
 import { Info, ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -15,7 +16,7 @@ export default async function Store() {
   }
 
   const hasOrder = await hasActiveOrder(user.id);
-  const orderClose = new Date(await getFirstOrderClose(user.schoolId));
+  const orderClose = getDate(await getFirstOrderClose(user.schoolId));
 
   const items = (await fetch(
     `${process.env.NEXTAUTH_URL}/api/client/items?schoolID=${user.schoolId}`,

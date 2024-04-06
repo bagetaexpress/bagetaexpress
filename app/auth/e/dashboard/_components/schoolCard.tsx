@@ -8,8 +8,6 @@ import {
 } from "@/components/ui/card";
 import {
   SchoolStats,
-  getOrderClose,
-  getSchool,
 } from "@/db/controllers/schoolController";
 import EditOrderClose from "./editOrderClose";
 import PrintOrderLabels from "./printOrderLabels";
@@ -17,6 +15,7 @@ import { getOrderItemsByStoreAndSchool } from "@/db/controllers/itemController";
 import { getUser } from "@/lib/userUtils";
 import { getStore } from "@/db/controllers/storeController";
 import PrintOrderList from "./printOrderList";
+import { getDate } from "@/lib/utils";
 
 export default async function SchoolCard({
   school,
@@ -28,7 +27,7 @@ export default async function SchoolCard({
     return null;
   }
 
-  const orderCloseDate = new Date(orderClose ?? new Date());
+  const orderCloseDate = getDate(orderClose ?? new Date());
   const orders = await getOrderItemsByStoreAndSchool(user.storeId, school.id);
   const store = await getStore(user.storeId ?? 0);
 

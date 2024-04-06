@@ -5,6 +5,7 @@ import { getUser } from "@/lib/userUtils";
 import { redirect } from "next/navigation";
 import LocalCart from "./_components/localCart";
 import { getTotalOrderedItems } from "@/db/controllers/orderController";
+import { getDate } from "@/lib/utils";
 
 export default async function CartPage() {
   const cartId = await getCartId();
@@ -27,7 +28,7 @@ export default async function CartPage() {
 
   const user = await getUser();
   if (!user || !user.schoolId) return;
-  const orderClose = new Date(await getFirstOrderClose(user.schoolId));
+  const orderClose = getDate(await getFirstOrderClose(user.schoolId));
   const totalOrders = await getTotalOrderedItems();
 
   return (

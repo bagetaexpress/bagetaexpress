@@ -15,6 +15,7 @@ import {
 } from "../schema";
 import { eq, and, sql, or } from "drizzle-orm";
 import { getUser } from "@/lib/userUtils";
+import { getDate } from "@/lib/utils";
 
 async function createOrder(
   userId: Order["userId"],
@@ -133,7 +134,7 @@ async function getFirstOrderItemClose(orderId: Order["id"]): Promise<Date> {
     return new Date();
   }
 
-  return new Date(items[0].orderClose);
+  return getDate(items[0].orderClose);
 }
 
 async function getOrdersBySchoolId(
