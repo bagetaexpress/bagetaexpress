@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
+import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -9,9 +10,14 @@ export function cn(...inputs: ClassValue[]) {
 export function getDate(date_str: string): Date {
   const date = new Date(date_str);
   const offset = date.getTimezoneOffset() * 60 * 1000;
-  const time = date.getTime() - offset;
+  const time = date.getTime() + offset;
 
+  return new Date(date_str);
   return new Date(time);
+}
+
+export function getFormatedDate(date: Date): string {
+  return format(date, "yyyy-MM-dd HH:mm:ss");
 }
 
 export function isLessThenNow(date_str: string) {

@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { updateOrderClose } from "@/lib/storeUtils";
+import { getFormatedDate } from "@/lib/utils";
 import { format } from "date-fns";
 import { Loader } from "lucide-react";
 import React, { useEffect } from "react";
@@ -93,7 +94,7 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
               setIsProcessing(true);
               await updateOrderClose(
                 schoolId,
-                format(date, "yyyy-MM-dd HH:mm:ss"),
+                getFormatedDate(date),
               );
               setIsProcessing(false);
               setIsOpen(false);
