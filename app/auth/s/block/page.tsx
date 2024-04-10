@@ -17,7 +17,7 @@ import {
   updateSchoolStoreOrderClose,
 } from "@/db/controllers/schoolController";
 import { getUser } from "@/lib/userUtils";
-import { getDate } from "@/lib/utils";
+import { getDate, getFormatedDate, isLessThenNow } from "@/lib/utils";
 import { format } from "date-fns";
 import { Check } from "lucide-react";
 import { redirect } from "next/navigation";
@@ -25,6 +25,7 @@ import { redirect } from "next/navigation";
 export default async function BlockPage({
   searchParams,
 }: {
+  params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   return (
@@ -73,22 +74,26 @@ export default async function BlockPage({
 
                 const schoolStores = await getSchoolStores(user.schoolId);
                 for (const schoolStore of schoolStores) {
-                  if (getDate(schoolStore.orderClose) > new Date()) continue;
+                  if (!isLessThenNow(schoolStore.orderClose)) continue;
 
                   const date = getDate(schoolStore.orderClose);
-                  const dayOfWeek = date.getDay();
+                  const dayOfWeek = new Date().getDay();
                   let daysToAdd: number = 1;
 
-                  if (dayOfWeek === 5) {
-                    daysToAdd = 3;
+                  if (dayOfWeek >= 5) {
+                    daysToAdd = 7 - dayOfWeek + 1;
                   }
 
+                  console.info("Current order close date", date);
+
                   date.setDate(date.getDate() + daysToAdd);
+
+                  console.info("Updated order close date", getFormatedDate(date));
 
                   await updateSchoolStoreOrderClose(
                     user.schoolId,
                     schoolStore.storeId,
-                    format(new Date(date), "yyyy-MM-dd HH:mm:ss"),
+                    getFormatedDate(date),
                   );
                 }
 
