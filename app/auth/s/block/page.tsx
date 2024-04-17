@@ -88,15 +88,12 @@ export default async function BlockPage({
 
                   date.setDate(date.getDate() + daysToAdd);
 
-                  const offset = date.getTimezoneOffset() * 60 * 1000;
-                  const time = date.getTime() + offset;
-
-                  console.info("Updated order close date", getFormatedDate(new Date(time)));
+                  console.info("Updated order close date", getFormatedDate(date));
 
                   await updateSchoolStoreOrderClose(
                     user.schoolId,
                     schoolStore.storeId,
-                    getFormatedDate(new Date(time)),
+                    getFormatedDate(date),
                   );
                 }
 

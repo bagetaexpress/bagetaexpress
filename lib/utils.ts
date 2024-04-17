@@ -6,13 +6,19 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/**@description Get the date with the timezone offset */
 export function getDate(date_str: string): Date {
   const date = new Date(date_str);
   const offset = date.getTimezoneOffset() * 60 * 1000;
   const time = date.getTime() + offset;
 
   return new Date(date_str);
+}
+
+export function getDateWithoutOffset(date_str: string): Date {
+  const date = new Date(date_str);
+  const offset = date.getTimezoneOffset() * 60 * 1000;
+  const time = date.getTime() + offset;
+
   return new Date(time);
 }
 
