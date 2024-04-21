@@ -93,9 +93,12 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
               if (!date) return;
               setIsProcessing(true);
 
+              const offset = 2 * 60 * 1000;
+              const newDate = new Date(date + offset);
+
               await updateOrderClose(
                 schoolId,
-                date.toISOString(),
+                newDate.toISOString(),
               );
               setIsProcessing(false);
               setIsOpen(false);
