@@ -5,7 +5,7 @@ import { getUser } from "@/lib/userUtils";
 import { redirect } from "next/navigation";
 import LocalCart from "./_components/localCart";
 import { getTotalOrderedItems } from "@/db/controllers/orderController";
-import { getDate } from "@/lib/utils";
+import { getDate, getNewDate } from "@/lib/utils";
 
 export default async function CartPage() {
   const cartId = await getCartId();
@@ -35,7 +35,7 @@ export default async function CartPage() {
     <div className="h-full flex flex-col justify-between md:justify-start">
       <LocalCart data={data} cartId={cartId} totalOrdered={totalOrders} />
       <div className="flex justify-end">
-        {orderClose > new Date() ? (
+        {orderClose > getNewDate() ? (
           <Cheackout
             orderClose={orderClose}
             items={data}

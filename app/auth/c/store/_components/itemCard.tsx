@@ -37,6 +37,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { getNewDate } from "@/lib/utils";
 
 export default function ItemCard({
   item: { item, allergens = [], ingredients = [] },
@@ -53,7 +54,7 @@ export default function ItemCard({
   const [error, setError] = useState<string | null>(null);
 
   async function onSubmit() {
-    if (orderClose < new Date()) {
+    if (orderClose < getNewDate()) {
       return;
     }
     setIsAdding(true);

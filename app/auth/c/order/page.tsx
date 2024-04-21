@@ -22,6 +22,7 @@ import { Order } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import { revalidatePath } from "next/cache";
 import { Separator } from "@/components/ui/separator";
+import { getNewDate } from "@/lib/utils";
 
 export default async function OrderPage() {
   const currUser = await getUser();
@@ -106,7 +107,7 @@ export default async function OrderPage() {
         </p>
       )}
       <div className="flex justify-end">
-        {foundOrders.length > 0 && orderClose > new Date() && (
+        {foundOrders.length > 0 && orderClose > getNewDate() && (
           <DeleteOrder orderId={order.id} />
         )}
       </div>
@@ -137,7 +138,7 @@ async function DeleteOrder({ orderId }: DeleteOrderProps) {
             action={async () => {
               "use server";
               const orderClose = await getFirstOrderItemClose(orderId);
-              if (orderClose > new Date()) {
+              if (orderClose > getNewDate()) {
                 await deleteOrderAndItems(orderId);
               }
               revalidatePath("/auth/c/order");
