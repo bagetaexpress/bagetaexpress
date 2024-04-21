@@ -16,7 +16,7 @@ import { updateOrderClose } from "@/lib/storeUtils";
 import { getFormatedDate } from "@/lib/utils";
 import { format } from "date-fns";
 import { Loader } from "lucide-react";
-import React, { useEffect } from "react";
+import React from "react";
 
 interface IProps {
   orderClose: Date;
@@ -92,9 +92,14 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
             onClick={async () => {
               if (!date) return;
               setIsProcessing(true);
+
+              const offset = date.getTimezoneOffset() * 60 * 1000;
+              const time = date.getTime() - offset;
+              const newDate = new Date(time);
+
               await updateOrderClose(
                 schoolId,
-                getFormatedDate(date),
+                getFormatedDate(newDate),
               );
               setIsProcessing(false);
               setIsOpen(false);
