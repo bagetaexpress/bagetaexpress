@@ -18,8 +18,9 @@ export function getDate(date_str: string): Date {
 export function getNewDate(): Date {
   // return new Date();
   const date = new Date();
-  const offset = date.getTimezoneOffset() * 60 * 1000;
-  const time = date.getTime() - offset;
+  //const offset = date.getTimezoneOffset() * 60 * 1000;
+  const offset = 120 * 60 * 1000;
+  const time = date.getTime() + offset;
 
   return new Date(time);
 }
