@@ -62,7 +62,7 @@ export default async function Store() {
             key={item.item.id}
             item={item}
             orderClose={orderClose}
-            disabled={hasOrder || orderClose <= new Date()}
+            disabled={hasOrder || orderClose <= getNewDate()}
           />
         ))}
       </div>
