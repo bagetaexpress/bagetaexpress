@@ -1,6 +1,6 @@
 "use server";
 
-import { InferInsertModel, eq, sql, and } from "drizzle-orm";
+import { InferInsertModel, eq, sql, and, desc } from "drizzle-orm";
 import {
   Allergen,
   Cart,
@@ -60,11 +60,14 @@ async function getItemsBySchool(
 ): Promise<ExtendedItem[]> {
   // @ts-expect-error hydrating needed fields below
   const items: ExtendedItem[] = await db
-    .select({ item })
+    .select({ item, sold: sql<number>`SUM(${orderItem.quantity}) as sold` })
     .from(item)
     .innerJoin(store, eq(item.storeId, store.id))
     .innerJoin(schoolStore, eq(store.id, schoolStore.storeId))
-    .where(and(eq(schoolStore.schoolId, schoolId), eq(item.deleted, false)));
+    .innerJoin(orderItem, eq(item.id, orderItem.itemId))
+    .where(and(eq(schoolStore.schoolId, schoolId), eq(item.deleted, false)))
+    .groupBy(item.id)
+    .orderBy(desc(sql<number>`sold`));
 
   for (const res of items) {
     res.allergens = await getAllergensByItem(res.item.id);
@@ -102,8 +105,8 @@ async function getItemsFromOrder(orderId: Order["id"]) {
 
 export type ItemStats = {
   item: Item &
-    Pick<ExtendedItem, "allergens"> &
-    Pick<ExtendedItem, "ingredients">;
+  Pick<ExtendedItem, "allergens"> &
+  Pick<ExtendedItem, "ingredients">;
   ordered: number;
   pickedup: number;
   unpicked: number;
