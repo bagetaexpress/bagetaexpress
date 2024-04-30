@@ -64,7 +64,7 @@ async function getItemsBySchool(
     .from(item)
     .innerJoin(store, eq(item.storeId, store.id))
     .innerJoin(schoolStore, eq(store.id, schoolStore.storeId))
-    .innerJoin(orderItem, eq(item.id, orderItem.itemId))
+    .leftJoin(orderItem, eq(item.id, orderItem.itemId))
     .where(and(eq(schoolStore.schoolId, schoolId), eq(item.deleted, false)))
     .groupBy(item.id)
     .orderBy(desc(sql<number>`sold`));
