@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { updateOrderClose } from "@/lib/storeUtils";
-import { getFormatedDate } from "@/lib/utils";
+import { getDate, getFormatedDate } from "@/lib/utils";
 import { format } from "date-fns";
 import { Loader } from "lucide-react";
 import React, { useEffect } from "react";
@@ -24,7 +24,7 @@ interface IProps {
 }
 
 export default function EditOrderClose({ orderClose, schoolId }: IProps) {
-  const [date, setDate] = React.useState<Date | undefined>(orderClose);
+  const [date, setDate] = React.useState<Date | undefined>(getDate(orderClose.toISOString()));
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -94,7 +94,7 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
               setIsProcessing(true);
               await updateOrderClose(
                 schoolId,
-                getFormatedDate(date),
+                getFormatedDate(getDate(date.toISOString())),
               );
               setIsProcessing(false);
               setIsOpen(false);
