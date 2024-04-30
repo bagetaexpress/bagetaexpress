@@ -24,13 +24,13 @@ interface IProps {
 }
 
 export default function EditOrderClose({ orderClose, schoolId }: IProps) {
-  const [date, setDate] = React.useState<Date | undefined>(orderClose);
+  const [date, setDate] = React.useState<Date | undefined>();
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
 
   useEffect(() => {
     const offset = 120 * 60 * 1000;
-    const time = orderClose.getTime() + offset;
+    const time = orderClose.getTime() - offset;
     const newDate = new Date(time);
     setDate(newDate);
   }, [orderClose]);
@@ -100,13 +100,9 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
               if (!date) return;
               setIsProcessing(true);
 
-              const offset = 0 * 60 * 1000;
-              const time = date.getTime() + offset;
-              const newDate = new Date(time);
-
               await updateOrderClose(
                 schoolId,
-                getFormatedDate(newDate),
+                getFormatedDate(date),
               );
               setIsProcessing(false);
               setIsOpen(false);
