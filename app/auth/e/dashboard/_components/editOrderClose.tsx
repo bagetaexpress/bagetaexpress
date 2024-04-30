@@ -28,6 +28,13 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
 
+  useEffect(() => {
+    const offset = 120 * 60 * 1000;
+    const time = orderClose.getTime() + offset;
+    const newDate = new Date(time);
+    setDate(newDate);
+  }, [orderClose]);
+
   return (
     <Dialog
       open={isOpen}
@@ -93,8 +100,7 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
               if (!date) return;
               setIsProcessing(true);
 
-              //const offset = date.getTimezoneOffset() * 60 * 1000;
-              const offset = 120 * 60 * 1000;
+              const offset = 0 * 60 * 1000;
               const time = date.getTime() + offset;
               const newDate = new Date(time);
 
