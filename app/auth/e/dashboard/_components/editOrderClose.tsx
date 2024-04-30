@@ -24,7 +24,7 @@ interface IProps {
 }
 
 export default function EditOrderClose({ orderClose, schoolId }: IProps) {
-  const [date, setDate] = React.useState<Date | undefined>(getDate(orderClose.toISOString()));
+  const [date, setDate] = React.useState<Date | undefined>(orderClose);
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
 
