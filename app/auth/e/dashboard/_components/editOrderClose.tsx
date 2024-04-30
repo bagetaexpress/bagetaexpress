@@ -92,9 +92,14 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
             onClick={async () => {
               if (!date) return;
               setIsProcessing(true);
+
+              const offset = date.getTimezoneOffset() * 60 * 1000;
+              const time = date.getTime() + offset;
+              const newDate = new Date(time);
+
               await updateOrderClose(
                 schoolId,
-                getFormatedDate(getDate(date.toISOString())),
+                getFormatedDate(newDate),
               );
               setIsProcessing(false);
               setIsOpen(false);
