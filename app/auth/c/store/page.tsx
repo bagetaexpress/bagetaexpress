@@ -5,7 +5,7 @@ import { ExtendedItem } from "@/db/controllers/itemController";
 import { hasActiveOrder } from "@/db/controllers/orderController";
 import { getFirstOrderClose } from "@/db/controllers/schoolController";
 import { getUser } from "@/lib/userUtils";
-import { getDate } from "@/lib/utils";
+import { getDate, getNewDate } from "@/lib/utils";
 import { Info, ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -44,7 +44,7 @@ export default async function Store() {
         </AlertDescription>
       </Alert>
       <h1 className="text-2xl font-semibold pt-2">Obchod</h1>
-      {orderClose > new Date() ? (
+      {orderClose > getNewDate() ? (
         <div className="text-sm text-gray-500 mb-4">
           Objednávky sa uzatvárajú:{" "}
           <span className="font-semibold text-primary-foreground">
@@ -62,7 +62,7 @@ export default async function Store() {
             key={item.item.id}
             item={item}
             orderClose={orderClose}
-            disabled={hasOrder || orderClose <= new Date()}
+            disabled={hasOrder || orderClose <= getNewDate()}
           />
         ))}
       </div>

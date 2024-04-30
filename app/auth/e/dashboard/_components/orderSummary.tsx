@@ -24,7 +24,7 @@ export default async function OrderSummary() {
   if (!user || !user.isEmployee) {
     redirect("/");
   }
-  const ordersSummary = await getOrderItemsByStore(user.storeId ?? 0);
+  const ordersSummary = await getOrderItemsByStore(user.storeId ?? 0, "ordered");
 
   return (
     <Dialog>

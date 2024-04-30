@@ -18,6 +18,7 @@ import { Item } from "@/db/schema";
 import { getCartItems } from "@/lib/cartUtils";
 import useFreeItems from "@/lib/hooks/useFreeItems";
 import { Separator } from "@/components/ui/separator";
+import { getNewDate } from "@/lib/utils";
 
 interface ICheckout {
   items: {
@@ -47,7 +48,7 @@ export default function Cheackout({
   });
 
   async function handleCheckout() {
-    if (orderClose < new Date()) {
+    if (orderClose < getNewDate()) {
       router.refresh();
       return;
     }

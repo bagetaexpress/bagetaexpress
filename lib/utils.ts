@@ -13,12 +13,23 @@ export function getDate(date_str: string): Date {
 
   return new Date(time);
   return new Date(date_str);
+  return new Date(time);
+}
+
+export function getNewDate(): Date {
+  // return new Date();
+  const date = new Date();
+  //const offset = date.getTimezoneOffset() * 60 * 1000;
+  const offset = 120 * 60 * 1000;
+  const time = date.getTime() + offset;
+
+  return new Date(time);
 }
 
 export function getDateWithoutOffset(date_str: string): Date {
   const date = new Date(date_str);
   const offset = date.getTimezoneOffset() * 60 * 1000;
-  const time = date.getTime() + offset;
+  const time = date.getTime() - offset;
 
   return new Date(time);
 }
