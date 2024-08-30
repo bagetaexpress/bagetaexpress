@@ -93,7 +93,11 @@ export default async function BlockPage({
                   await updateSchoolStoreOrderClose(
                     user.schoolId,
                     schoolStore.storeId,
+<<<<<<< Updated upstream
                     getFormatedDate(date),
+=======
+                    date,
+>>>>>>> Stashed changes
                   );
                 }
 

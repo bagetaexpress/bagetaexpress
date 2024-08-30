@@ -21,7 +21,7 @@ export default async function UnlockPinPage({
       const order = await getOrderByPin(
         params.pin,
         currUser.schoolId,
-        "unpicked"
+        "unpicked",
       );
       if (!order) throw new Error("Order not found");
 

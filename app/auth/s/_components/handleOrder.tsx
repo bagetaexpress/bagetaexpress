@@ -39,10 +39,19 @@ export default async function HandleOrder({
   }
 
   const items = await getItemsFromOrder(order.id);
+<<<<<<< Updated upstream
   const total = items.reduce(
     (acc, { item, quantity }) => acc + item.price * quantity,
     0
   );
+=======
+  const total = items
+    .reduce(
+      (acc, { item, quantity }) => acc + parseFloat(item.price) * quantity,
+      0,
+    )
+    .toFixed(2);
+>>>>>>> Stashed changes
 
   return (
     <div className=" min-h-full flex flex-col justify-between sm:justify-start">

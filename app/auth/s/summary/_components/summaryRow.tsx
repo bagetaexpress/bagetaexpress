@@ -9,10 +9,19 @@ interface IProps {
 export default async function SummaryRow({ order }: IProps) {
   const items = await getItemsFromOrder(order.id);
 
+<<<<<<< Updated upstream
   const total = items.reduce(
     (acc, { item, quantity }) => acc + item.price * quantity,
     0
   );
+=======
+  const total = items
+    .reduce(
+      (acc, { item, quantity }) => acc + parseFloat(item.price) * quantity,
+      0,
+    )
+    .toFixed(2);
+>>>>>>> Stashed changes
 
   return (
     <div>

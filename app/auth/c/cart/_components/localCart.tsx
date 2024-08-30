@@ -68,7 +68,19 @@ export default function LocalCart({
       </div>
       <div className="flex justify-between py-3">
         <p className="font-semibold text-lg">Spolu</p>
+<<<<<<< Updated upstream
         <p className="font-semibold text-xl">{totalPrice.toFixed(2)}€</p>
+=======
+        <p className="font-semibold text-xl">
+          {data
+            .reduce(
+              (acc, item) => acc + parseFloat(item.item.price) * item.quantity,
+              0,
+            )
+            .toFixed(2)}
+          €
+        </p>
+>>>>>>> Stashed changes
       </div>
       {freeItemsNum > 0 && (
         <>

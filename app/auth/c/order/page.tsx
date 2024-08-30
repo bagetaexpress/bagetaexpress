@@ -35,10 +35,19 @@ export default async function OrderPage() {
   const orderClose = await getFirstOrderItemClose(order.id);
 
   const items = await getItemsFromOrder(order.id);
+<<<<<<< Updated upstream
   const total = items.reduce(
     (acc, { item, quantity }) => acc + item.price * quantity,
     0
   );
+=======
+  const total = items
+    .reduce(
+      (acc, { item, quantity }) => acc + parseFloat(item.price) * quantity,
+      0,
+    )
+    .toFixed(2);
+>>>>>>> Stashed changes
 
   return (
     <div>

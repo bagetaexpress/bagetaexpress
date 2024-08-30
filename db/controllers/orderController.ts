@@ -21,7 +21,10 @@ async function createOrder(
   userId: Order["userId"],
   pin: Order["pin"],
   status: Order["status"] = "ordered",
+<<<<<<< Updated upstream
   discount: Order["discount"] = 0
+=======
+>>>>>>> Stashed changes
 ) {
   const newOrder = await db.insert(order).values({
     userId,
@@ -36,7 +39,7 @@ async function createOrder(
 async function getOrderByPin(
   pin: Order["pin"],
   schoolId?: School["id"],
-  status: Order["status"] = "ordered"
+  status: Order["status"] = "ordered",
 ): Promise<Order | null> {
   let orders: Order[];
 
@@ -50,8 +53,8 @@ async function getOrderByPin(
           and(
             eq(order.pin, pin),
             eq(order.status, status),
-            eq(customer.schoolId, schoolId)
-          )
+            eq(customer.schoolId, schoolId),
+          ),
         )
     ).map((row) => row.order);
   } else {
@@ -70,7 +73,7 @@ async function deleteOrder(orderId: Order["id"]): Promise<void> {
 
 async function getOrdersByUserId(
   userId: Order["userId"],
-  status: Order["status"]
+  status: Order["status"],
 ): Promise<Order[]> {
   const orders = await db
     .select()
@@ -108,7 +111,7 @@ async function getOrders(userId: Order["userId"]): Promise<Order[]> {
 
 async function updateOrderStatus(
   orderId: Order["id"],
-  status: Order["status"]
+  status: Order["status"],
 ): Promise<void> {
   await db
     .update(order)
@@ -140,8 +143,13 @@ async function getFirstOrderItemClose(orderId: Order["id"]): Promise<Date> {
 
 async function getOrdersBySchoolId(
   schoolId: School["id"],
+<<<<<<< Updated upstream
   status: Order["status"]
 ): Promise<{ order: Order; user: User }[]> {
+=======
+  status: Order["status"],
+): Promise<Order[]> {
+>>>>>>> Stashed changes
   const orders = await db
     .select({ order, user })
     .from(order)
