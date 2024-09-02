@@ -105,8 +105,8 @@ async function getItemsFromOrder(orderId: Order["id"]) {
 
 export type ItemStats = {
   item: Item &
-  Pick<ExtendedItem, "allergens"> &
-  Pick<ExtendedItem, "ingredients">;
+    Pick<ExtendedItem, "allergens"> &
+    Pick<ExtendedItem, "ingredients">;
   ordered: number;
   pickedup: number;
   unpicked: number;

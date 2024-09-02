@@ -6,9 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  SchoolStats,
-} from "@/db/controllers/schoolController";
+import { SchoolStats } from "@/db/controllers/schoolController";
 import EditOrderClose from "./editOrderClose";
 import PrintOrderLabels from "./printOrderLabels";
 import { getOrderItemsByStoreAndSchool } from "@/db/controllers/itemController";

@@ -88,16 +88,15 @@ export default async function BlockPage({
 
                   date.setDate(date.getDate() + daysToAdd);
 
-                  console.info("Updated order close date", getFormatedDate(date));
+                  console.info(
+                    "Updated order close date",
+                    getFormatedDate(date),
+                  );
 
                   await updateSchoolStoreOrderClose(
                     user.schoolId,
                     schoolStore.storeId,
-<<<<<<< Updated upstream
                     getFormatedDate(date),
-=======
-                    date,
->>>>>>> Stashed changes
                   );
                 }
 

@@ -18,10 +18,7 @@ function generatePin(length: number): string {
 async function createUniqueOrder(
   schoolId: number,
   userId: string,
-<<<<<<< Updated upstream
-  discount: number
-=======
->>>>>>> Stashed changes
+  discount: number,
 ): Promise<number> {
   let pin: string;
   let foundOrdered, foundUnpicked;
@@ -43,7 +40,7 @@ async function createUniqueOrder(
 
 async function createOrderFromCart(
   userId: string,
-  discount: number
+  discount: number,
 ): Promise<number> {
   const customer = await customerCtrl.getCustomer(userId);
   if (!customer) {

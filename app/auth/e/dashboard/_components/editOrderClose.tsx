@@ -100,10 +100,7 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
               if (!date) return;
               setIsProcessing(true);
 
-              await updateOrderClose(
-                schoolId,
-                getFormatedDate(date),
-              );
+              await updateOrderClose(schoolId, getFormatedDate(date));
               setIsProcessing(false);
               setIsOpen(false);
             }}

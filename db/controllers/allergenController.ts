@@ -43,26 +43,15 @@ async function createAllergen(
   number: Allergen["number"],
   name: Allergen["name"],
   storeId: Store["id"],
-<<<<<<< Updated upstream
 ): Promise<void> {
   await db.insert(allergen).values([{ number, name, storeId }]);
-=======
-) {
-  const res = await db.insert(allergen).values([{ number, name, storeId }]);
-
-  return res.insertId;
->>>>>>> Stashed changes
 }
 
 async function updateAllergen(
   allergenId: Allergen["id"],
   number: number,
   name: string,
-<<<<<<< Updated upstream
 ): Promise<void> {
-=======
-) {
->>>>>>> Stashed changes
   await db
     .update(allergen)
     .set({ number, name })

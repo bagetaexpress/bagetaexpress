@@ -65,11 +65,7 @@ async function getSchoolsOrderStats(
 async function updateSchoolStoreOrderClose(
   schoolId: SchoolStore["schoolId"],
   storeId: SchoolStore["storeId"],
-<<<<<<< Updated upstream
   orderClose: SchoolStore["orderClose"],
-=======
-  orderClose: Date,
->>>>>>> Stashed changes
 ) {
   await db
     .update(schoolStore)
