@@ -1,9 +1,5 @@
 # bagetaEXPRESS
 
-<center>
-    <img src="/assets/logomark.svg" width="200" height="200">
-</center>
-
 ## Description
 
 Order system for schools, which allows for
