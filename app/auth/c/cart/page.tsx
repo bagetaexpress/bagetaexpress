@@ -1,10 +1,10 @@
 import Cheackout from "@/app/auth/c/cart/_components/checkout";
-import { getFirstOrderClose } from "@/db/controllers/schoolController";
-import { getCartId, getCartItems } from "@/lib/cartUtils";
-import { getUser } from "@/lib/userUtils";
+import { getFirstOrderClose } from "@/db/controllers/school-controller";
+import { getCartId, getCartItems } from "@/lib/cart-utils";
+import { getUser } from "@/lib/user-utils";
 import { redirect } from "next/navigation";
-import LocalCart from "./_components/localCart";
-import { getTotalOrderedItems } from "@/db/controllers/orderController";
+import LocalCart from "./_components/local-cart";
+import { getTotalOrderedItems } from "@/db/controllers/order-controller";
 import { getDate, getNewDate } from "@/lib/utils";
 
 export default async function CartPage() {

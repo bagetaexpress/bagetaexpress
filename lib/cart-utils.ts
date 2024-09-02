@@ -4,18 +4,18 @@ import {
   getCart,
   createCart,
   deleteCart,
-} from "@/db/controllers/cartController";
+} from "@/db/controllers/cart-controller";
 import {
   getCartItem,
   createCartItem,
   updateCartItem,
   deleteCartItem,
   deleteCartItems,
-} from "@/db/controllers/cartItemController";
-import { getItemsFromCart } from "@/db/controllers/itemController";
+} from "@/db/controllers/cartItem-controller";
+import { getItemsFromCart } from "@/db/controllers/item-controller";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
-import { authOptions } from "./authOptions";
+import { authOptions } from "./auth-options";
 
 async function addToCart(itemId: number, quantity: number = 1): Promise<void> {
   const cartId = await getCartId();
@@ -59,7 +59,7 @@ async function getCartItems(cartId?: string) {
 async function saveUpdateCartItem(
   cartId: string,
   itemId: number,
-  quantity: number,
+  quantity: number
 ) {
   const found = await getCartItem(cartId, itemId);
   if (found === null) {

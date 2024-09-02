@@ -15,8 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getOrderItemsByStore } from "@/db/controllers/itemController";
-import { getUser } from "@/lib/userUtils";
+import { getOrderItemsByStore } from "@/db/controllers/item-controller";
+import { getUser } from "@/lib/user-utils";
 import { redirect } from "next/navigation";
 
 export default async function OrderSummary() {
@@ -26,7 +26,7 @@ export default async function OrderSummary() {
   }
   const ordersSummary = await getOrderItemsByStore(
     user.storeId ?? 0,
-    "ordered",
+    "ordered"
   );
 
   return (

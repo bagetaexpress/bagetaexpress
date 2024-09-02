@@ -8,11 +8,11 @@ import {
   getSellerById,
   createSeller,
   deleteSeller,
-} from "@/db/controllers/userController";
-import { getUser } from "@/lib/userUtils";
+} from "@/db/controllers/user-controller";
+import { getUser } from "@/lib/user-utils";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { AddEmployeeErrors, AddSellerErrors } from "./accessErrors";
+import { AddEmployeeErrors, AddSellerErrors } from "./access-errors";
 
 async function handleAddEmployee(formData: any) {
   const currUser = await getUser();
@@ -30,7 +30,7 @@ async function handleAddEmployee(formData: any) {
   const foundEmployee = await getEmployeeById(foundUser.id);
   if (foundEmployee) {
     redirect(
-      "/auth/e/access?EmpError=" + AddEmployeeErrors.UserAlreadyEmployee,
+      "/auth/e/access?EmpError=" + AddEmployeeErrors.UserAlreadyEmployee
     );
   }
 

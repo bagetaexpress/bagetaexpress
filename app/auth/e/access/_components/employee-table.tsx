@@ -8,21 +8,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Trash, Plus } from "lucide-react";
+import {
+  handleRemoveEmployee,
+  handleAddEmployee,
+} from "../access-server-utils";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { redirect } from "next/navigation";
-import { getUser } from "@/lib/userUtils";
-import { getSellersByStoreId } from "@/db/controllers/userController";
-import { handleAddSeller, handleRemoveSeller } from "../accessServerUtils";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { getSchoolsByStoreId } from "@/db/controllers/schoolController";
-import { AddSellerErrors } from "../accessErrors";
+import { getUser } from "@/lib/user-utils";
+import { getEmployeesByStoreId } from "@/db/controllers/user-controller";
+import { AddEmployeeErrors } from "../access-errors";
 import {
   Accordion,
   AccordionContent,
@@ -30,21 +25,19 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-export default async function SellerTable({
+export default async function EmployeeTable({
   err,
 }: {
-  err: AddSellerErrors | undefined;
+  err: AddEmployeeErrors | undefined;
 }) {
   const currUser = await getUser();
   if (!currUser || !currUser.isEmployee) {
     redirect("/");
   }
 
-  const sellers = await getSellersByStoreId(currUser.storeId ?? 0);
-  const schools = await getSchoolsByStoreId(currUser.storeId ?? 0);
-
-  const filteredSellers = sellers?.filter(
-    ({ user }) => user.id !== currUser.id && !user.isAdmin,
+  const employees = await getEmployeesByStoreId(currUser.storeId ?? 0);
+  const filteredEmployees = employees?.filter(
+    ({ user }) => user.id !== currUser.id && !user.isAdmin
   );
 
   return (
@@ -54,21 +47,19 @@ export default async function SellerTable({
           <TableRow>
             <TableHead className="w-[300px]">ID</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Škola</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredSellers?.map(({ school, user }) => (
-            <TableRow key={user.id} className="">
+          {filteredEmployees?.map(({ user }) => (
+            <TableRow key={user.id}>
               <TableCell className="font-medium">{user.id}</TableCell>
               <TableCell>{user.email}</TableCell>
-              <TableCell>{school.name}</TableCell>
-              <TableCell className=" text-right ">
+              <TableCell className=" text-right">
                 <form
                   action={async () => {
                     "use server";
-                    await handleRemoveSeller(user.id);
+                    await handleRemoveEmployee(user.id);
                   }}
                 >
                   <Button
@@ -85,13 +76,13 @@ export default async function SellerTable({
           ))}
         </TableBody>
       </Table>
-      {filteredSellers?.length === 0 && (
+      {filteredEmployees?.length === 0 && (
         <div className="text-center text-muted-foreground p-4">
-          Žiadni predajcovia
+          Žiadni zamestnanci
         </div>
       )}
       <Accordion type="multiple" className="max-w-full block md:hidden">
-        {filteredSellers?.map(({ school, user }) => (
+        {filteredEmployees?.map(({ user }) => (
           <AccordionItem key={user.id} value={user.email}>
             <AccordionTrigger>{user.name ?? user.email}</AccordionTrigger>
             <AccordionContent>
@@ -103,14 +94,10 @@ export default async function SellerTable({
                 <span className="font-medium">Email: </span>
                 {user.email}
               </div>
-              <div>
-                <span className="font-medium">Škola: </span>
-                {school.name}
-              </div>
               <form
                 action={async () => {
                   "use server";
-                  await handleRemoveSeller(user.id);
+                  await handleRemoveEmployee(user.id);
                 }}
                 className="flex pt-2"
               >
@@ -128,22 +115,15 @@ export default async function SellerTable({
           </AccordionItem>
         ))}
       </Accordion>
-      <form action={handleAddSeller} className="flex flex-col gap-2 mt-2">
-        <Label htmlFor="sellerId">Pridať predajcu</Label>
+      <form action={handleAddEmployee} className="flex flex-col gap-2 mt-2">
+        <Label htmlFor="employeeId">Pridať zamestnanca</Label>
         <div className="flex gap-2">
-          <Input name="sellerId" id="sellerId" placeholder="ID účtu" required />
-          <Select name="schoolId">
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Škola" />
-            </SelectTrigger>
-            <SelectContent>
-              {schools?.map(({ id, name }) => (
-                <SelectItem key={id} value={id.toString()}>
-                  {name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Input
+            name="employeeId"
+            id="employeeId"
+            placeholder="ID účtu"
+            required
+          />
           <Button type="submit" size="icon" className=" aspect-square">
             <Plus />
           </Button>
@@ -152,12 +132,10 @@ export default async function SellerTable({
           <span className="text-red-500">
             {
               {
-                [AddSellerErrors.InvalidUserId]: "Neplatné ID účtu",
-                [AddSellerErrors.UserNotFound]: "Používateľ neexistuje",
-                [AddSellerErrors.UserAlreadySeller]:
-                  "Používateľ už má priradenú rolu predajcu",
-                [AddSellerErrors.InvalidSchoolId]: "Zvolená škola neexistuje",
-                [AddSellerErrors.SchoolNotFound]: "Škola neexistuje",
+                [AddEmployeeErrors.InvalidUserId]: "Neplatné ID účtu",
+                [AddEmployeeErrors.UserNotFound]: "Účet neexistuje",
+                [AddEmployeeErrors.UserAlreadyEmployee]:
+                  "Účet už má priradenú rolu zamestnanca",
               }[err]
             }
           </span>

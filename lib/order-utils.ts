@@ -1,10 +1,10 @@
 "use server";
 
-import * as cartCtrl from "@/db/controllers/cartController";
-import * as orderItemCtrl from "@/db/controllers/orderItemController";
-import * as orderCtrl from "@/db/controllers/orderController";
-import * as customerCtrl from "@/db/controllers/customerController";
-import { deleteCartAndItems, getCartItems } from "./cartUtils";
+import * as cartCtrl from "@/db/controllers/cart-controller";
+import * as orderItemCtrl from "@/db/controllers/order-item-controller";
+import * as orderCtrl from "@/db/controllers/order-controller";
+import * as customerCtrl from "@/db/controllers/customer-controller";
+import { deleteCartAndItems, getCartItems } from "./cart-utils";
 
 function generatePin(length: number): string {
   const chars = "0123456789";

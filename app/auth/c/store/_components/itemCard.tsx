@@ -1,6 +1,6 @@
 "use client";
 
-import { ExtendedItem } from "@/db/controllers/itemController";
+import { ExtendedItem } from "@/db/controllers/item-controller";
 import {
   Card,
   CardHeader,
@@ -20,7 +20,7 @@ import {
   DrawerFooter,
   DrawerClose,
 } from "../../../../../components/ui/drawer";
-import { addToCart } from "@/lib/cartUtils";
+import { addToCart } from "@/lib/cart-utils";
 import { FormEvent, useRef, useState } from "react";
 import {
   TooltipProvider,

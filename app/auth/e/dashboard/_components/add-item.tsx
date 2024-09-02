@@ -24,19 +24,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Loader, Trash2, X } from "lucide-react";
-import { getUser } from "@/lib/userUtils";
-import { addItem, updateItem } from "@/db/controllers/itemController";
+import { getUser } from "@/lib/user-utils";
+import { addItem, updateItem } from "@/db/controllers/item-controller";
 import { use, useEffect, useMemo, useRef, useState } from "react";
 import {
   createItemAllergen,
   deleteAllItemAllergens,
   deleteItemAllergen,
-} from "@/db/controllers/allergenController";
+} from "@/db/controllers/allergen-controller";
 import {
   createItemIngredient,
   deleteItemIngredient,
   deleteItemIngredients,
-} from "@/db/controllers/ingredientController";
+} from "@/db/controllers/ingredient-controller";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -47,11 +47,11 @@ import {
 } from "@/components/ui/select";
 import { useUploadThing } from "@/lib/uploadthing";
 import Image from "next/image";
-import { deleteFile } from "@/lib/upladthingServer";
+import { deleteFile } from "@/lib/upladthing-server";
 import { Allergen, Ingredient, Item } from "@/db/schema";
 import React from "react";
 import { revalidateTag } from "next/cache";
-import { revalidateItems } from "@/lib/storeUtils";
+import { revalidateItems } from "@/lib/store-utils";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -110,12 +110,12 @@ export default function AddItemForm({
   const [error, setError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(item?.imageUrl ?? "");
   const [ingredients, setIngredients] = useState<idName[]>(
-    item?.ingredients ?? [],
+    item?.ingredients ?? []
   );
 
   const filteredIngredients = useMemo(() => {
     const res = ingredientList.filter(
-      (a) => !ingredients.find((b) => a.id === b.id),
+      (a) => !ingredients.find((b) => a.id === b.id)
     );
     return res;
   }, [ingredients, ingredientList]);
@@ -132,7 +132,7 @@ export default function AddItemForm({
         price: item?.price ? item.price.toString() : "",
         allergens: item?.allergens.map((a) => a.id).join(",") ?? "",
       }),
-      [item],
+      [item]
     ),
   });
 
@@ -416,7 +416,7 @@ export default function AddItemForm({
                       type="button"
                       onClick={() =>
                         setIngredients((prev) =>
-                          prev.filter((a) => a.id !== ingredient.id),
+                          prev.filter((a) => a.id !== ingredient.id)
                         )
                       }
                     >

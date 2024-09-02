@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import LoginServices from "./_components/LoginServices";
+import LoginServices from "./_components/login-services";
 import SvgLogo from "@/assets/bagetaExpress_logo.svg";
 import SvgBrandmark from "@/assets/bagetaExpress_brandmark.svg";
 import SvgLogomark from "@/assets/logomark.svg";

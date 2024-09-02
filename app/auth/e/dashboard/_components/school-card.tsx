@@ -6,13 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { SchoolStats } from "@/db/controllers/schoolController";
-import EditOrderClose from "./editOrderClose";
-import PrintOrderLabels from "./printOrderLabels";
-import { getOrderItemsByStoreAndSchool } from "@/db/controllers/itemController";
-import { getUser } from "@/lib/userUtils";
-import { getStore } from "@/db/controllers/storeController";
-import PrintOrderList from "./printOrderList";
+import { SchoolStats } from "@/db/controllers/school-controller";
+import EditOrderClose from "./edit-order-close";
+import PrintOrderLabels from "./print-order-labels";
+import { getOrderItemsByStoreAndSchool } from "@/db/controllers/item-controller";
+import { getUser } from "@/lib/user-utils";
+import { getStore } from "@/db/controllers/store-controller";
+import PrintOrderList from "./print-order-list";
 import { getDate } from "@/lib/utils";
 
 export default async function SchoolCard({

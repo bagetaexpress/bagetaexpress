@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { getItemsFromOrder } from "@/db/controllers/itemController";
+import { getItemsFromOrder } from "@/db/controllers/item-controller";
 import { Order } from "@/db/schema";
 
 interface IProps {
@@ -11,7 +11,7 @@ export default async function SummaryRow({ order }: IProps) {
 
   const total = items.reduce(
     (acc, { item, quantity }) => acc + item.price * quantity,
-    0,
+    0
   );
 
   return (

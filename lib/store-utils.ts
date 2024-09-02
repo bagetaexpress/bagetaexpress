@@ -1,13 +1,13 @@
 "use server";
 
-import { updateSchoolStoreOrderClose } from "@/db/controllers/schoolController";
-import { getUser } from "./userUtils";
+import { updateSchoolStoreOrderClose } from "@/db/controllers/school-controller";
+import { getUser } from "./user-utils";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { SchoolStore } from "@/db/schema";
 
 async function updateOrderClose(
   schoolId: SchoolStore["schoolId"],
-  date: SchoolStore["orderClose"],
+  date: SchoolStore["orderClose"]
 ) {
   const user = await getUser();
   if (!user || !user.storeId) {

@@ -4,9 +4,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { getOrdersBySchoolId } from "@/db/controllers/orderController";
-import { getUser } from "@/lib/userUtils";
-import SummaryRow from "./_components/summaryRow";
+import { getOrdersBySchoolId } from "@/db/controllers/order-controller";
+import { getUser } from "@/lib/user-utils";
+import SummaryRow from "./_components/summary-row";
 import { redirect } from "next/navigation";
 import {
   Select,
@@ -17,12 +17,12 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
-import { handleFilterChange } from "./serverUtil";
+import { handleFilterChange } from "./server-util";
 import { Order, order } from "@/db/schema";
-import PrintOrderList from "./_components/printOrderList";
-import { getSchool } from "@/db/controllers/schoolController";
-import { getOrderItemsByStoreAndSchool } from "@/db/controllers/itemController";
-import { getStore } from "@/db/controllers/storeController";
+import PrintOrderList from "./_components/print-order-list";
+import { getSchool } from "@/db/controllers/school-controller";
+import { getOrderItemsByStoreAndSchool } from "@/db/controllers/item-controller";
+import { getStore } from "@/db/controllers/store-controller";
 
 export default async function SummaryPage({
   searchParams,

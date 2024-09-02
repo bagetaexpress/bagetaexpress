@@ -24,13 +24,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Loader } from "lucide-react";
-import { getUser } from "@/lib/userUtils";
+import { getUser } from "@/lib/user-utils";
 import { useState } from "react";
 import { useUploadThing } from "@/lib/uploadthing";
 import Image from "next/image";
-import { deleteFile } from "@/lib/upladthingServer";
+import { deleteFile } from "@/lib/upladthing-server";
 import { Store } from "@/db/schema";
-import { updateStore } from "@/db/controllers/storeController";
+import { updateStore } from "@/db/controllers/store-controller";
 
 const formSchema = z.object({
   name: z.string().min(3, {

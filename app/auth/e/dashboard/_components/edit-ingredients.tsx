@@ -18,35 +18,35 @@ import {
   Table,
 } from "@/components/ui/table";
 import {
-  createAllergen,
-  deleteAllergen,
-  getAllergensByStoreId,
-} from "@/db/controllers/allergenController";
-import { getUser } from "@/lib/userUtils";
+  createIngredient,
+  deleteIngredient,
+  getIngredientsByStoreId,
+} from "@/db/controllers/ingredient-controller";
+import { getUser } from "@/lib/user-utils";
 import { Plus, Trash } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export default async function EditAllergens({ error }: { error?: string }) {
+export default async function EditIngredients({ error }: { error?: string }) {
   const user = await getUser();
   if (!user || !user.storeId) redirect("/");
 
-  const allergens = await getAllergensByStoreId(user.storeId);
+  const ingredients = await getIngredientsByStoreId(user.storeId);
 
-  async function handleCreateAllergen(formData: FormData) {
+  async function handleCreateIngredient(formData: FormData) {
     "use server";
     const numberStr = formData.get("number") as string;
     const name = formData.get("name") as string;
-
-    if (!numberStr || !name) return;
-    if (isNaN(parseInt(numberStr))) return;
-    if (!user || !user.storeId) return;
     const number = parseInt(numberStr);
 
+    if (!numberStr || !name) return;
+    if (isNaN(number)) return;
+    if (!user || !user.storeId) return;
+
     try {
-      await createAllergen(number, name, user.storeId);
+      await createIngredient(number, name, user.storeId);
     } catch (e) {
-      redirect("/auth/e/dashboard?allergenError=Somenthing went wrong");
+      redirect("/auth/e/dashboard?ingredientError=Somenthing went wrong");
     }
     revalidatePath("/auth/e/dashboard", "page");
   }
@@ -54,11 +54,11 @@ export default async function EditAllergens({ error }: { error?: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="flex-1 sm:grow-0">Upraviť alergény</Button>
+        <Button className="flex-1 sm:grow-0">Upraviť ingrediencie</Button>
       </DialogTrigger>
       <DialogContent className=" max-h-dvh overflow-auto">
         <DialogHeader>
-          <DialogTitle>Upraviť alergény</DialogTitle>
+          <DialogTitle>Upraviť ingrediencie</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <Table>
@@ -70,17 +70,17 @@ export default async function EditAllergens({ error }: { error?: string }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {allergens.map((allergen, i) => (
-              <TableRow key={i + "editAllergen"}>
+            {ingredients.map((ingredient, i) => (
+              <TableRow key={i}>
                 <TableCell className="font-medium p-2">
-                  {allergen.number}
+                  {ingredient.number}
                 </TableCell>
-                <TableCell className="p-2">{allergen.name}</TableCell>
+                <TableCell className="p-2">{ingredient.name}</TableCell>
                 <TableCell className="flex justify-center p-2">
                   <form
                     action={async () => {
                       "use server";
-                      await deleteAllergen(allergen.id);
+                      await deleteIngredient(ingredient.id);
                       revalidatePath("/auth/e/dashboard", "page");
                     }}
                   >
@@ -94,7 +94,7 @@ export default async function EditAllergens({ error }: { error?: string }) {
           </TableBody>
         </Table>
         <DialogFooter>
-          <form action={handleCreateAllergen} className=" flex flex-1 gap-1">
+          <form action={handleCreateIngredient} className=" flex flex-1 gap-1">
             <Input
               pattern="[0-9]*"
               required

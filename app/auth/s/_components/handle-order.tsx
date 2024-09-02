@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { getItemsFromOrder } from "@/db/controllers/itemController";
-import { getOrderByPin } from "@/db/controllers/orderController";
+import { getItemsFromOrder } from "@/db/controllers/item-controller";
+import { getOrderByPin } from "@/db/controllers/order-controller";
 import { Order } from "@/db/schema";
-import { getUser } from "@/lib/userUtils";
-import ClientButton from "./ClientButton";
+import { getUser } from "@/lib/user-utils";
+import ClientButton from "./client-button";
 import { Separator } from "@/components/ui/separator";
 
 interface IProps {
@@ -41,7 +41,7 @@ export default async function HandleOrder({
   const items = await getItemsFromOrder(order.id);
   const total = items.reduce(
     (acc, { item, quantity }) => acc + item.price * quantity,
-    0,
+    0
   );
 
   return (

@@ -7,23 +7,23 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { ItemStats, getItemsStats } from "@/db/controllers/itemController";
-import { getSchoolsOrderStats } from "@/db/controllers/schoolController";
-import { getUser } from "@/lib/userUtils";
+import { ItemStats, getItemsStats } from "@/db/controllers/item-controller";
+import { getSchoolsOrderStats } from "@/db/controllers/school-controller";
+import { getUser } from "@/lib/user-utils";
 import { Plus } from "lucide-react";
 import { redirect } from "next/navigation";
-import AddItemForm from "./_components/addItem";
-import DeleteItemButton from "./_components/deleteItem";
-import EditAllergens from "./_components/editAllergens";
-import EditIngredients from "./_components/editIngredients";
-import { getAllergensByStoreId } from "@/db/controllers/allergenController";
-import { getIngredientsByStoreId } from "@/db/controllers/ingredientController";
+import AddItemForm from "./_components/add-item";
+import DeleteItemButton from "./_components/delete-item";
+import EditAllergens from "./_components/edit-allergens";
+import EditIngredients from "./_components/edit-ingredients";
+import { getAllergensByStoreId } from "@/db/controllers/allergen-controller";
+import { getIngredientsByStoreId } from "@/db/controllers/ingredient-controller";
 import Image from "next/image";
-import SchoolCard from "./_components/schoolCard";
+import SchoolCard from "./_components/school-card";
 import { Allergen, Ingredient } from "@/db/schema";
-import OrderSummary from "./_components/orderSummary";
-import EditStore from "./_components/editStore";
-import { getStore } from "@/db/controllers/storeController";
+import OrderSummary from "./_components/order-summary";
+import EditStore from "./_components/edit-store";
+import { getStore } from "@/db/controllers/store-controller";
 
 export default async function DashboardPage({
   searchParams,

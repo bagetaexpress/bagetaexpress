@@ -1,4 +1,4 @@
-import { getItemsBySchool } from "@/db/controllers/itemController";
+import { getItemsBySchool } from "@/db/controllers/item-controller";
 
 async function GET(req: Request): Promise<Response> {
   const { searchParams } = new URL(req.url);

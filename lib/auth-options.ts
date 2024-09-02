@@ -2,7 +2,7 @@ import { AuthOptions } from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/db";
 import AzureADProvider from "next-auth/providers/azure-ad";
-import { getFullUserById } from "@/db/controllers/userController";
+import { getFullUserById } from "@/db/controllers/user-controller";
 
 export const authOptions: AuthOptions = {
   // ! wierd type error, don't have time to fix, but it works

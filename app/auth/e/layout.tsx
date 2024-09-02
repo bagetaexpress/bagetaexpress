@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import { redirect } from "next/navigation";
 
-import { getUser } from "@/lib/userUtils";
-import NavWrapper from "@/components/nav/navWrapper";
-import NavButton from "@/components/nav/navButton";
+import { getUser } from "@/lib/user-utils";
+import NavWrapper from "@/components/nav/nav-wrapper";
+import NavButton from "@/components/nav/nav-button";
 
 export default async function authLayout({
   children,

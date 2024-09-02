@@ -1,7 +1,7 @@
 "use client";
 
 import { Item } from "@/db/schema";
-import CartItemRow from "./cartItemRow";
+import CartItemRow from "./cart-item-row";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import useFreeItems from "@/lib/hooks/useFreeItems";

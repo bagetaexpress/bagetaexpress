@@ -4,7 +4,7 @@ import {
   createCustomer,
   createEmployee,
   getUserByEmail,
-} from "@/db/controllers/userController";
+} from "@/db/controllers/user-controller";
 
 interface ICreateUser {
   email: string;

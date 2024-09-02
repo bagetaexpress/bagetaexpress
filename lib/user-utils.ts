@@ -2,7 +2,7 @@
 
 import { getServerSession } from "next-auth";
 import { User } from "next-auth";
-import { authOptions } from "./authOptions";
+import { authOptions } from "./auth-options";
 
 async function getUser(): Promise<User | null> {
   const session = await getServerSession(authOptions);

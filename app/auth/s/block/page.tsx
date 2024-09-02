@@ -11,12 +11,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { blockUnpickedOrders } from "@/db/controllers/orderController";
+import { blockUnpickedOrders } from "@/db/controllers/order-controller";
 import {
   getSchoolStores,
   updateSchoolStoreOrderClose,
-} from "@/db/controllers/schoolController";
-import { getUser } from "@/lib/userUtils";
+} from "@/db/controllers/school-controller";
+import { getUser } from "@/lib/user-utils";
 import { getDate, getFormatedDate, isLessThenNow } from "@/lib/utils";
 import { format } from "date-fns";
 import { Check } from "lucide-react";
@@ -69,7 +69,7 @@ export default async function BlockPage({
                 if (!user || !user.schoolId) return;
 
                 console.info(
-                  `Blocking unpicked orders for school ${user.schoolId}`,
+                  `Blocking unpicked orders for school ${user.schoolId}`
                 );
 
                 const schoolStores = await getSchoolStores(user.schoolId);
@@ -90,13 +90,13 @@ export default async function BlockPage({
 
                   console.info(
                     "Updated order close date",
-                    getFormatedDate(date),
+                    getFormatedDate(date)
                   );
 
                   await updateSchoolStoreOrderClose(
                     user.schoolId,
                     schoolStore.storeId,
-                    getFormatedDate(date),
+                    getFormatedDate(date)
                   );
                 }
 

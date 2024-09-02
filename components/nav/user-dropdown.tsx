@@ -19,10 +19,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { getUser } from "@/lib/userUtils";
-import LogoutMenuItem from "./logountMenuItem";
-import { DarkModeToggle } from "../DarkModeToggle";
-import CopyToClipboard from "../copyToClipboard";
+import { getUser } from "@/lib/user-utils";
+import LogoutMenuItem from "./logount-menu-item";
+import { DarkModeToggle } from "../dark-mode-toggle";
+import CopyToClipboard from "../copy-to-clipboard";
 
 export default async function UserDropdown() {
   const user = await getUser();

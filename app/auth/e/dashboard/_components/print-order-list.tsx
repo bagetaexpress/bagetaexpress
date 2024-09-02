@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ExtendedItem } from "@/db/controllers/itemController";
+import { ExtendedItem } from "@/db/controllers/item-controller";
 import { School, Store } from "@/db/schema";
 import { printComponent } from "@/lib/utils";
 import { TableProperties } from "lucide-react";
@@ -29,11 +29,11 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
     <>
       <Button
         variant="outline"
-        className=" gap-2 flex-1 sm:grow-0"
         type="button"
+        size="icon"
+        className="aspect-square"
         onClick={handlePrint}
       >
-        Vytlačiť Zhrnutie
         <TableProperties />
       </Button>
       <div className="hidden">
@@ -46,20 +46,10 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
               padding: "1rem",
             }}
           >
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-              }}
-            >
-              <div>
-                <p className=" font-bold text-sm">Dodávateľ:</p>
-                <h3 className=" text-2xl">{store.name}</h3>
-              </div>
-              <div>
-                <p className=" font-bold text-sm">Odoberateľ:</p>
-                <h3 className=" text-2xl">{school.name}</h3>
-              </div>
+            <h1 className="font-bold text-4xl">{store.name}</h1>
+            <div>
+              <p className=" font-bold text-sm">Odoberateľ:</p>
+              <h3 className=" text-2xl">{school.name}</h3>
             </div>
             <table>
               <thead>
@@ -121,7 +111,7 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
                   {orders
                     .reduce(
                       (acc, order) => acc + order.item.price * order.quantity,
-                      0,
+                      0
                     )
                     .toFixed(2)}
                   €

@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
-import UserDropdown from "./userDropdown";
-import LogomarkJS from "./logomarkJS";
+import UserDropdown from "./user-dropdown";
+import LogomarkJS from "./logomark-js";
 import { redirect } from "next/navigation";
-import { getUser } from "@/lib/userUtils";
+import { getUser } from "@/lib/user-utils";
 
 export default async function NavWrapper({
   children,
