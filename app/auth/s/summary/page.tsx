@@ -84,7 +84,7 @@ export default async function SummaryPage({
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <SummaryRow order={order} />
+              <SummaryRow orderId={order.id} />
             </AccordionContent>
           </AccordionItem>
         ))}

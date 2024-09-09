@@ -21,7 +21,6 @@ import { deleteOrderAndItems } from "@/lib/orderUtils";
 import { Order } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import { revalidatePath } from "next/cache";
-import { Separator } from "@/components/ui/separator";
 import { getNewDate } from "@/lib/utils";
 
 export default async function OrderPage() {
@@ -35,10 +34,9 @@ export default async function OrderPage() {
   const orderClose = await getFirstOrderItemClose(order.id);
 
   const items = await getItemsFromOrder(order.id);
-  const total = items.reduce(
-    (acc, { item, quantity }) => acc + item.price * quantity,
-    0
-  );
+  const total = items
+    .reduce((acc, { item, quantity }) => acc + item.price * quantity, 0)
+    .toFixed(2);
 
   return (
     <div>
@@ -78,28 +76,10 @@ export default async function OrderPage() {
           </div>
         ))}
       </div>
-      <div className="flex justify-between py-3">
+      <div className="flex justify-between py-4">
         <p className="font-semibold text-lg">Spolu</p>
-        <p className="font-semibold text-xl">{total.toFixed(2)}€</p>
+        <p className="font-semibold text-xl">{total}€</p>
       </div>
-      {order.discount > 0 && (
-        <>
-          <Separator />
-          <div className="flex justify-between py-3">
-            <p className="font-semibold text-lg">Zľava</p>
-            <p className="font-semibold text-xl">
-              {order.discount.toFixed(2)}€
-            </p>
-          </div>
-          <Separator />
-          <div className="flex justify-between py-3">
-            <p className="font-semibold text-lg">Celkom</p>
-            <p className="font-semibold text-xl">
-              {(total - order.discount).toFixed(2)}€
-            </p>
-          </div>
-        </>
-      )}
       {foundUnpicked.length > 0 && (
         <p className="text-center font-semibold text-lg text-destructive">
           Objednávka je nevyzdvihnutá, prosím, dostavte sa k školskému

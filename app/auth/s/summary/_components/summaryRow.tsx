@@ -1,18 +1,15 @@
-import { Separator } from "@/components/ui/separator";
 import { getItemsFromOrder } from "@/db/controllers/itemController";
-import { Order } from "@/db/schema";
 
 interface IProps {
-  order: Order;
+  orderId: number;
 }
 
-export default async function SummaryRow({ order }: IProps) {
-  const items = await getItemsFromOrder(order.id);
+export default async function SummaryRow({ orderId }: IProps) {
+  const items = await getItemsFromOrder(orderId);
 
-  const total = items.reduce(
-    (acc, { item, quantity }) => acc + item.price * quantity,
-    0
-  );
+  const total = items
+    .reduce((acc, { item, quantity }) => acc + item.price * quantity, 0)
+    .toFixed(2);
 
   return (
     <div>
@@ -25,34 +22,17 @@ export default async function SummaryRow({ order }: IProps) {
             </div>
             <div className="flex justify-center text-center gap-2 flex-col">
               <p className=" font-medium text-xl">
+                {/* {(item.price * q).toFixed(2)}€ */}
                 {quantity}x{item.price.toFixed(2)}€
               </p>
             </div>
           </div>
         ))}
       </div>
-      <div className="flex justify-between py-3">
-        <p className="font-semibold text-lg">Spolu</p>
-        <p className="font-semibold text-xl">{total.toFixed(2)}€</p>
+      <div className="flex justify-between py-4">
+        <p className="font-semibold text-lg">Zhrnutie</p>
+        <p className="font-semibold text-xl">{total}€</p>
       </div>
-      {order.discount > 0 && (
-        <>
-          <Separator />
-          <div className="flex justify-between py-3">
-            <p className="font-semibold text-lg">Zľava</p>
-            <p className="font-semibold text-xl">
-              {order.discount.toFixed(2)}€
-            </p>
-          </div>
-          <Separator />
-          <div className="flex justify-between py-3">
-            <p className="font-semibold text-lg">Celkom</p>
-            <p className="font-semibold text-xl">
-              {(total - order.discount).toFixed(2)}€
-            </p>
-          </div>
-        </>
-      )}
     </div>
   );
 }
