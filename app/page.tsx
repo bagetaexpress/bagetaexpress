@@ -124,6 +124,7 @@ export default function Home() {
             <PopupCarousel
               items={[
                 <Image
+                  key="dashboard1"
                   src={MockUpDashboard}
                   alt="Managment dashboard"
                   className="drop-shadow-xl aspect-[4/3] object-cover"
@@ -146,16 +147,19 @@ export default function Home() {
             className="flex landing-page-seller"
             items={[
               <Image
+                key="seller3"
                 src={MockUpSeller3}
                 alt="Seller page"
                 className="drop-shadow-xl aspect-[9/13] object-cover"
               />,
               <Image
+                key="seller1"
                 src={MockUpSeller1}
                 alt="Seller page"
                 className="drop-shadow-xl aspect-[9/13] object-cover"
               />,
               <Image
+                key="seller2"
                 src={MockUpSeller2}
                 alt="Seller page"
                 className="drop-shadow-xl aspect-[9/13] object-cover"
@@ -224,16 +228,19 @@ export default function Home() {
             className="flex landing-page-order"
             items={[
               <Image
+                key="order3"
                 src={MockUpOrder3}
                 alt="Seller summary "
                 className="drop-shadow-xl aspect-[9/13] object-cover"
               />,
               <Image
+                key="order1"
                 src={MockUpOrder1}
                 alt="Seller summary "
                 className="drop-shadow-xl aspect-[9/13] object-cover"
               />,
               <Image
+                key="order2"
                 src={MockUpOrder2}
                 alt="Seller summary "
                 className="drop-shadow-xl aspect-[9/13] object-cover"
