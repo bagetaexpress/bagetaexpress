@@ -54,26 +54,30 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
-body > .printable {
+body>.printable {
   display: none;
 }
 
 @media print {
-  body > *:not(.printable) {
+  body>*:not(.printable) {
     display: none;
   }
-  body > .printable {
+
+  body>.printable {
     display: unset;
   }
+
   table {
     border-collapse: collapse;
     width: 100%;
   }
+
   th,
   td {
     border: 2px solid black;
@@ -82,10 +86,82 @@ body > .printable {
     padding: 8px;
     text-align: center;
   }
+
   th {
     background-color: #f2f2f2;
   }
+
   tr:nth-child(even) {
     background-color: #f2f2f2;
+  }
+}
+
+#seller1,
+#seller2,
+#seller3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-20%) scale(1.5);
+}
+
+#seller1 {
+  transform: translateX(-30%) scale(1.4) translateY(1%) rotate(-5deg);
+}
+
+#seller2 {
+  transform: translateX(-10%) scale(1.4) translateY(1%) rotate(5deg);
+}
+
+.landing-page-seller:hover #seller1 {
+  transform: translateX(-60%) translateY(7.5%) rotate(-10deg) scale(1.4);
+}
+
+.landing-page-seller:hover #seller2 {
+  transform: translateX(20%) translateY(7.5%) rotate(10deg) scale(1.4);
+}
+
+.landing-page-seller:hover #seller3 {
+  transform: translateX(-20%) scale(1.6);
+}
+
+@media (min-width: 1205px) {
+  .landing-page-seller:hover~div {
+    transform: translateX(20%);
+  }
+}
+
+#order1,
+#order2,
+#order3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(20%) scale(1.5);
+}
+
+#order1 {
+  transform: translateX(10%) scale(1.4) translateY(1%) rotate(-5deg);
+}
+
+#order2 {
+  transform: translateX(30%) scale(1.4) translateY(1%) rotate(5deg);
+}
+
+.landing-page-order:hover #order1 {
+  transform: translateX(-20%) translateY(7.5%) rotate(-10deg) scale(1.4);
+}
+
+.landing-page-order:hover #order2 {
+  transform: translateX(60%) translateY(7.5%) rotate(10deg) scale(1.4);
+}
+
+.landing-page-order:hover #order3 {
+  transform: translateX(20%) scale(1.6);
+}
+
+@media (min-width: 1205px) {
+  div:has(+.landing-page-order:hover) {
+    transform: translateX(-20%);
   }
 }

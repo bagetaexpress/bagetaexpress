@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import MsLogo from "@/assets/ms-symbollockup.svg";
@@ -13,7 +13,12 @@ export default function LoginServices() {
   if (session && session.user) {
     return (
       <Button
-        className="w-full"
+        style={{
+          backgroundColor: "hsl(var(--foreground))",
+          color: "hsl(var(--background))",
+        }}
+        size="lg"
+        className="px-3"
         onClick={() => {
           switch (true) {
             case session.user.isEmployee:
@@ -38,8 +43,12 @@ export default function LoginServices() {
   return (
     <>
       <Button
-        variant="outline"
-        className=" px-3 gap-3"
+        style={{
+          backgroundColor: "hsl(var(--foreground))",
+          color: "hsl(var(--background))",
+        }}
+        size="lg"
+        className="px-3 gap-3"
         onClick={() => {
           signIn("azure-ad", { callbackUrl: "/auth/redirect" });
         }}
