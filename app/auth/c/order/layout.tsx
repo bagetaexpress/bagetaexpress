@@ -12,8 +12,11 @@ export default async function CartLayout({
   if (!user) {
     redirect("/");
   }
-  const foundOrder = await getOrdersByUserId(user.id, "ordered");
-  const foundUnpicked = await getOrdersByUserId(user.id, "unpicked");
+
+  const [foundOrder, foundUnpicked] = await Promise.all([
+    getOrdersByUserId(user.id, "ordered"),
+    getOrdersByUserId(user.id, "unpicked"),
+  ]);
   if (foundOrder.length === 0 && foundUnpicked.length === 0) {
     redirect("/auth/c/store");
   }

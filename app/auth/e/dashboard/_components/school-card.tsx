@@ -14,10 +14,28 @@ import { getUser } from "@/lib/user-utils";
 import { getStore } from "@/db/controllers/store-controller";
 import PrintOrderList from "./print-order-list";
 import { getDate } from "@/lib/utils";
+import EditReservationClose from "./edit-reservation-close";
+import { Loader } from "lucide-react";
+
+export function SchoolCardPlaceholder() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle></CardTitle>
+        <CardDescription></CardDescription>
+      </CardHeader>
+      <CardContent className="flex justify-center items-center">
+        <Loader className="w-10 h-10 animate-spin" />
+      </CardContent>
+      <CardFooter></CardFooter>
+    </Card>
+  );
+}
 
 export default async function SchoolCard({
   school,
   orderClose,
+  reservationClose,
   ...stats
 }: SchoolStats) {
   const user = await getUser();
@@ -25,9 +43,12 @@ export default async function SchoolCard({
     return null;
   }
 
-  const orderCloseDate = getDate(orderClose ?? new Date());
-  const orders = await getOrderItemsByStoreAndSchool(user.storeId, school.id);
-  const store = await getStore(user.storeId ?? 0);
+  const orderCloseDate = getDate(orderClose);
+  const reservationCloseDate = getDate(reservationClose);
+  const [orders, store] = await Promise.all([
+    getOrderItemsByStoreAndSchool(user.storeId, school.id),
+    getStore(user.storeId),
+  ]);
 
   return (
     <Card>
@@ -50,16 +71,18 @@ export default async function SchoolCard({
           <p>{stats.unpicked}</p>
         </div>
       </CardContent>
-      <CardFooter>
-        <div className="flex w-full gap-1">
-          <EditOrderClose orderClose={orderCloseDate} schoolId={school.id} />
-          <PrintOrderLabels
-            orders={orders}
-            store={store}
-            orderClose={orderCloseDate}
-          />
-          <PrintOrderList school={school} orders={orders} store={store} />
-        </div>
+      <CardFooter className="grid gap-1">
+        <EditOrderClose orderClose={orderCloseDate} schoolId={school.id} />
+        <EditReservationClose
+          reservationClose={reservationCloseDate}
+          schoolId={school.id}
+        />
+        <PrintOrderLabels
+          orders={orders}
+          store={store}
+          orderClose={orderCloseDate}
+        />
+        <PrintOrderList school={school} orders={orders} store={store} />
       </CardFooter>
     </Card>
   );

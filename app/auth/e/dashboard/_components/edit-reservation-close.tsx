@@ -12,28 +12,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { updateOrderClose } from "@/lib/store-utils";
+import { updateReservationClose } from "@/lib/store-utils";
 import { getFormatedDate } from "@/lib/utils";
 import { format } from "date-fns";
 import { Loader } from "lucide-react";
 import React, { useEffect } from "react";
 
-interface IProps {
-  orderClose: Date;
+export default function EditReservationClose({
+  reservationClose,
+  schoolId,
+}: {
+  reservationClose: Date;
   schoolId: number;
-}
-
-export default function EditOrderClose({ orderClose, schoolId }: IProps) {
+}) {
   const [date, setDate] = React.useState<Date | undefined>();
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
 
   useEffect(() => {
     const offset = 120 * 60 * 1000;
-    const time = orderClose.getTime() - offset;
+    const time = reservationClose.getTime() - offset;
     const newDate = new Date(time);
     setDate(newDate);
-  }, [orderClose]);
+  }, [reservationClose]);
 
   return (
     <Dialog
@@ -41,20 +42,18 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
       onOpenChange={() => {
         if (isOpen) {
           setIsProcessing(false);
-          setDate(orderClose);
+          setDate(reservationClose);
         }
         setIsOpen(!isOpen);
       }}
     >
       <DialogTrigger asChild>
-        <Button className="flex-1">Uzávierka objednávania</Button>
+        <Button className="flex-1">Uzávierka rezervácie</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Upraviť dátum</DialogTitle>
-          <DialogDescription>
-            Upraviť dátum uzávierky objednávok
-          </DialogDescription>
+          <DialogDescription>Upraviť dátum uzávierky</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4 justify-center items-center">
           <Calendar
@@ -87,7 +86,7 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
           <Button
             variant="outline"
             onClick={() => {
-              setDate(orderClose);
+              setDate(reservationClose);
               setIsOpen(false);
             }}
           >
@@ -100,7 +99,7 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
               if (!date) return;
               setIsProcessing(true);
 
-              await updateOrderClose(schoolId, getFormatedDate(date));
+              await updateReservationClose(schoolId, getFormatedDate(date));
               setIsProcessing(false);
               setIsOpen(false);
             }}

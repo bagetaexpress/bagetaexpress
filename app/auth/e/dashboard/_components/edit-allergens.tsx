@@ -27,6 +27,15 @@ import { Plus, Trash } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+export function EditAllergensLoader() {
+  return (
+    <Button className="flex-1 sm:grow-0" disabled>
+      Upraviť alergény
+    </Button>
+  );
+}
+
+// @ts-ignore
 export default async function EditAllergens({ error }: { error?: string }) {
   const user = await getUser();
   if (!user || !user.storeId) redirect("/");

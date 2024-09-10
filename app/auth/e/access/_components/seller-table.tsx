@@ -40,11 +40,13 @@ export default async function SellerTable({
     redirect("/");
   }
 
-  const sellers = await getSellersByStoreId(currUser.storeId ?? 0);
-  const schools = await getSchoolsByStoreId(currUser.storeId ?? 0);
+  const [sellers, schools] = await Promise.all([
+    getSellersByStoreId(currUser.storeId ?? 0),
+    getSchoolsByStoreId(currUser.storeId ?? 0),
+  ]);
 
   const filteredSellers = sellers?.filter(
-    ({ user }) => user.id !== currUser.id && !user.isAdmin
+    ({ user }) => user.id !== currUser.id && !user.isAdmin,
   );
 
   return (

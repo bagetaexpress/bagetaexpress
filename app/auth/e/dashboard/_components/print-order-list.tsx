@@ -30,10 +30,10 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
       <Button
         variant="outline"
         type="button"
-        size="icon"
-        className="aspect-square"
+        className="gap-2"
         onClick={handlePrint}
       >
+        Zhrnutie
         <TableProperties />
       </Button>
       <div className="hidden">
@@ -111,7 +111,7 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
                   {orders
                     .reduce(
                       (acc, order) => acc + order.item.price * order.quantity,
-                      0
+                      0,
                     )
                     .toFixed(2)}
                   €

@@ -12,7 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ExtendedItem } from "@/db/controllers/item-controller";
-import { Store, order } from "@/db/schema";
+import { Store } from "@/db/schema";
 import { printComponent } from "@/lib/utils";
 import { Printer } from "lucide-react";
 import Image from "next/image";
@@ -38,7 +38,7 @@ export default function PrintOrderLabels({
   const toPrintRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [consumptionDate, setConsumptionDate] = useState<Date>(
-    new Date(orderClose.setDate(orderClose.getDate() + 2))
+    new Date(orderClose.setDate(orderClose.getDate() + 2)),
   );
 
   function handlePrint() {
@@ -94,7 +94,7 @@ export default function PrintOrderLabels({
                       Spotrebujte do:{" "}
                       {consumptionDate.toLocaleDateString("sk-SK")}
                     </p>
-                  </div>
+                  </div>,
                 );
               }
               return items;
@@ -104,12 +104,8 @@ export default function PrintOrderLabels({
       </div>
       <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
         <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            type="button"
-            size="icon"
-            className="aspect-square"
-          >
+          <Button variant="outline" type="button" className="gap-2">
+            Štítky
             <Printer />
           </Button>
         </DialogTrigger>
@@ -138,7 +134,7 @@ export default function PrintOrderLabels({
               variant="outline"
               onClick={() => {
                 setConsumptionDate(
-                  new Date(orderClose.setDate(orderClose.getDate() + 2))
+                  new Date(orderClose.setDate(orderClose.getDate() + 2)),
                 );
                 setIsOpen(false);
               }}

@@ -36,6 +36,7 @@ async function getSchool(schoolId: School["id"]): Promise<School> {
 export type SchoolStats = {
   school: School;
   orderClose: string;
+  reservationClose: string;
   ordered: number;
   pickedup: number;
   unpicked: number;
@@ -48,6 +49,7 @@ async function getSchoolsOrderStats(
     .select({
       school,
       orderClose: schoolStore.orderClose,
+      reservationClose: schoolStore.reservationClose,
       ordered: sql`COUNT(case when ${order.status} = 'ordered' then 1 end)`,
       pickedup: sql`COUNT(case when ${order.status} = 'pickedup' then 1 end)`,
       unpicked: sql`COUNT(case when ${order.status} = 'unpicked' then 1 end)`,
@@ -70,6 +72,19 @@ async function updateSchoolStoreOrderClose(
   await db
     .update(schoolStore)
     .set({ orderClose })
+    .where(
+      and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId)),
+    );
+}
+
+async function updateSchoolStoreReservationClose(
+  schoolId: SchoolStore["schoolId"],
+  storeId: SchoolStore["storeId"],
+  reservationClose: SchoolStore["reservationClose"],
+) {
+  await db
+    .update(schoolStore)
+    .set({ reservationClose })
     .where(
       and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId)),
     );
@@ -134,6 +149,7 @@ export {
   getSchoolByDomain,
   getSchoolsOrderStats,
   updateSchoolStoreOrderClose,
+  updateSchoolStoreReservationClose,
   getSchool,
   getSchoolDomains,
 };

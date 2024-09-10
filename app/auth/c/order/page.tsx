@@ -28,13 +28,18 @@ export default async function OrderPage() {
   const currUser = await getUser();
   if (!currUser) return null;
 
-  const foundOrders = await getOrdersByUserId(currUser.id, "ordered");
-  const foundUnpicked = await getOrdersByUserId(currUser.id, "unpicked");
+  const [[foundOrder], [foundUnpicked]] = await Promise.all([
+    getOrdersByUserId(currUser.id, "ordered"),
+    getOrdersByUserId(currUser.id, "unpicked"),
+  ]);
 
-  const order = foundOrders[0] ?? foundUnpicked[0];
-  const orderClose = await getFirstOrderItemClose(order.id);
+  const order = foundOrder ?? foundUnpicked;
 
-  const items = await getItemsFromOrder(order.id);
+  const [items, orderClose] = await Promise.all([
+    getItemsFromOrder(order.id),
+    getFirstOrderItemClose(order.id),
+  ]);
+
   const total = items.reduce(
     (acc, { item, quantity }) => acc + item.price * quantity,
     0,

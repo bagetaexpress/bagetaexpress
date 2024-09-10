@@ -15,23 +15,25 @@ export default async function Store() {
     redirect("/");
   }
 
-  const hasOrder = await hasActiveOrder(user.id);
-  const orderClose = getDate(await getFirstOrderClose(user.schoolId));
-
-  const items = (await fetch(
-    `${process.env.NEXTAUTH_URL}/api/client/items?schoolID=${user.schoolId}`,
-    {
-      next: {
-        revalidate: 60 * 60 * 24 * 7,
-        tags: ["items"],
+  const [hasOrder, orderCloseStr, items] = await Promise.all([
+    hasActiveOrder(user.id),
+    getFirstOrderClose(user.schoolId),
+    fetch(
+      `${process.env.NEXTAUTH_URL}/api/client/items?schoolID=${user.schoolId}`,
+      {
+        next: {
+          revalidate: 60 * 60 * 24 * 7,
+          tags: ["items"],
+        },
       },
-    }
-  )
-    .then((res) => res.json())
-    .catch((err) => {
-      console.log(err);
-      throw new Error("Failed to fetch items");
-    })) as ExtendedItem[];
+    )
+      .then((res) => res.json())
+      .catch((err) => {
+        console.log(err);
+        throw new Error("Failed to fetch items");
+      }) as Promise<ExtendedItem[]>,
+  ]);
+  const orderClose = getDate(orderCloseStr);
 
   return (
     <div className="h-full relative">

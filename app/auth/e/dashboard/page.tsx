@@ -10,20 +10,25 @@ import {
 import { ItemStats, getItemsStats } from "@/db/controllers/item-controller";
 import { getSchoolsOrderStats } from "@/db/controllers/school-controller";
 import { getUser } from "@/lib/user-utils";
-import { Plus } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 import AddItemForm from "./_components/add-item";
 import DeleteItemButton from "./_components/delete-item";
-import EditAllergens from "./_components/edit-allergens";
-import EditIngredients from "./_components/edit-ingredients";
+import EditAllergens, {
+  EditAllergensLoader,
+} from "./_components/edit-allergens";
+import EditIngredients, {
+  EditIngredientsLoader,
+} from "./_components/edit-ingredients";
 import { getAllergensByStoreId } from "@/db/controllers/allergen-controller";
 import { getIngredientsByStoreId } from "@/db/controllers/ingredient-controller";
 import Image from "next/image";
-import SchoolCard from "./_components/school-card";
+import SchoolCard, { SchoolCardPlaceholder } from "./_components/school-card";
 import { Allergen, Ingredient } from "@/db/schema";
 import OrderSummary from "./_components/order-summary";
 import EditStore from "./_components/edit-store";
 import { getStore } from "@/db/controllers/store-controller";
+import { Suspense } from "react";
 
 export default async function DashboardPage({
   searchParams,
@@ -35,27 +40,34 @@ export default async function DashboardPage({
     redirect("/");
   }
 
-  const schoolStats = await getSchoolsOrderStats(user.storeId ?? 0);
-  const itemStats = await getItemsStats(user.storeId ?? 0);
-  const allergens = await getAllergensByStoreId(user.storeId ?? 0);
-  const ingredients = await getIngredientsByStoreId(user.storeId ?? 0);
-  const store = await getStore(user.storeId ?? 0);
+  const [schoolStats, itemStats, allergens, ingredients, store] =
+    await Promise.all([
+      getSchoolsOrderStats(user.storeId ?? 0),
+      getItemsStats(user.storeId ?? 0),
+      getAllergensByStoreId(user.storeId ?? 0),
+      getIngredientsByStoreId(user.storeId ?? 0),
+      getStore(user.storeId ?? 0),
+    ]);
 
   return (
     <div className=" relative min-h-full">
       <h1 className="text-3xl font-semibold py-2">Dashboard</h1>
 
       <div className="flex gap-2 flex-wrap">
-        <EditAllergens
-          error={
-            (searchParams.allergenError ?? undefined) as string | undefined
-          }
-        />
-        <EditIngredients
-          error={
-            (searchParams.ingredientError ?? undefined) as string | undefined
-          }
-        />
+        <Suspense fallback={<EditAllergensLoader />}>
+          <EditAllergens
+            error={
+              (searchParams.allergenError ?? undefined) as string | undefined
+            }
+          />
+        </Suspense>
+        <Suspense fallback={<EditIngredientsLoader />}>
+          <EditIngredients
+            error={
+              (searchParams.ingredientError ?? undefined) as string | undefined
+            }
+          />
+        </Suspense>
         <OrderSummary />
         <EditStore store={store} />
       </div>
@@ -63,7 +75,9 @@ export default async function DashboardPage({
       <h2 className="text-2xl font-semibold pt-4">Školy</h2>
       <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {schoolStats.map((schoolStat, i) => (
-          <SchoolCard key={i} {...schoolStat} />
+          <Suspense fallback={<SchoolCardPlaceholder />}>
+            <SchoolCard key={i} {...schoolStat} />
+          </Suspense>
         ))}
       </div>
 

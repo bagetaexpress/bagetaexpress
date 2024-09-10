@@ -7,7 +7,6 @@ import {
 import { getOrdersBySchoolId } from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
 import SummaryRow from "./_components/summary-row";
-import { redirect } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -18,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { handleFilterChange } from "./server-util";
-import { Order, order } from "@/db/schema";
+import { Order } from "@/db/schema";
 import PrintOrderList from "./_components/print-order-list";
 import { getSchool } from "@/db/controllers/school-controller";
 import { getOrderItemsByStoreAndSchool } from "@/db/controllers/item-controller";
@@ -32,11 +31,13 @@ export default async function SummaryPage({
   const user = await getUser();
   if (!user || !user.schoolId) return null;
   const filter = (searchParams.filter ?? "ordered") as Order["status"];
-  const orders = await getOrdersBySchoolId(user.schoolId, filter);
 
-  const currentOrders = await getOrderItemsByStoreAndSchool(1, user.schoolId);
-  const school = await getSchool(user.schoolId);
-  const store = await getStore(1);
+  const [orders, currentOrders, school, store] = await Promise.all([
+    getOrdersBySchoolId(user.schoolId, filter),
+    getOrderItemsByStoreAndSchool(1, user.schoolId),
+    getSchool(user.schoolId),
+    getStore(1),
+  ]);
 
   return (
     <div className=" relative min-h-full">

@@ -27,6 +27,15 @@ import { Plus, Trash } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+export function EditIngredientsLoader() {
+  return (
+    <Button className="flex-1 sm:grow-0" disabled>
+      Upraviť ingrediencie
+    </Button>
+  );
+}
+
+// @ts-ignore
 export default async function EditIngredients({ error }: { error?: string }) {
   const user = await getUser();
   if (!user || !user.storeId) redirect("/");

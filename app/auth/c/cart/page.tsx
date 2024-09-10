@@ -8,8 +8,15 @@ import { getTotalOrderedItems } from "@/db/controllers/order-controller";
 import { getDate, getNewDate } from "@/lib/utils";
 
 export default async function CartPage() {
-  const cartId = await getCartId();
-  const data = await getCartItems();
+  const user = await getUser();
+  if (!user || !user.schoolId) return;
+
+  const [cartId, data, orderClose, totalOrders] = await Promise.all([
+    getCartId(),
+    getCartItems(),
+    getFirstOrderClose(user.schoolId),
+    getTotalOrderedItems(),
+  ]);
 
   if (data.length === 0) {
     return (
@@ -26,18 +33,13 @@ export default async function CartPage() {
     );
   }
 
-  const user = await getUser();
-  if (!user || !user.schoolId) return;
-  const orderClose = getDate(await getFirstOrderClose(user.schoolId));
-  const totalOrders = await getTotalOrderedItems();
-
   return (
     <div className="h-full flex flex-col justify-between md:justify-start">
       <LocalCart data={data} cartId={cartId} totalOrdered={totalOrders} />
       <div className="flex justify-end">
-        {orderClose > getNewDate() ? (
+        {getDate(orderClose) > getNewDate() ? (
           <Cheackout
-            orderClose={orderClose}
+            orderClose={getDate(orderClose)}
             items={data}
             cartId={cartId}
             totalOrdered={totalOrders}

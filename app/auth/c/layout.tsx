@@ -17,8 +17,10 @@ export default async function authLayout({
     redirect("/");
   }
 
-  const foundOrder = await getOrdersByUserId(user.id, "ordered");
-  const foundUnpicked = await getOrdersByUserId(user.id, "unpicked");
+  const [foundOrder, foundUnpicked] = await Promise.all([
+    getOrdersByUserId(user.id, "ordered"),
+    getOrdersByUserId(user.id, "unpicked"),
+  ]);
   const hasOrder = foundOrder.length > 0 || foundUnpicked.length > 0;
 
   return (

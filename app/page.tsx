@@ -32,6 +32,7 @@ import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { Github, Instagram } from "lucide-react";
 import { PopupCarousel } from "@/components/ui/custom/popup-carousel";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -65,7 +66,9 @@ export default function Home() {
             <Link href="/#contact">
               <Button variant="ghost">Kontakt</Button>
             </Link>
-            <UserDropdown />
+            <Suspense fallback={null}>
+              <UserDropdown />
+            </Suspense>
           </div>
         </nav>
         <div className="text-center mt-[20dvh]">
