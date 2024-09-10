@@ -75,8 +75,8 @@ export default async function DashboardPage({
       <h2 className="text-2xl font-semibold pt-4">Školy</h2>
       <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {schoolStats.map((schoolStat, i) => (
-          <Suspense fallback={<SchoolCardPlaceholder />}>
-            <SchoolCard key={i} {...schoolStat} />
+          <Suspense key={i} fallback={<SchoolCardPlaceholder />}>
+            <SchoolCard {...schoolStat} />
           </Suspense>
         ))}
       </div>
