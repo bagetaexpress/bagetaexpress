@@ -7,6 +7,7 @@ import { employee } from "./user/employee";
 import { customer } from "./user/customer";
 import { item } from "./item/item";
 import { store } from "./store/store";
+import { reservation } from "./reservation/reservation";
 
 import { cart } from "./cart/cart";
 import { cartItem } from "./cart/cart-item";
@@ -38,6 +39,7 @@ DROP TABLE IF EXISTS
   `allergen`,
   `item_allergen`,
   `ingredient`,
+  `reservation`,
   `item_ingredient`;
 */
 
@@ -60,6 +62,7 @@ export type Allergen = InferSelectModel<typeof allergen>;
 export type ItemAllergen = InferSelectModel<typeof itemAllergen>;
 export type Ingredient = InferSelectModel<typeof ingredient>;
 export type ItemIngredient = InferSelectModel<typeof itemIngredient>;
+export type Reservations = InferSelectModel<typeof reservation>;
 
 export const tables = {
   order,
@@ -81,6 +84,7 @@ export const tables = {
   itemAllergen,
   ingredient,
   itemIngredient,
+  reservation,
 };
 
 export {
@@ -103,4 +107,5 @@ export {
   itemAllergen,
   ingredient,
   itemIngredient,
+  reservation,
 };

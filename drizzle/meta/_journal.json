@@ -15,6 +15,13 @@
       "when": 1711814616443,
       "tag": "0001_tricky_ikaris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1725980477716,
+      "tag": "0002_lovely_sebastian_shaw",
+      "breakpoints": true
     }
   ]
 }
