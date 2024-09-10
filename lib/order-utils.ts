@@ -29,7 +29,7 @@ async function createUniqueOrder(
     foundUnpicked = await orderCtrl.getOrderByPin(pin, schoolId, "unpicked");
   } while (foundOrdered != null && foundUnpicked != null);
 
-  await orderCtrl.createOrder(userId, pin, "ordered", discount);
+  await orderCtrl.createOrder(userId, pin);
   const order = await orderCtrl.getOrdersByUserId(userId, "ordered");
   if (order.length === 0) {
     throw new Error("Order not found");

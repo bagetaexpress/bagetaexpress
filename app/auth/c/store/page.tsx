@@ -1,12 +1,11 @@
 import ItemCard from "@/app/auth/c/store/_components/itemCard";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { ExtendedItem } from "@/db/controllers/item-controller";
 import { hasActiveOrder } from "@/db/controllers/order-controller";
 import { getFirstOrderClose } from "@/db/controllers/school-controller";
 import { getUser } from "@/lib/user-utils";
 import { getDate, getNewDate } from "@/lib/utils";
-import { Info, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default async function Store() {
@@ -37,14 +36,6 @@ export default async function Store() {
 
   return (
     <div className="h-full relative">
-      <Alert>
-        <Info className="h-5 w-5 mr-2" />
-        <AlertTitle>Každá piata zadarmo!</AlertTitle>
-        <AlertDescription>
-          Každú piatu bagetu dostaneš{" "}
-          <span className=" font-bold">zadarmo</span>
-        </AlertDescription>
-      </Alert>
       <h1 className="text-2xl font-semibold pt-2">Obchod</h1>
       {orderClose > getNewDate() ? (
         <div className="text-sm text-gray-500 mb-4">
