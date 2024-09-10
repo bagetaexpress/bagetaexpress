@@ -41,8 +41,8 @@ export default function Home() {
       <BlurGradientBackground className="absolute left-0 top-0 w-full aspect-square opacity-50 z-[-10]" />
       <div className="flex min-h-screen flex-col items-center justify-center gap-10 relative px-5">
         <BlobOutlineWhite className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[0.8] translate-x-[-40%] translate-y-[-70%]" />
-        <BlobFullPrimary className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[1.2] translate-x-[-60%] translate-y-[-30%]" />
         <BlobPatternBlack className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[0.8] translate-x-[-30%] translate-y-[-29%]" />
+        <BlobFullPrimary className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[1.2] translate-x-[-60%] translate-y-[-30%]" />
         <BlobOutlineSecondary className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[0.8] translate-x-[-60%] translate-y-[0%]" />
         {/*
         <div className="p-4 pb-8 z-10">
