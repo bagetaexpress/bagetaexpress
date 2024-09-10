@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
-import { MainLayoutWrapper } from "@/components/MainLayoutWrapper";
+import { MainLayoutWrapper } from "@/components/main-layout-wrapper";
 import { Toaster } from "@/components/ui/sonner";
-
-const inter = Inter({ subsets: ["latin"] });
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 
 export const metadata: Metadata = {
   title: "bagetaEXPRESS",
@@ -34,7 +33,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="sk" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <meta property="og:type" content="website" />
       <meta property="og:title" content="bagetaEXPRESS" />
       <meta property="og:url" content="bageta.express" />
@@ -43,7 +42,7 @@ export default async function RootLayout({
         content="https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png"
       />
       <meta property="og:description" content="Objednaj si desiatu už teraz!" />
-      <body className={inter.className}>
+      <body>
         <MainLayoutWrapper attribute="class" defaultTheme="light">
           {children}
         </MainLayoutWrapper>

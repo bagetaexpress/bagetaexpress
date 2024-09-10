@@ -1,63 +1,337 @@
-"use client";
-
+import LoginServices from "./_components/login-services";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import LoginServices from "./_components/LoginServices";
-import SvgLogo from "@/assets/bagetaExpress_logo.svg";
-import SvgBrandmark from "@/assets/bagetaExpress_brandmark.svg";
-import SvgLogomark from "@/assets/logomark.svg";
+  BlobFullPrimary,
+  BlobOutlineWhite,
+  BlobOutlineSecondary,
+  BlobPatternBlack,
+  BlurGradientBackground,
+  BlobOutlineSecondary2,
+  BlobFullPrimary2,
+  BlobPatternBlack2,
+} from "@/components/blob";
+
+import MockUpStore from "@/assets/images/landing_page_store.png";
+import MockUpDashboard from "@/assets/images/landing_page_dashboard.png";
+import MockUpSeller from "@/assets/images/landing_page_seller.png";
+import MockUpSeller1 from "@/assets/images/landing_page_seller_1.png";
+import MockUpSeller2 from "@/assets/images/landing_page_seller_2.png";
+import MockUpSeller3 from "@/assets/images/landing_page_seller_3.png";
+import MockUpOrder from "@/assets/images/landing_page_order.png";
+import MockUpOrder1 from "@/assets/images/landing_page_order_1.png";
+import MockUpOrder2 from "@/assets/images/landing_page_order_2.png";
+import MockUpOrder3 from "@/assets/images/landing_page_order_3.png";
 
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import LogomarkJS from "@/components/nav/logomark-js";
+import UserDropdown from "@/components/nav/user-dropdown";
+import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
+import { Github, Instagram } from "lucide-react";
+import { PopupCarousel } from "@/components/ui/custom/popup-carousel";
 
-export default function Home({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default function Home() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2">
-      <div
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,215,16,1) 100%)",
-        }}
-        className=" justify-center items-center hidden md:flex"
-      >
-        <Image src={SvgBrandmark} alt="Bageta Express logo" width={300} />
-        <Image
-          src={SvgLogomark}
-          alt="Bageta Express logo"
-          style={{
-            position: "absolute",
-            bottom: "0",
-            left: "0",
-            padding: "1.5rem",
-          }}
-          width={250}
-        />
-      </div>
-      <div className="flex min-h-screen flex-col gap-4 items-center justify-center">
-        <div className=" md:hidden p-4 pb-8">
+    <div className="min-h-[100dvh] overflow-x-hidden relative">
+      {/* Background
+       */}
+      <BlurGradientBackground className="absolute left-0 top-0 w-full aspect-square opacity-50 z-[-10]" />
+      <div className="flex min-h-screen flex-col items-center justify-center gap-10 relative px-5">
+        <BlobOutlineWhite className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[0.8] translate-x-[-40%] translate-y-[-70%]" />
+        <BlobFullPrimary className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[1.2] translate-x-[-60%] translate-y-[-30%]" />
+        <BlobPatternBlack className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[0.8] translate-x-[-30%] translate-y-[-29%]" />
+        <BlobOutlineSecondary className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[0.8] translate-x-[-60%] translate-y-[0%]" />
+        {/*
+        <div className="p-4 pb-8 z-10">
           <Image src={SvgLogo} alt="Bageta Express logo" width={225} />
         </div>
-        <Card>
-          <CardHeader>
-            <CardTitle> Prihlásiť sa</CardTitle>
-            <CardDescription>
-              Pre prístup do aplikácie sa prihláste
-              <br /> pomocou svojho <b>školského</b> účtu.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <LoginServices />
-          </CardContent>
-        </Card>
+        */}
+        <nav className="h-fit flex flex-row items-center justify-between max-w-screen-lg sm:mt-5 w-full sm:w-[calc(100%-2.5rem)] bg-background p-5 sm:rounded-xl absolute top-0 left-1/2 translate-x-[-50%] shadow-2xl">
+          <div className="relative h-10 w-28">
+            <Link href="/">
+              <LogomarkJS
+                style={{ fill: "hsl(var(--primary-foreground))" }}
+                className="max-h-10 flex-1"
+              />
+            </Link>
+          </div>
+          <div className="flex gap-1">
+            <Link href="/#description">
+              <Button variant="ghost">Čo robíme?</Button>
+            </Link>
+            <Link href="/#contact">
+              <Button variant="ghost">Kontakt</Button>
+            </Link>
+            <UserDropdown />
+          </div>
+        </nav>
+        <div className="text-center mt-[20dvh]">
+          <h1
+            className="font-extrabold"
+            style={{
+              fontSize: "clamp(3rem, 10vw, 6rem)",
+              lineHeight: 1,
+            }}
+          >
+            NASKENUJ
+            <br />
+            <span
+              style={{
+                WebkitTextStroke: "clamp(2px, 0.5vw, 4px) black",
+                color: "transparent",
+              }}
+            >
+              OBJEDNAJ
+            </span>
+            <br />
+            VYCHUTNAJ
+          </h1>
+        </div>
+        <div className="text-center">
+          <p className="text-xl font-semibold max-w-prose pb-4">
+            <span className="underline">BagetaExpress</span> je objednávací
+            systém pre študentov ktorý ponúka jednoduché a bezproblémové
+            riešenie objednávania jedla na školy
+          </p>
+          <LoginServices />
+        </div>
+        <Image
+          src={MockUpStore}
+          alt="Bageta Express store mockup"
+          className="w-[1024px] max-w-[140%]"
+        />
       </div>
+      <div
+        id="description"
+        className="grid max-w-screen-lg mx-auto mt-52 gap-y-40 px-5"
+      >
+        <div className="grid sm:grid-cols-2">
+          <div className="flex flex-col justify-center gap-4">
+            <h3 className="font-bold text-3xl">Jednoduchá správa</h3>
+            <p className="max-w-prose font-ligh text-lg">
+              Pridaj nové jedlá, uprav ceny, sleduj objednávky a získaj podrobný
+              prehľad o svojom obchode, individuálne spravuj školy, tlač štítky,
+              spravuj zamestnancov a viac! Všetko na jednom mieste, dostupné
+              kedykoľvek a odkiaľkoľvek.
+            </p>
+          </div>
+          <div className="relative">
+            <BlobFullPrimary className="absolute left-0 bottom-0 z-[-1] w-[50rem] aspect-square rotate-90 translate-x-[-25%] translate-y-[10%]" />
+            <BlobPatternBlack className="absolute left-0 bottom-0 z-[-1] w-[50rem] scale-[0.8] aspect-square rotate-90 translate-x-[-25%] translate-y-[25%]" />
+            <PopupCarousel
+              items={[
+                <Image
+                  key="dashboard1"
+                  src={MockUpDashboard}
+                  alt="Managment dashboard"
+                  className="drop-shadow-xl aspect-[4/3] object-cover"
+                />,
+              ]}
+              className="flex"
+            >
+              <Image
+                src={MockUpDashboard}
+                alt="Managment dashboard"
+                className="flex-1 sm:translate-x-[35%] scale-[1.3] sm:scale-[1.7] sm:hover:scale-[1.8] transition-transform duration-300 ease-in-out cursor-pointer"
+              />
+            </PopupCarousel>
+          </div>
+        </div>
+        <div className="grid sm:grid-cols-2 relative">
+          <BlobOutlineSecondary2 className="absolute left-0 top-0 z-[-1] w-[50rem] scale-[0.9] aspect-square translate-x-[-20%] translate-y-[-10%]" />
+          <BlobPatternBlack className="absolute left-0 top-0 z-[-1] w-[50rem] scale-[0.7] rotate-45 aspect-square translate-x-[-30%] translate-y-[0%]" />
+          <PopupCarousel
+            className="flex landing-page-seller"
+            items={[
+              <Image
+                key="seller3"
+                src={MockUpSeller3}
+                alt="Seller page"
+                className="drop-shadow-xl aspect-[9/13] object-cover"
+              />,
+              <Image
+                key="seller1"
+                src={MockUpSeller1}
+                alt="Seller page"
+                className="drop-shadow-xl aspect-[9/13] object-cover"
+              />,
+              <Image
+                key="seller2"
+                src={MockUpSeller2}
+                alt="Seller page"
+                className="drop-shadow-xl aspect-[9/13] object-cover"
+              />,
+            ]}
+          >
+            <div className="hidden lg:inline relative cursor-pointer flex-1">
+              <Image
+                src={MockUpSeller1}
+                id="seller1"
+                alt="Seller page"
+                className="transition-transform duration-300 ease-in-out drop-shadow-2xl"
+              />
+              <Image
+                id="seller2"
+                src={MockUpSeller2}
+                alt="Seller page"
+                className="transition-transform duration-300 ease-in-out drop-shadow-2xl"
+              />
+              <Image
+                id="seller3"
+                src={MockUpSeller3}
+                alt="Seller page"
+                className="transition-transform duration-300 ease-in-out drop-shadow-2xl"
+              />
+              <Image
+                src={MockUpSeller1}
+                alt="Seller page"
+                className="hidden sm:inline invisible"
+              />
+            </div>
+            <Image
+              src={MockUpSeller}
+              alt="Seller summary and QR code scnanner"
+              className="hidden sm:inline lg:hidden translate-x-[-35%] scale-[1.7] hover:scale-[1.8] transition-transform duration-300 ease-in-out cursor-pointer"
+            />
+            <Image
+              src={MockUpSeller}
+              alt="Seller summary and QR code scnanner"
+              className="sm:hidden scale-[1.3] transition-transform duration-300 ease-in-out cursor-pointer"
+            />
+          </PopupCarousel>
+          <div className="flex flex-col order-first sm:order-last justify-center gap-4 transition-transform duration-300 ease-in-out landing-page-seller-text">
+            <h3 className="font-bold text-3xl">Bezprobémové prevzanie</h3>
+            <p className="max-w-prose font-ligh text-lg">
+              Prevezmi objednávky jednoducho a rýchlo. Stačí naskenovať QR kód
+              alebo zadať kód manuálne a objednávka je tvoja. Prehľadne
+              zobrazené informácie o objednávke, možnosť zobraziť detaily a
+              získať prehľad o objednávkach. To všetko v jednej aplikácii!
+            </p>
+          </div>
+        </div>
+        <div className="grid sm:grid-cols-2 relative">
+          <BlobFullPrimary2 className="absolute right-0 bottom-0 z-[-1] w-[50rem] aspect-square rotate-[-45deg] scale-[1.1] translate-x-[35%] sm:translate-y-[20%]" />
+          <BlobOutlineSecondary className="absolute right-0 bottom-0 z-[-1] w-[50rem] aspect-square rotate-[-45deg] scale-[0.9] translate-x-[35%] sm:translate-y-[30%]" />
+          <div className="flex flex-col justify-center gap-4 transition-transform duration-300 ease-in-out">
+            <h3 className="font-bold text-3xl">Rýchle objednanie</h3>
+            <p className="max-w-prose font-ligh text-lg">
+              Prihlás sa skrz svoj školský účet a objednaj si svoje obľúbené
+              jedlo jednoducho a rýchlo. Prehľadné zobrazenie jedál, rýchle
+              objednanie, interaktívne rozhranie a možnosť sledovať svoju
+              objednávku. Dostupné vždy a všade cez našu webovú stránku.
+            </p>
+          </div>
+          <PopupCarousel
+            className="flex landing-page-order"
+            items={[
+              <Image
+                key="order3"
+                src={MockUpOrder3}
+                alt="Seller summary "
+                className="drop-shadow-xl aspect-[9/13] object-cover"
+              />,
+              <Image
+                key="order1"
+                src={MockUpOrder1}
+                alt="Seller summary "
+                className="drop-shadow-xl aspect-[9/13] object-cover"
+              />,
+              <Image
+                key="order2"
+                src={MockUpOrder2}
+                alt="Seller summary "
+                className="drop-shadow-xl aspect-[9/13] object-cover"
+              />,
+            ]}
+          >
+            <div className="hidden lg:inline relative cursor-pointer flex-1">
+              <Image
+                src={MockUpOrder1}
+                id="order1"
+                alt="Seller summary and QR code scnanner"
+                className="transition-transform duration-300 ease-in-out drop-shadow-2xl"
+              />
+              <Image
+                id="order2"
+                src={MockUpOrder2}
+                alt="Seller summary and QR code scnanner"
+                className="transition-transform duration-300 ease-in-out drop-shadow-2xl"
+              />
+              <Image
+                id="order3"
+                src={MockUpOrder3}
+                alt="Seller summary and QR code scnanner"
+                className="transition-transform duration-300 ease-in-out drop-shadow-2xl"
+              />
+              <Image
+                src={MockUpOrder1}
+                alt="Seller summary and QR code scnanner"
+                className="hidden sm:inline invisible"
+              />
+            </div>
+            <Image
+              src={MockUpOrder}
+              alt="Order screen"
+              className="lg:hidden sm:translate-x-[35%] scale-[1.3] sm:scale-[1.7] sm:hover:scale-[1.8] transition-transform duration-300 ease-in-out cursor-pointer"
+            />
+          </PopupCarousel>
+        </div>
+      </div>
+
+      {/*
+      <div
+        id="contact"
+        className="relative flex flex-col gap-4 mt-52 lg:mt-80 bg-background rounded-xl p-5 shadow-2xl max-w-screen-lg mx-auto"
+      >
+        <BlobFullPrimary2 className="absolute top-0 left-0 z-[-1] w-[50rem] aspect-square scale-[1.2] translate-x-[-20%] translate-y-[-30%]" />
+        <BlobOutlineSecondary2 className="absolute top-0 left-0 z-[-1] w-[50rem] aspect-square rotate-90 scale-[0.9] translate-x-[-30%] translate-y-[-20%]" />
+        <BlobPatternBlack2 className="absolute right-0 bottom-0 z-[-1] w-[50rem] aspect-square rotate-45 scale-[0.9] translate-x-[35%] translate-y-[30%]" />
+        <h2 className="text-xl text-center leading-loose">
+          Máš Záujem? <br />
+          <span className="text-3xl font-bold">Napíš nám!</span>
+        </h2>
+        <div className="grid w-full gap-4">
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Zadajte email"
+              required
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="message">Správa</Label>
+            <Textarea id="message" placeholder="Správa" required />
+          </div>
+        </div>
+        <Button size="lg">Odoslať</Button>
+      </div>
+      */}
+
+      <footer className="w-full min-h-40 bg-background mt-52 flex flex-col gap-2">
+        <div className="flex-1 flex justify-center items-center gap-2 flex-wrap">
+          <Link href="https://www.instagram.com/bagetaexpress/" target="_blank">
+            <Button variant="outline" className="gap-2">
+              Instagram
+              <Instagram className="w-6 h-6" />
+            </Button>
+          </Link>
+          <Link href="https://www.github.com/tomz197" target="_blank">
+            <Button variant="outline" className="gap-2">
+              Github
+              <Github className="w-6 h-6" />
+            </Button>
+          </Link>
+        </div>
+        <Separator />
+        <p className="text-sm color-muted-background text-center pb-2">
+          Copyright &copy; 2024 Tomáš Ž.
+        </p>
+      </footer>
     </div>
   );
 }

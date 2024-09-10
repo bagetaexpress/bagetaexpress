@@ -2,10 +2,10 @@ import { ReactNode } from "react";
 import { ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
 
-import { getUser } from "@/lib/userUtils";
-import { getOrdersByUserId } from "@/db/controllers/orderController";
-import NavButton from "@/components/nav/navButton";
-import NavWrapper from "@/components/nav/navWrapper";
+import { getUser } from "@/lib/user-utils";
+import { getOrdersByUserId } from "@/db/controllers/order-controller";
+import NavButton from "@/components/nav/nav-button";
+import NavWrapper from "@/components/nav/nav-wrapper";
 
 export default async function authLayout({
   children,

@@ -1,6 +1,6 @@
-import EmployeeTable from "./_components/employeeTable";
-import SellerTable from "./_components/sellerTable";
-import { AddEmployeeErrors, AddSellerErrors } from "./accessErrors";
+import EmployeeTable from "./_components/employee-table";
+import SellerTable from "./_components/seller-table";
+import { AddEmployeeErrors, AddSellerErrors } from "./access-errors";
 
 export default async function AccessPage({
   searchParams,

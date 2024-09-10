@@ -1,7 +1,7 @@
 "use client";
 
-import { createOrderFromCart } from "@/lib/orderUtils";
-import { Button } from "../../../../../components/ui/button";
+import { createOrderFromCart } from "@/lib/order-utils";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerTrigger,
@@ -10,12 +10,12 @@ import {
   DrawerTitle,
   DrawerFooter,
   DrawerClose,
-} from "../../../../../components/ui/drawer";
+} from "@/components/ui/drawer";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader } from "lucide-react";
 import { Item } from "@/db/schema";
-import { getCartItems } from "@/lib/cartUtils";
+import { getCartItems } from "@/lib/cart-utils";
 import { getNewDate } from "@/lib/utils";
 
 interface ICheckout {
@@ -47,7 +47,7 @@ export default function Cheackout({
     setOrderCreateError(false);
 
     try {
-      await createOrderFromCart(cartId);
+      await createOrderFromCart(cartId, 0);
     } catch (error) {
       console.log(error);
       setOrderCreateError(true);

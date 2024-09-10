@@ -1,7 +1,7 @@
 import { order } from "./order/order";
-import { orderItem } from "./order/orderItem";
+import { orderItem } from "./order/order-item";
 import { school } from "./school/school";
-import { schoolStore } from "./school/schoolStore";
+import { schoolStore } from "./school/schools-store";
 import { account, session, user, verificationToken } from "./user/user";
 import { employee } from "./user/employee";
 import { customer } from "./user/customer";
@@ -9,12 +9,12 @@ import { item } from "./item/item";
 import { store } from "./store/store";
 
 import { cart } from "./cart/cart";
-import { cartItem } from "./cart/cartItem";
+import { cartItem } from "./cart/cart-item";
 import { seller } from "./user/seller";
 import { allergen } from "./item/allergen";
-import { itemAllergen } from "./item/itemAllergen";
+import { itemAllergen } from "./item/item-allergen";
 import { ingredient } from "./item/ingredient";
-import { itemIngredient } from "./item/itemIngredient";
+import { itemIngredient } from "./item/item-ingredient";
 import { InferSelectModel } from "drizzle-orm";
 
 /*

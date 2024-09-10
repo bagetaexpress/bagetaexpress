@@ -1,9 +1,9 @@
-import { getItemsFromOrder } from "@/db/controllers/itemController";
+import { getItemsFromOrder } from "@/db/controllers/item-controller";
 import {
   getFirstOrderItemClose,
   getOrdersByUserId,
-} from "@/db/controllers/orderController";
-import { getUser } from "@/lib/userUtils";
+} from "@/db/controllers/order-controller";
+import { getUser } from "@/lib/user-utils";
 import QrCode from "./_components/qrCode";
 import Image from "next/image";
 import {
@@ -17,7 +17,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { deleteOrderAndItems } from "@/lib/orderUtils";
+import { deleteOrderAndItems } from "@/lib/order-utils";
 import { Order } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import { revalidatePath } from "next/cache";

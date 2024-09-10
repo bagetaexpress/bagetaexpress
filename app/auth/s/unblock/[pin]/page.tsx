@@ -1,10 +1,10 @@
 import {
   getOrderByPin,
   updateOrderStatus,
-} from "@/db/controllers/orderController";
-import { getUser } from "@/lib/userUtils";
+} from "@/db/controllers/order-controller";
+import { getUser } from "@/lib/user-utils";
 import { redirect } from "next/navigation";
-import HandleOrder from "../../_components/handleOrder";
+import HandleOrder from "../../_components/handle-order";
 
 export default async function UnlockPinPage({
   params,

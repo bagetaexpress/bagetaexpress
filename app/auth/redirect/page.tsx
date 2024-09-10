@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import LogoutBtn from "./_components/LogoutBtn";
+import LogoutBtn from "./_components/logout-button";
 import {
   Accordion,
   AccordionContent,
@@ -8,8 +8,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Facebook, Instagram, Link } from "lucide-react";
-import { getSchoolDomains } from "@/db/controllers/schoolController";
-import { authOptions } from "@/lib/authOptions";
+import { getSchoolDomains } from "@/db/controllers/school-controller";
+import { authOptions } from "@/lib/auth-options";
 
 export default async function RedirectPage() {
   const session = await getServerSession(authOptions);

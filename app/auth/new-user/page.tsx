@@ -1,8 +1,8 @@
-import { getSchoolByDomain } from "@/db/controllers/schoolController";
-import { createCustomer } from "@/db/controllers/userController";
+import { getSchoolByDomain } from "@/db/controllers/school-controller";
+import { createCustomer } from "@/db/controllers/user-controller";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/authOptions";
+import { authOptions } from "@/lib/auth-options";
 
 export default async function NewUserPage() {
   const session = await getServerSession(authOptions);

@@ -1,5 +1,5 @@
-import { getOrdersByUserId } from "@/db/controllers/orderController";
-import { getUser } from "@/lib/userUtils";
+import { getOrdersByUserId } from "@/db/controllers/order-controller";
+import { getUser } from "@/lib/user-utils";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 

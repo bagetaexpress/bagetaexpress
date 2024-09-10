@@ -21,17 +21,17 @@ export default function useFreeItems({
 } {
   const cartTotalItems = useMemo(
     () => data.reduce((acc, item) => acc + item.quantity, 0),
-    [data]
+    [data],
   );
 
   const freeItemsNum = useMemo(
     () => Math.trunc(((totalOrdered % 5) + cartTotalItems) / 5),
-    [cartTotalItems, totalOrdered]
+    [cartTotalItems, totalOrdered],
   );
 
   const tillNextFree = useMemo(
     () => 5 - (((totalOrdered % 5) + cartTotalItems) % 5),
-    [cartTotalItems, totalOrdered]
+    [cartTotalItems, totalOrdered],
   );
 
   const totalPrice = useMemo(() => {
