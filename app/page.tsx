@@ -281,6 +281,7 @@ export default function Home() {
         </div>
       </div>
 
+      {/*
       <div
         id="contact"
         className="relative flex flex-col gap-4 mt-52 lg:mt-80 bg-background rounded-xl p-5 shadow-2xl max-w-screen-lg mx-auto"
@@ -309,6 +310,7 @@ export default function Home() {
         </div>
         <Button size="lg">Odoslať</Button>
       </div>
+      */}
 
       <footer className="w-full min-h-40 bg-background mt-52 flex flex-col gap-2">
         <div className="flex-1 flex justify-center items-center gap-2 flex-wrap">
