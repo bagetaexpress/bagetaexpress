@@ -22,10 +22,13 @@ async function createReservation(newReservation: {
   schoolId: Reservation["schoolId"];
   quantity: Reservation["quantity"];
 }) {
-  return await db.insert(reservation).values({
-    ...newReservation,
-    remaining: newReservation.quantity,
-  });
+  return await db
+    .insert(reservation)
+    .values({
+      ...newReservation,
+      remaining: newReservation.quantity,
+    })
+    .onConflictDoNothing();
 }
 
 async function updateReservation({

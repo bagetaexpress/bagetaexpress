@@ -21,7 +21,7 @@ import {
   DrawerClose,
 } from "../../../../../components/ui/drawer";
 import { addToCart } from "@/lib/cart-utils";
-import { FormEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   TooltipProvider,
   Tooltip,
@@ -71,6 +71,16 @@ export default function ItemCard({
   return (
     <>
       <Card className="flex-1 flex flex-col">
+        {item.imageUrl !== "" && item.imageUrl !== null ? (
+          <Image
+            src={item.imageUrl}
+            width={400}
+            height={400}
+            alt="Obrázok produktu"
+            className="rounded-md w-full rounded-b-none"
+            onClick={() => dialogBtnRef.current && dialogBtnRef.current.click()}
+          />
+        ) : null}
         <CardHeader
           onClick={() => dialogBtnRef.current && dialogBtnRef.current.click()}
           className="pb-1 cursor-pointer"
@@ -80,48 +90,12 @@ export default function ItemCard({
         </CardHeader>
         <CardContent
           onClick={() => dialogBtnRef.current && dialogBtnRef.current.click()}
-          className="text-xs flex-1 flex flex-col justify-end cursor-pointer"
+          className="text-xs flex flex-1 flex-col cursor-pointer"
         >
-          {item.imageUrl !== "" && item.imageUrl !== null ? (
-            <div className="flex justify-center mb-2">
-              <Image
-                src={item.imageUrl}
-                width={200}
-                height={200}
-                alt="Obrázok produktu"
-                className="rounded-md"
-              />
-            </div>
-          ) : null}
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <div className="flex flex-wrap">
-                  <p>
-                    <span className="font-semibold mr-1 inline-block">
-                      Alergény:
-                    </span>
-                    <span className="italic inline-block">
-                      {allergens.length === 0 && "žiadne"}
-                      {allergens.map((a) => a.id).join(", ")}
-                    </span>
-                  </p>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="italic">
-                  {allergens.map((a) => a.name).join(", ")}
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <div className="flex flex-wrap">
-            <p>
-              <span className="inline-block font-semibold mr-1">Obsahuje:</span>
-              {ingredients.map((i) => i.name).join(", ")}
-            </p>
-          </div>
+          <p>
+            <span className="inline-block font-semibold mr-1">Zloženie:</span>
+            {ingredients.map((i) => i.name).join(", ")}
+          </p>
         </CardContent>
         <CardFooter className="flex gap-2 justify-between">
           <p className="font-semibold text-lg">{item.price}€</p>
@@ -139,21 +113,19 @@ export default function ItemCard({
 
       <Dialog>
         <DialogTrigger ref={dialogBtnRef} className="hidden" />
-        <DialogContent>
+        <DialogContent className="max-w-screen-md w-full">
           <DialogHeader>
             <DialogTitle>{item.name}</DialogTitle>
             <DialogDescription>
               <p>{item.description}</p>
               {item.imageUrl !== "" && item.imageUrl !== null ? (
-                <div className="flex justify-center mb-2">
-                  <Image
-                    src={item.imageUrl}
-                    width={200}
-                    height={200}
-                    alt="Obrázok produktu"
-                    className="rounded-md"
-                  />
-                </div>
+                <Image
+                  src={item.imageUrl}
+                  width={800}
+                  height={800}
+                  alt="Obrázok produktu"
+                  className="rounded-md w-full mt-2"
+                />
               ) : null}
               <p>
                 <span className="inline-block font-semibold mr-1">
