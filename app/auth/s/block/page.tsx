@@ -68,15 +68,14 @@ export default async function BlockPage({
                 const user = await getUser();
                 if (!user || !user.schoolId) return;
 
-                console.info(
-                  `Blocking unpicked orders for school ${user.schoolId}`
-                );
-
                 const schoolStores = await getSchoolStores(user.schoolId);
                 for (const schoolStore of schoolStores) {
                   if (!isLessThenNow(schoolStore.orderClose)) continue;
 
-                  const date = getDate(schoolStore.orderClose);
+                  const orderCloseDate = getDate(schoolStore.orderClose);
+                  const reservationCloseDate = getDate(
+                    schoolStore.reservationClose,
+                  );
                   const dayOfWeek = new Date().getDay();
                   let daysToAdd: number = 1;
 
@@ -84,20 +83,17 @@ export default async function BlockPage({
                     daysToAdd = 7 - dayOfWeek + 1;
                   }
 
-                  console.info("Current order close date", date);
-
-                  date.setDate(date.getDate() + daysToAdd);
-
-                  console.info(
-                    "Updated order close date",
-                    getFormatedDate(date)
+                  orderCloseDate.setDate(orderCloseDate.getDate() + daysToAdd);
+                  reservationCloseDate.setDate(
+                    reservationCloseDate.getDate() + daysToAdd,
                   );
 
-                  await updateSchoolStoreOrderClose(
-                    user.schoolId,
-                    schoolStore.storeId,
-                    getFormatedDate(date)
-                  );
+                  await updateSchoolStoreOrderClose({
+                    schoolId: user.schoolId,
+                    storeId: schoolStore.storeId,
+                    orderClose: getFormatedDate(orderCloseDate),
+                    reservationClose: getFormatedDate(reservationCloseDate),
+                  });
                 }
 
                 await blockUnpickedOrders(user.schoolId);

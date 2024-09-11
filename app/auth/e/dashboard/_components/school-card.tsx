@@ -16,6 +16,8 @@ import PrintOrderList from "./print-order-list";
 import { getDate } from "@/lib/utils";
 import EditReservationClose from "./edit-reservation-close";
 import { Loader } from "lucide-react";
+import { getReservationsByStoreId } from "@/db/controllers/reservation-controller";
+import EditReservationItems from "./edit-reservation-items";
 
 export function SchoolCardPlaceholder() {
   return (
@@ -45,8 +47,9 @@ export default async function SchoolCard({
 
   const orderCloseDate = getDate(orderClose);
   const reservationCloseDate = getDate(reservationClose);
-  const [orders, store] = await Promise.all([
+  const [orders, reservations, store] = await Promise.all([
     getOrderItemsByStoreAndSchool(user.storeId, school.id),
+    getReservationsByStoreId(user.storeId),
     getStore(user.storeId),
   ]);
 
@@ -54,14 +57,22 @@ export default async function SchoolCard({
     <Card>
       <CardHeader>
         <CardTitle>{school.name}</CardTitle>
-        <CardDescription>
-          Ukončenie objednávok:{" "}
-          <span className="font-semibold">
-            {orderCloseDate.toLocaleString("sk-SK")}
-          </span>
-        </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="grid gap-2">
+        <div className="grid gap-2">
+          <p>
+            Ukončenie objednávok:{" "}
+            <span className="font-semibold text-nowrap">
+              {orderCloseDate.toLocaleString("sk-SK")}
+            </span>
+          </p>
+          <p>
+            Ukončenie rezervácie:{" "}
+            <span className="font-semibold text-nowrap">
+              {reservationCloseDate.toLocaleString("sk-SK")}
+            </span>
+          </p>
+        </div>
         <div className=" grid grid-cols-2">
           <p>Objednané:</p>
           <p>{stats.ordered}</p>
@@ -76,6 +87,10 @@ export default async function SchoolCard({
         <EditReservationClose
           reservationClose={reservationCloseDate}
           schoolId={school.id}
+        />
+        <EditReservationItems
+          schoolId={school.id}
+          reservations={reservations}
         />
         <PrintOrderLabels
           orders={orders}

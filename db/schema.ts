@@ -62,7 +62,7 @@ export type Allergen = InferSelectModel<typeof allergen>;
 export type ItemAllergen = InferSelectModel<typeof itemAllergen>;
 export type Ingredient = InferSelectModel<typeof ingredient>;
 export type ItemIngredient = InferSelectModel<typeof itemIngredient>;
-export type Reservations = InferSelectModel<typeof reservation>;
+export type Reservation = InferSelectModel<typeof reservation>;
 
 export const tables = {
   order,

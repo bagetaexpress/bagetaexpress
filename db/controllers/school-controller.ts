@@ -64,14 +64,20 @@ async function getSchoolsOrderStats(
   return schools as SchoolStats[];
 }
 
-async function updateSchoolStoreOrderClose(
-  schoolId: SchoolStore["schoolId"],
-  storeId: SchoolStore["storeId"],
-  orderClose: SchoolStore["orderClose"],
-) {
+async function updateSchoolStoreOrderClose({
+  schoolId,
+  storeId,
+  orderClose,
+  reservationClose,
+}: {
+  schoolId: SchoolStore["schoolId"];
+  storeId: SchoolStore["storeId"];
+  orderClose: SchoolStore["orderClose"];
+  reservationClose: SchoolStore["reservationClose"];
+}) {
   await db
     .update(schoolStore)
-    .set({ orderClose })
+    .set({ orderClose, reservationClose })
     .where(
       and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId)),
     );
