@@ -64,20 +64,28 @@ async function getSchoolsOrderStats(
   return schools as SchoolStats[];
 }
 
-async function updateSchoolStoreOrderClose({
+async function updateSchoolStore({
   schoolId,
   storeId,
   orderClose,
   reservationClose,
-}: {
-  schoolId: SchoolStore["schoolId"];
-  storeId: SchoolStore["storeId"];
-  orderClose: SchoolStore["orderClose"];
-  reservationClose: SchoolStore["reservationClose"];
-}) {
+}: SchoolStore) {
   await db
     .update(schoolStore)
     .set({ orderClose, reservationClose })
+    .where(
+      and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId)),
+    );
+}
+
+async function updateSchoolStoreOrderClose(
+  schoolId: SchoolStore["schoolId"],
+  storeId: SchoolStore["storeId"],
+  orderClose: SchoolStore["orderClose"],
+) {
+  await db
+    .update(schoolStore)
+    .set({ orderClose })
     .where(
       and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId)),
     );
@@ -156,6 +164,7 @@ export {
   getSchoolsOrderStats,
   updateSchoolStoreOrderClose,
   updateSchoolStoreReservationClose,
+  updateSchoolStore,
   getSchool,
   getSchoolDomains,
 };

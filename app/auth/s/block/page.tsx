@@ -14,11 +14,10 @@ import { Button } from "@/components/ui/button";
 import { blockUnpickedOrders } from "@/db/controllers/order-controller";
 import {
   getSchoolStores,
-  updateSchoolStoreOrderClose,
+  updateSchoolStore,
 } from "@/db/controllers/school-controller";
 import { getUser } from "@/lib/user-utils";
 import { getDate, getFormatedDate, isLessThenNow } from "@/lib/utils";
-import { format } from "date-fns";
 import { Check } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -88,7 +87,7 @@ export default async function BlockPage({
                     reservationCloseDate.getDate() + daysToAdd,
                   );
 
-                  await updateSchoolStoreOrderClose({
+                  await updateSchoolStore({
                     schoolId: user.schoolId,
                     storeId: schoolStore.storeId,
                     orderClose: getFormatedDate(orderCloseDate),
