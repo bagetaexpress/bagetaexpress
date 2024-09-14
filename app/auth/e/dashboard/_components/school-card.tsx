@@ -24,6 +24,8 @@ import EditReservationItems from "./edit-reservation-items";
 import { Store } from "@/db/schema";
 import { getIngredientsByItemId } from "@/db/controllers/ingredient-controller";
 import { getAllergensByItemId } from "@/db/controllers/allergen-controller";
+import { Suspense } from "react";
+import { Button } from "@/components/ui/button";
 
 export function SchoolCardPlaceholder() {
   return (
@@ -98,11 +100,19 @@ export default async function SchoolCard({
           schoolId={school.id}
           reservations={reservations}
         />
-        <PrintOrderLabelsWrapper
-          orders={orders}
-          store={store}
-          orderClose={orderCloseDate}
-        />
+        <Suspense
+          fallback={
+            <Button disabled variant="outline">
+              <Loader className="w-5 h-5 animate-spin" />
+            </Button>
+          }
+        >
+          <PrintOrderLabelsWrapper
+            orders={orders}
+            store={store}
+            orderClose={orderCloseDate}
+          />
+        </Suspense>
         <PrintOrderList school={school} orders={orders} store={store} />
       </CardFooter>
     </Card>
@@ -123,10 +133,14 @@ async function PrintOrderLabelsWrapper({
     return null;
   }
 
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   const ordersExtended = await Promise.all(
     orders.map(async (order) => {
-      const ingredients = await getIngredientsByItemId(order.item.id);
-      const allergens = await getAllergensByItemId(order.item.id);
+      const [ingredients, allergens] = await Promise.all([
+        getIngredientsByItemId(order.item.id),
+        getAllergensByItemId(order.item.id),
+      ]);
 
       return {
         ...order,
