@@ -1,6 +1,6 @@
 import ItemCard from "@/app/auth/c/store/_components/itemCard";
 import { Button } from "@/components/ui/button";
-import { ExtendedItem } from "@/db/controllers/item-controller";
+import { getItemsBySchool } from "@/db/controllers/item-controller";
 import { hasActiveOrder } from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
 import { getDate } from "@/lib/utils";
@@ -15,6 +15,8 @@ export default async function Store() {
 
   const [hasOrder, items] = await Promise.all([
     hasActiveOrder(user.id),
+    getItemsBySchool(user.schoolId),
+    /*
     fetch(
       `${process.env.NEXTAUTH_URL}/api/client/items?schoolID=${user.schoolId}`,
       {
@@ -28,6 +30,7 @@ export default async function Store() {
         console.log(err);
         throw new Error("Failed to fetch items");
       }) as Promise<ExtendedItem[]>,
+    */
   ]);
 
   return (
