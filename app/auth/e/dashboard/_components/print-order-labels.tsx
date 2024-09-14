@@ -23,6 +23,8 @@ import { date } from "zod";
 interface IProps {
   orders: Array<
     {
+      ingredients: { name: string }[];
+      allergens: { name: string }[];
       quantity: number;
     } & ExtendedItem
   >;

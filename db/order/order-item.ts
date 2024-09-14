@@ -12,6 +12,9 @@ export const orderItem = sqliteTable(
       .notNull()
       .references(() => item.id),
     quantity: integer("quantity", { mode: "number" }).notNull(),
+    isReservation: integer("is_reservation", { mode: "boolean" })
+      .notNull()
+      .default(false),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.orderId, table.itemId] }),

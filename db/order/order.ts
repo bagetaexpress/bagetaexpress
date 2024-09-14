@@ -9,9 +9,6 @@ export const order = sqliteTable("order", {
     .references(() => user.id),
   pin: text("pin", { length: 4 }).notNull(),
   discount: real("discount").notNull().default(0),
-  isReservation: integer("is_reservation", { mode: "boolean" })
-    .notNull()
-    .default(false),
   status: text("status", {
     enum: ["ordered", "pickedup", "unpicked", "cancelled"],
   }).notNull(),

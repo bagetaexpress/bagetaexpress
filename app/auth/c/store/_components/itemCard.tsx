@@ -1,34 +1,12 @@
-"use client";
-
 import { ExtendedItem } from "@/db/controllers/item-controller";
 import {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "../../../../../components/ui/card";
-import { Button } from "../../../../../components/ui/button";
-import {
-  Drawer,
-  DrawerTrigger,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerClose,
-} from "../../../../../components/ui/drawer";
-import { addToCart } from "@/lib/cart-utils";
-import { useRef, useState } from "react";
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
-import Image from "next/image";
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -37,40 +15,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getNewDate } from "@/lib/utils";
+import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
+import React from "react";
+import { Reservation, SchoolStore } from "@/db/schema";
+import { getDate } from "@/lib/utils";
+import AddToCartButton from "./add-to-cart-button";
 
 export default function ItemCard({
-  item: { item, allergens = [], ingredients = [] },
-  disabled,
-  orderClose,
+  item: { item, store, reservation, schoolStore },
+  hasOrder,
 }: {
   item: ExtendedItem;
-  disabled: boolean;
-  orderClose: Date;
+  hasOrder: boolean;
 }) {
-  const drawerBtnRef = useRef<HTMLButtonElement | null>(null);
-  const dialogBtnRef = useRef<HTMLButtonElement | null>(null);
-  const [isAdding, setIsAdding] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function onSubmit() {
-    if (orderClose < getNewDate()) {
-      return;
-    }
-    setIsAdding(true);
-    setError(null);
-    try {
-      await addToCart(item.id);
-    } catch (e: { message: string } | any) {
-      setError(e?.message ?? "Nastala chyba");
-    }
-    drawerBtnRef.current?.click();
-    setIsAdding(false);
-  }
-
   return (
-    <>
-      <Card className="flex-1 flex flex-col">
+    <Card className="flex flex-col">
+      <ItemDetailDialog item={{ item, store, reservation, schoolStore }}>
         {item.imageUrl !== "" && item.imageUrl !== null ? (
           <Image
             src={item.imageUrl}
@@ -78,108 +39,200 @@ export default function ItemCard({
             height={400}
             alt="Obrázok produktu"
             className="rounded-md w-full rounded-b-none"
-            onClick={() => dialogBtnRef.current && dialogBtnRef.current.click()}
           />
         ) : null}
-        <CardHeader
-          onClick={() => dialogBtnRef.current && dialogBtnRef.current.click()}
-          className="pb-1 cursor-pointer"
-        >
+        <CardHeader className="py-2 flex">
           <CardTitle>{item.name}</CardTitle>
-          <CardDescription>{item.description}</CardDescription>
+          <CardDescription>{store.name}</CardDescription>
         </CardHeader>
-        <CardContent
-          onClick={() => dialogBtnRef.current && dialogBtnRef.current.click()}
-          className="text-xs flex flex-1 flex-col cursor-pointer"
-        >
-          <p>
-            <span className="inline-block font-semibold mr-1">Zloženie:</span>
-            {ingredients.map((i) => i.name).join(", ")}
-          </p>
-        </CardContent>
-        <CardFooter className="flex gap-2 justify-between">
-          <p className="font-semibold text-lg">{item.price}€</p>
-          {/* <form onSubmit={onSubmit}> */}
-          <Button
-            onClick={onSubmit}
-            disabled={disabled || isAdding}
-            type="submit"
-          >
-            {isAdding ? "Pridáva sa..." : "Pridať do košíka"}
-          </Button>
-          {/* </form> */}
-        </CardFooter>
-      </Card>
-
-      <Dialog>
-        <DialogTrigger ref={dialogBtnRef} className="hidden" />
-        <DialogContent className="max-w-screen-md w-full">
-          <DialogHeader>
-            <DialogTitle>{item.name}</DialogTitle>
-            <DialogDescription>
-              <p>{item.description}</p>
-              {item.imageUrl !== "" && item.imageUrl !== null ? (
-                <Image
-                  src={item.imageUrl}
-                  width={800}
-                  height={800}
-                  alt="Obrázok produktu"
-                  className="rounded-md w-full mt-2"
-                />
-              ) : null}
-              <p>
-                <span className="inline-block font-semibold mr-1">
-                  Alergény:
-                </span>
-                {allergens.map((a) => a.name).join(", ")}
-              </p>
-              <p>
-                <span className="inline-block font-semibold mr-1">
-                  Obsahuje:
-                </span>
-                {ingredients.map((i) => i.name).join(", ")}
-              </p>
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-
-      <Drawer>
-        <DrawerTrigger ref={drawerBtnRef} className="hidden" />
-        <DrawerContent>
-          <div className="mx-auto w-full max-w-sm">
-            <DrawerHeader>
-              <DrawerTitle>
-                {error == null ? "Pridané do košíka!" : "Nepodarilo sa pridať!"}
-              </DrawerTitle>
-              <DrawerDescription>
-                {error == null ? item.name : error}
-              </DrawerDescription>
-            </DrawerHeader>
-            {item.imageUrl !== "" && item.imageUrl !== null ? (
-              <div className="flex justify-center mb-2">
-                <Image
-                  src={item.imageUrl}
-                  width={250}
-                  height={250}
-                  alt="Obrázok produktu"
-                  className="rounded-md"
-                />
-              </div>
-            ) : null}
-            <DrawerFooter>
-              <DrawerClose asChild>
-                <Button variant="outline">Pokračovať ďalej</Button>
-              </DrawerClose>
-              <a href="/auth/c/cart" className="flex">
-                <Button disabled={isAdding} className="flex-1">
-                  Prejsť do košíka
-                </Button>
-              </a>
-            </DrawerFooter>
+        <CardContent className="py-0 flex flex-col gap-1 flex-1">
+          <div className="flex flex-wrap">
+            {reservation && (
+              <Badge variant="secondary">Možnosť rezervovať</Badge>
+            )}
           </div>
-        </DrawerContent>
-      </Drawer>
-    </>
+          <p className="flex-1">{item.description}</p>
+          <OrderDateShort schoolStore={schoolStore} reservation={reservation} />
+        </CardContent>
+      </ItemDetailDialog>
+      <CardFooter className="grid grid-cols-3 justify-center items-center">
+        <p className="text-center text-xl font-bold">{item.price}€</p>
+        <div className="col-span-2">
+          <AddToCartButton
+            item={{ item, store, reservation, schoolStore }}
+            isDisabled={
+              isAddToCartDisabled({ schoolStore, reservation }) || hasOrder
+            }
+          />
+        </div>
+      </CardFooter>
+    </Card>
+  );
+}
+
+function isAddToCartDisabled({
+  schoolStore,
+  reservation,
+}: {
+  schoolStore: SchoolStore;
+  reservation: Reservation | null;
+}): boolean {
+  if (getDate(schoolStore.orderClose) >= new Date()) {
+    return false;
+  }
+  if (reservation && getDate(schoolStore.reservationClose) >= new Date()) {
+    return false;
+  }
+  return true;
+}
+
+function ItemDetailDialog({
+  item: { item, store, reservation, schoolStore },
+  children,
+}: {
+  item: ExtendedItem;
+  children: React.ReactNode;
+}) {
+  return (
+    <Dialog>
+      <DialogTrigger className="flex flex-col flex-1 text-start">
+        {children}
+      </DialogTrigger>
+      <DialogContent className="max-w-screen-md w-full">
+        <DialogHeader>
+          <DialogTitle>{item.name}</DialogTitle>
+          <DialogDescription>{store.name}</DialogDescription>
+        </DialogHeader>
+        <div className="flex flex-col gap-2">
+          <Image
+            src={item.imageUrl}
+            width={800}
+            height={800}
+            alt="Obrázok produktu"
+            className="rounded-md w-full mt-2"
+          />
+          <p>{item.description}</p>
+          <OrderDate schoolStore={schoolStore} />
+          <ReservationDate
+            reservation={reservation}
+            schoolStore={schoolStore}
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function OrderDate({ schoolStore }: { schoolStore: SchoolStore }) {
+  if (getDate(schoolStore.orderClose) < new Date()) {
+    return <p>Objednávky sú uzatvorené</p>;
+  }
+  return (
+    <p>
+      Objednanie možné do:{" "}
+      <span className="font-semibold text-nowrap">
+        {getDate(schoolStore.orderClose).toLocaleString("sk-SK")}
+      </span>
+    </p>
+  );
+}
+
+function OrderDateShort({
+  schoolStore,
+  reservation,
+}: {
+  schoolStore: SchoolStore;
+  reservation: Reservation | null;
+}) {
+  const orderClose = getDate(schoolStore.orderClose);
+  if (orderClose < new Date()) {
+    if (!reservation) {
+      return <p>Objednanie uzatvorené</p>;
+    }
+
+    const reservationClose = getDate(schoolStore.reservationClose);
+    if (reservationClose < new Date()) {
+      return <p>Rezervovanie uzatvorené</p>;
+    }
+
+    if (reservationClose.getDate() !== new Date().getDate()) {
+      return (
+        <p>
+          Rezervuj do{" "}
+          <span className="font-semibold text-nowrap">
+            {reservationClose.toLocaleDateString("sk-SK")}
+          </span>
+        </p>
+      );
+    }
+
+    return (
+      <p>
+        Rezervuj do{" "}
+        <span className="font-semibold text-nowrap">
+          {reservationClose.toLocaleTimeString("sk-SK")}
+        </span>
+      </p>
+    );
+  }
+
+  if (orderClose.getDate() !== new Date().getDate()) {
+    return (
+      <p>
+        Objednaj do{" "}
+        <span className="font-semibold text-nowrap">
+          {orderClose.toLocaleDateString("sk-SK")}
+        </span>
+      </p>
+    );
+  }
+
+  return (
+    <p>
+      Objednaj do{" "}
+      <span className="font-semibold text-nowrap">
+        {orderClose.toLocaleTimeString("sk-SK")}
+      </span>
+    </p>
+  );
+}
+
+function ReservationDate({
+  reservation,
+  schoolStore,
+}: {
+  reservation: Reservation | null;
+  schoolStore: SchoolStore;
+}) {
+  if (!reservation) {
+    return null;
+  }
+
+  if (getDate(schoolStore.reservationClose) < new Date()) {
+    return <p>Rezervácia je uzatvorená</p>;
+  }
+
+  if (getDate(schoolStore.orderClose) < new Date()) {
+    return (
+      <p>
+        Rezervácia je možná do{" "}
+        <span className="font-semibold text-nowrap">
+          {getDate(schoolStore.reservationClose).toLocaleString("sk-SK")}
+        </span>
+      </p>
+    );
+  }
+
+  return (
+    <p>
+      Rezervácia je možná od{" "}
+      <span className="font-semibold text-nowrap">
+        {getDate(schoolStore.orderClose).toLocaleString("sk-SK")}
+      </span>
+      {" do "}
+      <span className="font-semibold text-nowrap">
+        {getDate(schoolStore.reservationClose).toLocaleString("sk-SK")}
+      </span>
+    </p>
   );
 }

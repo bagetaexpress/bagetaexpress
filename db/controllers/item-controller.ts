@@ -2,12 +2,13 @@
 
 import { InferInsertModel, eq, sql, and, desc } from "drizzle-orm";
 import {
-  Allergen,
   Cart,
-  Ingredient,
+  CartItem,
   Item,
   Order,
+  Reservation,
   School,
+  SchoolStore,
   Store,
   allergen,
   cartItem,
@@ -18,6 +19,7 @@ import {
   itemIngredient,
   order,
   orderItem,
+  reservation,
   schoolStore,
   store,
 } from "../schema";
@@ -25,8 +27,9 @@ import { db } from "@/db";
 
 export type ExtendedItem = {
   item: Item;
-  allergens: { id: Allergen["number"]; name: Allergen["name"] }[];
-  ingredients: { id: Ingredient["number"]; name: Ingredient["name"] }[];
+  store: Store;
+  schoolStore: SchoolStore;
+  reservation: Reservation | null;
 };
 
 async function getAllergensByItem(itemId: Item["id"]) {
@@ -55,24 +58,59 @@ async function getIngredientsByItem(itemId: Item["id"]) {
   }));
 }
 
+async function getItemBySchool({
+  itemId,
+  schoolId,
+}: {
+  itemId: Item["id"];
+  schoolId: School["id"];
+}): Promise<ExtendedItem> {
+  const [found] = await db
+    .select({
+      item,
+      store,
+      reservation,
+      schoolStore,
+    })
+    .from(item)
+    .innerJoin(store, eq(item.storeId, store.id))
+    .innerJoin(schoolStore, eq(item.storeId, schoolStore.storeId))
+    .leftJoin(reservation, eq(reservation.itemId, item.id))
+    .where(
+      and(
+        eq(schoolStore.schoolId, schoolId),
+        eq(item.id, itemId),
+        eq(item.deleted, false),
+      ),
+    )
+    .limit(1);
+
+  if (!found) {
+    throw new Error("Item not found");
+  }
+
+  return found;
+}
+
 async function getItemsBySchool(
   schoolId: School["id"],
 ): Promise<ExtendedItem[]> {
-  // @ts-expect-error hydrating needed fields below
-  const items: ExtendedItem[] = await db
-    .select({ item, sold: sql<number>`SUM(${orderItem.quantity}) as sold` })
+  const items = await db
+    .select({
+      item,
+      store,
+      reservation,
+      schoolStore,
+      sold: sql<number>`SUM(${orderItem.quantity}) as sold`,
+    })
     .from(item)
     .innerJoin(store, eq(item.storeId, store.id))
-    .innerJoin(schoolStore, eq(store.id, schoolStore.storeId))
+    .innerJoin(schoolStore, eq(item.storeId, schoolStore.storeId))
+    .leftJoin(reservation, eq(reservation.itemId, item.id))
     .leftJoin(orderItem, eq(item.id, orderItem.itemId))
     .where(and(eq(schoolStore.schoolId, schoolId), eq(item.deleted, false)))
     .groupBy(item.id)
     .orderBy(desc(sql<number>`sold`));
-
-  for (const res of items) {
-    res.allergens = await getAllergensByItem(res.item.id);
-    res.ingredients = await getIngredientsByItem(res.item.id);
-  }
 
   return items;
 }
@@ -85,13 +123,27 @@ async function getItemById(itemId: Item["id"]): Promise<Item | null> {
   return found[0];
 }
 
-async function getItemsFromCart(cartId: Cart["userId"]) {
-  const items = await db
-    .select({ item, quantity: cartItem.quantity })
+export type CartExtendedItem = ExtendedItem & {
+  cartItem: CartItem;
+};
+
+async function getItemsFromCart(
+  cartId: Cart["userId"],
+): Promise<CartExtendedItem[]> {
+  return await db
+    .select({
+      item,
+      store,
+      cartItem,
+      reservation,
+      schoolStore,
+    })
     .from(item)
+    .innerJoin(store, eq(item.storeId, store.id))
+    .innerJoin(schoolStore, eq(item.storeId, schoolStore.storeId))
+    .leftJoin(reservation, eq(reservation.itemId, item.id))
     .innerJoin(cartItem, eq(item.id, cartItem.itemId))
     .where(eq(cartItem.cartId, cartId));
-  return items.map((item) => ({ item: item.item, quantity: item.quantity }));
 }
 
 async function getItemsFromOrder(orderId: Order["id"]) {
@@ -104,9 +156,10 @@ async function getItemsFromOrder(orderId: Order["id"]) {
 }
 
 export type ItemStats = {
-  item: Item &
-    Pick<ExtendedItem, "allergens"> &
-    Pick<ExtendedItem, "ingredients">;
+  item: Item & {
+    allergens: { id: number; name: string }[];
+    ingredients: { id: number; name: string }[];
+  };
   ordered: number;
   pickedup: number;
   unpicked: number;
@@ -179,16 +232,21 @@ async function getOrderItemsByStoreAndSchool(
   schoolId: School["id"],
   orderStatus: Order["status"] = "ordered",
 ): Promise<Array<ExtendedItem & { quantity: number }>> {
-  // @ts-expect-error hydrating needed fields below
   const items: Array<ExtendedItem & { quantity: number }> = await db
     .select({
       item,
+      store,
+      reservation,
+      schoolStore,
       quantity: sql<number>`SUM(order_item.quantity)`,
     })
     .from(item)
+    .innerJoin(store, eq(item.storeId, store.id))
+    .innerJoin(schoolStore, eq(item.storeId, schoolStore.storeId))
     .innerJoin(orderItem, eq(item.id, orderItem.itemId))
     .innerJoin(order, eq(orderItem.orderId, order.id))
     .innerJoin(customer, eq(order.userId, customer.userId))
+    .leftJoin(reservation, eq(reservation.itemId, item.id))
     .where(
       and(
         eq(item.storeId, storeId),
@@ -198,17 +256,13 @@ async function getOrderItemsByStoreAndSchool(
     )
     .groupBy(item.id);
 
-  for (const it of items) {
-    it.allergens = await getAllergensByItem(it.item.id);
-    it.ingredients = await getIngredientsByItem(it.item.id);
-  }
-
   return items;
 }
 
 export {
   getOrderItemsByStoreAndSchool,
   getOrderItemsByStore,
+  getItemBySchool,
   getItemsBySchool,
   getItemById,
   getItemsFromCart,

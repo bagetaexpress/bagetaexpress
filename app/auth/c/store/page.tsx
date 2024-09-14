@@ -2,9 +2,8 @@ import ItemCard from "@/app/auth/c/store/_components/itemCard";
 import { Button } from "@/components/ui/button";
 import { ExtendedItem } from "@/db/controllers/item-controller";
 import { hasActiveOrder } from "@/db/controllers/order-controller";
-import { getFirstOrderClose } from "@/db/controllers/school-controller";
 import { getUser } from "@/lib/user-utils";
-import { getDate, getNewDate } from "@/lib/utils";
+import { getDate } from "@/lib/utils";
 import { ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -14,14 +13,12 @@ export default async function Store() {
     redirect("/");
   }
 
-  const [hasOrder, orderCloseStr, items] = await Promise.all([
+  const [hasOrder, items] = await Promise.all([
     hasActiveOrder(user.id),
-    getFirstOrderClose(user.schoolId),
     fetch(
       `${process.env.NEXTAUTH_URL}/api/client/items?schoolID=${user.schoolId}`,
       {
         next: {
-          revalidate: 60 * 60 * 24 * 7,
           tags: ["items"],
         },
       },
@@ -32,32 +29,28 @@ export default async function Store() {
         throw new Error("Failed to fetch items");
       }) as Promise<ExtendedItem[]>,
   ]);
-  const orderClose = getDate(orderCloseStr);
 
   return (
     <div className="h-full relative">
       <h1 className="text-2xl font-semibold pt-2">Obchod</h1>
-      {orderClose > getNewDate() ? (
-        <div className="text-sm text-gray-500 mb-4">
-          Objednávky sa uzatvárajú:{" "}
-          <span className="font-semibold text-primary-foreground">
-            {orderClose.toLocaleString("sk-SK")}
-          </span>
-        </div>
-      ) : (
-        <div className="text-sm text-gray-500 mb-4">
-          Objednávky sú uzatvorené
-        </div>
-      )}
       <div className="grid gap-1 mb-14 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
-        {items.map((item) => (
-          <ItemCard
-            key={item.item.id}
-            item={item}
-            orderClose={orderClose}
-            disabled={hasOrder || orderClose <= getNewDate()}
-          />
-        ))}
+        {items
+          .sort((a) => {
+            if (getDate(a.schoolStore.orderClose) >= new Date()) {
+              return -1;
+            }
+            if (
+              a.reservation &&
+              (getDate(a.schoolStore.reservationClose) >= new Date() ||
+                a.reservation.remaining > 0)
+            ) {
+              return -1;
+            }
+            return 0;
+          })
+          .map((item) => (
+            <ItemCard key={item.item.id} item={item} hasOrder={hasOrder} />
+          ))}
       </div>
       <div
         style={{

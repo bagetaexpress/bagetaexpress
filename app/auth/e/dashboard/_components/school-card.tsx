@@ -9,7 +9,10 @@ import {
 import { SchoolStats } from "@/db/controllers/school-controller";
 import EditOrderClose from "./edit-order-close";
 import PrintOrderLabels from "./print-order-labels";
-import { getOrderItemsByStoreAndSchool } from "@/db/controllers/item-controller";
+import {
+  ExtendedItem,
+  getOrderItemsByStoreAndSchool,
+} from "@/db/controllers/item-controller";
 import { getUser } from "@/lib/user-utils";
 import { getStore } from "@/db/controllers/store-controller";
 import PrintOrderList from "./print-order-list";
@@ -18,6 +21,9 @@ import EditReservationClose from "./edit-reservation-close";
 import { Loader } from "lucide-react";
 import { getReservationsByStoreId } from "@/db/controllers/reservation-controller";
 import EditReservationItems from "./edit-reservation-items";
+import { Store } from "@/db/schema";
+import { getIngredientsByItemId } from "@/db/controllers/ingredient-controller";
+import { getAllergensByItemId } from "@/db/controllers/allergen-controller";
 
 export function SchoolCardPlaceholder() {
   return (
@@ -92,7 +98,7 @@ export default async function SchoolCard({
           schoolId={school.id}
           reservations={reservations}
         />
-        <PrintOrderLabels
+        <PrintOrderLabelsWrapper
           orders={orders}
           store={store}
           orderClose={orderCloseDate}
@@ -100,5 +106,41 @@ export default async function SchoolCard({
         <PrintOrderList school={school} orders={orders} store={store} />
       </CardFooter>
     </Card>
+  );
+}
+
+async function PrintOrderLabelsWrapper({
+  orders,
+  store,
+  orderClose,
+}: {
+  orders: Array<ExtendedItem & { quantity: number }>;
+  store: Store;
+  orderClose: Date;
+}) {
+  const user = await getUser();
+  if (!user || !user.isEmployee || !user.storeId) {
+    return null;
+  }
+
+  const ordersExtended = await Promise.all(
+    orders.map(async (order) => {
+      const ingredients = await getIngredientsByItemId(order.item.id);
+      const allergens = await getAllergensByItemId(order.item.id);
+
+      return {
+        ...order,
+        ingredients: ingredients.map((i) => ({ name: i.ingredient.name })),
+        allergens: allergens.map((a) => ({ name: a.allergen.name })),
+      };
+    }),
+  );
+
+  return (
+    <PrintOrderLabels
+      orders={ordersExtended}
+      store={store}
+      orderClose={orderClose}
+    />
   );
 }

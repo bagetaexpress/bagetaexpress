@@ -12,38 +12,70 @@ import {
   deleteCartItem,
   deleteCartItems,
 } from "@/db/controllers/cartItem-controller";
-import { getItemsFromCart } from "@/db/controllers/item-controller";
-import { getServerSession } from "next-auth";
+import {
+  getItemBySchool,
+  getItemsFromCart,
+} from "@/db/controllers/item-controller";
 import { revalidatePath } from "next/cache";
-import { authOptions } from "./auth-options";
+import { getUser } from "./user-utils";
+import { getDate } from "./utils";
 
-async function addToCart(itemId: number, quantity: number = 1): Promise<void> {
+async function addToCart(itemId: number): Promise<void> {
+  const user = await getUser();
+  if (user == null || user.id == null || user.schoolId == null) {
+    throw new Error("User is not authenticated");
+  }
+
+  const { schoolStore, reservation } = await getItemBySchool({
+    itemId,
+    schoolId: user.schoolId,
+  });
+
+  if (
+    getDate(schoolStore.orderClose) < getDate(new Date().toLocaleString()) &&
+    !reservation
+  ) {
+    throw new Error("Objednávky boli uzavreté");
+  }
+  if (
+    reservation &&
+    getDate(schoolStore.reservationClose) < getDate(new Date().toLocaleString())
+  ) {
+    throw new Error("Rezervácie boli uzavreté");
+  }
+
+  if (
+    reservation &&
+    getDate(schoolStore.orderClose) >= getDate(new Date().toLocaleString()) &&
+    reservation.remaining <= 0
+  ) {
+    throw new Error("Nemáte dostatok kreditov na rezerváciu");
+  }
+
   const cartId = await getCartId();
 
   const orderItem = await getCartItem(cartId, itemId);
   if (orderItem == null) {
-    // create new cart item
-    await createCartItem(cartId, itemId, quantity);
+    await createCartItem(cartId, itemId, 1);
     return;
   }
+
   if (orderItem.quantity >= 5) {
     throw new Error("V košíku už máte maximálny počet kusov");
   }
-  // update quantity
-  await updateCartItem(cartId, itemId, orderItem.quantity + quantity);
+  await updateCartItem(cartId, itemId, orderItem.quantity + 1);
 }
 
 async function getCartId(): Promise<string> {
-  const session = await getServerSession(authOptions);
-  if (session == null) {
+  const user = await getUser();
+  if (user == null) {
     throw new Error("User is not authenticated");
   }
-  const userId = session.user.id;
 
-  let cart = await getCart(userId);
+  let cart = await getCart(user.id);
   if (cart == null) {
-    await createCart(userId);
-    return userId;
+    await createCart(user.id);
+    return user.id;
   }
   return cart.userId;
 }
@@ -59,7 +91,7 @@ async function getCartItems(cartId?: string) {
 async function saveUpdateCartItem(
   cartId: string,
   itemId: number,
-  quantity: number
+  quantity: number,
 ) {
   const found = await getCartItem(cartId, itemId);
   if (found === null) {

@@ -1,36 +1,36 @@
 "use client";
 
-import { Item } from "@/db/schema";
+import { CartExtendedItem } from "@/db/controllers/item-controller";
 import CartItemRow from "./cart-item-row";
 import { useState } from "react";
-
-interface LocalCartProps {
-  data: {
-    item: Item;
-    quantity: number;
-  }[];
-  cartId: string;
-}
 
 export default function LocalCart({
   data: originalData,
   cartId,
-}: LocalCartProps) {
+}: {
+  data: CartExtendedItem[];
+  cartId: string;
+}) {
   const [data, setData] = useState(originalData);
 
   return (
     <div>
       <h1 className="text-2xl font-semibold pt-2">Košík</h1>
-      <div className="grid grid-cols-1 divide-y-2">
+      <div className="grid grid-cols-1 divide-y-2 rounded-md overflow-hidden">
         {data.map((item, i) => (
           <CartItemRow
             key={item.item.id + "-" + i}
-            {...item.item}
-            quantity={item.quantity}
+            {...item}
             addItem={() => {
-              const newData = data.map((d) => {
+              const newData = data.map((d): CartExtendedItem => {
                 if (d.item.id === item.item.id) {
-                  return { ...d, quantity: d.quantity + 1 };
+                  return {
+                    ...d,
+                    cartItem: {
+                      ...d.cartItem,
+                      quantity: d.cartItem.quantity + 1,
+                    },
+                  };
                 }
                 return d;
               });
@@ -39,7 +39,13 @@ export default function LocalCart({
             removeItem={() => {
               const newData = data.map((d) => {
                 if (d.item.id === item.item.id) {
-                  return { ...d, quantity: d.quantity - 1 };
+                  return {
+                    ...d,
+                    cartItem: {
+                      ...d.cartItem,
+                      quantity: d.cartItem.quantity - 1,
+                    },
+                  };
                 }
                 return d;
               });
@@ -53,7 +59,10 @@ export default function LocalCart({
         <p className="font-semibold text-lg">Spolu</p>
         <p className="font-semibold text-xl">
           {data
-            .reduce((acc, item) => acc + item.item.price * item.quantity, 0)
+            .reduce(
+              (acc, item) => acc + item.item.price * item.cartItem.quantity,
+              0,
+            )
             .toFixed(2)}
           €
         </p>

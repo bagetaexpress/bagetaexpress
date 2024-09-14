@@ -14,48 +14,47 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader } from "lucide-react";
-import { Item } from "@/db/schema";
 import { getCartItems } from "@/lib/cart-utils";
-import { getNewDate } from "@/lib/utils";
+import { CartExtendedItem } from "@/db/controllers/item-controller";
 
 interface ICheckout {
-  items: {
-    item: Item;
-    quantity: number;
-  }[];
+  items: CartExtendedItem[];
   cartId: string;
-  orderClose: Date;
 }
 
-export default function Cheackout({
-  items: defaultItems,
-  cartId,
-  orderClose,
-}: ICheckout) {
+export default function Cheackout({ items: defaultItems, cartId }: ICheckout) {
   const [items, setItems] = useState(defaultItems);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
-  const [orderCreateError, setOrderCreateError] = useState(false);
+  const [orderCreateError, setOrderCreateError] = useState<{
+    message: string;
+  } | null>();
   const router = useRouter();
 
   async function handleCheckout() {
-    if (orderClose < getNewDate()) {
-      router.refresh();
-      return;
-    }
     setIsCreatingOrder(true);
-    setOrderCreateError(false);
+    setOrderCreateError(null);
 
     try {
-      await createOrderFromCart(cartId, 0);
+      const { error } = await createOrderFromCart();
+      if (error) {
+        setOrderCreateError({
+          message: error,
+        });
+        setIsCreatingOrder(false);
+        return;
+      }
     } catch (error) {
       console.log(error);
-      setOrderCreateError(true);
+      setOrderCreateError({
+        message: "Nastala chyba pri vytváraní objednávky",
+      });
       setIsCreatingOrder(false);
       return;
     }
-    router.push("/auth/c/order");
+
     setIsCreatingOrder(false);
+    router.push("/auth/c/order");
   }
 
   async function fetchCart() {
@@ -75,7 +74,7 @@ export default function Cheackout({
       }}
     >
       <DrawerTrigger onClick={fetchCart} asChild>
-        <Button className="flex-1 md:max-w-fit">Objedať</Button>
+        <Button className="flex-1 md:max-w-fit">Objedať / Rezervovať</Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
@@ -88,7 +87,7 @@ export default function Cheackout({
                 <div key={i} className="flex justify-between p-1">
                   <p>{item.item.name}</p>
                   <p>
-                    {item.quantity} x {item.item.price}€
+                    {item.cartItem.quantity} x {item.item.price}€
                   </p>
                 </div>
               ))}
@@ -98,7 +97,8 @@ export default function Cheackout({
               <p className="font-semibold text-xl">
                 {items
                   .reduce(
-                    (acc, item) => acc + item.item.price * item.quantity,
+                    (acc, item) =>
+                      acc + item.item.price * item.cartItem.quantity,
                     0,
                   )
                   .toFixed(2)}
@@ -106,9 +106,7 @@ export default function Cheackout({
               </p>
             </div>
             {orderCreateError && (
-              <p className="text-red-500 text-center">
-                Nastala chyba pri vytváraní objednávky
-              </p>
+              <p className="text-red-500">{orderCreateError.message}</p>
             )}
           </div>
           <DrawerFooter>
@@ -128,7 +126,7 @@ export default function Cheackout({
                 disabled={isCreatingOrder || !isLoaded}
                 onClick={handleCheckout}
               >
-                Objednať
+                Objednať / Rezervovať
               </Button>
             )}
           </DrawerFooter>

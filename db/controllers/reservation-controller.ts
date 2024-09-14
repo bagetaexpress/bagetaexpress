@@ -17,6 +17,19 @@ async function getReservationsByStoreId(storeId: Item["storeId"]): Promise<
     .where(eq(item.storeId, storeId));
 }
 
+async function getReservation(
+  itemId: Item["id"],
+  schoolId: Reservation["schoolId"],
+) {
+  return await db
+    .select()
+    .from(reservation)
+    .where(
+      and(eq(reservation.itemId, itemId), eq(reservation.schoolId, schoolId)),
+    )
+    .get();
+}
+
 async function createReservation(newReservation: {
   itemId: Item["id"];
   schoolId: Reservation["schoolId"];
@@ -61,6 +74,7 @@ async function deleteReservation(
 
 export {
   getReservationsByStoreId,
+  getReservation,
   createReservation,
   updateReservation,
   deleteReservation,

@@ -21,7 +21,7 @@ async function createOrder(
   userId: Order["userId"],
   pin: Order["pin"],
   status: Order["status"] = "ordered",
-  discount: Order["discount"] = 0
+  discount: Order["discount"] = 0,
 ) {
   const newOrder = await db.insert(order).values({
     userId,
@@ -36,7 +36,7 @@ async function createOrder(
 async function getOrderByPin(
   pin: Order["pin"],
   schoolId?: School["id"],
-  status: Order["status"] = "ordered"
+  status: Order["status"] = "ordered",
 ): Promise<Order | null> {
   let orders: Order[];
 
@@ -50,8 +50,8 @@ async function getOrderByPin(
           and(
             eq(order.pin, pin),
             eq(order.status, status),
-            eq(customer.schoolId, schoolId)
-          )
+            eq(customer.schoolId, schoolId),
+          ),
         )
     ).map((row) => row.order);
   } else {
@@ -70,7 +70,7 @@ async function deleteOrder(orderId: Order["id"]): Promise<void> {
 
 async function getOrdersByUserId(
   userId: Order["userId"],
-  status: Order["status"]
+  status: Order["status"],
 ): Promise<Order[]> {
   const orders = await db
     .select()
@@ -86,8 +86,8 @@ async function hasActiveOrder(userId: Order["userId"]): Promise<boolean> {
     .where(
       and(
         eq(order.userId, userId),
-        or(eq(order.status, "ordered"), eq(order.status, "unpicked"))
-      )
+        or(eq(order.status, "ordered"), eq(order.status, "unpicked")),
+      ),
     )
     .limit(1);
   return orders.length > 0;
@@ -108,7 +108,7 @@ async function getOrders(userId: Order["userId"]): Promise<Order[]> {
 
 async function updateOrderStatus(
   orderId: Order["id"],
-  status: Order["status"]
+  status: Order["status"],
 ): Promise<void> {
   await db
     .update(order)
@@ -140,7 +140,7 @@ async function getFirstOrderItemClose(orderId: Order["id"]): Promise<Date> {
 
 async function getOrdersBySchoolId(
   schoolId: School["id"],
-  status: Order["status"]
+  status: Order["status"],
 ): Promise<{ order: Order; user: User }[]> {
   const orders = await db
     .select({ order, user })
@@ -156,7 +156,7 @@ async function blockUnpickedOrders(schoolId: School["id"]): Promise<void> {
     .update(order)
     .set({ status: "unpicked", updatedAt: new Date().toISOString() })
     .where(
-      sql`status = "ordered" AND user_id IN (SELECT user_id FROM customer WHERE school_id = ${schoolId})`
+      sql`status = "ordered" AND user_id IN (SELECT user_id FROM customer WHERE school_id = ${schoolId})`,
     );
   // await db.execute(sql`
   //   UPDATE \`order\`

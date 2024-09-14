@@ -1,20 +1,14 @@
 import Cheackout from "@/app/auth/c/cart/_components/checkout";
-import { getFirstOrderClose } from "@/db/controllers/school-controller";
 import { getCartId, getCartItems } from "@/lib/cart-utils";
 import { getUser } from "@/lib/user-utils";
 import { redirect } from "next/navigation";
 import LocalCart from "./_components/local-cart";
-import { getDate } from "@/lib/utils";
 
 export default async function CartPage() {
   const user = await getUser();
   if (!user || !user.schoolId) return;
 
-  const [cartId, data, orderClose] = await Promise.all([
-    getCartId(),
-    getCartItems(),
-    getFirstOrderClose(user.schoolId),
-  ]);
+  const [cartId, data] = await Promise.all([getCartId(), getCartItems()]);
 
   if (data.length === 0) {
     return (
@@ -35,17 +29,7 @@ export default async function CartPage() {
     <div className="h-full flex flex-col justify-between md:justify-start">
       <LocalCart data={data} cartId={cartId} />
       <div className="flex justify-end">
-        {getDate(orderClose) > new Date() ? (
-          <Cheackout
-            orderClose={getDate(orderClose)}
-            items={data}
-            cartId={cartId}
-          />
-        ) : (
-          <p className="text-xl font-semibold text-red-500">
-            Objednávky sú uzavreté
-          </p>
-        )}
+        <Cheackout items={data} cartId={cartId} />
       </div>
     </div>
   );
