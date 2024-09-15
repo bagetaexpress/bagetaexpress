@@ -83,11 +83,13 @@ export default async function SchoolCard({
         </div>
         <div className=" grid grid-cols-2">
           <p>Objednané:</p>
-          <p>{stats.ordered}</p>
+          <p>{stats.ordered ?? 0}</p>
+          <p>Rezervované:</p>
+          <p>{stats.reserved ?? 0}</p>
           <p>Doručené:</p>
-          <p>{stats.pickedup}</p>
+          <p>{stats.pickedup ?? 0}</p>
           <p>Zablokované:</p>
-          <p>{stats.unpicked}</p>
+          <p>{stats.unpicked ?? 0}</p>
         </div>
       </CardContent>
       <CardFooter className="grid gap-1">

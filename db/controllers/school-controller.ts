@@ -1,12 +1,13 @@
 "use server";
 
-import { and, eq, sql } from "drizzle-orm";
+import { aliasedTable, and, eq, sql } from "drizzle-orm";
 import { db } from "..";
 import {
   School,
   SchoolStore,
   customer,
   order,
+  orderItem,
   school,
   schoolStore,
 } from "../schema";
@@ -38,6 +39,7 @@ export type SchoolStats = {
   orderClose: string;
   reservationClose: string;
   ordered: number;
+  reserved: number;
   pickedup: number;
   unpicked: number;
 };
@@ -45,19 +47,49 @@ export type SchoolStats = {
 async function getSchoolsOrderStats(
   storeId: SchoolStore["storeId"],
 ): Promise<SchoolStats[]> {
+  const ordered = aliasedTable(orderItem, "ordered");
+  const reserved = aliasedTable(orderItem, "reserved");
+  const pickedup = aliasedTable(orderItem, "pickedup");
+  const unpicked = aliasedTable(orderItem, "unpicked");
+
   const schools = await db
     .select({
       school,
       orderClose: schoolStore.orderClose,
       reservationClose: schoolStore.reservationClose,
-      ordered: sql`COUNT(case when ${order.status} = 'ordered' then 1 end)`,
-      pickedup: sql`COUNT(case when ${order.status} = 'pickedup' then 1 end)`,
-      unpicked: sql`COUNT(case when ${order.status} = 'unpicked' then 1 end)`,
+      ordered: sql`SUM(ordered.quantity)`,
+      reserved: sql`SUM(reserved.quantity)`,
+      pickedup: sql`SUM(pickedup.quantity)`,
+      unpicked: sql`SUM(unpicked.quantity)`,
     })
     .from(school)
     .leftJoin(schoolStore, eq(school.id, schoolStore.schoolId))
     .leftJoin(customer, eq(school.id, customer.schoolId))
     .leftJoin(order, eq(customer.userId, order.userId))
+    .leftJoin(
+      ordered,
+      and(
+        eq(order.id, ordered.orderId),
+        eq(order.status, "ordered"),
+        eq(ordered.isReservation, false),
+      ),
+    )
+    .leftJoin(
+      reserved,
+      and(
+        eq(order.id, reserved.orderId),
+        eq(order.status, "ordered"),
+        eq(reserved.isReservation, true),
+      ),
+    )
+    .leftJoin(
+      pickedup,
+      and(eq(order.id, pickedup.orderId), eq(order.status, "pickedup")),
+    )
+    .leftJoin(
+      unpicked,
+      and(eq(order.id, unpicked.orderId), eq(order.status, "unpicked")),
+    )
     .where(eq(schoolStore.storeId, storeId))
     .groupBy(school.id);
 

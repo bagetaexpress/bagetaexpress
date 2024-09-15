@@ -179,17 +179,13 @@ export type ItemStats = {
     allergens: { id: number; name: string }[];
     ingredients: { id: number; name: string }[];
   };
-  ordered: number;
   pickedup: number;
-  unpicked: number;
 };
 async function getItemsStats(storeId: Item["storeId"]): Promise<ItemStats[]> {
   const items = (await db
     .select({
       item,
-      ordered: sql`COUNT(case when 'ordered' = ${order.status} then 1 else null end)`,
-      pickedup: sql`COUNT(case when 'pickedup' = ${order.status} then 1 else null end)`,
-      unpicked: sql`COUNT(case when 'unpicked' = ${order.status} then 1 else null end)`,
+      pickedup: sql`SUM(order_item.quantity)`,
     })
     .from(item)
     .leftJoin(orderItem, eq(item.id, orderItem.itemId))

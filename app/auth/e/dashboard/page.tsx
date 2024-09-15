@@ -10,7 +10,7 @@ import {
 import { ItemStats, getItemsStats } from "@/db/controllers/item-controller";
 import { getSchoolsOrderStats } from "@/db/controllers/school-controller";
 import { getUser } from "@/lib/user-utils";
-import { Loader, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 import AddItemForm from "./_components/add-item";
 import DeleteItemButton from "./_components/delete-item";
