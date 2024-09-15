@@ -8,5 +8,5 @@ CREATE TABLE `reservation` (
 	FOREIGN KEY (`item_id`) REFERENCES `item`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-ALTER TABLE `order` ADD `is_reservation` integer DEFAULT false NOT NULL;--> statement-breakpoint
-ALTER TABLE `school_store` ADD `reservation_close` text DEFAULT CURRENT_TIMESTAMP NOT NULL;
+ALTER TABLE order_item ADD `is_reservation` integer DEFAULT false NOT NULL;--> statement-breakpoint
+ALTER TABLE school_store ADD `reservation_close` text DEFAULT CURRENT_TIMESTAMP NOT NULL;
