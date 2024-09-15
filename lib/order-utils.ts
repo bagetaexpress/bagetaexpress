@@ -106,8 +106,6 @@ async function createOrderFromCart(discount: number = 0): Promise<{
           )
           .limit(1);
 
-        console.log(extendedItem);
-
         if (!extendedItem) {
           error = `Položka '${cartItem.item.name}' nebola nájdená`;
           tx.rollback();

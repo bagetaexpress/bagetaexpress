@@ -119,7 +119,7 @@ export default function Cheackout({ items: defaultItems, cartId }: ICheckout) {
                 className="flex-1"
               >
                 <Loader className="w-5 h-5 mr-2 animate-spin" />
-                Vytváranie objednávky...
+                Vytváranie ...
               </Button>
             ) : (
               <Button

@@ -15,13 +15,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { Loader, Search } from "lucide-react";
 import { handleFilterChange } from "./server-util";
 import { Order } from "@/db/schema";
 import PrintOrderList from "./_components/print-order-list";
 import { getSchool } from "@/db/controllers/school-controller";
 import { getOrderItemsByStoreAndSchool } from "@/db/controllers/item-controller";
 import { getStore } from "@/db/controllers/store-controller";
+import { Suspense } from "react";
+import { User } from "next-auth";
+import ReservedItems from "./_components/reserved-items";
 
 export default async function SummaryPage({
   searchParams,
@@ -32,12 +35,7 @@ export default async function SummaryPage({
   if (!user || !user.schoolId) return null;
   const filter = (searchParams.filter ?? "ordered") as Order["status"];
 
-  const [orders, currentOrders, school, store] = await Promise.all([
-    getOrdersBySchoolId(user.schoolId, filter),
-    getOrderItemsByStoreAndSchool(1, user.schoolId),
-    getSchool(user.schoolId),
-    getStore(1),
-  ]);
+  const orders = await getOrdersBySchoolId(user.schoolId, filter);
 
   return (
     <div className=" relative min-h-full">
@@ -68,7 +66,10 @@ export default async function SummaryPage({
             <Search />
           </Button>
         </form>
-        <PrintOrderList orders={currentOrders} store={store} school={school} />
+        <div className="flex gap-2 flex-wrap">
+          <PrintOrderListWrapper user={user} />
+          <ReservedItems user={user} />
+        </div>
       </div>
       <Accordion type="multiple">
         {orders.length === 0 && (
@@ -85,11 +86,41 @@ export default async function SummaryPage({
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <SummaryRow orderId={order.id} />
+              <Suspense
+                fallback={
+                  <div className="flex justify-center">
+                    <Loader className="h-5 w-5 animate-spin" />
+                  </div>
+                }
+              >
+                <SummaryRow orderId={order.id} />
+              </Suspense>
             </AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
     </div>
+  );
+}
+
+async function PrintOrderListWrapper({ user }: { user: User }) {
+  if (!user || !user.schoolId) return null;
+
+  const [currentOrders, school, store] = await Promise.all([
+    getOrderItemsByStoreAndSchool(1, user.schoolId),
+    getSchool(user.schoolId),
+    getStore(1),
+  ]);
+
+  return (
+    <Suspense
+      fallback={
+        <Button variant="outline" className="flex-1 sm:grow-0">
+          <Loader className="w-5 h-5 animate-spin" />
+        </Button>
+      }
+    >
+      <PrintOrderList orders={currentOrders} store={store} school={school} />
+    </Suspense>
   );
 }
