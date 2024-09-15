@@ -115,6 +115,25 @@ async function getItemsBySchool(
   return items;
 }
 
+async function getExtendedItemById(
+  itemId: Item["id"],
+): Promise<ExtendedItem | null> {
+  const [found] = await db
+    .select({
+      item,
+      store,
+      reservation,
+      schoolStore,
+    })
+    .from(item)
+    .innerJoin(store, eq(item.storeId, store.id))
+    .innerJoin(schoolStore, eq(item.storeId, schoolStore.storeId))
+    .leftJoin(reservation, eq(reservation.itemId, item.id))
+    .where(and(eq(item.id, itemId), eq(item.deleted, false)));
+
+  return found;
+}
+
 async function getItemById(itemId: Item["id"]): Promise<Item | null> {
   const found = await db.select().from(item).where(eq(item.id, itemId));
   if (found.length === 0) {
@@ -265,6 +284,7 @@ export {
   getItemBySchool,
   getItemsBySchool,
   getItemById,
+  getExtendedItemById,
   getItemsFromCart,
   getItemsFromOrder,
   getItemsStats,

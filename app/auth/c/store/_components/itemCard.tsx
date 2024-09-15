@@ -7,20 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
 import { Reservation, SchoolStore } from "@/db/schema";
 import { getDate } from "@/lib/utils";
 import AddToCartButton from "./add-to-cart-button";
+import Link from "next/link";
 
 export default function ItemCard({
   item: { item, store, reservation, schoolStore },
@@ -31,7 +24,7 @@ export default function ItemCard({
 }) {
   return (
     <Card className="flex flex-col">
-      <ItemDetailDialog item={{ item, store, reservation, schoolStore }}>
+      <Link href={`/auth/c/item/${item.id}`}>
         {item.imageUrl !== "" && item.imageUrl !== null ? (
           <Image
             src={item.imageUrl}
@@ -54,7 +47,7 @@ export default function ItemCard({
           <p className="flex-1">{item.description}</p>
           <OrderDateShort schoolStore={schoolStore} reservation={reservation} />
         </CardContent>
-      </ItemDetailDialog>
+      </Link>
       <CardFooter className="grid grid-cols-3 justify-center items-center">
         <p className="text-center text-xl font-bold">{item.price}€</p>
         <div className="col-span-2">
@@ -84,57 +77,6 @@ function isAddToCartDisabled({
     return false;
   }
   return true;
-}
-
-function ItemDetailDialog({
-  item: { item, store, reservation, schoolStore },
-  children,
-}: {
-  item: ExtendedItem;
-  children: React.ReactNode;
-}) {
-  return (
-    <Dialog>
-      <DialogTrigger className="flex flex-col flex-1 text-start">
-        {children}
-      </DialogTrigger>
-      <DialogContent className="max-w-screen-md w-full">
-        <DialogHeader>
-          <DialogTitle>{item.name}</DialogTitle>
-          <DialogDescription>{store.name}</DialogDescription>
-        </DialogHeader>
-        <div className="flex flex-col gap-2">
-          <Image
-            src={item.imageUrl}
-            width={800}
-            height={800}
-            alt="Obrázok produktu"
-            className="rounded-md w-full mt-2"
-          />
-          <p>{item.description}</p>
-          <OrderDate schoolStore={schoolStore} />
-          <ReservationDate
-            reservation={reservation}
-            schoolStore={schoolStore}
-          />
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function OrderDate({ schoolStore }: { schoolStore: SchoolStore }) {
-  if (getDate(schoolStore.orderClose) < new Date()) {
-    return <p>Objednávky sú uzatvorené</p>;
-  }
-  return (
-    <p>
-      Objednanie možné do:{" "}
-      <span className="font-semibold text-nowrap">
-        {getDate(schoolStore.orderClose).toLocaleString("sk-SK")}
-      </span>
-    </p>
-  );
 }
 
 function OrderDateShort({
@@ -192,46 +134,6 @@ function OrderDateShort({
       Objednaj do{" "}
       <span className="font-semibold text-nowrap">
         {orderClose.toLocaleTimeString("sk-SK")}
-      </span>
-    </p>
-  );
-}
-
-function ReservationDate({
-  reservation,
-  schoolStore,
-}: {
-  reservation: Reservation | null;
-  schoolStore: SchoolStore;
-}) {
-  if (!reservation) {
-    return null;
-  }
-
-  if (getDate(schoolStore.reservationClose) < new Date()) {
-    return <p>Rezervácia je uzatvorená</p>;
-  }
-
-  if (getDate(schoolStore.orderClose) < new Date()) {
-    return (
-      <p>
-        Rezervácia je možná do{" "}
-        <span className="font-semibold text-nowrap">
-          {getDate(schoolStore.reservationClose).toLocaleString("sk-SK")}
-        </span>
-      </p>
-    );
-  }
-
-  return (
-    <p>
-      Rezervácia je možná od{" "}
-      <span className="font-semibold text-nowrap">
-        {getDate(schoolStore.orderClose).toLocaleString("sk-SK")}
-      </span>
-      {" do "}
-      <span className="font-semibold text-nowrap">
-        {getDate(schoolStore.reservationClose).toLocaleString("sk-SK")}
       </span>
     </p>
   );
