@@ -9,7 +9,7 @@ import { getUser } from "./user-utils";
 import { db } from "@/db";
 import * as schemas from "@/db/schema";
 import { and, eq, or } from "drizzle-orm";
-import { getDate } from "./utils";
+import { getDate, getNewDate } from "./utils";
 
 function generatePin(length: number): string {
   const chars = "0123456789";
@@ -112,12 +112,10 @@ async function createOrderFromCart(discount: number = 0): Promise<{
         }
 
         const isOrderClosed =
-          getDate(extendedItem.school_store.orderClose) <
-          getDate(new Date().toLocaleString());
+          getDate(extendedItem.school_store.orderClose) < getNewDate();
         const isReservationClosed =
           extendedItem.reservation &&
-          getDate(extendedItem.school_store.reservationClose) <
-            getDate(new Date().toLocaleString());
+          getDate(extendedItem.school_store.reservationClose) < getNewDate();
 
         if (isOrderClosed && !extendedItem.reservation) {
           error = `Nie je možné objednať '${cartItem.item.name}', čas pre objednanie uplynul`;

@@ -42,7 +42,10 @@ export default function EditReservationClose({
       onOpenChange={() => {
         if (isOpen) {
           setIsProcessing(false);
-          setDate(reservationClose);
+          const offset = 120 * 60 * 1000;
+          const time = reservationClose.getTime() - offset;
+          const newDate = new Date(time);
+          setDate(newDate);
         }
         setIsOpen(!isOpen);
       }}
