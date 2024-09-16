@@ -3,11 +3,10 @@
 import { Badge } from "@/components/ui/badge";
 import { CartExtendedItem } from "@/db/controllers/item-controller";
 import { saveUpdateCartItem } from "@/lib/cart-utils";
-import { cn, getDate } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Minus, Plus, Trash } from "lucide-react";
 import Image from "next/image";
 import { useMemo } from "react";
-import { isInt8Array } from "util/types";
 
 export default function CartItemRow({
   cartId,
@@ -39,7 +38,7 @@ export default function CartItemRow({
 
   const isInvalid = useMemo(() => {
     if (
-      getDate(props.schoolStore.orderClose) < new Date() &&
+      new Date(props.schoolStore.orderClose) < new Date() &&
       !props.reservation
     ) {
       return true;
@@ -47,15 +46,15 @@ export default function CartItemRow({
 
     if (
       props.reservation &&
-      getDate(props.schoolStore.reservationClose) < new Date()
+      new Date(props.schoolStore.reservationClose) < new Date()
     ) {
       return true;
     }
 
     if (
       props.reservation &&
-      getDate(props.schoolStore.orderClose) < new Date() &&
-      getDate(props.schoolStore.reservationClose) >= new Date() &&
+      new Date(props.schoolStore.orderClose) < new Date() &&
+      new Date(props.schoolStore.reservationClose) >= new Date() &&
       props.reservation.remaining < props.cartItem.quantity
     ) {
       return true;
@@ -123,11 +122,11 @@ export default function CartItemRow({
 
 function CartBadges({ reservation, schoolStore, cartItem }: CartExtendedItem) {
   const isOrderClosed = useMemo(
-    () => getDate(schoolStore.orderClose) < new Date(),
+    () => new Date(schoolStore.orderClose) < new Date(),
     [schoolStore.orderClose],
   );
   const isReservationClosed = useMemo(
-    () => getDate(schoolStore.reservationClose) < new Date(),
+    () => new Date(schoolStore.reservationClose) < new Date(),
     [schoolStore.reservationClose],
   );
 

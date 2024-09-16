@@ -31,12 +31,12 @@ export default function AddToCartButton({
   const [error, setError] = useState<string | null>(null);
 
   async function onSubmit() {
-    if (getDate(schoolStore.orderClose) < new Date() && !reservation) {
+    if (new Date(schoolStore.orderClose) < new Date() && !reservation) {
       setError("Objednávky sú uzavreté");
       drawerBtnRef.current?.click();
       return;
     }
-    if (reservation && getDate(schoolStore.reservationClose) < new Date()) {
+    if (reservation && new Date(schoolStore.reservationClose) < new Date()) {
       setError("Rezervácie sú uzavreté");
       drawerBtnRef.current?.click();
       return;
