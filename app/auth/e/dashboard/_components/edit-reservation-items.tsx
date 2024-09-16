@@ -93,13 +93,9 @@ function EditReservationItem({
             min={0}
             name="quantity"
             defaultValue={reservation.quantity}
-            className="min-w-fit w-fit aspect-[4/3]"
+            className="min-w-0 w-fit aspect-[4/3]"
           />
-          <Button
-            size="icon"
-            className="aspect-square"
-            type="submit"
-          >
+          <Button size="icon" className="aspect-square" type="submit">
             <Save className="h-5 w-5" />
           </Button>
         </form>
