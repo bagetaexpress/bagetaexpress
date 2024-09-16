@@ -60,7 +60,7 @@ async function getSchoolsOrderStats(
       ordered: sql`SUM(ordered.quantity)`,
       reserved: sql`SUM(reserved.quantity)`,
       pickedup: sql`SUM(pickedup.quantity)`,
-      unpicked: sql`SUM(unpicked.quantity)`,
+      unpicked: sql`COUNT(case when ${order.status} = 'unpicked' then 1 end)`,
     })
     .from(school)
     .leftJoin(schoolStore, eq(school.id, schoolStore.schoolId))

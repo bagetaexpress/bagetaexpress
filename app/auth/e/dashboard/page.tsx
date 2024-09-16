@@ -118,22 +118,20 @@ function ItemCard({
 }) {
   return (
     <Card className="flex-1 flex flex-col">
+      {item.imageUrl !== "" && item.imageUrl !== null ? (
+        <Image
+          src={item.imageUrl}
+          width={400}
+          height={400}
+          alt="Obrázok produktu"
+          className="rounded-md w-full rounded-b-none aspect-video object-cover object-center"
+        />
+      ) : null}
       <CardHeader>
         <CardTitle>{item.name}</CardTitle>
         <CardDescription>{item.description}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col justify-end">
-        {item.imageUrl != null && item.imageUrl != "" ? (
-          <div className="flex justify-center mb-2">
-            <Image
-              src={item.imageUrl}
-              width={200}
-              height={200}
-              alt="item image"
-              className="rounded-md"
-            />
-          </div>
-        ) : null}
         <p>Doručené: {stats.pickedup}</p>
       </CardContent>
       <CardFooter>

@@ -81,14 +81,14 @@ export default async function SchoolCard({
             </span>
           </p>
         </div>
-        <div className=" grid grid-cols-2">
-          <p>Objednané:</p>
+        <div className="grid grid-cols-[3fr_1fr] sm:grid-cols-[2fr_1fr]">
+          <p>Objednané(ks.):</p>
           <p>{stats.ordered ?? 0}</p>
-          <p>Rezervované:</p>
+          <p>Rezervované(ks.):</p>
           <p>{stats.reserved ?? 0}</p>
-          <p>Doručené:</p>
+          <p>Doručené(ks.):</p>
           <p>{stats.pickedup ?? 0}</p>
-          <p>Zablokované:</p>
+          <p>Zablokované(obj.):</p>
           <p>{stats.unpicked ?? 0}</p>
         </div>
       </CardContent>
