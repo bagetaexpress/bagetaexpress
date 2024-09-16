@@ -56,33 +56,6 @@ export default function EditReservationItems({
                 key={item.id}
               />
             ))}
-          {reservations
-            .filter(({ reservation }) => !reservation)
-            .map(({ item }) => (
-              <CreateReservationRow
-                item={item}
-                schoolId={schoolId}
-                key={item.id}
-              />
-            ))}
-          {reservations
-            .filter(({ reservation }) => !reservation)
-            .map(({ item }) => (
-              <CreateReservationRow
-                item={item}
-                schoolId={schoolId}
-                key={item.id}
-              />
-            ))}
-          {reservations
-            .filter(({ reservation }) => !reservation)
-            .map(({ item }) => (
-              <CreateReservationRow
-                item={item}
-                schoolId={schoolId}
-                key={item.id}
-              />
-            ))}
         </div>
       </DialogContent>
     </Dialog>
@@ -120,7 +93,7 @@ function EditReservationItem({
             min={0}
             name="quantity"
             defaultValue={reservation.quantity}
-            className="min-w-0 max-w-[8ch] aspect-[4/3]"
+            className="min-w-0 w-fit max-w-[8ch] aspect-[4/3]"
           />
           <Button size="icon" className="aspect-square" type="submit">
             <Save className="h-5 w-5" />
