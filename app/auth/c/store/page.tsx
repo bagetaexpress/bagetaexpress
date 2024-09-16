@@ -38,14 +38,20 @@ export default async function Store() {
       <h1 className="text-2xl font-semibold pt-2">Obchod</h1>
       <div className="grid gap-1 mb-14 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {items
-          .sort((a) => {
-            if (getDate(a.schoolStore.orderClose) >= new Date()) {
+          .sort((a, b) => {
+            if (
+              getDate(a.schoolStore.orderClose) >= new Date() &&
+              getDate(b.schoolStore.orderClose) < new Date()
+            ) {
               return -1;
             }
             if (
               a.reservation &&
               (getDate(a.schoolStore.reservationClose) >= new Date() ||
-                a.reservation.remaining > 0)
+                a.reservation.remaining > 0) &&
+              (!b.reservation ||
+                (getDate(b.schoolStore.reservationClose) < new Date() &&
+                  b.reservation.remaining <= 0))
             ) {
               return -1;
             }
