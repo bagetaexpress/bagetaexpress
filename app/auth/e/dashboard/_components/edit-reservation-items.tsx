@@ -90,6 +90,7 @@ function EditReservationItem({
         >
           <Input
             type="number"
+            autoFocus={false}
             min={0}
             name="quantity"
             defaultValue={reservation.quantity}
@@ -175,6 +176,7 @@ function CreateReservationRow({
         <Input
           type="number"
           min={0}
+          autoFocus={false}
           name="quantity"
           className="min-w-0 max-w-[8ch] aspect-[4/3]"
         />
