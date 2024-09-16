@@ -33,7 +33,7 @@ export default function EditReservationItems({
       <DialogTrigger asChild>
         <Button className="flex-1">Položky rezervácie</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-dvh overflow-auto">
         <DialogHeader>
           <DialogTitle>Upraviť položky rezervácie</DialogTitle>
         </DialogHeader>
@@ -44,6 +44,33 @@ export default function EditReservationItems({
               <EditReservationItem
                 item={item}
                 reservation={reservation as Reservation}
+                key={item.id}
+              />
+            ))}
+          {reservations
+            .filter(({ reservation }) => !reservation)
+            .map(({ item }) => (
+              <CreateReservationRow
+                item={item}
+                schoolId={schoolId}
+                key={item.id}
+              />
+            ))}
+          {reservations
+            .filter(({ reservation }) => !reservation)
+            .map(({ item }) => (
+              <CreateReservationRow
+                item={item}
+                schoolId={schoolId}
+                key={item.id}
+              />
+            ))}
+          {reservations
+            .filter(({ reservation }) => !reservation)
+            .map(({ item }) => (
+              <CreateReservationRow
+                item={item}
+                schoolId={schoolId}
                 key={item.id}
               />
             ))}
@@ -93,7 +120,7 @@ function EditReservationItem({
             min={0}
             name="quantity"
             defaultValue={reservation.quantity}
-            className="min-w-0 w-fit aspect-[4/3]"
+            className="min-w-0 max-w-[8ch] aspect-[4/3]"
           />
           <Button size="icon" className="aspect-square" type="submit">
             <Save className="h-5 w-5" />
@@ -176,7 +203,7 @@ function CreateReservationRow({
           type="number"
           min={0}
           name="quantity"
-          className="min-w-fit w-fit aspect-[4/3]"
+          className="min-w-0 max-w-[8ch] aspect-[4/3]"
         />
         <Button className="px-8">
           <Plus className="h-5 w-5" />

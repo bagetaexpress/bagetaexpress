@@ -276,7 +276,7 @@ export default function AddItemForm({
       }}
     >
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className=" max-h-dvh overflow-auto">
+      <DialogContent className="max-h-dvh overflow-auto">
         <DialogHeader>
           <DialogTitle>
             {
