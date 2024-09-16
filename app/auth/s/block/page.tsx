@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { blockUnpickedOrders } from "@/db/controllers/order-controller";
+import { resetReservationRemaining } from "@/db/controllers/reservation-controller";
 import {
   getSchoolStores,
   updateSchoolStore,
@@ -95,6 +96,7 @@ export default async function BlockPage({
                   });
                 }
 
+                await resetReservationRemaining(user.schoolId);
                 await blockUnpickedOrders(user.schoolId);
 
                 redirect("/auth/s/block?success=true");

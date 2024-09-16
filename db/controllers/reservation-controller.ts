@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { Item, Reservation, item, reservation } from "../schema";
-import { and, eq } from "drizzle-orm";
+import { and, eq, getTableColumns, sql } from "drizzle-orm";
 
 async function getReservationsByStoreId(storeId: Item["storeId"]): Promise<
   {
@@ -61,6 +61,13 @@ async function updateReservation({
     );
 }
 
+async function resetReservationRemaining(schoolId: Reservation["schoolId"]) {
+  return await db
+    .update(reservation)
+    .set({ remaining: sql<number>`quantity` })
+    .where(eq(reservation.schoolId, schoolId));
+}
+
 async function deleteReservation(
   itemId: Item["id"],
   schoolId: Reservation["schoolId"],
@@ -74,6 +81,7 @@ async function deleteReservation(
 
 export {
   getReservationsByStoreId,
+  resetReservationRemaining,
   getReservation,
   createReservation,
   updateReservation,
