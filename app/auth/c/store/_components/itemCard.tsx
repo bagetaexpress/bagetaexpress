@@ -11,7 +11,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
 import { Reservation, SchoolStore } from "@/db/schema";
-import { getDate } from "@/lib/utils";
+import { getDate, getNewDate } from "@/lib/utils";
 import AddToCartButton from "./add-to-cart-button";
 import Link from "next/link";
 
@@ -75,10 +75,10 @@ function isAddToCartDisabled({
   schoolStore: SchoolStore;
   reservation: Reservation | null;
 }): boolean {
-  if (getDate(schoolStore.orderClose) >= new Date()) {
+  if (getDate(schoolStore.orderClose) >= getNewDate()) {
     return false;
   }
-  if (reservation && getDate(schoolStore.reservationClose) >= new Date()) {
+  if (reservation && getDate(schoolStore.reservationClose) >= getNewDate()) {
     return false;
   }
   return true;
@@ -92,13 +92,13 @@ function OrderDateShort({
   reservation: Reservation | null;
 }) {
   const orderClose = getDate(schoolStore.orderClose);
-  if (orderClose < new Date()) {
+  if (orderClose < getNewDate()) {
     if (!reservation) {
       return <p>Objednanie uzatvorené</p>;
     }
 
     const reservationClose = getDate(schoolStore.reservationClose);
-    if (reservationClose < new Date()) {
+    if (reservationClose < getNewDate()) {
       return <p>Rezervovanie uzatvorené</p>;
     }
 

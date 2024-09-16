@@ -2,7 +2,7 @@ import { getAllergensByItemId } from "@/db/controllers/allergen-controller";
 import { getIngredientsByItemId } from "@/db/controllers/ingredient-controller";
 import { getExtendedItemById } from "@/db/controllers/item-controller";
 import { Reservation, SchoolStore } from "@/db/schema";
-import { getDate } from "@/lib/utils";
+import { getDate, getNewDate } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
 
@@ -65,7 +65,7 @@ export default async function ItemDetailDialog({
 }
 
 function OrderDate({ schoolStore }: { schoolStore: SchoolStore }) {
-  if (getDate(schoolStore.orderClose) < new Date()) {
+  if (getDate(schoolStore.orderClose) < getNewDate()) {
     return (
       <p>
         <span className="font-semibold">Objenanie:</span>
@@ -97,7 +97,7 @@ function ReservationDate({
     return null;
   }
 
-  if (getDate(schoolStore.reservationClose) < new Date()) {
+  if (getDate(schoolStore.reservationClose) < getNewDate()) {
     return (
       <p>
         <span className="font-semibold">Rezervácia:</span>
@@ -107,7 +107,7 @@ function ReservationDate({
     );
   }
 
-  if (getDate(schoolStore.orderClose) < new Date()) {
+  if (getDate(schoolStore.orderClose) < getNewDate()) {
     return (
       <p>
         <span className="font-semibold">Rezervácia:</span>

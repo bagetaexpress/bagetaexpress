@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { getItemsBySchool } from "@/db/controllers/item-controller";
 import { hasActiveOrder } from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
-import { getDate } from "@/lib/utils";
+import { getDate, getNewDate } from "@/lib/utils";
 import { ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -40,17 +40,17 @@ export default async function Store() {
         {items
           .sort((a, b) => {
             if (
-              getDate(a.schoolStore.orderClose) >= new Date() &&
-              getDate(b.schoolStore.orderClose) < new Date()
+              getDate(a.schoolStore.orderClose) >= getNewDate() &&
+              getDate(b.schoolStore.orderClose) < getNewDate()
             ) {
               return -1;
             }
             if (
               a.reservation &&
-              (getDate(a.schoolStore.reservationClose) >= new Date() ||
+              (getDate(a.schoolStore.reservationClose) >= getNewDate() ||
                 a.reservation.remaining > 0) &&
               (!b.reservation ||
-                (getDate(b.schoolStore.reservationClose) < new Date() &&
+                (getDate(b.schoolStore.reservationClose) < getNewDate() &&
                   b.reservation.remaining <= 0))
             ) {
               return -1;
