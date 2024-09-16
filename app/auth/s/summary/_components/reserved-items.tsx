@@ -46,7 +46,10 @@ async function ReservedItemsInner({ user }: { user: User }) {
         </DialogHeader>
         <div className="grid divide-y-2">
           {items.map(({ item, store, quantity }) => (
-            <div className={`flex justify-between p-2 items-center`}>
+            <div
+              key={item.id}
+              className={`flex justify-between p-2 items-center`}
+            >
               <div className="flex gap-1 items-center">
                 {item.imageUrl != null && item.imageUrl != "" ? (
                   <Image
