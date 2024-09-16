@@ -24,7 +24,7 @@ export default function ItemCard({
 }) {
   return (
     <Card className="flex flex-col">
-      <Link href={`/auth/c/item/${item.id}`}>
+      <Link className="flex-1 flex flex-col" href={`/auth/c/item/${item.id}`}>
         {item.imageUrl !== "" && item.imageUrl !== null ? (
           <Image
             src={item.imageUrl}
@@ -44,8 +44,13 @@ export default function ItemCard({
               <Badge variant="secondary">Možnosť rezervovať</Badge>
             )}
           </div>
-          <p className="flex-1">{item.description}</p>
-          <OrderDateShort schoolStore={schoolStore} reservation={reservation} />
+          {item.description.trim() !== "" && <p>{item.description}</p>}
+          <div className="flex-1 flex flex-col justify-end">
+            <OrderDateShort
+              schoolStore={schoolStore}
+              reservation={reservation}
+            />
+          </div>
         </CardContent>
       </Link>
       <CardFooter className="grid grid-cols-3 justify-center items-center">
