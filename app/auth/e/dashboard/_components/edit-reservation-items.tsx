@@ -33,7 +33,7 @@ export default function EditReservationItems({
       <DialogTrigger asChild>
         <Button className="flex-1">Položky rezervácie</Button>
       </DialogTrigger>
-      <DialogContent className="max-h-dvh overflow-auto">
+      <DialogContent autoFocus={false} className="max-h-dvh overflow-auto">
         <DialogHeader>
           <DialogTitle>Upraviť položky rezervácie</DialogTitle>
         </DialogHeader>
@@ -74,6 +74,7 @@ function EditReservationItem({
       <p>{item.name}</p>
       <div className="flex gap-1">
         <form
+          autoFocus={false}
           className="flex gap-1"
           action={async (form: FormData) => {
             "use server";
@@ -92,6 +93,7 @@ function EditReservationItem({
             type="number"
             autoFocus={false}
             min={0}
+            tabIndex={-1}
             name="quantity"
             defaultValue={reservation.quantity}
             className="min-w-0 w-fit max-w-[8ch] aspect-[4/3]"
@@ -158,6 +160,7 @@ function CreateReservationRow({
     <div key={item.id} className="flex gap-2 justify-between">
       <p className="flex-1">{item.name}</p>
       <form
+        autoFocus={false}
         className="flex gap-1"
         action={async (form: FormData) => {
           "use server";
@@ -176,6 +179,7 @@ function CreateReservationRow({
         <Input
           type="number"
           min={0}
+          tabIndex={-1}
           autoFocus={false}
           name="quantity"
           className="min-w-0 max-w-[8ch] aspect-[4/3]"
