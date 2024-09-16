@@ -16,7 +16,7 @@ export default function ReservedItems({ user }: { user: User }) {
   return (
     <Suspense
       fallback={
-        <Button variant="outline" className="flex-1 sm:grow-0" disabled>
+        <Button variant="outline" className="flex-1 md:grow-0" disabled>
           <Loader className="w-5 h-5 animate-spin" />
         </Button>
       }
@@ -36,7 +36,7 @@ async function ReservedItemsInner({ user }: { user: User }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex-1 sm:grow-0">
+        <Button variant="outline" className="flex-1 md:grow-0">
           Zobraziť rezervované
         </Button>
       </DialogTrigger>
@@ -44,6 +44,9 @@ async function ReservedItemsInner({ user }: { user: User }) {
         <DialogHeader>
           <DialogTitle>Rezervované položky</DialogTitle>
         </DialogHeader>
+        {items.length === 0 && (
+          <div className="text-center text-gray-500">Žiadne rezervácie</div>
+        )}
         <div className="grid divide-y-2">
           {items.map(({ item, store, quantity }) => (
             <div

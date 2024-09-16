@@ -29,7 +29,7 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
     <>
       <Button
         variant="outline"
-        className=" gap-2 flex-1 sm:grow-0"
+        className=" gap-2 flex-1 md:grow-0"
         type="button"
         onClick={handlePrint}
       >
@@ -121,7 +121,7 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
                   {orders
                     .reduce(
                       (acc, order) => acc + order.item.price * order.quantity,
-                      0
+                      0,
                     )
                     .toFixed(2)}
                   €

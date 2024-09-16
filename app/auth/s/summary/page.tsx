@@ -51,10 +51,13 @@ export default async function SummaryPage({
           }[filter]
         }
       </h2>
-      <div className="flex gap-2 justify-between items-center flex-wrap">
-        <form action={handleFilterChange} className="flex py-2 gap-2">
+      <div className="flex gap-2 justify-between flex-wrap flex-col md:flex-row">
+        <form
+          action={handleFilterChange}
+          className="flex py-2 gap-2 flex-1 md:grow-0"
+        >
           <Select name="filter" defaultValue={filter}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="flex-1 md:grow-0 md:min-w-[180px]">
               <SelectValue placeholder="ordered" />
             </SelectTrigger>
             <SelectContent>
@@ -62,11 +65,11 @@ export default async function SummaryPage({
               <SelectItem value="unpicked">Nevyzdvihnuté</SelectItem>
             </SelectContent>
           </Select>
-          <Button type="submit" size="icon">
+          <Button type="submit" size="icon" className="aspect-square">
             <Search />
           </Button>
         </form>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap items-center">
           <PrintOrderListWrapper user={user} />
           <ReservedItems user={user} />
         </div>
@@ -115,7 +118,7 @@ async function PrintOrderListWrapper({ user }: { user: User }) {
   return (
     <Suspense
       fallback={
-        <Button variant="outline" className="flex-1 sm:grow-0">
+        <Button variant="outline" className="flex-1 md:grow-0">
           <Loader className="w-5 h-5 animate-spin" />
         </Button>
       }
