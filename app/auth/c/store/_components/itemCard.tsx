@@ -31,7 +31,7 @@ export default function ItemCard({
             width={400}
             height={400}
             alt="Obrázok produktu"
-            className="rounded-md w-full rounded-b-none"
+            className="rounded-md w-full rounded-b-none aspect-video object-cover object-center"
           />
         ) : null}
         <CardHeader className="py-2 flex">
