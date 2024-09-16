@@ -81,6 +81,12 @@ function EditReservationItem({
             const quantity = Number(form.get("quantity"));
             if (isNaN(quantity)) return;
 
+            if (quantity === 0) {
+              await deleteReservation(item.id, reservation.schoolId);
+              revalidatePath("/auth/e/dashboard");
+              return;
+            }
+
             await updateReservation({
               itemId: item.id,
               schoolId: reservation.schoolId,
