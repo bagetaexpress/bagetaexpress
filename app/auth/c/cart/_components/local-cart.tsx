@@ -14,8 +14,7 @@ export default function LocalCart({
   const [data, setData] = useState(originalData);
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold pt-2">Košík</h1>
+    <>
       <div className="grid grid-cols-1 divide-y-2 rounded-md overflow-hidden">
         {data.map((item, i) => (
           <CartItemRow
@@ -67,6 +66,6 @@ export default function LocalCart({
           €
         </p>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,41 +1,43 @@
 import ItemCard from "@/app/auth/c/store/_components/itemCard";
 import { Button } from "@/components/ui/button";
 import { getItemsBySchool } from "@/db/controllers/item-controller";
-import { hasActiveOrder } from "@/db/controllers/order-controller";
+import { getActiveOrder } from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
 import { getDate, getNewDate } from "@/lib/utils";
-import { ShoppingCart } from "lucide-react";
+import { Loader, ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
-export default async function Store() {
+export default function StorePage() {
+  return (
+    <div className="h-full relative flex flex-col">
+      <h1 className="text-2xl font-semibold pt-2">Obchod</h1>
+      <Suspense
+        fallback={
+          <div className="flex flex-1 justify-center items-center">
+            <Loader className="h-10 w-10 animate-spin" />
+          </div>
+        }
+      >
+        <StorePageInner />
+      </Suspense>
+    </div>
+  );
+}
+
+async function StorePageInner() {
   const user = await getUser();
   if (!user || !user.schoolId) {
     redirect("/");
   }
 
   const [hasOrder, items] = await Promise.all([
-    hasActiveOrder(user.id),
+    getActiveOrder(user.id),
     getItemsBySchool(user.schoolId),
-    /*
-    fetch(
-      `${process.env.NEXTAUTH_URL}/api/client/items?schoolID=${user.schoolId}`,
-      {
-        next: {
-          tags: ["items"],
-        },
-      },
-    )
-      .then((res) => res.json())
-      .catch((err) => {
-        console.log(err);
-        throw new Error("Failed to fetch items");
-      }) as Promise<ExtendedItem[]>,
-    */
   ]);
 
   return (
-    <div className="h-full relative">
-      <h1 className="text-2xl font-semibold pt-2">Obchod</h1>
+    <>
       <div className="grid gap-1 mb-14 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {items
           .sort((a, b) => {
@@ -58,7 +60,7 @@ export default async function Store() {
             return 0;
           })
           .map((item) => (
-            <ItemCard key={item.item.id} item={item} hasOrder={hasOrder} />
+            <ItemCard key={item.item.id} item={item} hasOrder={!!hasOrder} />
           ))}
       </div>
       <div
@@ -94,6 +96,6 @@ export default async function Store() {
           </a>
         )}
       </div>
-    </div>
+    </>
   );
 }

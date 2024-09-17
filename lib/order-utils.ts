@@ -30,7 +30,7 @@ async function createOrderFromCart(discount: number = 0): Promise<{
 
   const [customer, hasOrder, cart, cartItems] = await Promise.all([
     customerCtrl.getCustomer(user.id),
-    orderCtrl.hasActiveOrder(user.id),
+    orderCtrl.getActiveOrder(user.id),
     cartCtrl.getCart(user.id),
     getCartItems(user.id),
   ]);

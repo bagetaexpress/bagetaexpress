@@ -3,7 +3,7 @@ import { ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { getUser } from "@/lib/user-utils";
-import { hasActiveOrder } from "@/db/controllers/order-controller";
+import { getActiveOrder } from "@/db/controllers/order-controller";
 import NavButton from "@/components/nav/nav-button";
 import NavWrapper from "@/components/nav/nav-wrapper";
 
@@ -17,7 +17,7 @@ export default async function authLayout({
     redirect("/");
   }
 
-  const hasOrder = await hasActiveOrder(user.id);
+  const hasOrder = await getActiveOrder(user.id);
 
   return (
     <div style={{ minHeight: "100dvh" }} className="flex flex-col">

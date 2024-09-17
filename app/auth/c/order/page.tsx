@@ -1,7 +1,7 @@
 import { getItemsFromOrder } from "@/db/controllers/item-controller";
 import {
+  getActiveOrder,
   getFirstOrderItemClose,
-  getOrdersByUserId,
 } from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
 import QrCode from "./_components/qrCode";
@@ -22,17 +22,32 @@ import { Order } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import { revalidatePath } from "next/cache";
 import { getNewDate } from "@/lib/utils";
+import { Suspense } from "react";
+import { Loader } from "lucide-react";
 
-export default async function OrderPage() {
-  const currUser = await getUser();
-  if (!currUser) return null;
+export default function OrderPage() {
+  return (
+    <div className="flex flex-col h-full">
+      <h1 className="text-2xl font-semibold py-2">Objednávka</h1>
+      <Suspense
+        fallback={
+          <div className="flex flex-1 justify-center items-center">
+            <Loader className="h-10 w-10 animate-spin" />
+          </div>
+        }
+      >
+        <OrderPageInner />
+      </Suspense>
+    </div>
+  );
+}
 
-  const [[foundOrder], [foundUnpicked]] = await Promise.all([
-    getOrdersByUserId(currUser.id, "ordered"),
-    getOrdersByUserId(currUser.id, "unpicked"),
-  ]);
+async function OrderPageInner() {
+  const user = await getUser();
+  if (!user) return null;
 
-  const order = foundOrder ?? foundUnpicked;
+  const order = await getActiveOrder(user.id);
+  if (!order) return null;
 
   const [items, orderClose] = await Promise.all([
     getItemsFromOrder(order.id),
@@ -44,8 +59,7 @@ export default async function OrderPage() {
     .toFixed(2);
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold py-2">Objednávka</h1>
+    <>
       <div className="flex justify-center">
         <QrCode
           pin={order.pin}
@@ -85,18 +99,18 @@ export default async function OrderPage() {
         <p className="font-semibold text-lg">Spolu</p>
         <p className="font-semibold text-xl">{total}€</p>
       </div>
-      {foundUnpicked && (
+      {order.status === "unpicked" && (
         <p className="text-center font-semibold text-lg text-destructive">
           Objednávka je nevyzdvihnutá, prosím, dostavte sa k školskému
           predajcovi
         </p>
       )}
       <div className="flex justify-end">
-        {foundOrder && orderClose > getNewDate() && (
+        {order.status === "ordered" && orderClose > getNewDate() && (
           <DeleteOrder orderId={order.id} />
         )}
       </div>
-    </div>
+    </>
   );
 }
 

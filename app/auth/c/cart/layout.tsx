@@ -1,4 +1,4 @@
-import { getOrdersByUserId } from "@/db/controllers/order-controller";
+import { getActiveOrder } from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
@@ -12,8 +12,9 @@ export default async function CartLayout({
   if (!user) {
     redirect("/");
   }
-  const foundOrder = await getOrdersByUserId(user.id, "ordered");
-  if (foundOrder.length > 0) {
+
+  const hasActive = await getActiveOrder(user.id);
+  if (hasActive) {
     redirect("/auth/c/order");
   }
 

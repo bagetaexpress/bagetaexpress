@@ -1,4 +1,4 @@
-import { getOrdersByUserId } from "@/db/controllers/order-controller";
+import { getActiveOrder } from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
@@ -13,11 +13,8 @@ export default async function CartLayout({
     redirect("/");
   }
 
-  const [foundOrder, foundUnpicked] = await Promise.all([
-    getOrdersByUserId(user.id, "ordered"),
-    getOrdersByUserId(user.id, "unpicked"),
-  ]);
-  if (foundOrder.length === 0 && foundUnpicked.length === 0) {
+  const hasActive = await getActiveOrder(user.id);
+  if (!hasActive) {
     redirect("/auth/c/store");
   }
 

@@ -16,6 +16,7 @@ import {
 import { eq, and, sql, or } from "drizzle-orm";
 import { getUser } from "@/lib/user-utils";
 import { getDate } from "@/lib/utils";
+import { cache } from "react";
 
 async function createOrder(
   userId: Order["userId"],
@@ -79,19 +80,21 @@ async function getOrdersByUserId(
   return orders;
 }
 
-async function hasActiveOrder(userId: Order["userId"]): Promise<boolean> {
-  const orders = await db
-    .select()
-    .from(order)
-    .where(
-      and(
-        eq(order.userId, userId),
-        or(eq(order.status, "ordered"), eq(order.status, "unpicked")),
-      ),
-    )
-    .limit(1);
-  return orders.length > 0;
-}
+const getActiveOrder = cache(
+  async (userId: Order["userId"]): Promise<Order | null> => {
+    const [found] = await db
+      .select()
+      .from(order)
+      .where(
+        and(
+          eq(order.userId, userId),
+          or(eq(order.status, "ordered"), eq(order.status, "unpicked")),
+        ),
+      )
+      .limit(1);
+    return found ?? null;
+  },
+);
 
 async function getOrder(orderId: Order["id"]): Promise<Order | null> {
   const orders = await db.select().from(order).where(eq(order.id, orderId));
@@ -190,5 +193,5 @@ export {
   getOrdersByUserId,
   blockUnpickedOrders,
   getFirstOrderItemClose,
-  hasActiveOrder,
+  getActiveOrder,
 };
