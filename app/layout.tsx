@@ -6,6 +6,7 @@ import { MainLayoutWrapper } from "@/components/main-layout-wrapper";
 import { Toaster } from "@/components/ui/sonner";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { getUser } from "@/lib/user-utils";
 
 export const metadata: Metadata = {
   title: "bagetaEXPRESS",
@@ -32,6 +33,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  void getUser();
   return (
     <html lang="sk" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <meta property="og:type" content="website" />
