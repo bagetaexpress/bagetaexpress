@@ -28,7 +28,6 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, user }) {
-      console.log("loading user");
       const found = await getFullUserById(user.id);
       if (!found) {
         return session;

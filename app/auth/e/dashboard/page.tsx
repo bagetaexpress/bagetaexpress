@@ -10,71 +10,69 @@ import {
 import { ItemStats, getItemsStats } from "@/db/controllers/item-controller";
 import { getSchoolsOrderStats } from "@/db/controllers/school-controller";
 import { getUser } from "@/lib/user-utils";
-import { Plus } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 import AddItemForm from "./_components/add-item";
 import DeleteItemButton from "./_components/delete-item";
-import EditAllergens, {
-  EditAllergensLoader,
-} from "./_components/edit-allergens";
-import EditIngredients, {
-  EditIngredientsLoader,
-} from "./_components/edit-ingredients";
+import EditAllergens from "./_components/edit-allergens";
+import EditIngredients from "./_components/edit-ingredients";
 import { getAllergensByStoreId } from "@/db/controllers/allergen-controller";
 import { getIngredientsByStoreId } from "@/db/controllers/ingredient-controller";
 import Image from "next/image";
 import SchoolCard, { SchoolCardPlaceholder } from "./_components/school-card";
-import { Allergen, Ingredient } from "@/db/schema";
+import { Allergen, Ingredient, Store } from "@/db/schema";
 import OrderSummary from "./_components/order-summary";
 import EditStore from "./_components/edit-store";
 import { getStore } from "@/db/controllers/store-controller";
 import { Suspense } from "react";
 import ReservationSummary from "./_components/reservation-summary";
 
-export default async function DashboardPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const user = await getUser();
-  if (!user || !user.isEmployee) {
-    redirect("/");
-  }
-
-  const [schoolStats, itemStats, allergens, ingredients, store] =
-    await Promise.all([
-      getSchoolsOrderStats(user.storeId ?? 0),
-      getItemsStats(user.storeId ?? 0),
-      getAllergensByStoreId(user.storeId ?? 0),
-      getIngredientsByStoreId(user.storeId ?? 0),
-      getStore(user.storeId ?? 0),
-    ]);
-
+export default function DashboardPage() {
   return (
     <div className=" relative min-h-full">
       <h1 className="text-3xl font-semibold py-2">Dashboard</h1>
 
       <div className="flex gap-2 flex-wrap">
-        <Suspense fallback={<EditAllergensLoader />}>
-          <EditAllergens
-            error={
-              (searchParams.allergenError ?? undefined) as string | undefined
-            }
-          />
-        </Suspense>
-        <Suspense fallback={<EditIngredientsLoader />}>
-          <EditIngredients
-            error={
-              (searchParams.ingredientError ?? undefined) as string | undefined
-            }
-          />
-        </Suspense>
+        <EditAllergens />
+        <EditIngredients />
         <OrderSummary />
         <ReservationSummary />
-        <EditStore store={store} />
+        <EditStoreSuspense />
       </div>
-
       <h2 className="text-2xl font-semibold pt-4">Školy</h2>
+      <Suspense
+        fallback={
+          <div className="flex min-h-40 justify-center items-center">
+            <Loader className="h-10 w-10 animate-spin" />
+          </div>
+        }
+      >
+        <SchoolDashboard />
+      </Suspense>
+      <h2 className="text-2xl font-semibold pt-4">Produkty</h2>
+      <Suspense
+        fallback={
+          <div className="flex min-h-40 justify-center items-center">
+            <Loader className="h-10 w-10 animate-spin" />
+          </div>
+        }
+      >
+        <ProductDashboard />
+      </Suspense>
+    </div>
+  );
+}
+
+async function SchoolDashboard() {
+  const user = await getUser();
+  if (!user || !user.isEmployee || !user.storeId) {
+    redirect("/");
+  }
+
+  const schoolStats = await getSchoolsOrderStats(user.storeId);
+
+  return (
+    <>
       <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {schoolStats.map((schoolStat, i) => (
           <Suspense key={i} fallback={<SchoolCardPlaceholder />}>
@@ -82,8 +80,24 @@ export default async function DashboardPage({
           </Suspense>
         ))}
       </div>
+    </>
+  );
+}
 
-      <h2 className="text-2xl font-semibold pt-4">Produkty</h2>
+async function ProductDashboard() {
+  const user = await getUser();
+  if (!user || !user.isEmployee || !user.storeId) {
+    redirect("/");
+  }
+
+  const [itemStats, allergens, ingredients] = await Promise.all([
+    getItemsStats(user.storeId),
+    getAllergensByStoreId(user.storeId),
+    getIngredientsByStoreId(user.storeId),
+  ]);
+
+  return (
+    <>
       <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {itemStats.map((itemStat, i) => (
           <ItemCard
@@ -105,8 +119,32 @@ export default async function DashboardPage({
           </AddItemForm>
         </Card>
       </div>
-    </div>
+    </>
   );
+}
+
+async function EditStoreSuspense() {
+  const user = await getUser();
+  if (!user || !user.isEmployee || !user.storeId) {
+    redirect("/");
+  }
+
+  return (
+    <Suspense
+      fallback={
+        <Button className="flex-1 sm:grow-0 opacity-50" variant="outline">
+          Upraviť obchod <Loader className="h-5 w-5 animate-spin" />
+        </Button>
+      }
+    >
+      <EditStoreInner storeId={user.storeId} />
+    </Suspense>
+  );
+}
+
+async function EditStoreInner({ storeId }: { storeId: Store["id"] }) {
+  const store = await getStore(storeId);
+  return <EditStore store={store} />;
 }
 
 function ItemCard({

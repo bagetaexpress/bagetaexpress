@@ -25,8 +25,12 @@ export default function OrderSummary() {
   return (
     <Suspense
       fallback={
-        <Button variant="outline" className="flex-1 sm:grow-0" disabled>
-          <Loader className="w-5 h-5 animate-spin" />
+        <Button
+          variant="outline"
+          className="flex-1 sm:grow-0 opacity-50"
+          disabled
+        >
+          Zhrnutie objednávok <Loader className="w-5 h-5 animate-spin" />
         </Button>
       }
     >

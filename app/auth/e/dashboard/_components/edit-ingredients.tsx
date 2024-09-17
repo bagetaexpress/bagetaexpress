@@ -23,20 +23,26 @@ import {
   getIngredientsByStoreId,
 } from "@/db/controllers/ingredient-controller";
 import { getUser } from "@/lib/user-utils";
-import { Plus, Trash } from "lucide-react";
+import { Loader, Plus, Trash } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
-export function EditIngredientsLoader() {
+export default function EditIngredients() {
   return (
-    <Button className="flex-1 sm:grow-0" disabled>
-      Upraviť ingrediencie
-    </Button>
+    <Suspense
+      fallback={
+        <Button className="flex-1 sm:grow-0 opacity-50" disabled>
+          Upraviť ingrediencie <Loader className="w-5 h-5 animate-spin" />
+        </Button>
+      }
+    >
+      <EditIngredientsInner />
+    </Suspense>
   );
 }
 
-// @ts-ignore
-export default async function EditIngredients({ error }: { error?: string }) {
+async function EditIngredientsInner() {
   const user = await getUser();
   if (!user || !user.storeId) redirect("/");
 
