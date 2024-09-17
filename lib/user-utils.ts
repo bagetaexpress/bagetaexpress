@@ -6,7 +6,6 @@ import { authOptions } from "./auth-options";
 import { cache } from "react";
 
 const getUser = cache(async (): Promise<User | null> => {
-  console.log("loading sesion");
   const session = await getServerSession(authOptions);
   if (session === null) {
     return null;
