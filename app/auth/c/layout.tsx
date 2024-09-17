@@ -49,7 +49,6 @@ async function NavButtons() {
 
   return (
     <>
-      <NavButton href="/auth/c/store" text="Domov" />
       {!hasOrder && (
         <NavButton
           href="/auth/c/cart"
