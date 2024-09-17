@@ -23,7 +23,6 @@ import { getSchool } from "@/db/controllers/school-controller";
 import { getOrderItemsByStoreAndSchool } from "@/db/controllers/item-controller";
 import { getStore } from "@/db/controllers/store-controller";
 import { Suspense } from "react";
-import { User } from "next-auth";
 import ReservedItems from "./_components/reserved-items";
 
 export default async function SummaryPage({
@@ -31,14 +30,10 @@ export default async function SummaryPage({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const user = await getUser();
-  if (!user || !user.schoolId) return null;
-  const filter = (searchParams.filter ?? "ordered") as Order["status"];
-
-  const orders = await getOrdersBySchoolId(user.schoolId, filter);
+  const filter = (searchParams.filter as Order["status"]) ?? "ordered";
 
   return (
-    <div className=" relative min-h-full">
+    <div className="flex flex-col relative min-h-full">
       <h1 className="text-2xl font-semibold pt-2">Zhrnutie</h1>
       <h2>
         Zobrasujú sa:{" "}
@@ -70,14 +65,41 @@ export default async function SummaryPage({
           </Button>
         </form>
         <div className="flex gap-2 flex-wrap items-center">
-          <PrintOrderListWrapper user={user} />
-          <ReservedItems user={user} />
+          <PrintOrderListWrapper />
+          <ReservedItems />
         </div>
       </div>
+      <Suspense
+        fallback={
+          <div className="flex flex-1 justify-center items-center">
+            <Loader className="h-10 w-10 animate-spin" />
+          </div>
+        }
+      >
+        <SummaryPageInner filter={filter} />
+      </Suspense>
+    </div>
+  );
+}
+
+async function SummaryPageInner({
+  filter = "ordered",
+}: {
+  filter?: Order["status"];
+}) {
+  const user = await getUser();
+  if (!user || !user.schoolId) return null;
+
+  const orders = await getOrdersBySchoolId(user.schoolId, filter);
+
+  return (
+    <>
+      {orders.length === 0 && (
+        <div className="flex-1 flex justify-center items-center">
+          <p className="text-center text-gray-500">Žiadne objednávky</p>
+        </div>
+      )}
       <Accordion type="multiple">
-        {orders.length === 0 && (
-          <div className="text-center text-gray-500">Žiadne objednávky</div>
-        )}
         {orders.map(({ order, user }) => (
           <AccordionItem key={order.id} value={order.pin}>
             <AccordionTrigger>
@@ -102,11 +124,12 @@ export default async function SummaryPage({
           </AccordionItem>
         ))}
       </Accordion>
-    </div>
+    </>
   );
 }
 
-async function PrintOrderListWrapper({ user }: { user: User }) {
+async function PrintOrderListWrapper() {
+  const user = await getUser();
   if (!user || !user.schoolId) return null;
 
   const [currentOrders, school, store] = await Promise.all([

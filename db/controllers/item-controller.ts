@@ -174,6 +174,28 @@ async function getItemsFromOrder(orderId: Order["id"]) {
   return items.map((item) => ({ item: item.item, quantity: item.quantity }));
 }
 
+async function getItemFromOrderByPin(
+  pin: Order["pin"],
+  schoolId?: School["id"],
+  status: Order["status"] = "ordered",
+) {
+  const items = await db
+    .select({ item, quantity: orderItem.quantity })
+    .from(item)
+    .innerJoin(orderItem, eq(item.id, orderItem.itemId))
+    .innerJoin(order, eq(orderItem.orderId, order.id))
+    .innerJoin(customer, eq(order.userId, customer.userId))
+    .where(
+      and(
+        eq(order.pin, pin),
+        eq(order.status, status),
+        schoolId ? eq(customer.schoolId, schoolId) : undefined,
+      ),
+    );
+
+  return items.map((item) => ({ item: item.item, quantity: item.quantity }));
+}
+
 export type ItemStats = {
   item: Item & {
     allergens: { id: number; name: string }[];
@@ -351,6 +373,7 @@ export {
   getItemsBySchool,
   getItemById,
   getExtendedItemById,
+  getItemFromOrderByPin,
   getItemsFromCart,
   getItemsFromOrder,
   getItemsStats,

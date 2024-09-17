@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { getItemsFromOrder } from "@/db/controllers/item-controller";
+import { getItemFromOrderByPin } from "@/db/controllers/item-controller";
 import { getOrderByPin } from "@/db/controllers/order-controller";
 import { Order } from "@/db/schema";
 import { getUser } from "@/lib/user-utils";
@@ -23,7 +23,11 @@ export default async function HandleOrder({
   const currUser = await getUser();
   if (!currUser) return null;
 
-  const order = await getOrderByPin(pin, currUser.schoolId, orderStatus);
+  const [order, items] = await Promise.all([
+    getOrderByPin(pin, currUser.schoolId, orderStatus),
+    getItemFromOrderByPin(pin, currUser.schoolId, orderStatus),
+  ]);
+
   if (!order) {
     return (
       <div className="min-h-full flex justify-center items-center flex-col gap-2">
@@ -37,7 +41,6 @@ export default async function HandleOrder({
     );
   }
 
-  const items = await getItemsFromOrder(order.id);
   const total = items
     .reduce((acc, { item, quantity }) => acc + item.price * quantity, 0)
     .toFixed(2);

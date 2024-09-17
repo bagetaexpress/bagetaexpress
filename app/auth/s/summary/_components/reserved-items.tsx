@@ -11,8 +11,9 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
+import { getUser } from "@/lib/user-utils";
 
-export default function ReservedItems({ user }: { user: User }) {
+export default function ReservedItems() {
   return (
     <Suspense
       fallback={
@@ -21,12 +22,13 @@ export default function ReservedItems({ user }: { user: User }) {
         </Button>
       }
     >
-      <ReservedItemsInner user={user} />
+      <ReservedItemsInner />
     </Suspense>
   );
 }
 
-async function ReservedItemsInner({ user }: { user: User }) {
+async function ReservedItemsInner() {
+  const user = await getUser();
   if (!user || !user.schoolId) {
     return null;
   }

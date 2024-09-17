@@ -5,6 +5,8 @@ import {
 import { getUser } from "@/lib/user-utils";
 import { redirect } from "next/navigation";
 import HandleOrder from "../../_components/handle-order";
+import { Suspense } from "react";
+import { Loader } from "lucide-react";
 
 export default async function TakePinPage({
   params,
@@ -21,7 +23,7 @@ export default async function TakePinPage({
       const order = await getOrderByPin(
         params.pin,
         currUser.schoolId,
-        "ordered"
+        "ordered",
       );
       if (!order) throw new Error("Order not found");
 
@@ -39,11 +41,19 @@ export default async function TakePinPage({
   }
 
   return (
-    <HandleOrder
-      pin={params.pin}
-      confirmText="Potvrdiť"
-      confirmAction={confirmOrder}
-      cancelAction={cancleAction}
-    />
+    <Suspense
+      fallback={
+        <div className="flex min-h-full justify-center items-center">
+          <Loader className="h-10 w-10 animate-spin" />
+        </div>
+      }
+    >
+      <HandleOrder
+        pin={params.pin}
+        confirmText="Potvrdiť"
+        confirmAction={confirmOrder}
+        cancelAction={cancleAction}
+      />
+    </Suspense>
   );
 }
