@@ -224,6 +224,30 @@ async function updateItem(
   await db.update(item).set(data).where(eq(item.id, data.id));
 }
 
+async function getReservationItemsByStore(
+  storeId: Store["id"],
+  orderStatus: Order["status"] = "ordered",
+) {
+  const items = await db
+    .select({
+      item,
+      quantity: sql<number>`SUM(order_item.quantity)`,
+    })
+    .from(item)
+    .innerJoin(orderItem, eq(item.id, orderItem.itemId))
+    .innerJoin(order, eq(orderItem.orderId, order.id))
+    .where(
+      and(
+        eq(order.status, orderStatus),
+        eq(item.storeId, storeId),
+        eq(orderItem.isReservation, true),
+      ),
+    )
+    .groupBy(item.id);
+
+  return items;
+}
+
 async function getOrderItemsByStore(
   storeId: Store["id"],
   orderStatus: Order["status"] = "ordered",
@@ -236,7 +260,13 @@ async function getOrderItemsByStore(
     .from(item)
     .innerJoin(orderItem, eq(item.id, orderItem.itemId))
     .innerJoin(order, eq(orderItem.orderId, order.id))
-    .where(and(eq(order.status, orderStatus), eq(item.storeId, storeId)))
+    .where(
+      and(
+        eq(order.status, orderStatus),
+        eq(item.storeId, storeId),
+        eq(orderItem.isReservation, false),
+      ),
+    )
     .groupBy(item.id);
 
   return items;
@@ -293,7 +323,10 @@ async function getOrderItemsByStoreAndSchool(
     .from(item)
     .innerJoin(store, eq(item.storeId, store.id))
     .innerJoin(schoolStore, eq(item.storeId, schoolStore.storeId))
-    .innerJoin(orderItem, eq(item.id, orderItem.itemId))
+    .innerJoin(
+      orderItem,
+      and(eq(item.id, orderItem.itemId), eq(orderItem.isReservation, false)),
+    )
     .innerJoin(order, eq(orderItem.orderId, order.id))
     .innerJoin(customer, eq(order.userId, customer.userId))
     .leftJoin(reservation, eq(reservation.itemId, item.id))
@@ -313,6 +346,7 @@ export {
   getOrderItemsByStoreAndSchool,
   getReservedItemsByStoreAndSchool,
   getOrderItemsByStore,
+  getReservationItemsByStore,
   getItemBySchool,
   getItemsBySchool,
   getItemById,

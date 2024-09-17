@@ -29,6 +29,7 @@ import OrderSummary from "./_components/order-summary";
 import EditStore from "./_components/edit-store";
 import { getStore } from "@/db/controllers/store-controller";
 import { Suspense } from "react";
+import ReservationSummary from "./_components/reservation-summary";
 
 export default async function DashboardPage({
   searchParams,
@@ -69,6 +70,7 @@ export default async function DashboardPage({
           />
         </Suspense>
         <OrderSummary />
+        <ReservationSummary />
         <EditStore store={store} />
       </div>
 

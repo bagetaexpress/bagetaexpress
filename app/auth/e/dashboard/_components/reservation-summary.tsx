@@ -15,13 +15,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getOrderItemsByStore } from "@/db/controllers/item-controller";
+import { getReservationItemsByStore } from "@/db/controllers/item-controller";
 import { getUser } from "@/lib/user-utils";
 import { Loader } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export default function OrderSummary() {
+export default function ReservationSummary() {
   return (
     <Suspense
       fallback={
@@ -30,17 +30,17 @@ export default function OrderSummary() {
         </Button>
       }
     >
-      <OrderSummaryInner />
+      <ReservationSummaryInner />
     </Suspense>
   );
 }
 
-async function OrderSummaryInner() {
+async function ReservationSummaryInner() {
   const user = await getUser();
   if (!user || !user.isEmployee) {
     redirect("/");
   }
-  const ordersSummary = await getOrderItemsByStore(
+  const reservationSummary = await getReservationItemsByStore(
     user.storeId ?? 0,
     "ordered",
   );
@@ -49,14 +49,14 @@ async function OrderSummaryInner() {
     <Dialog>
       <DialogTrigger asChild>
         <Button className="flex-1 sm:grow-0" variant="outline">
-          Zhrnutie objednávok
+          Zhrnutie rezervácií
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Zhrnutie aktívnych objednávok</DialogTitle>
+          <DialogTitle>Zhrnutie aktívnych rezervácií</DialogTitle>
           <DialogDescription>
-            Ak objednávky nie sú uzavrené, tak zobrazené počty sa môžu zmeniť
+            Ak rezervácie nie sú uzavrené, tak zobrazené počty sa môžu zmeniť
           </DialogDescription>
         </DialogHeader>
         <Table>
@@ -68,7 +68,7 @@ async function OrderSummaryInner() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {ordersSummary.map(({ item, quantity }, index) => (
+            {reservationSummary.map(({ item, quantity }, index) => (
               <TableRow key={item.id}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{item.name}</TableCell>
