@@ -94,12 +94,14 @@ async function createOrderFromCart(discount: number = 0): Promise<{
           )
           .leftJoin(
             schemas.reservation,
-            eq(schemas.reservation.itemId, schemas.item.id),
+            and(
+              eq(schemas.reservation.itemId, schemas.item.id),
+              eq(schemas.reservation.schoolId, customer.schoolId),
+            ),
           )
           .where(
             and(
               eq(schemas.schoolStore.schoolId, customer.schoolId),
-              eq(schemas.reservation.schoolId, customer.schoolId),
               eq(schemas.item.id, cartItem.item.id),
               eq(schemas.item.deleted, false),
             ),
