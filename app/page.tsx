@@ -36,7 +36,7 @@ import { Suspense } from "react";
 
 export default function Home() {
   return (
-    <div className="min-h-[100dvh] overflow-x-hidden relative">
+    <div className="min-h-[100dvh] overflow-hidden relative">
       {/* Background
        */}
       <BlurGradientBackground className="absolute left-0 top-0 w-full aspect-square opacity-50 z-[-10]" />
