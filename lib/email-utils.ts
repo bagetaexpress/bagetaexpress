@@ -12,8 +12,6 @@ export async function SendContactEmail(email: string): Promise<ErrorRes<null>> {
   if (z.string().email().safeParse(email).success === false) {
     return { data: null, error: "Invalid email" };
   }
-  console.log("send email");
-  return { data: null, error: null };
   try {
     const { error } = await resend.emails.send({
       from: "Acme <noreply@bageta.express>",
@@ -28,7 +26,7 @@ export async function SendContactEmail(email: string): Promise<ErrorRes<null>> {
     }
 
     return { data: null, error: null };
-  } catch (error) {
-    return { error: error.message, data: null };
+  } catch (error: any) {
+    return { error: error?.message ?? "Send email failed", data: null };
   }
 }
