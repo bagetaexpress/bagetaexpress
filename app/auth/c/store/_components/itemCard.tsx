@@ -24,7 +24,11 @@ export default function ItemCard({
 }) {
   return (
     <Card className="flex flex-col">
-      <Link className="flex-1 flex flex-col" href={`/auth/c/item/${item.id}`}>
+      <Link
+        prefetch={false}
+        className="flex-1 flex flex-col"
+        href={`/auth/c/item/${item.id}`}
+      >
         {item.imageUrl !== "" && item.imageUrl !== null ? (
           <Image
             src={item.imageUrl}

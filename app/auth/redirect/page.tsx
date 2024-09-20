@@ -7,7 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Facebook, Instagram, Link } from "lucide-react";
+import { Link } from "lucide-react";
 import { getSchoolDomains } from "@/db/controllers/school-controller";
 import { authOptions } from "@/lib/auth-options";
 

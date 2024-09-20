@@ -59,7 +59,7 @@ export default function Home({
         */}
         <nav className="h-fit flex flex-row items-center justify-between max-w-screen-lg sm:mt-5 w-full sm:w-[calc(100%-2.5rem)] bg-background p-5 sm:rounded-xl absolute top-0 left-1/2 translate-x-[-50%] shadow-2xl">
           <div className="relative h-10 w-28">
-            <Link href="/">
+            <Link prefetch={false} href="/">
               <LogomarkJS
                 style={{ fill: "hsl(var(--primary-foreground))" }}
                 className="max-h-10 flex-1"
@@ -67,10 +67,10 @@ export default function Home({
             </Link>
           </div>
           <div className="flex gap-1">
-            <Link href="/#description">
+            <Link prefetch={false} href="/#description">
               <Button variant="ghost">Čo robíme?</Button>
             </Link>
-            <Link href="/#contact">
+            <Link prefetch={false} href="/#contact">
               <Button variant="ghost">Kontakt</Button>
             </Link>
             <Suspense fallback={null}>
@@ -309,13 +309,21 @@ export default function Home({
 
       <footer className="w-full min-h-40 bg-background mt-52 flex flex-col gap-2">
         <div className="flex-1 flex justify-center items-center gap-2 flex-wrap">
-          <Link href="https://www.instagram.com/bagetaexpress/" target="_blank">
+          <Link
+            prefetch={false}
+            href="https://www.instagram.com/bagetaexpress/"
+            target="_blank"
+          >
             <Button variant="outline" className="gap-2">
               Instagram
               <Instagram className="w-6 h-6" />
             </Button>
           </Link>
-          <Link href="https://www.github.com/tomz197" target="_blank">
+          <Link
+            prefetch={false}
+            href="https://www.github.com/tomz197"
+            target="_blank"
+          >
             <Button variant="outline" className="gap-2">
               Github
               <Github className="w-6 h-6" />
