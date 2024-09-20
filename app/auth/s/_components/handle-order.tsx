@@ -82,7 +82,7 @@ export default async function HandleOrder({
           <p className="font-semibold text-xl">{total}€</p>
         </div>
       </div>
-      <div className=" flex gap-2 justify-end flex-col sm:flex-row">
+      <div className=" flex gap-2 justify-between flex-col sm:flex-row">
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="outline">Zrušiť</Button>
