@@ -33,8 +33,15 @@ import { Separator } from "@/components/ui/separator";
 import { Github, Instagram } from "lucide-react";
 import { PopupCarousel } from "@/components/ui/custom/popup-carousel";
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
+import ClientButton from "./auth/s/_components/client-button";
+import EmailForm from "./_components/email-form";
 
-export default function Home() {
+export default function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   return (
     <div className="min-h-[100dvh] overflow-hidden relative">
       {/* Background
@@ -284,36 +291,21 @@ export default function Home() {
         </div>
       </div>
 
-      {/*
       <div
         id="contact"
-        className="relative flex flex-col gap-4 mt-52 lg:mt-80 bg-background rounded-xl p-5 shadow-2xl max-w-screen-lg mx-auto"
+        className="relative flex flex-col gap-4 sm:gap-0 mt-52 lg:mt-80 bg-background rounded-xl p-5 shadow-2xl max-w-screen-lg mx-auto"
       >
         <BlobFullPrimary2 className="absolute top-0 left-0 z-[-1] w-[50rem] aspect-square scale-[1.2] translate-x-[-20%] translate-y-[-30%]" />
         <BlobOutlineSecondary2 className="absolute top-0 left-0 z-[-1] w-[50rem] aspect-square rotate-90 scale-[0.9] translate-x-[-30%] translate-y-[-20%]" />
         <BlobPatternBlack2 className="absolute right-0 bottom-0 z-[-1] w-[50rem] aspect-square rotate-45 scale-[0.9] translate-x-[35%] translate-y-[30%]" />
-        <h2 className="text-xl text-center leading-loose">
-          Máš Záujem? <br />
-          <span className="text-3xl font-bold">Napíš nám!</span>
-        </h2>
-        <div className="grid w-full gap-4">
-          <div className="grid w-full items-center gap-1.5">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Zadajte email"
-              required
-            />
-          </div>
-          <div className="grid w-full items-center gap-1.5">
-            <Label htmlFor="message">Správa</Label>
-            <Textarea id="message" placeholder="Správa" required />
-          </div>
+        <div className="text-center">
+          <h2 className="text-4xl font-bold text-center">Máš Záujem?</h2>
+          <p className="text-xl leading-loose">
+            Zadajte email a my vás kontaktujeme!
+          </p>
         </div>
-        <Button size="lg">Odoslať</Button>
+        <EmailForm />
       </div>
-      */}
 
       <footer className="w-full min-h-40 bg-background mt-52 flex flex-col gap-2">
         <div className="flex-1 flex justify-center items-center gap-2 flex-wrap">

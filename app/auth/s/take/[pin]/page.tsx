@@ -17,6 +17,7 @@ export default async function TakePinPage({
     "use server";
     let success = true;
     try {
+      console.info(`Confirming order with pin: ${params.pin}`);
       const currUser = await getUser();
       if (!currUser) throw new Error("User not found");
 
@@ -27,6 +28,7 @@ export default async function TakePinPage({
       );
       if (!order) throw new Error("Order not found");
 
+      console.info(`Updating order status to pickedup`);
       await updateOrderStatus(order.id, "pickedup");
     } catch (error) {
       console.error(error);

@@ -88,6 +88,9 @@ export default async function BlockPage({
                     reservationCloseDate.getDate() + daysToAdd,
                   );
 
+                  console.info(
+                    `SchoolId: ${user.schoolId} - StoreId: ${schoolStore.storeId} - OrderClose: ${getFormatedDate(orderCloseDate)} - ReservationClose: ${getFormatedDate(reservationCloseDate)}`,
+                  );
                   await updateSchoolStore({
                     schoolId: user.schoolId,
                     storeId: schoolStore.storeId,
