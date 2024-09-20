@@ -50,7 +50,6 @@ async function getSchoolsOrderStats(
   const ordered = aliasedTable(orderItem, "ordered");
   const reserved = aliasedTable(orderItem, "reserved");
   const pickedup = aliasedTable(orderItem, "pickedup");
-  const unpicked = aliasedTable(orderItem, "unpicked");
 
   const schools = await db
     .select({
@@ -86,12 +85,22 @@ async function getSchoolsOrderStats(
       pickedup,
       and(eq(order.id, pickedup.orderId), eq(order.status, "pickedup")),
     )
-    .leftJoin(
-      unpicked,
-      and(eq(order.id, unpicked.orderId), eq(order.status, "unpicked")),
-    )
     .where(eq(schoolStore.storeId, storeId))
     .groupBy(school.id);
+
+  for (const school of schools) {
+    school.ordered = school.ordered ?? 0;
+    school.reserved = school.reserved ?? 0;
+    school.pickedup = school.pickedup ?? 0;
+    const [unpicked] = await db
+      .select({
+        unpicked: sql`COUNT(case when ${order.status} = 'unpicked' then 1 end)`,
+      })
+      .from(order)
+      .innerJoin(customer, eq(order.userId, customer.userId))
+      .where(eq(customer.schoolId, school.school.id));
+    school.unpicked = unpicked?.unpicked ?? 0;
+  }
 
   return schools as SchoolStats[];
 }
