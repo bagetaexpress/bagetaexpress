@@ -4,6 +4,17 @@ import { getOrderByPin } from "@/db/controllers/order-controller";
 import { Order } from "@/db/schema";
 import { getUser } from "@/lib/user-utils";
 import ClientButton from "./client-button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface IProps {
   pin: string;
@@ -72,12 +83,30 @@ export default async function HandleOrder({
         </div>
       </div>
       <div className=" flex gap-2 justify-end flex-col sm:flex-row">
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline">Zrušiť</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Chete zrušiť prevzatie objednávky?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Táto objednávka nebude označená ako prevzatá.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Vrátiť sa</AlertDialogCancel>
+              <form action={cancelAction}>
+                <Button className="w-full" type="submit">
+                  Pokračovať
+                </Button>
+              </form>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         <ClientButton action={confirmAction} text={confirmText} />
-        <form action={cancelAction}>
-          <Button className="w-full" type="submit" variant="outline">
-            Zrušiť
-          </Button>
-        </form>
       </div>
     </div>
   );
