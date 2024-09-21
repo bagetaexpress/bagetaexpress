@@ -1,10 +1,11 @@
 "use client";
+
+import QrScanner from "@/components/qr-reader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { QrReader } from "react-qr-reader";
 
 export default function Scanner({ url }: { url: string }) {
   const [pinError, setPinError] = useState("");
@@ -13,7 +14,7 @@ export default function Scanner({ url }: { url: string }) {
   return (
     <>
       <div className="">
-        <QrReader
+        <QrScanner
           onResult={(result, error) => {
             if (!!error) return;
             if (!!result) {
@@ -25,8 +26,8 @@ export default function Scanner({ url }: { url: string }) {
               router.push(`${url}/${pin}`);
             }
           }}
-          constraints={{ facingMode: "environment" }}
         />
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
