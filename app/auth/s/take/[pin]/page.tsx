@@ -3,7 +3,7 @@ import {
   updateOrderStatus,
 } from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 import HandleOrder from "../../_components/handle-order";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
@@ -34,12 +34,13 @@ export default async function TakePinPage({
       console.error(error);
       success = false;
     }
-    redirect("/auth/s/take?success=" + success);
+    redirect("/auth/s/take?success=" + success, RedirectType.replace);
   }
 
   async function cancleAction() {
     "use server";
-    redirect("/auth/s/take");
+    console.info(`Cancelling order with pin: ${params.pin}`);
+    redirect("/auth/s/take", RedirectType.replace);
   }
 
   return (

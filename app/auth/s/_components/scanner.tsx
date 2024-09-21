@@ -15,15 +15,16 @@ export default function Scanner({ url }: { url: string }) {
     <>
       <div className="">
         <QrScanner
-          onResult={(result, error) => {
+          onResult={(result, error, controls) => {
             if (!!error) return;
             if (!!result) {
-              // @ts-ignore
-              const pin = result.text as string;
+              console.log(result.getText());
+              const pin = result.getText();
               if (pin.length !== 4) return;
               if (pin.match(/\D/)) return;
 
-              router.push(`${url}/${pin}`);
+              controls?.stop();
+              router.replace(`${url}/${pin}`);
             }
           }}
         />
@@ -39,7 +40,7 @@ export default function Scanner({ url }: { url: string }) {
               return;
             }
 
-            router.push(`${url}/${pin}`);
+            router.replace(`${url}/${pin}`);
           }}
           className="flex justify-center items-center gap-2 mt-2"
         >
@@ -49,7 +50,7 @@ export default function Scanner({ url }: { url: string }) {
             required
             onChange={() => setPinError("")}
           />
-          <Button type="submit" size="icon" className=" aspect-square">
+          <Button type="submit" size="icon" className="aspect-square">
             <Search />
           </Button>
         </form>

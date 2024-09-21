@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BrowserQRCodeReader, IScannerControls } from "@zxing/browser";
 import { DecodeContinuouslyCallback } from "@zxing/browser/esm/common/DecodeContinuouslyCallback";
 
@@ -9,22 +9,21 @@ export default function QrScanner({
 }: {
   onResult: DecodeContinuouslyCallback;
 }) {
-  const [controls, setControls] = useState<IScannerControls | null>(null);
   const [error, setError] = useState("");
+  const previewElementRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     setError("");
-
-    const previewElemet = document.getElementById(videoId);
-    if (!previewElemet) {
+    if (!previewElementRef.current) {
       setError("QR scanner is not supported in this browser.");
       return;
     }
 
     const codeReader = new BrowserQRCodeReader(undefined, {
-      delayBetweenScanAttempts: 100,
+      delayBetweenScanAttempts: 250,
     });
 
+    let controls: IScannerControls | null = null;
     codeReader
       .decodeFromConstraints(
         {
@@ -35,7 +34,9 @@ export default function QrScanner({
         videoId,
         onResult,
       )
-      .then((v) => setControls(v))
+      .then((v) => {
+        controls = v;
+      })
       .catch((error: any) => {
         setError(error.message || "An error occurred.");
       });
@@ -43,11 +44,11 @@ export default function QrScanner({
     return () => {
       controls?.stop();
     };
-  }, []);
+  }, [previewElementRef]);
 
   return (
     <>
-      <video id={videoId} className="w-full h-full" />
+      <video id={videoId} ref={previewElementRef} className="w-full h-full" />
       {!!error && <p className="text-red-500 pt-1">{error}</p>}
     </>
   );
