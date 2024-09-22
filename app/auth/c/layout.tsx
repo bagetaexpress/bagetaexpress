@@ -21,7 +21,7 @@ export default async function authLayout({
   return (
     <div style={{ minHeight: "100dvh" }} className="flex flex-col">
       <NavWrapper>
-        <NavButton href="/auth/c/store" text="Domov" />
+        <NavButton href="/auth/c/store" text="Obchod" />
         <Suspense
           fallback={
             <Button variant="ghost" className="opacity-50" disabled>

@@ -8,8 +8,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { signOut } from "next-auth/react";
-import { redirect } from "next/navigation";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -21,7 +19,6 @@ import {
 } from "../ui/alert-dialog";
 import { getUser } from "@/lib/user-utils";
 import LogoutMenuItem from "./logount-menu-item";
-import { DarkModeToggle } from "../dark-mode-toggle";
 import CopyToClipboard from "../copy-to-clipboard";
 
 export default async function UserDropdown() {
@@ -62,6 +59,9 @@ export default async function UserDropdown() {
               ) : null}
             </>
           ) : null}
+          <a href="/">
+            <DropdownMenuItem>O nás</DropdownMenuItem>
+          </a>
           <DropdownMenuSeparator />
           <DropdownMenuLabel>Môj účet</DropdownMenuLabel>
           <AlertDialogTrigger asChild>
