@@ -22,9 +22,6 @@ import MockUpOrder2 from "@/assets/images/landing_page_order_2.png";
 import MockUpOrder3 from "@/assets/images/landing_page_order_3.png";
 
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import LogomarkJS from "@/components/nav/logomark-js";
 import UserDropdown from "@/components/nav/user-dropdown";
@@ -33,30 +30,17 @@ import { Separator } from "@/components/ui/separator";
 import { Github, Instagram } from "lucide-react";
 import { PopupCarousel } from "@/components/ui/custom/popup-carousel";
 import { Suspense } from "react";
-import { redirect } from "next/navigation";
-import ClientButton from "./auth/s/_components/client-button";
 import EmailForm from "./_components/email-form";
 
-export default function Home({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default function Home() {
   return (
     <div className="min-h-[100dvh] overflow-hidden relative">
-      {/* Background
-       */}
       <BlurGradientBackground className="absolute left-0 top-0 w-full aspect-square opacity-50 z-[-10]" />
       <div className="flex min-h-screen flex-col items-center justify-center gap-10 relative px-5">
         <BlobOutlineWhite className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[0.8] translate-x-[-40%] translate-y-[-70%]" />
         <BlobPatternBlack className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[0.8] translate-x-[-30%] translate-y-[-29%]" />
         <BlobFullPrimary className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[1.2] translate-x-[-60%] translate-y-[-30%]" />
         <BlobOutlineSecondary className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[0.8] translate-x-[-60%] translate-y-[0%]" />
-        {/*
-        <div className="p-4 pb-8 z-10">
-          <Image src={SvgLogo} alt="Bageta Express logo" width={225} />
-        </div>
-        */}
         <nav className="h-fit flex flex-row items-center justify-between max-w-screen-lg sm:mt-5 w-full sm:w-[calc(100%-2.5rem)] bg-background p-5 sm:rounded-xl absolute top-0 left-1/2 translate-x-[-50%] shadow-2xl">
           <div className="relative h-10 w-28">
             <Link prefetch={false} href="/">
@@ -291,7 +275,6 @@ export default function Home({
         </div>
       </div>
 
-      {/*
       <div
         id="contact"
         className="relative flex flex-col gap-4 sm:gap-0 mt-52 lg:mt-80 bg-background rounded-xl p-5 shadow-2xl max-w-screen-lg mx-auto"
@@ -307,7 +290,8 @@ export default function Home({
         </div>
         <EmailForm />
       </div>
-      */}
+      {/*
+       */}
 
       <footer className="w-full min-h-40 bg-background mt-52 flex flex-col gap-2">
         <div className="flex-1 flex justify-center items-center gap-2 flex-wrap">

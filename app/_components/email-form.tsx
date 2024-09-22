@@ -3,11 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, Check, Loader } from "lucide-react";
-import { SendContactEmail } from "@/lib/email-utils";
+import { SendContactEmail, verifyRecaptcha } from "@/lib/email-utils";
 
 export default function EmailForm() {
   const [email, setEmail] = useState("");
@@ -42,23 +42,61 @@ export default function EmailForm() {
     setIsSuccess(false);
 
     const res = z.string().email().safeParse(email);
-    if (res.success) {
-      void handleSendEmail();
-    } else {
+    if (!res.success) {
       setIsSent(true);
       setIsError(true);
       setErrorMessage("Neplatný email");
+      return;
     }
+
+    // NOTE: https://developers.google.com/recaptcha/docs/v3
+
+    // @ts-ignore
+    window.grecaptcha.ready(function () {
+      // @ts-ignore
+      window.grecaptcha
+        .execute(process.env.RECAPTCHA_SITE_KEY, { action: "submit" })
+        .then(async function (token: string) {
+          const { data, error } = await verifyRecaptcha(token);
+          if (error) {
+            setIsSent(true);
+            setIsError(true);
+            setErrorMessage("Recaptcha verifikácia zlyhala");
+            setIsLoading(false);
+            return;
+          }
+          if (!data?.success) {
+            setIsSent(true);
+            setIsError(true);
+            setErrorMessage("Recaptcha verifikácia zlyhala");
+            setIsLoading(false);
+            return;
+          }
+          void handleSendEmail();
+        });
+    });
   }
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`;
+    document.body.appendChild(script);
+  }, []);
 
   return (
     <form action={onSubmit} className="grid w-full gap-4 sm:p-16">
+      <div
+        className="g-recaptcha"
+        data-sitekey={process.env.RECAPTCHA_SITE_KEY}
+        data-size="invisible"
+      ></div>
       <div className="grid w-full items-center gap-1.5">
         <Label htmlFor="email">Email</Label>
         <Input
           id="email"
           type="email"
           placeholder="Zadajte email"
+          disabled={isLoading}
           required
           value={email}
           onChange={(v) => {
@@ -67,9 +105,29 @@ export default function EmailForm() {
           }}
         />
       </div>
-      <Button size="lg" disabled={isLoading}>
-        Odoslať {isLoading && <Loader className="h-5 w-5 ml-2 animate-spin" />}
-      </Button>
+      <div className="grid">
+        <Button size="lg" disabled={isLoading}>
+          Odoslať{" "}
+          {isLoading && <Loader className="h-5 w-5 ml-2 animate-spin" />}
+        </Button>
+        <p className="text-xs text-muted-foreground font-extralight opacity-60">
+          This site is protected by reCAPTCHA and the Google{" "}
+          <a
+            href="https://policies.google.com/privacy"
+            className="text-blue-400 hover:text-blue-700"
+          >
+            Privacy Policy
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://policies.google.com/terms"
+            className="text-blue-400 hover:text-blue-700"
+          >
+            Terms of Service
+          </a>{" "}
+          apply.
+        </p>
+      </div>
       {isSent && isError && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />

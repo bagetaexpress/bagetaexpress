@@ -18,7 +18,6 @@ export default function Scanner({ url }: { url: string }) {
           onResult={(result, error, controls) => {
             if (!!error) return;
             if (!!result) {
-              console.log(result.getText());
               const pin = result.getText();
               if (pin.length !== 4) return;
               if (pin.match(/\D/)) return;

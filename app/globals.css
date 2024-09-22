@@ -66,43 +66,9 @@
   }
 }
 
-/*
-body>.printable {
-  display: none;
+.grecaptcha-badge {
+  visibility: hidden;
 }
-
-@media print {
-  body>*:not(.printable) {
-    display: none;
-  }
-
-  body>.printable {
-    display: unset;
-  }
-
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  th,
-  td {
-    border: 2px solid black;
-    border-collapse: collapse;
-    border-color: #000000;
-    padding: 8px;
-    text-align: center;
-  }
-
-  th {
-    background-color: #f2f2f2;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-}
-*/
 
 #seller1,
 #seller2,

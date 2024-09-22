@@ -413,8 +413,6 @@ async function getItemsSummaryByStoreAndSchool(
     )
     .groupBy(item.id);
 
-  console.log(items);
-
   return items;
 }
 
