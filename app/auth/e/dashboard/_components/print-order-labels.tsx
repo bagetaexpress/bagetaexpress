@@ -71,7 +71,11 @@ export default function PrintOrderLabels({
           >
             {orders.map((order, i) => {
               const items = [];
-              for (let j = 0; j < order.quantity; j++) {
+              for (
+                let j = 0;
+                j < (order.quantity ?? 0) + (order.reservation?.quantity ?? 0);
+                j++
+              ) {
                 items.push(
                   <div key={i.toString() + j.toString()}>
                     {store.imageUrl !== "" && store.imageUrl !== null ? (

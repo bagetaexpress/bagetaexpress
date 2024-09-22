@@ -20,7 +20,10 @@ import { handleFilterChange } from "./server-util";
 import { Order } from "@/db/schema";
 import PrintOrderList from "@/components/print-order-list";
 import { getSchool } from "@/db/controllers/school-controller";
-import { getOrderItemsByStoreAndSchool } from "@/db/controllers/item-controller";
+import {
+  getItemsSummaryByStoreAndSchool,
+  getOrderItemsByStoreAndSchool,
+} from "@/db/controllers/item-controller";
 import { getStore } from "@/db/controllers/store-controller";
 import { Suspense } from "react";
 import ReservedItems from "./_components/reserved-items";
@@ -132,8 +135,8 @@ async function PrintOrderListWrapper() {
   const user = await getUser();
   if (!user || !user.schoolId) return null;
 
-  const [currentOrders, school, store] = await Promise.all([
-    getOrderItemsByStoreAndSchool(1, user.schoolId),
+  const [itemSummary, school, store] = await Promise.all([
+    getItemsSummaryByStoreAndSchool(1, user.schoolId),
     getSchool(user.schoolId),
     getStore(1),
   ]);
@@ -146,7 +149,7 @@ async function PrintOrderListWrapper() {
         </Button>
       }
     >
-      <PrintOrderList orders={currentOrders} store={store} school={school} />
+      <PrintOrderList orders={itemSummary} store={store} school={school} />
     </Suspense>
   );
 }

@@ -121,9 +121,19 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
                   <tr key={i}>
                     <td scope="row">{i + 1}</td>
                     <td style={{ textAlign: "left" }}>{order.item.name}</td>
-                    <td>{order.quantity}ks</td>
+                    <td>
+                      {(order.quantity ?? 0) +
+                        (order.reservation?.quantity ?? 0)}
+                      ks
+                    </td>
                     <td>{order.item.price}</td>
-                    <td>{(order.item.price * order.quantity).toFixed(2)}</td>
+                    <td>
+                      {(
+                        order.item.price *
+                        ((order.quantity ?? 0) +
+                          (order.reservation?.quantity ?? 0))
+                      ).toFixed(2)}
+                    </td>
                     <td>20%</td>
                   </tr>
                 ))}
@@ -138,16 +148,24 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
               <div>
                 <p>
                   Spolu:{" "}
-                  {orders.reduce((acc, { quantity }) => acc + +quantity, 0)}
+                  {orders.reduce(
+                    (acc, { quantity, reservation }) =>
+                      acc + (+quantity + (reservation?.quantity ?? 0)),
+                    0,
+                  )}
                   ks
                 </p>
               </div>
               <div>
                 <p>
-                  Celková suma:
+                  Celková suma:{" "}
                   {orders
                     .reduce(
-                      (acc, order) => acc + order.item.price * order.quantity,
+                      (acc, order) =>
+                        acc +
+                        order.item.price *
+                          ((order.quantity ?? 0) +
+                            (order.reservation?.quantity ?? 0)),
                       0,
                     )
                     .toFixed(2)}

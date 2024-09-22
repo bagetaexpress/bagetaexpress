@@ -11,7 +11,7 @@ import EditOrderClose from "./edit-order-close";
 import PrintOrderLabels from "./print-order-labels";
 import {
   ExtendedItem,
-  getOrderItemsByStoreAndSchool,
+  getItemsSummaryByStoreAndSchool,
 } from "@/db/controllers/item-controller";
 import { getUser } from "@/lib/user-utils";
 import { getStore } from "@/db/controllers/store-controller";
@@ -55,8 +55,8 @@ export default async function SchoolCard({
 
   const orderCloseDate = getDate(orderClose);
   const reservationCloseDate = getDate(reservationClose);
-  const [orders, reservations, store] = await Promise.all([
-    getOrderItemsByStoreAndSchool(user.storeId, school.id),
+  const [summary, reservations, store] = await Promise.all([
+    getItemsSummaryByStoreAndSchool(user.storeId, school.id),
     getReservationsByStoreId(user.storeId),
     getStore(user.storeId),
   ]);
@@ -110,12 +110,12 @@ export default async function SchoolCard({
           }
         >
           <PrintOrderLabelsWrapper
-            orders={orders}
+            orders={summary}
             store={store}
             orderClose={orderCloseDate}
           />
         </Suspense>
-        <PrintOrderList school={school} orders={orders} store={store} />
+        <PrintOrderList school={school} orders={summary} store={store} />
       </CardFooter>
     </Card>
   );
@@ -134,8 +134,6 @@ async function PrintOrderLabelsWrapper({
   if (!user || !user.isEmployee || !user.storeId) {
     return null;
   }
-
-  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const ordersExtended = await Promise.all(
     orders.map(async (order) => {

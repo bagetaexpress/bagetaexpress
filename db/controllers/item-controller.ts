@@ -1,6 +1,15 @@
 "use server";
 
-import { InferInsertModel, eq, sql, and, desc } from "drizzle-orm";
+import {
+  InferInsertModel,
+  eq,
+  sql,
+  and,
+  desc,
+  isNull,
+  or,
+  isNotNull,
+} from "drizzle-orm";
 import {
   Cart,
   CartItem,
@@ -364,9 +373,55 @@ async function getOrderItemsByStoreAndSchool(
   return items;
 }
 
+async function getItemsSummaryByStoreAndSchool(
+  storeId: Store["id"],
+  schoolId: School["id"],
+  orderStatus: Order["status"] = "ordered",
+): Promise<Array<ExtendedItem & { quantity: number }>> {
+  const oi = db
+    .select()
+    .from(orderItem)
+    .innerJoin(
+      order,
+      and(eq(orderItem.orderId, order.id), eq(order.status, orderStatus)),
+    )
+    .innerJoin(
+      customer,
+      and(eq(order.userId, customer.userId), eq(customer.schoolId, schoolId)),
+    )
+    .where(eq(orderItem.isReservation, false))
+    .as("oi");
+
+  const items = await db
+    .select({
+      item,
+      store,
+      reservation,
+      schoolStore,
+      quantity: sql<number>`SUM(oi.quantity)`,
+    })
+    .from(item)
+    .innerJoin(store, eq(item.storeId, store.id))
+    .innerJoin(schoolStore, eq(item.storeId, schoolStore.storeId))
+    .leftJoin(reservation, eq(reservation.itemId, item.id))
+    .leftJoin(oi, and(eq(item.id, oi.order_item.itemId)))
+    .where(
+      and(
+        eq(item.storeId, storeId),
+        or(isNotNull(oi.order_item.quantity), isNotNull(reservation.quantity)),
+      ),
+    )
+    .groupBy(item.id);
+
+  console.log(items);
+
+  return items;
+}
+
 export {
   getOrderItemsByStoreAndSchool,
   getReservedItemsByStoreAndSchool,
+  getItemsSummaryByStoreAndSchool,
   getOrderItemsByStore,
   getReservationItemsByStore,
   getItemBySchool,
