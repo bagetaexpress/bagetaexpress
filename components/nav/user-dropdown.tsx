@@ -47,17 +47,17 @@ export default async function UserDropdown() {
             <>
               {user.isCustomer ? (
                 <a href="/auth/c/store">
-                  <DropdownMenuItem>Obchod</DropdownMenuItem>
+                  <DropdownMenuItem>Žiak</DropdownMenuItem>
                 </a>
               ) : null}
               {user.isSeller ? (
                 <a href="/auth/s/summary">
-                  <DropdownMenuItem>Prehľad</DropdownMenuItem>
+                  <DropdownMenuItem>Predajca</DropdownMenuItem>
                 </a>
               ) : null}
               {user.isEmployee ? (
                 <a href="/auth/e/dashboard">
-                  <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                  <DropdownMenuItem>Zamestnanec</DropdownMenuItem>
                 </a>
               ) : null}
             </>
