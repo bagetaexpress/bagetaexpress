@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -13,10 +14,9 @@ import {
 } from "@/components/ui/dialog";
 import { ExtendedItem } from "@/db/controllers/item-controller";
 import { Store } from "@/db/schema";
-import { printComponent } from "@/lib/utils";
 import { Printer } from "lucide-react";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
 import { date } from "zod";
 
@@ -38,12 +38,16 @@ export default function PrintOrderLabels({
   orderClose,
 }: IProps) {
   const toPrintRef = useRef<HTMLDivElement>(null);
+  const handlePrint = useReactToPrint({
+    content: useCallback(() => toPrintRef.current, []),
+  });
+
   const [isOpen, setIsOpen] = useState(false);
   const [consumptionDate, setConsumptionDate] = useState<Date>(
     new Date(orderClose.setDate(orderClose.getDate() + 2)),
   );
 
-  function handlePrint() {
+  function onPrintPress() {
     if (!toPrintRef.current) {
       toast.error("Tlač sa nepodarila", {
         description: "Obnovte stránku a skúste znova alebo kontaktujte podporu",
@@ -51,14 +55,20 @@ export default function PrintOrderLabels({
       });
       return;
     }
-    void printComponent(toPrintRef.current);
+    handlePrint();
+    return;
   }
 
   return (
     <>
       <div className="hidden">
         <div ref={toPrintRef}>
-          <div className="grid grid-cols-3 gap-4 p-4">
+          <div
+            className="grid grid-cols-3 gap-4 p-4"
+            style={{
+              fontFamily: "Geist, Arial, sans-serif",
+            }}
+          >
             {orders.map((order, i) => {
               const items = [];
               for (let j = 0; j < order.quantity; j++) {
@@ -147,7 +157,7 @@ export default function PrintOrderLabels({
               style={{ marginLeft: 0 }}
               onClick={async () => {
                 if (!date) return;
-                handlePrint();
+                onPrintPress();
                 setIsOpen(false);
               }}
             >

@@ -3,9 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { ExtendedItem } from "@/db/controllers/item-controller";
 import { School, Store } from "@/db/schema";
-import { printComponent } from "@/lib/utils";
 import { TableProperties } from "lucide-react";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
+import { useReactToPrint } from "react-to-print";
+import { toast } from "sonner";
 
 interface IProps {
   orders: Array<
@@ -19,10 +20,20 @@ interface IProps {
 
 export default function PrintOrderList({ orders, store, school }: IProps) {
   const toPrintRef = useRef<HTMLDivElement>(null);
+  const handlePrint = useReactToPrint({
+    content: useCallback(() => toPrintRef.current, []),
+  });
 
-  function handlePrint() {
-    if (!toPrintRef.current) return;
-    void printComponent(toPrintRef.current);
+  function onPrintPress() {
+    if (!toPrintRef.current) {
+      toast.error("Tlač sa nepodarila", {
+        description: "Obnovte stránku a skúste znova alebo kontaktujte podporu",
+        action: { label: "Obnoviť stránku", onClick: () => location.reload() },
+      });
+      return;
+    }
+    handlePrint();
+    return;
   }
 
   return (
@@ -31,15 +42,41 @@ export default function PrintOrderList({ orders, store, school }: IProps) {
         variant="outline"
         type="button"
         className="gap-2"
-        onClick={handlePrint}
+        onClick={onPrintPress}
       >
         Zhrnutie
         <TableProperties />
       </Button>
       <div className="hidden">
-        <div ref={toPrintRef}>
+        <div ref={toPrintRef} id="print-order-list">
+          <style>
+            {`
+              #print-order-list table {
+                border-collapse: collapse;
+                width: 100%;
+              }
+
+              #print-order-list th,
+              #print-order-list td {
+                border: 2px solid black;
+                border-collapse: collapse;
+                border-color: #000000;
+                padding: 8px;
+                text-align: center;
+              }
+
+              #print-order-list th {
+                background-color: #f2f2f2;
+              }
+
+              #print-order-list tr:nth-child(even) {
+                background-color: #f2f2f2;
+              }
+          `}
+          </style>
           <div
             style={{
+              fontFamily: "Geist, Arial, sans-serif",
               display: "flex",
               flexDirection: "column",
               gap: "1rem",
