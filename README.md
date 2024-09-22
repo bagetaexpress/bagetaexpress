@@ -2,12 +2,16 @@
 
 ## Description
 
-Order system for schools, which allows for
-
-- students to order food from fast food restaurants near their school
-- restaurants to receive orders and prepare them
+Food ordering system for schools. For more info visit [bageta.express](https://bageta.express/)
 
 ## Installation
+
+### Prerequisites
+
+- Node.js
+- pnpm
+
+### Steps
 
 1. Clone the repository
 
@@ -18,12 +22,12 @@ git clone https://github.com/tomz197/bagetaexpress.git
 2. Install dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 3. Create a `.env` file in the root directory, following the `.env.example` file
 4. Run the server
 
 ```bash
-npm run dev
+pnpm run dev
 ```
