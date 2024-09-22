@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Loader, Search } from "lucide-react";
 import { handleFilterChange } from "./server-util";
 import { Order } from "@/db/schema";
-import PrintOrderList from "./_components/print-order-list";
+import PrintOrderList from "@/components/print-order-list";
 import { getSchool } from "@/db/controllers/school-controller";
 import { getOrderItemsByStoreAndSchool } from "@/db/controllers/item-controller";
 import { getStore } from "@/db/controllers/store-controller";

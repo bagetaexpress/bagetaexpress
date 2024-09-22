@@ -15,7 +15,7 @@ import {
 } from "@/db/controllers/item-controller";
 import { getUser } from "@/lib/user-utils";
 import { getStore } from "@/db/controllers/store-controller";
-import PrintOrderList from "./print-order-list";
+import PrintOrderList from "@/components/print-order-list";
 import { getDate } from "@/lib/utils";
 import EditReservationClose from "./edit-reservation-close";
 import { Loader } from "lucide-react";
