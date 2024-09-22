@@ -77,7 +77,12 @@ export default function PrintOrderLabels({
                 j++
               ) {
                 items.push(
-                  <div key={i.toString() + j.toString()}>
+                  <div
+                    key={i.toString() + j.toString()}
+                    style={{
+                      pageBreakInside: "avoid",
+                    }}
+                  >
                     {store.imageUrl !== "" && store.imageUrl !== null ? (
                       <Image
                         alt="store image"
