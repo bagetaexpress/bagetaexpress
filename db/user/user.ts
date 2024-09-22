@@ -4,7 +4,7 @@ import {
   text,
   primaryKey,
 } from "drizzle-orm/sqlite-core";
-import type { AdapterAccount } from "@auth/core/adapters";
+import { AdapterAccount } from "next-auth/adapters";
 
 export const user = sqliteTable("user", {
   id: text("id").notNull().primaryKey(),
