@@ -27,7 +27,7 @@ import LogomarkJS from "@/components/nav/logomark-js";
 import UserDropdown from "@/components/nav/user-dropdown";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { Github, Instagram } from "lucide-react";
+import { Github, Instagram, Pointer } from "lucide-react";
 import { PopupCarousel } from "@/components/ui/custom/popup-carousel";
 import { Suspense } from "react";
 import EmailForm from "./_components/email-form";
@@ -161,6 +161,7 @@ export default function Home() {
             ]}
           >
             <div className="hidden lg:inline relative cursor-pointer flex-1">
+              <Pointer className="absolute right-[35%] bottom-0 translate-y-[100%] z-[10] w-[4rem] h-[4rem] shadow-lg p-3 rounded-full bg-muted text-muted-foreground pointer-events-none" />
               <Image
                 src={MockUpSeller1}
                 id="seller1"
@@ -195,6 +196,8 @@ export default function Home() {
               alt="Seller summary and QR code scnanner"
               className="sm:hidden scale-[1.3] transition-transform duration-300 ease-in-out cursor-pointer"
             />
+            <Pointer className="hidden sm:inline lg:hidden absolute right-[60%] bottom-0 translate-y-[50%] z-[10] w-[4rem] h-[4rem] shadow-lg p-3 rounded-full bg-muted text-muted-foreground pointer-events-none" />
+            <Pointer className="sm:hidden absolute right-0 bottom-0 z-[10] w-[4rem] h-[4rem] translate-y-[-50%] translate-x-[-50%] shadow-lg p-3 rounded-full bg-muted text-muted-foreground pointer-events-none" />
           </PopupCarousel>
           <div className="flex flex-col order-first sm:order-last justify-center gap-4 transition-transform duration-300 ease-in-out landing-page-seller-text">
             <h3 className="font-bold text-3xl">Bezprobémové prevzanie</h3>
@@ -242,6 +245,7 @@ export default function Home() {
             ]}
           >
             <div className="hidden lg:inline relative cursor-pointer flex-1">
+              <Pointer className="absolute left-[35%] bottom-0 translate-y-[100%] z-[10] w-[4rem] h-[4rem] shadow-lg p-3 rounded-full bg-muted text-muted-foreground pointer-events-none" />
               <Image
                 src={MockUpOrder1}
                 id="order1"
@@ -271,6 +275,8 @@ export default function Home() {
               alt="Order screen"
               className="lg:hidden sm:translate-x-[35%] scale-[1.3] sm:scale-[1.7] sm:hover:scale-[1.8] transition-transform duration-300 ease-in-out cursor-pointer"
             />
+            <Pointer className="hidden sm:inline lg:hidden absolute left-[65%] bottom-0 translate-y-[50%] z-[10] w-[4rem] h-[4rem] shadow-lg p-3 rounded-full bg-muted text-muted-foreground pointer-events-none" />
+            <Pointer className="sm:hidden absolute right-0 bottom-0 z-[10] w-[4rem] h-[4rem] translate-y-[-75%] translate-x-[-75%] shadow-lg p-3 rounded-full bg-muted text-muted-foreground pointer-events-none" />
           </PopupCarousel>
         </div>
       </div>
