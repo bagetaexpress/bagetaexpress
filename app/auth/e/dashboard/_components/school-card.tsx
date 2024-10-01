@@ -19,13 +19,13 @@ import PrintOrderList from "@/components/print-order-list";
 import { getDate } from "@/lib/utils";
 import EditReservationClose from "./edit-reservation-close";
 import { Loader } from "lucide-react";
-import { getReservationsByStoreId } from "@/db/controllers/reservation-controller";
 import EditReservationItems from "./edit-reservation-items";
 import { Store } from "@/db/schema";
 import { getIngredientsByItemId } from "@/db/controllers/ingredient-controller";
 import { getAllergensByItemId } from "@/db/controllers/allergen-controller";
 import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
+import reservationRepository from "@/repositories/reservation-repository";
 
 export function SchoolCardPlaceholder() {
   return (
@@ -57,7 +57,7 @@ export default async function SchoolCard({
   const reservationCloseDate = getDate(reservationClose);
   const [summary, reservations, store] = await Promise.all([
     getItemsSummaryByStoreAndSchool(user.storeId, school.id),
-    getReservationsByStoreId(user.storeId),
+    reservationRepository.getMultiple({ storeId: user.storeId }),
     getStore(user.storeId),
   ]);
 

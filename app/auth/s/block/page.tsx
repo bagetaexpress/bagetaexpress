@@ -12,13 +12,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { blockUnpickedOrders } from "@/db/controllers/order-controller";
-import { resetReservationRemaining } from "@/db/controllers/reservation-controller";
 import {
   getSchoolStores,
   updateSchoolStore,
 } from "@/db/controllers/school-controller";
 import { getUser } from "@/lib/user-utils";
 import { getDate, getFormatedDate, isLessThenNow } from "@/lib/utils";
+import reservationRepository from "@/repositories/reservation-repository";
 import { Check } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -99,7 +99,7 @@ export default async function BlockPage({
                   });
                 }
 
-                await resetReservationRemaining(user.schoolId);
+                await reservationRepository.resetRemaining(user.schoolId);
                 await blockUnpickedOrders(user.schoolId);
 
                 redirect("/auth/s/block?success=true");

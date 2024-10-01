@@ -1,10 +1,8 @@
-"use server";
-
 import { db } from "@/db";
-import { Item, Reservation, item, reservation } from "../schema";
-import { and, eq, getTableColumns, sql } from "drizzle-orm";
+import { Item, Reservation, item, reservation } from "@/db/schema";
+import { and, eq, sql } from "drizzle-orm";
 
-async function getReservationsByStoreId(storeId: Item["storeId"]): Promise<
+async function getMultiple({ storeId }: { storeId: Item["storeId"] }): Promise<
   {
     item: Item;
     reservation: Reservation | null;
@@ -17,25 +15,27 @@ async function getReservationsByStoreId(storeId: Item["storeId"]): Promise<
     .where(eq(item.storeId, storeId));
 }
 
-async function getReservation(
+async function getSingle(
   itemId: Item["id"],
   schoolId: Reservation["schoolId"],
-) {
-  return await db
+): Promise<Reservation | null> {
+  const [found] = await db
     .select()
     .from(reservation)
     .where(
       and(eq(reservation.itemId, itemId), eq(reservation.schoolId, schoolId)),
     )
-    .get();
+    .limit(1);
+
+  return found ?? null;
 }
 
-async function createReservation(newReservation: {
+async function createSingle(newReservation: {
   itemId: Item["id"];
   schoolId: Reservation["schoolId"];
   quantity: Reservation["quantity"];
-}) {
-  return await db
+}): Promise<void> {
+  await db
     .insert(reservation)
     .values({
       ...newReservation,
@@ -44,7 +44,7 @@ async function createReservation(newReservation: {
     .onConflictDoNothing();
 }
 
-async function updateReservation({
+async function updateSingle({
   itemId,
   schoolId,
   quantity,
@@ -52,8 +52,8 @@ async function updateReservation({
   itemId: Item["id"];
   schoolId: Reservation["schoolId"];
   quantity: Reservation["quantity"];
-}) {
-  return await db
+}): Promise<void> {
+  await db
     .update(reservation)
     .set({ quantity, remaining: quantity })
     .where(
@@ -61,29 +61,34 @@ async function updateReservation({
     );
 }
 
-async function resetReservationRemaining(schoolId: Reservation["schoolId"]) {
+async function resetRemaining(schoolId: Reservation["schoolId"]) {
   return await db
     .update(reservation)
     .set({ remaining: sql<number>`quantity` })
     .where(eq(reservation.schoolId, schoolId));
 }
 
-async function deleteReservation(
-  itemId: Item["id"],
-  schoolId: Reservation["schoolId"],
-) {
-  return await db
+async function deleteSingle({
+  itemId,
+  schoolId,
+}: {
+  itemId: Item["id"];
+  schoolId: Reservation["schoolId"];
+}): Promise<void> {
+  await db
     .delete(reservation)
     .where(
       and(eq(reservation.itemId, itemId), eq(reservation.schoolId, schoolId)),
     );
 }
 
-export {
-  getReservationsByStoreId,
-  resetReservationRemaining,
-  getReservation,
-  createReservation,
-  updateReservation,
-  deleteReservation,
+export const reservationRepository = {
+  getMultiple,
+  getSingle,
+  createSingle,
+  updateSingle,
+  resetRemaining,
+  deleteSingle,
 };
+
+export default reservationRepository;

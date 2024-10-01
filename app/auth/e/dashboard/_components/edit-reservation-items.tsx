@@ -9,12 +9,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-  createReservation,
-  deleteReservation,
-  updateReservation,
-} from "@/db/controllers/reservation-controller";
 import { Item, Reservation, School } from "@/db/schema";
+import reservationRepository from "@/repositories/reservation-repository";
 import { Plus, Save, Trash2 } from "lucide-react";
 import { revalidatePath } from "next/cache";
 
@@ -82,12 +78,15 @@ function EditReservationItem({
             if (isNaN(quantity)) return;
 
             if (quantity === 0) {
-              await deleteReservation(item.id, reservation.schoolId);
+              await reservationRepository.deleteSingle({
+                itemId: item.id,
+                schoolId: reservation.schoolId,
+              });
               revalidatePath("/auth/e/dashboard");
               return;
             }
 
-            await updateReservation({
+            await reservationRepository.updateSingle({
               itemId: item.id,
               schoolId: reservation.schoolId,
               quantity,
@@ -140,7 +139,10 @@ function DeleteReservationDialog({
           <form
             action={async () => {
               "use server";
-              await deleteReservation(item.id, schoolId);
+              await reservationRepository.deleteSingle({
+                itemId: item.id,
+                schoolId: schoolId,
+              });
               revalidatePath("/auth/e/dashboard");
             }}
             className="grid"
@@ -174,7 +176,7 @@ function CreateReservationRow({
           const quantity = Number(form.get("quantity"));
           if (isNaN(quantity)) return;
 
-          await createReservation({
+          await reservationRepository.createSingle({
             schoolId,
             itemId: item.id,
             quantity,
@@ -187,6 +189,7 @@ function CreateReservationRow({
           min={0}
           tabIndex={-1}
           autoFocus={false}
+          required
           name="quantity"
           className="min-w-0 max-w-[8ch] aspect-[4/3]"
         />
