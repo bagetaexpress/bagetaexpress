@@ -14,7 +14,7 @@ import {
   getItemsSummaryByStoreAndSchool,
 } from "@/db/controllers/item-controller";
 import { getUser } from "@/lib/user-utils";
-import { getStore } from "@/db/controllers/store-controller";
+import storeRepository from "@/repositories/store-repository";
 import PrintOrderList from "@/components/print-order-list";
 import { getDate } from "@/lib/utils";
 import EditReservationClose from "./edit-reservation-close";
@@ -58,7 +58,7 @@ export default async function SchoolCard({
   const [summary, reservations, store] = await Promise.all([
     getItemsSummaryByStoreAndSchool(user.storeId, school.id),
     reservationRepository.getMultiple({ storeId: user.storeId }),
-    getStore(user.storeId),
+    storeRepository.getSingle({ storeId: user.storeId }),
   ]);
 
   return (

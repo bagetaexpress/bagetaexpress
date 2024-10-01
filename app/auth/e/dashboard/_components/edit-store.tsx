@@ -30,7 +30,7 @@ import { useUploadThing } from "@/lib/uploadthing";
 import Image from "next/image";
 import { deleteFile } from "@/lib/upladthing-server";
 import { Store } from "@/db/schema";
-import { updateStore } from "@/db/controllers/store-controller";
+import storeRepository from "@/repositories/store-repository";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -102,7 +102,7 @@ export default function EditStore({ store }: StoreProps) {
     }
 
     setProcessingStatus("konečné upravovanie");
-    await updateStore({
+    await storeRepository.updateSingle({
       ...values,
       id: store.id,
       imageUrl: localUrl,

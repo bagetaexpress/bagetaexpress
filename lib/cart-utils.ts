@@ -1,24 +1,14 @@
 "use server";
 
 import {
-  getCart,
-  createCart,
-  deleteCart,
-} from "@/db/controllers/cart-controller";
-import {
-  getCartItem,
-  createCartItem,
-  updateCartItem,
-  deleteCartItem,
-  deleteCartItems,
-} from "@/db/controllers/cartItem-controller";
-import {
   getItemBySchool,
   getItemsFromCart,
 } from "@/db/controllers/item-controller";
 import { revalidatePath } from "next/cache";
 import { getUser } from "./user-utils";
 import { getDate } from "./utils";
+import cartRepository from "@/repositories/cart-repository";
+import { Cart } from "@/db/schema";
 
 async function addToCart(itemId: number): Promise<void> {
   const user = await getUser();
@@ -49,40 +39,32 @@ async function addToCart(itemId: number): Promise<void> {
     getDate(schoolStore.orderClose) >= getDate(new Date().toLocaleString()) &&
     reservation.remaining <= 0
   ) {
-    throw new Error("Nemáte dostatok kreditov na rezerváciu");
+    throw new Error("Nie je dostatok kusov na rezerváciu");
   }
 
-  const cartId = await getCartId();
-
-  const orderItem = await getCartItem(cartId, itemId);
-  if (orderItem == null) {
-    await createCartItem(cartId, itemId, 1);
-    return;
-  }
-
-  if (orderItem.quantity >= 5) {
-    throw new Error("V košíku už máte maximálny počet kusov");
-  }
-  await updateCartItem(cartId, itemId, orderItem.quantity + 1);
+  await cartRepository.addItemToCart({
+    userId: user.id,
+    itemId,
+  });
 }
 
-async function getCartId(): Promise<string> {
+async function getCart(): Promise<Cart> {
   const user = await getUser();
   if (user == null) {
     throw new Error("User is not authenticated");
   }
 
-  let cart = await getCart(user.id);
-  if (cart == null) {
-    await createCart(user.id);
-    return user.id;
+  let foundCart = await cartRepository.getSingle({ userId: user.id });
+  if (!foundCart) {
+    foundCart = await cartRepository.createSingle({ userId: user.id });
   }
-  return cart.userId;
+
+  return foundCart;
 }
 
 async function getCartItems(cartId?: string) {
   if (!cartId) {
-    cartId = await getCartId();
+    cartId = (await getCart()).userId;
   }
 
   return await getItemsFromCart(cartId);
@@ -93,30 +75,22 @@ async function saveUpdateCartItem(
   itemId: number,
   quantity: number,
 ) {
-  const found = await getCartItem(cartId, itemId);
-  if (found === null) {
-    throw new Error("Item item not found");
-  }
-  if (found.quantity === quantity) {
-    return;
-  }
-  if (quantity <= 0) {
-    await deleteCartItem(cartId, itemId);
-  } else {
-    await updateCartItem(cartId, itemId, quantity);
-  }
+  await cartRepository.updateCartItemSingle({
+    userId: cartId,
+    itemId,
+    quantity,
+  });
   revalidatePath("/auth/c/cart", "page");
 }
 
 async function deleteCartAndItems(cartId: string) {
-  await deleteCartItems(cartId);
-  await deleteCart(cartId);
+  await cartRepository.deleteSingle({ userId: cartId });
 }
 
 export {
   addToCart,
   getCartItems,
   deleteCartAndItems,
-  getCartId,
+  getCart,
   saveUpdateCartItem,
 };

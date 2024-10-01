@@ -1,3 +1,4 @@
+import "server-only";
 import { db } from "@/db";
 import { Item, Reservation, item, reservation } from "@/db/schema";
 import { and, eq, sql } from "drizzle-orm";

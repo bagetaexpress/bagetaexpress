@@ -23,9 +23,9 @@ import SchoolCard, { SchoolCardPlaceholder } from "./_components/school-card";
 import { Allergen, Ingredient, Store } from "@/db/schema";
 import OrderSummary from "./_components/order-summary";
 import EditStore from "./_components/edit-store";
-import { getStore } from "@/db/controllers/store-controller";
 import { Suspense } from "react";
 import ReservationSummary from "./_components/reservation-summary";
+import storeRepository from "@/repositories/store-repository";
 
 export default function DashboardPage() {
   return (
@@ -143,7 +143,7 @@ async function EditStoreSuspense() {
 }
 
 async function EditStoreInner({ storeId }: { storeId: Store["id"] }) {
-  const store = await getStore(storeId);
+  const store = await storeRepository.getSingle({ storeId });
   return <EditStore store={store} />;
 }
 

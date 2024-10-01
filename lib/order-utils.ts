@@ -1,6 +1,5 @@
 "use server";
 
-import * as cartCtrl from "@/db/controllers/cart-controller";
 import * as orderItemCtrl from "@/db/controllers/order-item-controller";
 import * as orderCtrl from "@/db/controllers/order-controller";
 import { getCartItems } from "./cart-utils";
@@ -10,6 +9,7 @@ import * as schemas from "@/db/schema";
 import { and, eq, or } from "drizzle-orm";
 import { getDate, getNewDate } from "./utils";
 import { customerRepository } from "@/repositories/customer-repository";
+import cartRepository from "@/repositories/cart-repository";
 
 function generatePin(length: number): string {
   const chars = "0123456789";
@@ -31,7 +31,7 @@ async function createOrderFromCart(discount: number = 0): Promise<{
   const [customer, hasOrder, cart, cartItems] = await Promise.all([
     customerRepository.getSingle({ userId: user.id }),
     orderCtrl.getActiveOrder(user.id),
-    cartCtrl.getCart(user.id),
+    cartRepository.getSingle({ userId: user.id }),
     getCartItems(user.id),
   ]);
 

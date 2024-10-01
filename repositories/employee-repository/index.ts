@@ -1,3 +1,4 @@
+import "server-only";
 import { Employee, Seller, User, employee, user } from "@/db/schema";
 import { db } from "@/db/index";
 import { InferInsertModel, eq } from "drizzle-orm";

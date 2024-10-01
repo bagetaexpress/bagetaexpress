@@ -1,5 +1,5 @@
 import Cheackout from "@/app/auth/c/cart/_components/checkout";
-import { getCartId, getCartItems } from "@/lib/cart-utils";
+import { getCart, getCartItems } from "@/lib/cart-utils";
 import { getUser } from "@/lib/user-utils";
 import { redirect } from "next/navigation";
 import LocalCart from "./_components/local-cart";
@@ -27,7 +27,7 @@ async function CartPageInner() {
   const user = await getUser();
   if (!user || !user.schoolId) return;
 
-  const [cartId, data] = await Promise.all([getCartId(), getCartItems()]);
+  const [cart, data] = await Promise.all([getCart(), getCartItems()]);
 
   if (data.length === 0) {
     return (
@@ -46,10 +46,10 @@ async function CartPageInner() {
   return (
     <div className="flex-1 flex flex-col justify-between md:justify-start">
       <div>
-        <LocalCart data={data} cartId={cartId} />
+        <LocalCart data={data} cartId={cart.userId} />
       </div>
       <div className="flex justify-end">
-        <Cheackout items={data} cartId={cartId} />
+        <Cheackout items={data} cartId={cart.userId} />
       </div>
     </div>
   );
