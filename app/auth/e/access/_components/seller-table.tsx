@@ -12,7 +12,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/user-utils";
-import { getSellersByStoreId } from "@/db/controllers/user-controller";
 import { handleAddSeller, handleRemoveSeller } from "../access-server-utils";
 import {
   Select,
@@ -29,6 +28,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import sellerRepository from "@/repositories/seller-repository";
 
 export default async function SellerTable({
   err,
@@ -41,7 +41,7 @@ export default async function SellerTable({
   }
 
   const [sellers, schools] = await Promise.all([
-    getSellersByStoreId(currUser.storeId ?? 0),
+    sellerRepository.getMultiple({storeId: currUser.storeId ?? 0}),
     getSchoolsByStoreId(currUser.storeId ?? 0),
   ]);
 

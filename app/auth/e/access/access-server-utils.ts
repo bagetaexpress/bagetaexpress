@@ -1,18 +1,12 @@
 "use server";
 
-import {
-  getUserById,
-  getEmployeeById,
-  createEmployee,
-  deleteEmployee,
-  getSellerById,
-  createSeller,
-  deleteSeller,
-} from "@/db/controllers/user-controller";
 import { getUser } from "@/lib/user-utils";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { AddEmployeeErrors, AddSellerErrors } from "./access-errors";
+import employeeRepository from "@/repositories/employee-repository";
+import { userRepository } from "@/repositories/user-repository";
+import sellerRepository from "@/repositories/seller-repository";
 
 async function handleAddEmployee(formData: any) {
   const currUser = await getUser();
@@ -22,19 +16,21 @@ async function handleAddEmployee(formData: any) {
     redirect("/auth/e/access?EmpError=" + AddEmployeeErrors.InvalidUserId);
   }
 
-  const foundUser = await getUserById(employeeId);
+  const foundUser = await userRepository.getSingle({ userId: employeeId });
   if (!foundUser) {
     redirect("/auth/e/access?EmpError=" + AddEmployeeErrors.UserNotFound);
   }
 
-  const foundEmployee = await getEmployeeById(foundUser.id);
+  const foundEmployee = await employeeRepository.getSingle({
+    userId: foundUser.id,
+  });
   if (foundEmployee) {
     redirect(
-      "/auth/e/access?EmpError=" + AddEmployeeErrors.UserAlreadyEmployee
+      "/auth/e/access?EmpError=" + AddEmployeeErrors.UserAlreadyEmployee,
     );
   }
 
-  await createEmployee({
+  await employeeRepository.createSingle({
     userId: foundUser.id,
     storeId: currUser.storeId ?? 0,
   });
@@ -43,38 +39,45 @@ async function handleAddEmployee(formData: any) {
 }
 
 async function handleRemoveEmployee(employeeId: string) {
-  const foundEmployee = await getEmployeeById(employeeId);
+  const foundEmployee = await employeeRepository.getSingle({
+    userId: employeeId,
+  });
   if (!foundEmployee) {
     revalidatePath("auth/e/access", "page");
+    return;
   }
 
-  await deleteEmployee(foundEmployee?.userId ?? "");
+  await employeeRepository.deleteSingle({ userId: foundEmployee.userId });
   revalidatePath("auth/e/access", "page");
 }
 
 async function handleAddSeller(formData: any) {
   const currUser = await getUser();
   if (!currUser || !currUser.storeId) return;
-  const sellerId = formData.get("sellerId");
+
   const schoolId = formData.get("schoolId");
+  const sellerId = formData.get("sellerId");
+
   if (!schoolId || typeof schoolId !== "string" || !schoolId.match(/^\d+$/)) {
     redirect("/auth/e/access?SellerError=" + AddSellerErrors.InvalidSchoolId);
   }
-  if (!sellerId || typeof sellerId !== "string") {
+  if (!sellerId || typeof sellerId !== "string" || !sellerId.match(/^\d+$/)) {
     redirect("/auth/e/access?SellerError=" + AddSellerErrors.InvalidUserId);
   }
 
-  const foundUser = await getUserById(sellerId);
+  const foundUser = await userRepository.getSingle({ userId: sellerId });
   if (!foundUser) {
     redirect("/auth/e/access?SellerError=" + AddSellerErrors.UserNotFound);
   }
 
-  const foundSeller = await getSellerById(foundUser.id);
+  const foundSeller = await sellerRepository.getSingle({
+    userId: foundUser.id,
+  });
   if (foundSeller) {
     redirect("/auth/e/access?SellerError=" + AddSellerErrors.UserAlreadySeller);
   }
 
-  await createSeller({
+  await sellerRepository.createSingle({
     userId: foundUser.id,
     schoolId: parseInt(schoolId),
     storeId: currUser.storeId ?? 0,
@@ -84,12 +87,13 @@ async function handleAddSeller(formData: any) {
 }
 
 async function handleRemoveSeller(sellerId: string) {
-  const foundSeller = await getSellerById(sellerId);
+  const foundSeller = await sellerRepository.getSingle({ userId: sellerId });
   if (!foundSeller) {
     revalidatePath("auth/e/access", "page");
+    return;
   }
 
-  await deleteSeller(foundSeller?.userId ?? "");
+  await sellerRepository.deleteSingle({ userId: foundSeller?.userId });
   revalidatePath("auth/e/access", "page");
 }
 

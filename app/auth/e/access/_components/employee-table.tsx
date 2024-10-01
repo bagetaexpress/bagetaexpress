@@ -16,7 +16,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/user-utils";
-import { getEmployeesByStoreId } from "@/db/controllers/user-controller";
 import { AddEmployeeErrors } from "../access-errors";
 import {
   Accordion,
@@ -24,6 +23,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import employeeRepository from "@/repositories/employee-repository";
 
 export default async function EmployeeTable({
   err,
@@ -35,9 +35,11 @@ export default async function EmployeeTable({
     redirect("/");
   }
 
-  const employees = await getEmployeesByStoreId(currUser.storeId ?? 0);
+  const employees = await employeeRepository.getMultiple({
+    storeId: currUser.storeId ?? 0,
+  });
   const filteredEmployees = employees?.filter(
-    ({ user }) => user.id !== currUser.id && !user.isAdmin
+    ({ user }) => user.id !== currUser.id && !user.isAdmin,
   );
 
   return (

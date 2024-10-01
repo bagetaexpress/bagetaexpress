@@ -2,7 +2,7 @@ import { AuthOptions } from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/db";
 import AzureADProvider from "next-auth/providers/azure-ad";
-import { getFullUserById } from "@/db/controllers/user-controller";
+import { userRepository } from "@/repositories/user-repository";
 
 export const authOptions: AuthOptions = {
   // ! wierd type error, don't have time to fix, but it works
@@ -28,7 +28,7 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, user }) {
-      const found = await getFullUserById(user.id);
+      const found = await userRepository.getSingleExtended({ userId: user.id });
       if (!found) {
         return session;
       }

@@ -1,8 +1,8 @@
 import { getSchoolByDomain } from "@/db/controllers/school-controller";
-import { createCustomer } from "@/db/controllers/user-controller";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth-options";
+import { customerRepository } from "@/repositories/customer-repository";
 
 export default async function NewUserPage() {
   const session = await getServerSession(authOptions);
@@ -25,7 +25,7 @@ export default async function NewUserPage() {
   }
   const school = await getSchoolByDomain(mailDomain);
   if (school) {
-    await createCustomer({
+    await customerRepository.createSingle({
       userId: session.user.id,
       schoolId: school.id,
     });

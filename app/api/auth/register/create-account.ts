@@ -1,10 +1,8 @@
 "use server";
 
-import {
-  createCustomer,
-  createEmployee,
-  getUserByEmail,
-} from "@/db/controllers/user-controller";
+import { customerRepository } from "@/repositories/customer-repository";
+import employeeRepository from "@/repositories/employee-repository";
+import { userRepository } from "@/repositories/user-repository";
 
 interface ICreateUser {
   email: string;
@@ -20,7 +18,9 @@ type CreateUserResponse = {
 
 async function createUser(req: ICreateUser): Promise<CreateUserResponse> {
   try {
-    const foundUser = await getUserByEmail(req.email);
+    const foundUser = await userRepository.getSingleExtended({
+      email: req.email,
+    });
     if (foundUser) {
       throw new Error("User already exists");
     }
@@ -33,10 +33,10 @@ async function createUser(req: ICreateUser): Promise<CreateUserResponse> {
     }
 
     if (req.schoolId) {
-      await createCustomer(req as any);
+      await customerRepository.createSingle(req as any);
     }
     if (req.storeId) {
-      await createEmployee(req as any);
+      await employeeRepository.createSingle(req as any);
     }
 
     return { status: 200, error: "" };
