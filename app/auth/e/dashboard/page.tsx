@@ -16,7 +16,6 @@ import AddItemForm from "./_components/add-item";
 import DeleteItemButton from "./_components/delete-item";
 import EditAllergens from "./_components/edit-allergens";
 import EditIngredients from "./_components/edit-ingredients";
-import { getAllergensByStoreId } from "@/db/controllers/allergen-controller";
 import Image from "next/image";
 import SchoolCard, { SchoolCardPlaceholder } from "./_components/school-card";
 import { Allergen, Ingredient, Store } from "@/db/schema";
@@ -26,6 +25,7 @@ import { Suspense } from "react";
 import ReservationSummary from "./_components/reservation-summary";
 import storeRepository from "@/repositories/store-repository";
 import ingredientRepository from "@/repositories/ingredient-repository";
+import allergenRepository from "@/repositories/allergen-repository";
 
 export default function DashboardPage() {
   return (
@@ -92,7 +92,7 @@ async function ProductDashboard() {
 
   const [itemStats, allergens, ingredients] = await Promise.all([
     getItemsStats(user.storeId),
-    getAllergensByStoreId(user.storeId),
+    allergenRepository.getMany({ storeId: user.storeId }),
     ingredientRepository.getMany({ storeId: user.storeId }),
   ]);
 

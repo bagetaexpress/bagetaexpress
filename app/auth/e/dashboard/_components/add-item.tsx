@@ -27,10 +27,6 @@ import { Loader, Trash2, X } from "lucide-react";
 import { getUser } from "@/lib/user-utils";
 import { addItem, updateItem } from "@/db/controllers/item-controller";
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  createItemAllergen,
-  deleteAllItemAllergens,
-} from "@/db/controllers/allergen-controller";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -46,6 +42,7 @@ import { Allergen, Ingredient, Item } from "@/db/schema";
 import React from "react";
 import { revalidateItems } from "@/lib/store-utils";
 import ingredientRepository from "@/repositories/ingredient-repository";
+import allergenRepository from "@/repositories/allergen-repository";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -188,9 +185,9 @@ export default function AddItemForm({
 
         setProcessingStatus("upravovanie alergénov");
         // remove allergens
-        await deleteAllItemAllergens(item.id);
+        await allergenRepository.removeFromItemMany({itemId: item.id});
         for (const allergen of allergens) {
-          await createItemAllergen(item.id, allergen.id);
+          await allergenRepository.addToItemSingle({ itemId: item.id, allergenId: allergen.id});
         }
 
         setProcessingStatus("upravovanie ingrediencií");
@@ -231,9 +228,9 @@ export default function AddItemForm({
           imageUrl: localUrl ?? "",
         });
 
-        await deleteAllItemAllergens(itemId);
+        await allergenRepository.removeFromItemMany({itemId: itemId});
         for (const allergen of allergens) {
-          await createItemAllergen(itemId, allergen.id);
+          await allergenRepository.addToItemSingle({ itemId: itemId, allergenId: allergen.id});
         }
         await ingredientRepository.removeFromItemMany({ itemId: itemId});
         for (const ingredient of ingredients) {

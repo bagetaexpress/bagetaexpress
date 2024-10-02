@@ -17,12 +17,8 @@ import {
   TableCell,
   Table,
 } from "@/components/ui/table";
-import {
-  createAllergen,
-  deleteAllergen,
-  getAllergensByStoreId,
-} from "@/db/controllers/allergen-controller";
 import { getUser } from "@/lib/user-utils";
+import allergenRepository from "@/repositories/allergen-repository";
 import { Loader, Plus, Trash } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -46,7 +42,7 @@ async function EditAllergensInner() {
   const user = await getUser();
   if (!user || !user.storeId) redirect("/");
 
-  const allergens = await getAllergensByStoreId(user.storeId);
+  const allergens = await allergenRepository.getMany({storeId: user.storeId});
 
   async function handleCreateAllergen(formData: FormData) {
     "use server";
@@ -59,7 +55,7 @@ async function EditAllergensInner() {
     const number = parseInt(numberStr);
 
     try {
-      await createAllergen(number, name, user.storeId);
+      await allergenRepository.createSingle({number, name, storeId: user.storeId});
     } catch (e) {
       redirect("/auth/e/dashboard?allergenError=Somenthing went wrong");
     }
@@ -95,7 +91,7 @@ async function EditAllergensInner() {
                   <form
                     action={async () => {
                       "use server";
-                      await deleteAllergen(allergen.id);
+                      await allergenRepository.deleteSingle({allergenId: allergen.id});
                       revalidatePath("/auth/e/dashboard", "page");
                     }}
                   >
