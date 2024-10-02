@@ -21,11 +21,11 @@ import EditReservationClose from "./edit-reservation-close";
 import { Loader } from "lucide-react";
 import EditReservationItems from "./edit-reservation-items";
 import { Store } from "@/db/schema";
-import { getIngredientsByItemId } from "@/db/controllers/ingredient-controller";
 import { getAllergensByItemId } from "@/db/controllers/allergen-controller";
 import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import reservationRepository from "@/repositories/reservation-repository";
+import ingredientRepository from "@/repositories/ingredient-repository";
 
 export function SchoolCardPlaceholder() {
   return (
@@ -138,13 +138,13 @@ async function PrintOrderLabelsWrapper({
   const ordersExtended = await Promise.all(
     orders.map(async (order) => {
       const [ingredients, allergens] = await Promise.all([
-        getIngredientsByItemId(order.item.id),
+        ingredientRepository.getMany({ itemId: order.item.id }),
         getAllergensByItemId(order.item.id),
       ]);
 
       return {
         ...order,
-        ingredients: ingredients.map((i) => ({ name: i.ingredient.name })),
+        ingredients: ingredients.map((i) => ({ name: i.name })),
         allergens: allergens.map((a) => ({ name: a.allergen.name })),
       };
     }),

@@ -17,12 +17,8 @@ import {
   TableCell,
   Table,
 } from "@/components/ui/table";
-import {
-  createIngredient,
-  deleteIngredient,
-  getIngredientsByStoreId,
-} from "@/db/controllers/ingredient-controller";
 import { getUser } from "@/lib/user-utils";
+import ingredientRepository from "@/repositories/ingredient-repository";
 import { Loader, Plus, Trash } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -46,7 +42,7 @@ async function EditIngredientsInner() {
   const user = await getUser();
   if (!user || !user.storeId) redirect("/");
 
-  const ingredients = await getIngredientsByStoreId(user.storeId);
+  const ingredients = await ingredientRepository.getMany({storeId: user.storeId});
 
   async function handleCreateIngredient(formData: FormData) {
     "use server";
@@ -59,7 +55,7 @@ async function EditIngredientsInner() {
     if (!user || !user.storeId) return;
 
     try {
-      await createIngredient(number, name, user.storeId);
+      await ingredientRepository.createSingle({number, name, storeId: user.storeId});
     } catch (e) {
       redirect("/auth/e/dashboard?ingredientError=Somenthing went wrong");
     }
@@ -95,7 +91,7 @@ async function EditIngredientsInner() {
                   <form
                     action={async () => {
                       "use server";
-                      await deleteIngredient(ingredient.id);
+                      await ingredientRepository.deleteSingle({ingredientId: ingredient.id});
                       revalidatePath("/auth/e/dashboard", "page");
                     }}
                   >

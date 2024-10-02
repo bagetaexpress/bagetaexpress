@@ -31,10 +31,6 @@ import {
   createItemAllergen,
   deleteAllItemAllergens,
 } from "@/db/controllers/allergen-controller";
-import {
-  createItemIngredient,
-  deleteItemIngredients,
-} from "@/db/controllers/ingredient-controller";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -49,6 +45,7 @@ import { deleteFile } from "@/lib/upladthing-server";
 import { Allergen, Ingredient, Item } from "@/db/schema";
 import React from "react";
 import { revalidateItems } from "@/lib/store-utils";
+import ingredientRepository from "@/repositories/ingredient-repository";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -198,9 +195,9 @@ export default function AddItemForm({
 
         setProcessingStatus("upravovanie ingrediencií");
         // remove ingredients
-        await deleteItemIngredients(item.id);
+        await ingredientRepository.removeFromItemMany({ itemId: item.id});
         for (const ingredient of ingredients) {
-          await createItemIngredient(item.id, ingredient.id);
+          await ingredientRepository.addToItemSingle({ itemId: item.id, ingredientId: ingredient.id});
         }
 
         setProcessingStatus("konečné upravovanie");
@@ -226,7 +223,7 @@ export default function AddItemForm({
         }
 
         setProcessingStatus("Pridávanie produktu");
-        const id = await addItem({
+        const itemId = await addItem({
           ...values,
           price: parseFloat(values.price),
           weight: parseInt(values.weight),
@@ -234,13 +231,13 @@ export default function AddItemForm({
           imageUrl: localUrl ?? "",
         });
 
-        await deleteAllItemAllergens(id);
+        await deleteAllItemAllergens(itemId);
         for (const allergen of allergens) {
-          await createItemAllergen(id, allergen.id);
+          await createItemAllergen(itemId, allergen.id);
         }
-        await deleteItemIngredients(id);
+        await ingredientRepository.removeFromItemMany({ itemId: itemId});
         for (const ingredient of ingredients) {
-          await createItemIngredient(id, ingredient.id);
+          await ingredientRepository.addToItemSingle({ itemId: itemId, ingredientId: ingredient.id});
         }
         break;
       default:

@@ -1,8 +1,8 @@
 import { getAllergensByItemId } from "@/db/controllers/allergen-controller";
-import { getIngredientsByItemId } from "@/db/controllers/ingredient-controller";
 import { getExtendedItemById } from "@/db/controllers/item-controller";
 import { Reservation, SchoolStore } from "@/db/schema";
 import { getDate, getNewDate } from "@/lib/utils";
+import ingredientRepository from "@/repositories/ingredient-repository";
 import Image from "next/image";
 import React from "react";
 
@@ -27,7 +27,7 @@ export default async function ItemDetailDialog({
 
   const [allergens, ingredients] = await Promise.all([
     getAllergensByItemId(item.id),
-    getIngredientsByItemId(item.id),
+    ingredientRepository.getMany({itemId: item.id})
   ]);
 
   return (
@@ -47,7 +47,7 @@ export default async function ItemDetailDialog({
       <div>
         <p>
           <span className="underline">Zloženie:</span>{" "}
-          {ingredients.map((v) => v.ingredient.name).join(", ")}
+          {ingredients.map((v) => v.name).join(", ")}
         </p>
         <p>
           <span className="underline">Alergény:</span>{" "}
