@@ -16,7 +16,7 @@ export async function SendContactEmail(email: string): Promise<ErrorRes<null>> {
   try {
     const { error } = await resend.emails.send({
       from: "bagetaEXPRESS <kontakt@bageta.express>",
-      to: ["tomas.zifcak197@gmail.com"],
+      to: ["tomas.zifcak197@gmail.com", email],
       replyTo: "bagetaEXPRESS <tomas.zifcak197@gmail.com>",
       subject: "Spolupráca s Bageta Express",
       react: EmailTemplate(),
