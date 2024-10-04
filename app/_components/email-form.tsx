@@ -20,7 +20,6 @@ export default function EmailForm() {
   async function handleSendEmail() {
     try {
       const { error } = await SendContactEmail(email);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
       if (error) {
         throw new Error(error);
       }

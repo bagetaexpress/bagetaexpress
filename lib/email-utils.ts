@@ -1,6 +1,9 @@
 "use server";
 
-import { EmailTemplate } from "@/components/email/contact-template";
+import {
+  EmailTemplateResponseNeeded,
+  EmailTemplateWelcome,
+} from "@/components/email/contact-template";
 import { Resend } from "resend";
 import { z } from "zod";
 
@@ -16,14 +19,25 @@ export async function SendContactEmail(email: string): Promise<ErrorRes<null>> {
   try {
     const { error } = await resend.emails.send({
       from: "bagetaEXPRESS <kontakt@bageta.express>",
-      to: ["tomas.zifcak197@gmail.com", email],
+      to: [email],
       replyTo: "bagetaEXPRESS <tomas.zifcak197@gmail.com>",
       subject: "Spolupráca s Bageta Express",
-      react: EmailTemplate(),
+      react: EmailTemplateWelcome(),
     });
 
     if (error) {
       return { error: error.message, data: null };
+    }
+    const { error: error2 } = await resend.emails.send({
+      from: "bagetaEXPRESS <kontakt@bageta.express>",
+      to: ["tomas.zifcak197@gmail.com"],
+      replyTo: "bagetaEXPRESS <tomas.zifcak197@gmail.com>",
+      subject: "Spolupráca s Bageta Express",
+      react: EmailTemplateResponseNeeded(email),
+    });
+
+    if (error2) {
+      return { error: error2.message, data: null };
     }
 
     return { data: null, error: null };
@@ -56,7 +70,6 @@ export async function verifyRecaptcha(
     }
 
     const success = (await res.json()) as RecaptchaRes;
-    console.log(success);
 
     if (!success.success) {
       return { data: null, error: "Recaptcha verification failed" };
