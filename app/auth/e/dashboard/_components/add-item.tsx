@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/dialog";
 import { Loader, Trash2, X } from "lucide-react";
 import { getUser } from "@/lib/user-utils";
-import { addItem, updateItem } from "@/db/controllers/item-controller";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -41,8 +40,7 @@ import { deleteFile } from "@/lib/upladthing-server";
 import { Allergen, Ingredient, Item } from "@/db/schema";
 import React from "react";
 import { revalidateItems } from "@/lib/store-utils";
-import ingredientRepository from "@/repositories/ingredient-repository";
-import allergenRepository from "@/repositories/allergen-repository";
+import {updateItem, createItem} from "@/lib/item-utils";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -172,6 +170,7 @@ export default function AddItemForm({
           try {
             await deleteFile(item.imageUrl);
           } catch (e) {}
+
           const res = await startUpload([image]);
           if (!res) {
             setIsProcessing(false);
@@ -183,28 +182,18 @@ export default function AddItemForm({
           localUrl = item.imageUrl;
         }
 
-        setProcessingStatus("upravovanie alergénov");
-        // remove allergens
-        await allergenRepository.removeFromItemMany({itemId: item.id});
-        for (const allergen of allergens) {
-          await allergenRepository.addToItemSingle({ itemId: item.id, allergenId: allergen.id});
-        }
-
-        setProcessingStatus("upravovanie ingrediencií");
-        // remove ingredients
-        await ingredientRepository.removeFromItemMany({ itemId: item.id});
-        for (const ingredient of ingredients) {
-          await ingredientRepository.addToItemSingle({ itemId: item.id, ingredientId: ingredient.id});
-        }
-
-        setProcessingStatus("konečné upravovanie");
         await updateItem({
-          ...(({ allergens, ...rest }) => rest)(values),
-          price: parseFloat(values.price),
-          weight: parseInt(values.weight),
-          id: item.id,
-          imageUrl: localUrl ?? "",
-        });
+          itemId: item.id,
+          data: {
+            ...(({ allergens, ...rest }) => rest)(values),
+            price: parseFloat(values.price),
+            weight: parseInt(values.weight),
+            id: item.id,
+            imageUrl: localUrl ?? "",
+          },
+          allergenIds: allergens.map((a) => a.id),
+          ingredientIds: ingredients.map((a) => a.id),
+        })
         break;
       case "add":
         localUrl = "";
@@ -220,22 +209,17 @@ export default function AddItemForm({
         }
 
         setProcessingStatus("Pridávanie produktu");
-        const itemId = await addItem({
-          ...values,
-          price: parseFloat(values.price),
-          weight: parseInt(values.weight),
-          storeId: user.storeId,
-          imageUrl: localUrl ?? "",
+        await createItem({
+          data: {
+            ...values,
+            price: parseFloat(values.price),
+            weight: parseInt(values.weight),
+            storeId: user.storeId,
+            imageUrl: localUrl ?? "",
+          },
+          allergenIds: allergens.map((a) => a.id),
+          ingredientIds: ingredients.map((a) => a.id),
         });
-
-        await allergenRepository.removeFromItemMany({itemId: itemId});
-        for (const allergen of allergens) {
-          await allergenRepository.addToItemSingle({ itemId: itemId, allergenId: allergen.id});
-        }
-        await ingredientRepository.removeFromItemMany({ itemId: itemId});
-        for (const ingredient of ingredients) {
-          await ingredientRepository.addToItemSingle({ itemId: itemId, ingredientId: ingredient.id});
-        }
         break;
       default:
         break;

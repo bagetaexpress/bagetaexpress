@@ -31,7 +31,7 @@ export function PopupCarousel({
   return (
     <Dialog>
       <DialogTrigger className={className}>{children}</DialogTrigger>
-      <DialogContent className="max-w-screen-lg w-full px-16">
+      <DialogContent className="max-w-screen-lg w-full px-16 max-h-dvh">
         {(title || description) && (
           <DialogHeader>
             {title && <DialogTitle>{title}</DialogTitle>}

@@ -121,7 +121,7 @@ export default function Home() {
                   key="dashboard1"
                   src={MockUpDashboard}
                   alt="Managment dashboard"
-                  className="drop-shadow-xl aspect-[4/3] object-cover"
+                  className="drop-shadow-xl aspect-[4/3] object-cover max-h-dvh"
                 />,
               ]}
               className="flex"
@@ -144,19 +144,19 @@ export default function Home() {
                 key="seller3"
                 src={MockUpSeller3}
                 alt="Seller page"
-                className="drop-shadow-xl aspect-[9/13] object-cover"
+                className="drop-shadow-xl aspect-[9/13] object-cover max-h-dvh"
               />,
               <Image
                 key="seller1"
                 src={MockUpSeller1}
                 alt="Seller page"
-                className="drop-shadow-xl aspect-[9/13] object-cover"
+                className="drop-shadow-xl aspect-[9/13] object-cover max-h-dvh"
               />,
               <Image
                 key="seller2"
                 src={MockUpSeller2}
                 alt="Seller page"
-                className="drop-shadow-xl aspect-[9/13] object-cover"
+                className="drop-shadow-xl aspect-[9/13] object-cover max-h-dvh"
               />,
             ]}
           >
@@ -228,19 +228,19 @@ export default function Home() {
                 key="order3"
                 src={MockUpOrder3}
                 alt="Seller summary "
-                className="drop-shadow-xl aspect-[9/13] object-cover"
+                className="drop-shadow-xl aspect-[9/13] object-cover max-h-dvh"
               />,
               <Image
                 key="order1"
                 src={MockUpOrder1}
                 alt="Seller summary "
-                className="drop-shadow-xl aspect-[9/13] object-cover"
+                className="drop-shadow-xl aspect-[9/13] object-cover max-h-dvh"
               />,
               <Image
                 key="order2"
                 src={MockUpOrder2}
                 alt="Seller summary "
-                className="drop-shadow-xl aspect-[9/13] object-cover"
+                className="drop-shadow-xl aspect-[9/13] object-cover max-h-dvh"
               />,
             ]}
           >

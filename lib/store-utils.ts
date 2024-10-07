@@ -6,7 +6,8 @@ import {
 } from "@/db/controllers/school-controller";
 import { getUser } from "./user-utils";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { SchoolStore } from "@/db/schema";
+import { SchoolStore, Store } from "@/db/schema";
+import { storeRepository } from "@/repositories/store-repository";
 
 async function updateOrderClose(
   schoolId: SchoolStore["schoolId"],
@@ -32,8 +33,16 @@ async function updateReservationClose(
   revalidatePath("/auth/e/dashboard", "page");
 }
 
-function revalidateItems() {
+async function revalidateItems() {
   revalidateTag("items");
 }
 
-export { updateOrderClose, revalidateItems, updateReservationClose };
+async function updateStore(data: { id: Store["id"] } & Partial<Store>) {
+  await storeRepository.updateSingle(data);
+}
+export {
+  updateOrderClose,
+  revalidateItems,
+  updateReservationClose,
+  updateStore,
+};
