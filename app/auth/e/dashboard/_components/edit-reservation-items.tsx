@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Item, Reservation, School } from "@/db/schema";
@@ -32,6 +33,9 @@ export default function EditReservationItems({
       <DialogContent autoFocus={false} className="max-h-dvh overflow-auto">
         <DialogHeader>
           <DialogTitle>Upraviť položky rezervácie</DialogTitle>
+          <DialogDescription>
+            Rezervácie je možné upravovať jedine ak práve rezervácia neprebieha
+          </DialogDescription>
         </DialogHeader>
         <div className="grid gap-2">
           {reservations
@@ -76,6 +80,10 @@ function EditReservationItem({
             "use server";
             const quantity = Number(form.get("quantity"));
             if (isNaN(quantity)) return;
+            if (reservation.quantity !== reservation.remaining) {
+              revalidatePath("/auth/e/dashboard");
+              return;
+            }
 
             if (quantity === 0) {
               await reservationRepository.deleteSingle({
@@ -85,6 +93,8 @@ function EditReservationItem({
               revalidatePath("/auth/e/dashboard");
               return;
             }
+
+            if (quantity === reservation.quantity) return;
 
             await reservationRepository.updateSingle({
               itemId: item.id,
@@ -101,13 +111,23 @@ function EditReservationItem({
             tabIndex={-1}
             name="quantity"
             defaultValue={reservation.quantity}
+            disabled={reservation.quantity !== reservation.remaining}
             className="min-w-0 w-fit max-w-[8ch] aspect-[4/3]"
           />
-          <Button size="icon" className="aspect-square" type="submit">
+          <Button
+            size="icon"
+            type="submit"
+            disabled={reservation.quantity !== reservation.remaining}
+            className={`aspect-square ${reservation.quantity !== reservation.remaining ? "opacity-50 hover:cursor-not-allowed" : ""}`}
+          >
             <Save className="h-5 w-5" />
           </Button>
         </form>
-        <DeleteReservationDialog item={item} schoolId={reservation.schoolId} />
+        <DeleteReservationDialog
+          item={item}
+          schoolId={reservation.schoolId}
+          reservation={reservation}
+        />
       </div>
     </div>
   );
@@ -116,9 +136,11 @@ function EditReservationItem({
 function DeleteReservationDialog({
   item,
   schoolId,
+  reservation,
 }: {
   item: Item;
   schoolId: School["id"];
+  reservation: Reservation;
 }) {
   return (
     <Dialog>
@@ -132,6 +154,9 @@ function DeleteReservationDialog({
           <DialogTitle>Odstrániť rezerváciu</DialogTitle>
         </DialogHeader>
         <p>Chcete odstrániť rezerváciu?</p>
+        <p>
+          Rezervácie je možné upravovať jedine ak práve rezervácia neprebieha
+        </p>
         <DialogFooter className="grid grid-cols-2">
           <DialogClose asChild>
             <Button variant="outline">Nie</Button>
@@ -139,6 +164,7 @@ function DeleteReservationDialog({
           <form
             action={async () => {
               "use server";
+              if (reservation.quantity !== reservation.remaining) return;
               await reservationRepository.deleteSingle({
                 itemId: item.id,
                 schoolId: schoolId,
@@ -147,7 +173,16 @@ function DeleteReservationDialog({
             }}
             className="grid"
           >
-            <Button variant="destructive" type="submit">
+            <Button
+              variant="destructive"
+              type="submit"
+              disabled={reservation.quantity !== reservation.remaining}
+              className={
+                reservation.quantity !== reservation.remaining
+                  ? "opacity-50 hover:cursor-not-allowed"
+                  : ""
+              }
+            >
               Áno
             </Button>
           </form>
