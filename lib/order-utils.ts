@@ -1,6 +1,5 @@
 "use server";
 
-import * as orderItemCtrl from "@/db/controllers/order-item-controller";
 import * as orderCtrl from "@/db/controllers/order-controller";
 import { getCartItems } from "./cart-utils";
 import { getUser } from "./user-utils";

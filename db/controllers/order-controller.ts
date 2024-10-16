@@ -14,25 +14,8 @@ import {
   user,
 } from "../schema";
 import { eq, and, sql, or } from "drizzle-orm";
-import { getUser } from "@/lib/user-utils";
 import { getDate } from "@/lib/utils";
 import { cache } from "react";
-
-async function createOrder(
-  userId: Order["userId"],
-  pin: Order["pin"],
-  status: Order["status"] = "ordered",
-  discount: Order["discount"] = 0,
-) {
-  const newOrder = await db.insert(order).values({
-    userId,
-    pin,
-    discount,
-    status,
-  });
-
-  return newOrder;
-}
 
 async function getOrderByPin(
   pin: Order["pin"],
@@ -65,21 +48,6 @@ async function getOrderByPin(
   return orders[0] ?? null;
 }
 
-async function deleteOrder(orderId: Order["id"]): Promise<void> {
-  await db.delete(order).where(eq(order.id, orderId));
-}
-
-async function getOrdersByUserId(
-  userId: Order["userId"],
-  status: Order["status"],
-): Promise<Order[]> {
-  const orders = await db
-    .select()
-    .from(order)
-    .where(and(eq(order.userId, userId), eq(order.status, status)));
-  return orders;
-}
-
 const getActiveOrder = cache(
   async (userId: Order["userId"]): Promise<Order | null> => {
     const [found] = await db
@@ -95,19 +63,6 @@ const getActiveOrder = cache(
     return found ?? null;
   },
 );
-
-async function getOrder(orderId: Order["id"]): Promise<Order | null> {
-  const orders = await db.select().from(order).where(eq(order.id, orderId));
-  if (orders.length === 0) {
-    return null;
-  }
-  return orders[0];
-}
-
-async function getOrders(userId: Order["userId"]): Promise<Order[]> {
-  const orders = await db.select().from(order).where(eq(order.userId, userId));
-  return orders;
-}
 
 async function updateOrderStatus(
   orderId: Order["id"],
@@ -161,36 +116,12 @@ async function blockUnpickedOrders(schoolId: School["id"]): Promise<void> {
     .where(
       sql`status = "ordered" AND user_id IN (SELECT user_id FROM customer WHERE school_id = ${schoolId})`,
     );
-  // await db.execute(sql`
-  //   UPDATE \`order\`
-  //   INNER JOIN customer ON \`order\`.user_id = customer.user_id
-  //   SET \`order\`.status = "unpicked"
-  //   WHERE \`order\`.status = "ordered" AND customer.school_id = ${schoolId}`);
-}
-
-async function getTotalOrderedItems(): Promise<number> {
-  const user = await getUser();
-  if (!user) {
-    return 0;
-  }
-  const res = await db
-    .select({ sum: sql`SUM(quantity)` })
-    .from(order)
-    .innerJoin(orderItem, eq(order.id, orderItem.orderId))
-    .where(and(eq(order.userId, user.id), eq(order.status, "pickedup")));
-  return (res[0]?.sum ?? 0) as number;
 }
 
 export {
-  getTotalOrderedItems,
-  createOrder,
-  deleteOrder,
   getOrderByPin,
-  getOrder,
-  getOrders,
   getOrdersBySchoolId,
   updateOrderStatus,
-  getOrdersByUserId,
   blockUnpickedOrders,
   getFirstOrderItemClose,
   getActiveOrder,

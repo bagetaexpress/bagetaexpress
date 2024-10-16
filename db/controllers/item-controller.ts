@@ -6,7 +6,6 @@ import {
   sql,
   and,
   desc,
-  isNull,
   or,
   isNotNull,
 } from "drizzle-orm";
@@ -141,14 +140,6 @@ async function getExtendedItemById(
     .where(and(eq(item.id, itemId), eq(item.deleted, false)));
 
   return found;
-}
-
-async function getItemById(itemId: Item["id"]): Promise<Item | null> {
-  const found = await db.select().from(item).where(eq(item.id, itemId));
-  if (found.length === 0) {
-    return null;
-  }
-  return found[0];
 }
 
 export type CartExtendedItem = ExtendedItem & {
@@ -338,41 +329,6 @@ async function getReservedItemsByStoreAndSchool(
   return items;
 }
 
-async function getOrderItemsByStoreAndSchool(
-  storeId: Store["id"],
-  schoolId: School["id"],
-  orderStatus: Order["status"] = "ordered",
-): Promise<Array<ExtendedItem & { quantity: number }>> {
-  const items: Array<ExtendedItem & { quantity: number }> = await db
-    .select({
-      item,
-      store,
-      reservation,
-      schoolStore,
-      quantity: sql<number>`SUM(order_item.quantity)`,
-    })
-    .from(item)
-    .innerJoin(store, eq(item.storeId, store.id))
-    .innerJoin(schoolStore, eq(item.storeId, schoolStore.storeId))
-    .innerJoin(
-      orderItem,
-      and(eq(item.id, orderItem.itemId), eq(orderItem.isReservation, false)),
-    )
-    .innerJoin(order, eq(orderItem.orderId, order.id))
-    .innerJoin(customer, eq(order.userId, customer.userId))
-    .leftJoin(reservation, eq(reservation.itemId, item.id))
-    .where(
-      and(
-        eq(item.storeId, storeId),
-        eq(order.status, orderStatus),
-        eq(customer.schoolId, schoolId),
-      ),
-    )
-    .groupBy(item.id);
-
-  return items;
-}
-
 async function getItemsSummaryByStoreAndSchool(
   storeId: Store["id"],
   schoolId: School["id"],
@@ -417,14 +373,12 @@ async function getItemsSummaryByStoreAndSchool(
 }
 
 export {
-  getOrderItemsByStoreAndSchool,
   getReservedItemsByStoreAndSchool,
   getItemsSummaryByStoreAndSchool,
   getOrderItemsByStore,
   getReservationItemsByStore,
   getItemBySchool,
   getItemsBySchool,
-  getItemById,
   getExtendedItemById,
   getItemFromOrderByPin,
   getItemsFromCart,

@@ -145,16 +145,6 @@ async function updateSchoolStoreReservationClose(
     );
 }
 
-async function getFirstOrderClose(schoolId: SchoolStore["schoolId"]) {
-  const res = await db
-    .select({ orderClose: schoolStore.orderClose })
-    .from(schoolStore)
-    .where(eq(schoolStore.schoolId, schoolId))
-    .orderBy(schoolStore.orderClose)
-    .limit(1);
-  return res[0].orderClose;
-}
-
 async function getSchoolStores(
   schoolId: SchoolStore["schoolId"],
 ): Promise<SchoolStore[]> {
@@ -183,23 +173,8 @@ async function getSchoolDomains(): Promise<School["emailDomain"][]> {
   return res.map((r) => r.emailDomain);
 }
 
-async function getOrderClose(
-  schoolId: School["id"],
-  storeId: SchoolStore["storeId"],
-): Promise<SchoolStore["orderClose"] | null> {
-  const res = await db
-    .select({ orderClose: schoolStore.orderClose })
-    .from(schoolStore)
-    .where(
-      and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId)),
-    );
-  return res[0]?.orderClose ?? null;
-}
-
 export {
-  getOrderClose,
   getSchoolsByStoreId,
-  getFirstOrderClose,
   getSchoolStores,
   getSchoolByDomain,
   getSchoolsOrderStats,
