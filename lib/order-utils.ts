@@ -175,8 +175,12 @@ async function createOrderFromCart(discount: number = 0): Promise<{
 }
 
 async function deleteOrderAndItems(orderId: number): Promise<void> {
-  await orderItemCtrl.deleteOrderItems(orderId);
-  await orderCtrl.deleteOrder(orderId);
+  await db.transaction(async (tx) => {
+    await tx
+      .delete(schemas.orderItem)
+      .where(eq(schemas.orderItem.orderId, orderId));
+    await tx.delete(schemas.order).where(eq(schemas.order.id, orderId));
+  });
 }
 
 export { createOrderFromCart, deleteOrderAndItems };
