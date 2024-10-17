@@ -1,7 +1,5 @@
-"use server";
-
-import { aliasedTable, and, eq, sql } from "drizzle-orm";
-import { db } from "..";
+import { aliasedTable, and, eq, getTableColumns, sql } from "drizzle-orm";
+import { db } from "@/db";
 import {
   School,
   SchoolStore,
@@ -10,28 +8,46 @@ import {
   orderItem,
   school,
   schoolStore,
-} from "../schema";
+} from "@/db/schema";
 
-async function getSchoolsByStoreId(
-  storeId: SchoolStore["storeId"],
-): Promise<School[]> {
-  const schools = await db
-    .select({ school })
+async function getSingle({
+  schoolId,
+  emailDomain,
+}: {
+  schoolId?: School["id"];
+  emailDomain?: School["emailDomain"];
+}): Promise<School | null> {
+  const [found] = await db
+    .select()
+    .from(school)
+    .where(
+      and(
+        schoolId ? eq(school.id, schoolId) : undefined,
+        emailDomain ? eq(school.emailDomain, emailDomain) : undefined,
+      ),
+    );
+
+  return found ?? null;
+}
+
+async function getMany({
+  storeId,
+}: {
+  storeId: SchoolStore["storeId"];
+}): Promise<School[]> {
+  const res = await db
+    .select({ ...getTableColumns(school) })
     .from(school)
     .innerJoin(schoolStore, eq(school.id, schoolStore.schoolId))
     .where(eq(schoolStore.storeId, storeId));
-  return schools.map((school) => school.school);
+
+  return res;
 }
 
-async function getSchool(schoolId: School["id"]): Promise<School> {
-  const res = await db
-    .select({ school })
-    .from(school)
-    .where(eq(school.id, schoolId));
-  if (res.length === 0) {
-    throw new Error("School not found");
-  }
-  return res[0].school;
+async function getDomainMany({}: {}): Promise<School["emailDomain"][]> {
+  const res = await db.select({ emailDomain: school.emailDomain }).from(school);
+
+  return res.map((r) => r.emailDomain);
 }
 
 export type SchoolStats = {
@@ -44,9 +60,11 @@ export type SchoolStats = {
   unpicked: number;
 };
 
-async function getSchoolsOrderStats(
-  storeId: SchoolStore["storeId"],
-): Promise<SchoolStats[]> {
+async function getSchoolStatsMany({
+  storeId,
+}: {
+  storeId: SchoolStore["storeId"];
+}): Promise<SchoolStats[]> {
   const ordered = aliasedTable(orderItem, "ordered");
   const reserved = aliasedTable(orderItem, "reserved");
   const pickedup = aliasedTable(orderItem, "pickedup");
@@ -105,28 +123,11 @@ async function getSchoolsOrderStats(
   return schools as SchoolStats[];
 }
 
-async function getSchoolByDomain(
-  domain: School["emailDomain"],
-): Promise<School | undefined> {
-  const res = await db
-    .select({ school })
-    .from(school)
-    .where(eq(school.emailDomain, domain));
-  if (res.length === 0) {
-    return undefined;
-  }
-  return res[0].school;
-}
-
-async function getSchoolDomains(): Promise<School["emailDomain"][]> {
-  const res = await db.select({ emailDomain: school.emailDomain }).from(school);
-  return res.map((r) => r.emailDomain);
-}
-
-export {
-  getSchoolsByStoreId,
-  getSchoolByDomain,
-  getSchoolsOrderStats,
-  getSchool,
-  getSchoolDomains,
+export const schoolRepository = {
+  getSingle,
+  getMany,
+  getDomainMany,
+  getSchoolStatsMany,
 };
+
+export default schoolRepository;

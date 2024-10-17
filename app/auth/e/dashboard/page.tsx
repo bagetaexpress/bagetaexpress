@@ -8,7 +8,6 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { ItemStats, getItemsStats } from "@/db/controllers/item-controller";
-import { getSchoolsOrderStats } from "@/db/controllers/school-controller";
 import { getUser } from "@/lib/user-utils";
 import { Loader, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
@@ -26,6 +25,7 @@ import ReservationSummary from "./_components/reservation-summary";
 import storeRepository from "@/repositories/store-repository";
 import ingredientRepository from "@/repositories/ingredient-repository";
 import allergenRepository from "@/repositories/allergen-repository";
+import schoolRepository from "@/repositories/school-repository";
 
 export default function DashboardPage() {
   return (
@@ -69,12 +69,14 @@ async function SchoolDashboard() {
     redirect("/");
   }
 
-  const schoolStats = await getSchoolsOrderStats(user.storeId);
+  const schoolStatsMany = await schoolRepository.getSchoolStatsMany({
+    storeId: user.storeId,
+  });
 
   return (
     <>
       <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
-        {schoolStats.map((schoolStat, i) => (
+        {schoolStatsMany.map((schoolStat, i) => (
           <Suspense key={i} fallback={<SchoolCardPlaceholder />}>
             <SchoolCard {...schoolStat} />
           </Suspense>

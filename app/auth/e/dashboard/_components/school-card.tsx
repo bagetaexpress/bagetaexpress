@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { SchoolStats } from "@/db/controllers/school-controller";
 import EditOrderClose from "./edit-order-close";
 import PrintOrderLabels from "./print-order-labels";
 import {
@@ -26,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import reservationRepository from "@/repositories/reservation-repository";
 import ingredientRepository from "@/repositories/ingredient-repository";
 import allergenRepository from "@/repositories/allergen-repository";
+import { SchoolStats } from "@/repositories/school-repository";
 
 export function SchoolCardPlaceholder() {
   return (
@@ -139,7 +139,7 @@ async function PrintOrderLabelsWrapper({
     orders.map(async (order) => {
       const [ingredients, allergens] = await Promise.all([
         ingredientRepository.getMany({ itemId: order.item.id }),
-        allergenRepository.getMany({ itemId: order.item.id })
+        allergenRepository.getMany({ itemId: order.item.id }),
       ]);
 
       return {

@@ -8,8 +8,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Link } from "lucide-react";
-import { getSchoolDomains } from "@/db/controllers/school-controller";
 import { authOptions } from "@/lib/auth-options";
+import schoolRepository from "@/repositories/school-repository";
 
 export default async function RedirectPage() {
   const session = await getServerSession(authOptions);
@@ -26,7 +26,7 @@ export default async function RedirectPage() {
     redirect("/auth/c/store");
   }
 
-  const schoolDomains = await getSchoolDomains();
+  const schoolDomains = await schoolRepository.getDomainMany({});
 
   return (
     <div

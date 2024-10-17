@@ -20,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getSchoolsByStoreId } from "@/db/controllers/school-controller";
 import { AddSellerErrors } from "../access-errors";
 import {
   Accordion,
@@ -29,6 +28,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import sellerRepository from "@/repositories/seller-repository";
+import schoolRepository from "@/repositories/school-repository";
 
 export default async function SellerTable({
   err,
@@ -41,8 +41,8 @@ export default async function SellerTable({
   }
 
   const [sellers, schools] = await Promise.all([
-    sellerRepository.getMultiple({storeId: currUser.storeId ?? 0}),
-    getSchoolsByStoreId(currUser.storeId ?? 0),
+    sellerRepository.getMultiple({ storeId: currUser.storeId ?? 0 }),
+    schoolRepository.getMany({ storeId: currUser.storeId ?? 0 }),
   ]);
 
   const filteredSellers = sellers?.filter(
