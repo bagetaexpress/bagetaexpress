@@ -105,56 +105,6 @@ async function getSchoolsOrderStats(
   return schools as SchoolStats[];
 }
 
-async function updateSchoolStore({
-  schoolId,
-  storeId,
-  orderClose,
-  reservationClose,
-}: SchoolStore) {
-  await db
-    .update(schoolStore)
-    .set({ orderClose, reservationClose })
-    .where(
-      and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId)),
-    );
-}
-
-async function updateSchoolStoreOrderClose(
-  schoolId: SchoolStore["schoolId"],
-  storeId: SchoolStore["storeId"],
-  orderClose: SchoolStore["orderClose"],
-) {
-  await db
-    .update(schoolStore)
-    .set({ orderClose })
-    .where(
-      and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId)),
-    );
-}
-
-async function updateSchoolStoreReservationClose(
-  schoolId: SchoolStore["schoolId"],
-  storeId: SchoolStore["storeId"],
-  reservationClose: SchoolStore["reservationClose"],
-) {
-  await db
-    .update(schoolStore)
-    .set({ reservationClose })
-    .where(
-      and(eq(schoolStore.schoolId, schoolId), eq(schoolStore.storeId, storeId)),
-    );
-}
-
-async function getSchoolStores(
-  schoolId: SchoolStore["schoolId"],
-): Promise<SchoolStore[]> {
-  const res = await db
-    .select({ schoolStore })
-    .from(schoolStore)
-    .where(eq(schoolStore.schoolId, schoolId));
-  return res.map((r) => r.schoolStore);
-}
-
 async function getSchoolByDomain(
   domain: School["emailDomain"],
 ): Promise<School | undefined> {
@@ -175,12 +125,8 @@ async function getSchoolDomains(): Promise<School["emailDomain"][]> {
 
 export {
   getSchoolsByStoreId,
-  getSchoolStores,
   getSchoolByDomain,
   getSchoolsOrderStats,
-  updateSchoolStoreOrderClose,
-  updateSchoolStoreReservationClose,
-  updateSchoolStore,
   getSchool,
   getSchoolDomains,
 };

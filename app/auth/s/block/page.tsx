@@ -12,13 +12,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { blockUnpickedOrders } from "@/db/controllers/order-controller";
-import {
-  getSchoolStores,
-  updateSchoolStore,
-} from "@/db/controllers/school-controller";
 import { getUser } from "@/lib/user-utils";
 import { getDate, getFormatedDate, isLessThenNow } from "@/lib/utils";
 import reservationRepository from "@/repositories/reservation-repository";
+import { schoolStoreRepository } from "@/repositories/school-store-repository";
 import { Check } from "lucide-react";
 import { redirect } from "next/navigation";
 
@@ -68,7 +65,9 @@ export default async function BlockPage({
                 const user = await getUser();
                 if (!user || !user.schoolId) return;
 
-                const schoolStores = await getSchoolStores(user.schoolId);
+                const schoolStores = await schoolStoreRepository.getMany({
+                  schoolId: user.schoolId,
+                });
                 for (const schoolStore of schoolStores) {
                   if (!isLessThenNow(schoolStore.orderClose)) continue;
 
@@ -91,7 +90,8 @@ export default async function BlockPage({
                   console.info(
                     `SchoolId: ${user.schoolId} - StoreId: ${schoolStore.storeId} - OrderClose: ${getFormatedDate(orderCloseDate)} - ReservationClose: ${getFormatedDate(reservationCloseDate)}`,
                   );
-                  await updateSchoolStore({
+
+                  await schoolStoreRepository.updateSingle({
                     schoolId: user.schoolId,
                     storeId: schoolStore.storeId,
                     orderClose: getFormatedDate(orderCloseDate),
