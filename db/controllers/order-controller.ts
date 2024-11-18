@@ -15,7 +15,7 @@ import {
 } from "../schema";
 import { eq, and, sql, or } from "drizzle-orm";
 import { getUser } from "@/lib/user-utils";
-import { getDate } from "@/lib/utils";
+import { getDate, getFormatedDate } from "@/lib/utils";
 import { cache } from "react";
 
 async function createOrder(
@@ -117,7 +117,7 @@ async function updateOrderStatus(
     .update(order)
     .set({
       status,
-      updatedAt: new Date().toISOString(),
+      updatedAt: getFormatedDate(new Date()),
     })
     .where(eq(order.id, orderId));
 }
@@ -157,7 +157,7 @@ async function getOrdersBySchoolId(
 async function blockUnpickedOrders(schoolId: School["id"]): Promise<void> {
   await db
     .update(order)
-    .set({ status: "unpicked", updatedAt: new Date().toISOString() })
+    .set({ status: "unpicked", updatedAt: getFormatedDate(new Date()) })
     .where(
       sql`status = "ordered" AND user_id IN (SELECT user_id FROM customer WHERE school_id = ${schoolId})`,
     );
