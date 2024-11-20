@@ -4,7 +4,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { getOrdersBySchoolId } from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
 import SummaryRow from "./_components/summary-row";
 import {
@@ -24,6 +23,7 @@ import { Suspense } from "react";
 import ReservedItems from "./_components/reserved-items";
 import storeRepository from "@/repositories/store-repository";
 import schoolRepository from "@/repositories/school-repository";
+import orderRepository from "@/repositories/order-repository";
 
 export default async function SummaryPage({
   searchParams,
@@ -90,7 +90,10 @@ async function SummaryPageInner({
   const user = await getUser();
   if (!user || !user.schoolId) return null;
 
-  const orders = await getOrdersBySchoolId(user.schoolId, filter);
+  const orders = await orderRepository.getMany({
+    schoolId: user.schoolId,
+    status: [filter],
+  });
 
   return (
     <>

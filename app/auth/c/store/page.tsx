@@ -1,9 +1,9 @@
 import ItemCard from "@/app/auth/c/store/_components/itemCard";
 import { Button } from "@/components/ui/button";
 import { getItemsBySchool } from "@/db/controllers/item-controller";
-import { getActiveOrder } from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
 import { getDate, getNewDate } from "@/lib/utils";
+import orderRepository from "@/repositories/order-repository";
 import { Loader, ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -32,7 +32,10 @@ async function StorePageInner() {
   }
 
   const [hasOrder, items] = await Promise.all([
-    getActiveOrder(user.id),
+    orderRepository.getSingle({
+      userId: user.id,
+      status: ["ordered", "unpicked"],
+    }),
     getItemsBySchool(user.schoolId),
   ]);
 

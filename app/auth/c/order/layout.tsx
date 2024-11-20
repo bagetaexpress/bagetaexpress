@@ -1,5 +1,5 @@
-import { getActiveOrder } from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
+import orderRepository from "@/repositories/order-repository";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
@@ -13,7 +13,10 @@ export default async function CartLayout({
     redirect("/");
   }
 
-  const hasActive = await getActiveOrder(user.id);
+  const hasActive = await orderRepository.getSingle({
+    userId: user.id,
+    status: ["ordered", "unpicked"],
+  });
   if (!hasActive) {
     redirect("/auth/c/store");
   }

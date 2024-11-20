@@ -1,12 +1,9 @@
-import {
-  getOrderByPin,
-  updateOrderStatus,
-} from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
 import { redirect, RedirectType } from "next/navigation";
 import HandleOrder from "../../_components/handle-order";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
+import orderRepository from "@/repositories/order-repository";
 
 export default async function TakePinPage({
   params,
@@ -21,15 +18,18 @@ export default async function TakePinPage({
       const currUser = await getUser();
       if (!currUser) throw new Error("User not found");
 
-      const order = await getOrderByPin(
-        params.pin,
-        currUser.schoolId,
-        "ordered",
-      );
+      const order = await orderRepository.getSingle({
+        pin: params.pin,
+        schoolId: currUser.schoolId,
+        status: ["ordered"],
+      });
       if (!order) throw new Error("Order not found");
 
       console.info(`Updating order status to pickedup`);
-      await updateOrderStatus(order.id, "pickedup");
+      await orderRepository.updateSingle({
+        id: order.id,
+        status: "pickedup",
+      });
     } catch (error) {
       console.error(error);
       success = false;

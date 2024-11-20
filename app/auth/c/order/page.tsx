@@ -1,8 +1,4 @@
 import { getItemsFromOrder } from "@/db/controllers/item-controller";
-import {
-  getActiveOrder,
-  getFirstOrderItemClose,
-} from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
 import QrCode from "./_components/qrCode";
 import Image from "next/image";
@@ -24,6 +20,7 @@ import { revalidatePath } from "next/cache";
 import { getNewDate } from "@/lib/utils";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
+import orderRepository from "@/repositories/order-repository";
 
 export default function OrderPage() {
   return (
@@ -46,12 +43,15 @@ async function OrderPageInner() {
   const user = await getUser();
   if (!user) return null;
 
-  const order = await getActiveOrder(user.id);
+  const order = await orderRepository.getSingle({
+    userId: user.id,
+    status: ["ordered", "unpicked"],
+  });
   if (!order) return null;
 
   const [items, orderClose] = await Promise.all([
     getItemsFromOrder(order.id),
-    getFirstOrderItemClose(order.id),
+    orderRepository.getFirstClose(order.id),
   ]);
 
   const total = items
@@ -136,7 +136,7 @@ async function DeleteOrder({ orderId }: DeleteOrderProps) {
           <form
             action={async () => {
               "use server";
-              const orderClose = await getFirstOrderItemClose(orderId);
+              const orderClose = await orderRepository.getFirstClose(orderId);
               if (orderClose > getNewDate()) {
                 await deleteOrderAndItems(orderId);
               }

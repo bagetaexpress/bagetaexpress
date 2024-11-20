@@ -3,10 +3,10 @@ import { Loader, ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { getUser } from "@/lib/user-utils";
-import { getActiveOrder } from "@/db/controllers/order-controller";
 import NavButton from "@/components/nav/nav-button";
 import NavWrapper from "@/components/nav/nav-wrapper";
 import { Button } from "@/components/ui/button";
+import orderRepository from "@/repositories/order-repository";
 
 export default async function authLayout({
   children,
@@ -45,7 +45,10 @@ async function NavButtons() {
     return null;
   }
 
-  const hasOrder = await getActiveOrder(user.id);
+  const hasOrder = await orderRepository.getSingle({
+    userId: user.id,
+    status: ["ordered", "unpicked"],
+  });
 
   return (
     <>

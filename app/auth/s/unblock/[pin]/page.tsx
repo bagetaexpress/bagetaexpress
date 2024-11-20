@@ -1,10 +1,7 @@
-import {
-  getOrderByPin,
-  updateOrderStatus,
-} from "@/db/controllers/order-controller";
 import { getUser } from "@/lib/user-utils";
 import { redirect } from "next/navigation";
 import HandleOrder from "../../_components/handle-order";
+import orderRepository from "@/repositories/order-repository";
 
 export default async function UnlockPinPage({
   params,
@@ -18,14 +15,17 @@ export default async function UnlockPinPage({
       const currUser = await getUser();
       if (!currUser) throw new Error("User not found");
 
-      const order = await getOrderByPin(
-        params.pin,
-        currUser.schoolId,
-        "unpicked",
-      );
+      const order = await orderRepository.getSingle({
+        pin: params.pin,
+        schoolId: currUser.schoolId,
+        status: ["unpicked"],
+      });
       if (!order) throw new Error("Order not found");
 
-      await updateOrderStatus(order.id, "cancelled");
+      await orderRepository.updateSingle({
+        id: order.id,
+        status: "cancelled",
+      });
     } catch (error) {
       console.error(error);
       success = false;

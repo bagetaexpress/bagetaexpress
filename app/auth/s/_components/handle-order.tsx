@@ -1,12 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { getItemFromOrderByPin } from "@/db/controllers/item-controller";
-import { getOrderByPin } from "@/db/controllers/order-controller";
 import { Order } from "@/db/schema";
 import { getUser } from "@/lib/user-utils";
 import ClientButton from "./client-button";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -15,6 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import orderRepository from "@/repositories/order-repository";
 
 interface IProps {
   pin: string;
@@ -35,7 +34,11 @@ export default async function HandleOrder({
   if (!currUser) return null;
 
   const [order, items] = await Promise.all([
-    getOrderByPin(pin, currUser.schoolId, orderStatus),
+    orderRepository.getSingle({
+      pin,
+      userId: currUser.id,
+      status: [orderStatus],
+    }),
     getItemFromOrderByPin(pin, currUser.schoolId, orderStatus),
   ]);
 
