@@ -8,10 +8,7 @@ import {
 } from "@/components/ui/card";
 import EditOrderClose from "./edit-order-close";
 import PrintOrderLabels from "./print-order-labels";
-import {
-  ExtendedItem,
-  getItemsSummaryByStoreAndSchool,
-} from "@/db/controllers/item-controller";
+import { ExtendedItem } from "@/repositories/item-repository";
 import { getUser } from "@/lib/user-utils";
 import storeRepository from "@/repositories/store-repository";
 import PrintOrderList from "@/components/print-order-list";
@@ -26,6 +23,7 @@ import reservationRepository from "@/repositories/reservation-repository";
 import ingredientRepository from "@/repositories/ingredient-repository";
 import allergenRepository from "@/repositories/allergen-repository";
 import { SchoolStats } from "@/repositories/school-repository";
+import itemRepository from "@/repositories/item-repository";
 
 export function SchoolCardPlaceholder() {
   return (
@@ -56,7 +54,12 @@ export default async function SchoolCard({
   const orderCloseDate = getDate(orderClose);
   const reservationCloseDate = getDate(reservationClose);
   const [summary, reservations, store] = await Promise.all([
-    getItemsSummaryByStoreAndSchool(user.storeId, school.id),
+    itemRepository.getMany({
+      storeId: user.storeId,
+      schoolId: school.id,
+      isReservation: false,
+      orderStatus: ["ordered"],
+    }),
     reservationRepository.getMultiple({ storeId: user.storeId }),
     storeRepository.getSingle({ storeId: user.storeId }),
   ]);

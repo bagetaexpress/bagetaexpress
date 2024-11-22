@@ -1,5 +1,3 @@
-import { getReservedItemsByStoreAndSchool } from "@/db/controllers/item-controller";
-import { User } from "next-auth";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +10,7 @@ import Image from "next/image";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
 import { getUser } from "@/lib/user-utils";
+import itemRepository from "@/repositories/item-repository";
 
 export default function ReservedItems() {
   return (
@@ -33,7 +32,12 @@ async function ReservedItemsInner() {
     return null;
   }
 
-  const items = await getReservedItemsByStoreAndSchool(1, user.schoolId);
+  const items = await itemRepository.getMany({
+    storeId: 1,
+    schoolId: user.schoolId,
+    isReservation: true,
+    orderStatus: ["ordered"],
+  });
 
   return (
     <Dialog>

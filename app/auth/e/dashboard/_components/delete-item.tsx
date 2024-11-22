@@ -10,17 +10,15 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { updateItem } from "@/db/controllers/item-controller";
 import { Item } from "@/db/schema";
+import itemRepository from "@/repositories/item-repository";
 import { Trash } from "lucide-react";
 import { revalidatePath } from "next/cache";
 
 export default function DeleteItemButton({ item }: { item: Item }) {
   async function handleDelete() {
     "use server";
-    // await deleteFile(item.imageUrl);
-    // await removeItem(item.id);
-    await updateItem({ id: item.id, deleted: true });
+    await itemRepository.updateSingle({ data: { id: item.id, deleted: true } });
     revalidatePath("/auth/e/dashboard", "page");
   }
 

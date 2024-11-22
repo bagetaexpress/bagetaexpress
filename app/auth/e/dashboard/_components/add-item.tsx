@@ -40,7 +40,7 @@ import { deleteFile } from "@/lib/upladthing-server";
 import { Allergen, Ingredient, Item } from "@/db/schema";
 import React from "react";
 import { revalidateItems } from "@/lib/store-utils";
-import {updateItem, createItem} from "@/lib/item-utils";
+import { createItem, updateItem } from "@/lib/item-utils";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -183,7 +183,6 @@ export default function AddItemForm({
         }
 
         await updateItem({
-          itemId: item.id,
           data: {
             ...(({ allergens, ...rest }) => rest)(values),
             price: parseFloat(values.price),
@@ -193,7 +192,7 @@ export default function AddItemForm({
           },
           allergenIds: allergens.map((a) => a.id),
           ingredientIds: ingredients.map((a) => a.id),
-        })
+        });
         break;
       case "add":
         localUrl = "";

@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { getItemFromOrderByPin } from "@/db/controllers/item-controller";
 import { Order } from "@/db/schema";
 import { getUser } from "@/lib/user-utils";
 import ClientButton from "./client-button";
@@ -14,6 +13,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import orderRepository from "@/repositories/order-repository";
+import itemRepository from "@/repositories/item-repository";
 
 interface IProps {
   pin: string;
@@ -39,7 +39,11 @@ export default async function HandleOrder({
       userId: currUser.id,
       status: [orderStatus],
     }),
-    getItemFromOrderByPin(pin, currUser.schoolId, orderStatus),
+    itemRepository.getManyWithQuantity({
+      orderPin: pin,
+      schoolId: currUser.schoolId,
+      orderStatus: [orderStatus],
+    }),
   ]);
 
   if (!order) {

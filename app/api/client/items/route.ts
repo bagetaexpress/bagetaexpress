@@ -1,4 +1,4 @@
-import { getItemsBySchool } from "@/db/controllers/item-controller";
+import itemRepository from "@/repositories/item-repository";
 
 async function GET(req: Request): Promise<Response> {
   const { searchParams } = new URL(req.url);
@@ -11,7 +11,9 @@ async function GET(req: Request): Promise<Response> {
     return new Response("Invalid schoolID", { status: 400 });
   }
 
-  const items = await getItemsBySchool(parseInt(schoolID));
+  const items = await itemRepository.getMany({
+    schoolId: parseInt(schoolID),
+  });
   return Response.json(items);
 }
 

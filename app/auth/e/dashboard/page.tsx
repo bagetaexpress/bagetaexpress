@@ -7,7 +7,6 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { ItemStats, getItemsStats } from "@/db/controllers/item-controller";
 import { getUser } from "@/lib/user-utils";
 import { Loader, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
@@ -26,6 +25,7 @@ import storeRepository from "@/repositories/store-repository";
 import ingredientRepository from "@/repositories/ingredient-repository";
 import allergenRepository from "@/repositories/allergen-repository";
 import schoolRepository from "@/repositories/school-repository";
+import itemRepository, { ItemStats } from "@/repositories/item-repository";
 
 export default function DashboardPage() {
   return (
@@ -93,14 +93,14 @@ async function ProductDashboard() {
   }
 
   const [itemStats, allergens, ingredients] = await Promise.all([
-    getItemsStats(user.storeId),
+    itemRepository.getStats({ storeId: user.storeId }),
     allergenRepository.getMany({ storeId: user.storeId }),
     ingredientRepository.getMany({ storeId: user.storeId }),
   ]);
 
   return (
     <>
-      <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
+      <div className="grid gap-1 lg:grid-cols-4 md:grid-cols.-3 sm:grid-cols-2">
         {itemStats.map((itemStat, i) => (
           <ItemCard
             key={i}
@@ -149,7 +149,7 @@ async function EditStoreInner({ storeId }: { storeId: Store["id"] }) {
   return <EditStore store={store} />;
 }
 
-function ItemCard({
+async function ItemCard({
   itemStats: { item, ...stats },
   allergens,
   ingredients,
@@ -158,6 +158,13 @@ function ItemCard({
   allergens: Allergen[];
   ingredients: Ingredient[];
 }) {
+  const itemAllergens = await allergenRepository.getMany({
+    itemId: item.id,
+  });
+  const itemIngredients = await ingredientRepository.getMany({
+    itemId: item.id,
+  });
+
   return (
     <Card className="flex-1 flex flex-col">
       {item.imageUrl !== "" && item.imageUrl !== null ? (
@@ -183,7 +190,11 @@ function ItemCard({
             allergens={allergens}
             ingredients={ingredients}
             action="update"
-            item={item}
+            item={{
+              ...item,
+              allergens: itemAllergens,
+              ingredients: itemIngredients,
+            }}
           >
             <Button>Upraviť</Button>
           </AddItemForm>

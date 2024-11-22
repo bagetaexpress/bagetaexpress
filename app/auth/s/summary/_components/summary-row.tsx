@@ -1,11 +1,14 @@
-import { getItemsFromOrder } from "@/db/controllers/item-controller";
+import itemRepository from "@/repositories/item-repository";
 
 interface IProps {
   orderId: number;
 }
 
 export default async function SummaryRow({ orderId }: IProps) {
-  const items = await getItemsFromOrder(orderId);
+  const items = await itemRepository.getManyWithQuantity({
+    orderId,
+    orderStatus: ["ordered"],
+  });
 
   const total = items
     .reduce((acc, { item, quantity }) => acc + item.price * quantity, 0)

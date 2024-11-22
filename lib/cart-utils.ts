@@ -1,14 +1,11 @@
 "use server";
 
-import {
-  getItemBySchool,
-  getItemsFromCart,
-} from "@/db/controllers/item-controller";
 import { revalidatePath } from "next/cache";
 import { getUser } from "./user-utils";
 import { getDate } from "./utils";
 import cartRepository from "@/repositories/cart-repository";
 import { Cart } from "@/db/schema";
+import itemRepository from "@/repositories/item-repository";
 
 async function addToCart(itemId: number): Promise<void> {
   const user = await getUser();
@@ -16,10 +13,14 @@ async function addToCart(itemId: number): Promise<void> {
     throw new Error("User is not authenticated");
   }
 
-  const { schoolStore, reservation } = await getItemBySchool({
-    itemId,
+  const res = await itemRepository.getSingle({
+    id: itemId,
     schoolId: user.schoolId,
   });
+  if (res == null) {
+    throw new Error("Item not found");
+  }
+  const { schoolStore, reservation } = res;
 
   if (
     getDate(schoolStore.orderClose) < getDate(new Date().toLocaleString()) &&
@@ -67,7 +68,7 @@ async function getCartItems(cartId?: string) {
     cartId = (await getCart()).userId;
   }
 
-  return await getItemsFromCart(cartId);
+  return await itemRepository.getManyCart({ cartId });
 }
 
 async function saveUpdateCartItem(

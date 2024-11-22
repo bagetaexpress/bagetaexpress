@@ -18,12 +18,12 @@ import { Loader, Search } from "lucide-react";
 import { handleFilterChange } from "./server-util";
 import { Order } from "@/db/schema";
 import PrintOrderList from "@/components/print-order-list";
-import { getItemsSummaryByStoreAndSchool } from "@/db/controllers/item-controller";
 import { Suspense } from "react";
 import ReservedItems from "./_components/reserved-items";
 import storeRepository from "@/repositories/store-repository";
 import schoolRepository from "@/repositories/school-repository";
 import orderRepository from "@/repositories/order-repository";
+import itemRepository from "@/repositories/item-repository";
 
 export default async function SummaryPage({
   searchParams,
@@ -136,7 +136,12 @@ async function PrintOrderListWrapper() {
   if (!user || !user.schoolId) return null;
 
   const [itemSummary, school, store] = await Promise.all([
-    getItemsSummaryByStoreAndSchool(1, user.schoolId),
+    itemRepository.getMany({
+      storeId: 1,
+      schoolId: user.schoolId,
+      isReservation: false,
+      orderStatus: ["ordered"],
+    }),
     schoolRepository.getSingle({ schoolId: user.schoolId }),
     storeRepository.getSingle({ storeId: 1 }),
   ]);

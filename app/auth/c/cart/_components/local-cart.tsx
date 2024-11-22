@@ -1,6 +1,6 @@
 "use client";
 
-import { CartExtendedItem } from "@/db/controllers/item-controller";
+import { CartExtendedItem } from "@/repositories/item-repository";
 import CartItemRow from "./cart-item-row";
 import { useState } from "react";
 

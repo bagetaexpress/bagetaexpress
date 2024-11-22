@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader } from "lucide-react";
 import { getCartItems } from "@/lib/cart-utils";
-import { CartExtendedItem } from "@/db/controllers/item-controller";
+import { CartExtendedItem } from "@/repositories/item-repository";
 
 interface ICheckout {
   items: CartExtendedItem[];

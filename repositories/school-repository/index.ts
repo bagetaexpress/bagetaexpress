@@ -1,3 +1,4 @@
+import "server-only";
 import { aliasedTable, and, eq, getTableColumns, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {

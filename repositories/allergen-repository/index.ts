@@ -1,6 +1,6 @@
 import "server-only";
 import { and, eq, getTableColumns } from "drizzle-orm";
-import { db } from "@/db/index";
+import { db } from "@/db";
 import { Allergen, Item, allergen, itemAllergen } from "@/db/schema";
 
 async function getMany({

@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ExtendedItem } from "@/db/controllers/item-controller";
 import { School, Store } from "@/db/schema";
+import { ExtendedItem } from "@/repositories/item-repository";
 import { TableProperties } from "lucide-react";
 import { useCallback, useRef } from "react";
 import { useReactToPrint } from "react-to-print";

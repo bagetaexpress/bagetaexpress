@@ -12,7 +12,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ExtendedItem } from "@/db/controllers/item-controller";
+import { ExtendedItem } from "@/repositories/item-repository";
 import { Store } from "@/db/schema";
 import { Printer } from "lucide-react";
 import Image from "next/image";

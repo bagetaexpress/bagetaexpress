@@ -1,7 +1,7 @@
 // "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { CartExtendedItem } from "@/db/controllers/item-controller";
+import { CartExtendedItem } from "@/repositories/item-repository";
 import { saveUpdateCartItem } from "@/lib/cart-utils";
 import { cn } from "@/lib/utils";
 import { Minus, Plus, Trash } from "lucide-react";

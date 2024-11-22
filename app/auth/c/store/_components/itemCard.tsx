@@ -1,4 +1,3 @@
-import { ExtendedItem } from "@/db/controllers/item-controller";
 import {
   Card,
   CardContent,
@@ -14,6 +13,7 @@ import { Reservation, SchoolStore } from "@/db/schema";
 import { getDate, getNewDate } from "@/lib/utils";
 import AddToCartButton from "./add-to-cart-button";
 import Link from "next/link";
+import { ExtendedItem } from "@/repositories/item-repository";
 
 export default function ItemCard({
   item: { item, store, reservation, schoolStore },
@@ -61,7 +61,7 @@ export default function ItemCard({
         <p className="text-center text-xl font-bold">{item.price}€</p>
         <div className="col-span-2">
           <AddToCartButton
-            item={{ item, store, reservation, schoolStore }}
+            item={{ item, reservation, schoolStore }}
             isDisabled={
               isAddToCartDisabled({ schoolStore, reservation }) || hasOrder
             }

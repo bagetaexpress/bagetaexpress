@@ -10,19 +10,18 @@ import {
   DrawerFooter,
   DrawerClose,
 } from "@/components/ui/drawer";
-import { ExtendedItem } from "@/db/controllers/item-controller";
 import { addToCart } from "@/lib/cart-utils";
 import { useRef, useState } from "react";
-import { getDate, getNewDate } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
+import { ExtendedItem } from "@/repositories/item-repository";
 
 export default function AddToCartButton({
   item: { item, reservation, schoolStore },
   isDisabled,
 }: {
-  item: ExtendedItem;
+  item: Pick<ExtendedItem, "item" | "reservation" | "schoolStore">;
   isDisabled: boolean;
 }) {
   const drawerBtnRef = useRef<HTMLButtonElement | null>(null);

@@ -1,8 +1,8 @@
 import ItemCard from "@/app/auth/c/store/_components/itemCard";
 import { Button } from "@/components/ui/button";
-import { getItemsBySchool } from "@/db/controllers/item-controller";
 import { getUser } from "@/lib/user-utils";
 import { getDate, getNewDate } from "@/lib/utils";
+import itemRepository from "@/repositories/item-repository";
 import orderRepository from "@/repositories/order-repository";
 import { Loader, ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
@@ -36,7 +36,10 @@ async function StorePageInner() {
       userId: user.id,
       status: ["ordered", "unpicked"],
     }),
-    getItemsBySchool(user.schoolId),
+    itemRepository.getMany({
+      schoolId: user.schoolId,
+      orderBy: "desc",
+    }),
   ]);
 
   return (

@@ -15,8 +15,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getReservationItemsByStore } from "@/db/controllers/item-controller";
+import { item } from "@/db/schema";
 import { getUser } from "@/lib/user-utils";
+import itemRepository from "@/repositories/item-repository";
 import { Loader } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -44,10 +45,12 @@ async function ReservationSummaryInner() {
   if (!user || !user.isEmployee) {
     redirect("/");
   }
-  const reservationSummary = await getReservationItemsByStore(
-    user.storeId ?? 0,
-    "ordered",
-  );
+  const reservationSummary = await itemRepository.getManyWithQuantity({
+    storeId: user.storeId,
+    orderStatus: ["ordered"],
+    isReservation: true,
+    groupBy: [item.id],
+  });
 
   return (
     <Dialog>

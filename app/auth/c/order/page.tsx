@@ -1,4 +1,3 @@
-import { getItemsFromOrder } from "@/db/controllers/item-controller";
 import { getUser } from "@/lib/user-utils";
 import QrCode from "./_components/qrCode";
 import Image from "next/image";
@@ -21,6 +20,7 @@ import { getNewDate } from "@/lib/utils";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
 import orderRepository from "@/repositories/order-repository";
+import itemRepository from "@/repositories/item-repository";
 
 export default function OrderPage() {
   return (
@@ -50,7 +50,10 @@ async function OrderPageInner() {
   if (!order) return null;
 
   const [items, orderClose] = await Promise.all([
-    getItemsFromOrder(order.id),
+    itemRepository.getManyWithQuantity({
+      orderId: order.id,
+      orderStatus: ["ordered"],
+    }),
     orderRepository.getFirstClose(order.id),
   ]);
 

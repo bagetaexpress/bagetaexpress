@@ -1,8 +1,8 @@
-import { getExtendedItemById } from "@/db/controllers/item-controller";
 import { Reservation, SchoolStore } from "@/db/schema";
 import { getDate, getNewDate } from "@/lib/utils";
 import allergenRepository from "@/repositories/allergen-repository";
 import ingredientRepository from "@/repositories/ingredient-repository";
+import itemRepository from "@/repositories/item-repository";
 import Image from "next/image";
 import React from "react";
 
@@ -19,15 +19,15 @@ export default async function ItemDetailDialog({
     return <p>Invalid item ID</p>;
   }
 
-  const found = await getExtendedItemById(parseInt(params.itemId));
+  const found = await itemRepository.getSingle({ id: parseInt(params.itemId) });
   if (!found) {
     return <p>Item not found</p>;
   }
   const { item, store, reservation, schoolStore } = found;
 
   const [allergens, ingredients] = await Promise.all([
-    allergenRepository.getMany({storeId: store.id}),
-    ingredientRepository.getMany({itemId: item.id})
+    allergenRepository.getMany({ storeId: store.id }),
+    ingredientRepository.getMany({ itemId: item.id }),
   ]);
 
   return (
