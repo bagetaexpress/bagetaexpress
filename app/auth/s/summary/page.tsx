@@ -136,11 +136,9 @@ async function PrintOrderListWrapper() {
   if (!user || !user.schoolId) return null;
 
   const [itemSummary, school, store] = await Promise.all([
-    itemRepository.getMany({
+    itemRepository.getSummary({
       storeId: 1,
       schoolId: user.schoolId,
-      isReservation: false,
-      orderStatus: ["ordered"],
     }),
     schoolRepository.getSingle({ schoolId: user.schoolId }),
     storeRepository.getSingle({ storeId: 1 }),
