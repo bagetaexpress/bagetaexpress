@@ -239,9 +239,11 @@ async function getMany({
 async function getSummary({
   storeId,
   schoolId,
+  isReservation = false,
 }: {
   storeId: Store["id"];
-  schoolId: School["id"];
+  schoolId?: School["id"];
+  isReservation?: boolean;
 }): Promise<ExtendedItem[]> {
   const oi = db
     .select()
@@ -252,9 +254,12 @@ async function getSummary({
     )
     .innerJoin(
       customer,
-      and(eq(order.userId, customer.userId), eq(customer.schoolId, schoolId)),
+      and(
+        eq(order.userId, customer.userId),
+        schoolId ? eq(customer.schoolId, schoolId) : undefined,
+      ),
     )
-    .where(eq(orderItem.isReservation, false))
+    .where(eq(orderItem.isReservation, isReservation))
     .as("oi");
 
   const items = await db

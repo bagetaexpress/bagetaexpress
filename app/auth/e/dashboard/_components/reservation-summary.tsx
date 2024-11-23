@@ -42,14 +42,12 @@ export default function ReservationSummary() {
 
 async function ReservationSummaryInner() {
   const user = await getUser();
-  if (!user || !user.isEmployee) {
+  if (!user || !user.isEmployee || !user.storeId) {
     redirect("/");
   }
-  const reservationSummary = await itemRepository.getManyWithQuantity({
+  const reservationSummary = await itemRepository.getSummary({
     storeId: user.storeId,
-    orderStatus: ["ordered"],
     isReservation: true,
-    groupBy: [item.id],
   });
 
   return (
@@ -71,17 +69,21 @@ async function ReservationSummaryInner() {
             <TableRow>
               <TableHead className=" w-fit max-w-fit">p.č.</TableHead>
               <TableHead>Názov</TableHead>
-              <TableHead>Počet</TableHead>
+              <TableHead className="text-center">Rezervované/Celkom</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {reservationSummary.map(({ item, quantity }, index) => (
-              <TableRow key={item.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{quantity}ks</TableCell>
-              </TableRow>
-            ))}
+            {reservationSummary.map(
+              ({ item, quantity, reservation }, index) => (
+                <TableRow key={item.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell className="text-center">
+                    {quantity ?? 0} / {reservation?.quantity} ks
+                  </TableCell>
+                </TableRow>
+              ),
+            )}
           </TableBody>
         </Table>
       </DialogContent>

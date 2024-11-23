@@ -15,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { item } from "@/db/schema";
 import { getUser } from "@/lib/user-utils";
 import itemRepository from "@/repositories/item-repository";
 import { Loader } from "lucide-react";
@@ -42,15 +41,15 @@ export default function OrderSummary() {
 
 async function OrderSummaryInner() {
   const user = await getUser();
-  if (!user || !user.isEmployee) {
+  if (!user || !user.isEmployee || !user.storeId) {
     redirect("/");
   }
-  const ordersSummary = await itemRepository.getManyWithQuantity({
-    storeId: user.storeId,
-    orderStatus: ["ordered"],
-    isReservation: false,
-    groupBy: [item.id],
-  });
+  const ordersSummary = (
+    await itemRepository.getSummary({
+      storeId: user.storeId,
+      isReservation: false,
+    })
+  ).filter(({ quantity }) => quantity > 0);
 
   return (
     <Dialog>
@@ -84,6 +83,9 @@ async function OrderSummaryInner() {
             ))}
           </TableBody>
         </Table>
+        {ordersSummary.length === 0 && (
+          <div className="text-center text-gray-500">Žiadne objednávky</div>
+        )}
       </DialogContent>
     </Dialog>
   );
