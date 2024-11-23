@@ -52,7 +52,7 @@ async function OrderPageInner() {
   const [items, orderClose] = await Promise.all([
     itemRepository.getManyWithQuantity({
       orderId: order.id,
-      orderStatus: ["ordered"],
+      orderStatus: ["ordered", "unpicked"],
     }),
     orderRepository.getFirstClose(order.id),
   ]);

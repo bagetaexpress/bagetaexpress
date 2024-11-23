@@ -54,11 +54,9 @@ export default async function SchoolCard({
   const orderCloseDate = getDate(orderClose);
   const reservationCloseDate = getDate(reservationClose);
   const [summary, reservations, store] = await Promise.all([
-    itemRepository.getMany({
+    itemRepository.getSummary({
       storeId: user.storeId,
       schoolId: school.id,
-      isReservation: false,
-      orderStatus: ["ordered"],
     }),
     reservationRepository.getMultiple({ storeId: user.storeId }),
     storeRepository.getSingle({ storeId: user.storeId }),

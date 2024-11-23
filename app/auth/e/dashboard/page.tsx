@@ -181,7 +181,7 @@ async function ItemCard({
         <CardDescription>{item.description}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col justify-end">
-        <p>Doručené: {stats.pickedup}</p>
+        <p>Doručené: {stats.pickedup ?? 0}</p>
       </CardContent>
       <CardFooter>
         <div className="w-full grid grid-cols-2 gap-1">

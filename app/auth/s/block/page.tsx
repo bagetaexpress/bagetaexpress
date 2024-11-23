@@ -103,9 +103,9 @@ export default async function BlockPage({
                 await orderRepository.updateMany({
                   filter: {
                     schoolId: user.schoolId,
-                    status: "unpicked",
+                    status: "ordered",
                   },
-                  data: { status: "pickedup" },
+                  data: { status: "unpicked" },
                 });
 
                 redirect("/auth/s/block?success=true");

@@ -36,7 +36,6 @@ export default async function HandleOrder({
   const [order, items] = await Promise.all([
     orderRepository.getSingle({
       pin,
-      userId: currUser.id,
       status: [orderStatus],
     }),
     itemRepository.getManyWithQuantity({

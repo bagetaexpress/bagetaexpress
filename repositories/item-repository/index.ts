@@ -176,7 +176,12 @@ async function getMany({
   isReservation?: boolean;
   isDeleted?: boolean;
 }): Promise<ExtendedItem[]> {
-  const filters = [isDeleted ? eq(item.deleted, isDeleted) : undefined];
+  const filters = [
+    isDeleted ? eq(item.deleted, isDeleted) : undefined,
+    isReservation !== undefined
+      ? eq(orderItem.isReservation, isReservation)
+      : undefined,
+  ];
 
   let baseQuery = db
     .select({
@@ -204,22 +209,8 @@ async function getMany({
     .leftJoin(reservation, eq(reservation.itemId, item.id))
     .$dynamic();
 
-  if (isReservation !== undefined) {
-    baseQuery = baseQuery.innerJoin(
-      orderItem,
-      and(
-        eq(item.id, orderItem.itemId),
-        eq(orderItem.isReservation, isReservation),
-      ),
-    );
-  } else {
-    baseQuery = baseQuery.leftJoin(orderItem, eq(item.id, orderItem.itemId));
-  }
-
   if (orderStatus !== undefined || orderId !== undefined) {
-    if (isReservation === undefined) {
-      baseQuery = baseQuery.innerJoin(order, eq(order.id, orderItem.orderId));
-    }
+    baseQuery = baseQuery.innerJoin(orderItem, eq(item.id, orderItem.itemId));
     baseQuery = baseQuery.innerJoin(
       order,
       and(
@@ -230,6 +221,8 @@ async function getMany({
           : undefined,
       ),
     );
+  } else {
+    baseQuery = baseQuery.leftJoin(orderItem, eq(item.id, orderItem.itemId));
   }
 
   baseQuery = baseQuery.where(and(...filters)).groupBy(item.id);
@@ -241,6 +234,51 @@ async function getMany({
   }
 
   return await baseQuery.execute();
+}
+
+async function getSummary({
+  storeId,
+  schoolId,
+}: {
+  storeId: Store["id"];
+  schoolId: School["id"];
+}): Promise<ExtendedItem[]> {
+  const oi = db
+    .select()
+    .from(orderItem)
+    .innerJoin(
+      order,
+      and(eq(orderItem.orderId, order.id), eq(order.status, "ordered")),
+    )
+    .innerJoin(
+      customer,
+      and(eq(order.userId, customer.userId), eq(customer.schoolId, schoolId)),
+    )
+    .where(eq(orderItem.isReservation, false))
+    .as("oi");
+
+  const items = await db
+    .select({
+      item,
+      store,
+      reservation,
+      schoolStore,
+      quantity: sql<number>`SUM(oi.quantity)`,
+    })
+    .from(item)
+    .innerJoin(store, eq(item.storeId, store.id))
+    .innerJoin(schoolStore, eq(item.storeId, schoolStore.storeId))
+    .leftJoin(reservation, eq(reservation.itemId, item.id))
+    .leftJoin(oi, and(eq(item.id, oi.order_item.itemId)))
+    .where(
+      and(
+        eq(item.storeId, storeId),
+        or(isNotNull(oi.order_item.quantity), isNotNull(reservation.quantity)),
+      ),
+    )
+    .groupBy(item.id);
+
+  return items;
 }
 
 async function getManyWithQuantity({
@@ -276,7 +314,12 @@ async function getManyWithQuantity({
   ];
 
   let baseQuery = db
-    .select({ item, quantity: sql<number>`SUM(${orderItem.quantity})` })
+    .select({
+      item,
+      quantity: groupBy
+        ? sql<number>`SUM(${orderItem.quantity})`
+        : orderItem.quantity,
+    })
     .from(item)
     .innerJoin(orderItem, eq(item.id, orderItem.itemId))
     .innerJoin(order, eq(order.id, orderItem.orderId))
@@ -308,13 +351,13 @@ async function getManyCart({
       cartItem,
       reservation,
       schoolStore,
-      quantity: sql<number>`SUM(${cartItem.quantity})`,
+      quantity: cartItem.quantity,
     })
     .from(item)
     .innerJoin(store, eq(item.storeId, store.id))
     .innerJoin(schoolStore, eq(item.storeId, schoolStore.storeId))
-    .leftJoin(reservation, eq(reservation.itemId, item.id))
     .innerJoin(cartItem, eq(item.id, cartItem.itemId))
+    .leftJoin(reservation, eq(reservation.itemId, item.id))
     .where(eq(cartItem.cartId, cartId));
 }
 
@@ -326,7 +369,7 @@ async function getStats({
   const items = await db
     .select({
       item,
-      pickedup: sql<number>`SUM(order_item.quantity)`,
+      pickedup: sql<number>`SUM(${orderItem.quantity})`,
     })
     .from(item)
     .leftJoin(orderItem, eq(item.id, orderItem.itemId))
@@ -340,6 +383,7 @@ async function getStats({
 export const itemRepository = {
   getSingle,
   getMany,
+  getSummary,
   getManyWithQuantity,
   getManyCart,
   createSingle,
