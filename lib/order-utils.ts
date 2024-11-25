@@ -5,7 +5,7 @@ import { getUser } from "./user-utils";
 import { db } from "@/db";
 import * as schemas from "@/db/schema";
 import { and, eq, or } from "drizzle-orm";
-import { getDate, getNewDate } from "./utils";
+import { getDate, getFormatedDate, getNewDate } from "./utils";
 import { customerRepository } from "@/repositories/customer-repository";
 import cartRepository from "@/repositories/cart-repository";
 import orderRepository from "@/repositories/order-repository";
@@ -83,6 +83,8 @@ async function createOrderFromCart(discount: number = 0): Promise<{
           pin,
           discount,
           status: "ordered",
+          createdAt: getFormatedDate(getNewDate()),
+          updatedAt: getFormatedDate(getNewDate()),
         })
         .returning();
 

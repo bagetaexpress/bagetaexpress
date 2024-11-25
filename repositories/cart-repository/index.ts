@@ -2,6 +2,7 @@ import "server-only";
 import { db } from "@/db";
 import { Cart, cart, cartItem, CartItem } from "@/db/schema";
 import { and, eq, sql } from "drizzle-orm";
+import { getFormatedDate, getNewDate } from "@/lib/utils";
 
 async function addItemToCart({
   userId,
@@ -109,6 +110,8 @@ async function createSingle({
     .insert(cart)
     .values({
       userId,
+      createdAt: getFormatedDate(getNewDate()),
+      updatedAt: getFormatedDate(getNewDate()),
     })
     .returning();
   return created;

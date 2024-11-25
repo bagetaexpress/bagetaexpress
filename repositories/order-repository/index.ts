@@ -15,6 +15,7 @@ import {
 import { eq, and, sql, or, getTableColumns } from "drizzle-orm";
 import { getDate, getFormatedDate } from "@/lib/utils";
 import { cache } from "react";
+import { getNewDate } from "../../lib/utils";
 
 const getSingle = cache(
   async ({
@@ -82,7 +83,7 @@ async function updateSingle(
     .update(order)
     .set({
       ...data,
-      updatedAt: getFormatedDate(new Date()),
+      updatedAt: getFormatedDate(getNewDate()),
     })
     .where(eq(order.id, data.id));
 }
@@ -119,7 +120,7 @@ async function updateMany({
     .update(order)
     .set({
       ...data,
-      updatedAt: getFormatedDate(new Date()),
+      updatedAt: getFormatedDate(getNewDate()),
     })
     .where(
       and(
