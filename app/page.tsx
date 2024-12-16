@@ -31,8 +31,38 @@ import { Github, Instagram, Pointer } from "lucide-react";
 import { PopupCarousel } from "@/components/ui/custom/popup-carousel";
 import { Suspense } from "react";
 import EmailForm from "./_components/email-form";
+import { getUser } from "@/lib/user-utils";
+import { redirect, RedirectType } from "next/navigation";
 
-export default function Home() {
+export default function HomeWrapper() {
+  return (
+    <>
+      <Home />
+      <Suspense fallback={null}>
+        <RedirectWrapper />
+      </Suspense>
+    </>
+  );
+}
+
+async function RedirectWrapper() {
+  const user = await getUser();
+  if (user == null) {
+    return;
+  }
+  switch (true) {
+    case user.isEmployee || user.isAdmin:
+      redirect("/auth/e/dashboard", RedirectType.replace);
+    case user.isSeller:
+      redirect("/auth/s/summary", RedirectType.replace);
+    case user.isCustomer:
+      redirect("/auth/c/store", RedirectType.replace);
+  }
+
+  return null;
+}
+
+export function Home() {
   return (
     <div className="min-h-[100dvh] overflow-hidden relative">
       <BlurGradientBackground className="absolute left-0 top-0 w-full aspect-square opacity-50 z-[-10]" />

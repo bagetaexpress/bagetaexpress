@@ -34,6 +34,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   void getUser();
+
   return (
     <html lang="sk" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <meta property="og:type" content="website" />

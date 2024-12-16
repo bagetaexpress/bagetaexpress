@@ -59,7 +59,7 @@ export default async function UserDropdown() {
               ) : null}
             </>
           ) : null}
-          <a href="/">
+          <a href="/about-us">
             <DropdownMenuItem>O nás</DropdownMenuItem>
           </a>
           <DropdownMenuSeparator />

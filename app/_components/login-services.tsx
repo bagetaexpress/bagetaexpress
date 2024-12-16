@@ -21,7 +21,7 @@ export default function LoginServices() {
         className="px-3"
         onClick={() => {
           switch (true) {
-            case session.user.isEmployee:
+            case session.user.isEmployee || session.user.isAdmin:
               router.push("/auth/e/dashboard");
               break;
             case session.user.isSeller:
