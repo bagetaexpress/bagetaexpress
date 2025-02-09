@@ -2,13 +2,13 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle, Check } from "lucide-react";
 import Scanner from "../_components/scanner";
 
-export default function TakePage({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default async function TakePage(
+  props: {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   return (
     <div className=" relative min-h-full max-w-screen-sm mx-auto">
       <h1 className="text-2xl font-semibold pt-2">Prevzať</h1>

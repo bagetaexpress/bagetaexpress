@@ -5,11 +5,12 @@ import { Suspense } from "react";
 import { Loader } from "lucide-react";
 import orderRepository from "@/repositories/order-repository";
 
-export default async function TakePinPage({
-  params,
-}: {
-  params: { pin: string };
-}) {
+export default async function TakePinPage(
+  props: {
+    params: Promise<{ pin: string }>;
+  }
+) {
+  const params = await props.params;
   async function confirmOrder() {
     "use server";
     let success = true;

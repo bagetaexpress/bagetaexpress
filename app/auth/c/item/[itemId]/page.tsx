@@ -6,11 +6,12 @@ import itemRepository from "@/repositories/item-repository";
 import Image from "next/image";
 import React from "react";
 
-export default async function ItemDetailDialog({
-  params,
-}: {
-  params: { itemId: string };
-}) {
+export default async function ItemDetailDialog(
+  props: {
+    params: Promise<{ itemId: string }>;
+  }
+) {
+  const params = await props.params;
   if (
     isNaN(parseInt(params.itemId)) ||
     parseInt(params.itemId) < 0 ||

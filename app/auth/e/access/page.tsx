@@ -2,11 +2,12 @@ import EmployeeTable from "./_components/employee-table";
 import SellerTable from "./_components/seller-table";
 import { AddEmployeeErrors, AddSellerErrors } from "./access-errors";
 
-export default async function AccessPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default async function AccessPage(
+  props: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   return (
     <div className=" relative min-h-full">
       <h1 className="text-3xl font-semibold pt-2">Správa účtov</h1>

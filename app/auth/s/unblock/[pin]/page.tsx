@@ -3,11 +3,12 @@ import { redirect } from "next/navigation";
 import HandleOrder from "../../_components/handle-order";
 import orderRepository from "@/repositories/order-repository";
 
-export default async function UnlockPinPage({
-  params,
-}: {
-  params: { pin: string };
-}) {
+export default async function UnlockPinPage(
+  props: {
+    params: Promise<{ pin: string }>;
+  }
+) {
+  const params = await props.params;
   async function confirmOrder() {
     "use server";
     let success = true;

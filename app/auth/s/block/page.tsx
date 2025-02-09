@@ -19,12 +19,13 @@ import { schoolStoreRepository } from "@/repositories/school-store-repository";
 import { Check } from "lucide-react";
 import { redirect } from "next/navigation";
 
-export default async function BlockPage({
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default async function BlockPage(
+  props: {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   return (
     <div className=" min-h-full flex flex-col gap-2 justify-center items-center">
       <div className="w-fit">

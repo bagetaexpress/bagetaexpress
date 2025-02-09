@@ -2,13 +2,13 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Check, AlertTriangle } from "lucide-react";
 import Scanner from "../_components/scanner";
 
-export default function UnblockPage({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default async function UnblockPage(
+  props: {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   return (
     <div className=" relative min-h-full max-w-screen-sm mx-auto">
       <h1 className="text-2xl font-semibold pt-2">Odblokovať</h1>
