@@ -25,11 +25,9 @@ import schoolRepository from "@/repositories/school-repository";
 import orderRepository from "@/repositories/order-repository";
 import itemRepository from "@/repositories/item-repository";
 
-export default async function SummaryPage(
-  props: {
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-  }
-) {
+export default async function SummaryPage(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const searchParams = await props.searchParams;
   const filter = (searchParams.filter as Order["status"]) ?? "ordered";
 
