@@ -20,6 +20,7 @@ import {
 import { getUser } from "@/lib/user-utils";
 import LogoutMenuItem from "./logount-menu-item";
 import CopyToClipboard from "../copy-to-clipboard";
+import Link from "next/link";
 
 export default async function UserDropdown() {
   const user = await getUser();
@@ -43,25 +44,25 @@ export default async function UserDropdown() {
           {permissionsSum >= 2 ? (
             <>
               {user.isCustomer ? (
-                <a href="/auth/c/store">
+                <Link prefetch={false} href="/auth/c/store">
                   <DropdownMenuItem>Žiak</DropdownMenuItem>
-                </a>
+                </Link>
               ) : null}
               {user.isSeller ? (
-                <a href="/auth/s/summary">
+                <Link prefetch={false} href="/auth/s/summary">
                   <DropdownMenuItem>Predajca</DropdownMenuItem>
-                </a>
+                </Link>
               ) : null}
               {user.isEmployee ? (
-                <a href="/auth/e/dashboard">
+                <Link prefetch={false} href="/auth/e/dashboard">
                   <DropdownMenuItem>Zamestnanec</DropdownMenuItem>
-                </a>
+                </Link>
               ) : null}
             </>
           ) : null}
-          <a href="/about-us">
+          <Link prefetch={false} href="/about-us">
             <DropdownMenuItem>O nás</DropdownMenuItem>
-          </a>
+          </Link>
           <DropdownMenuSeparator />
           <DropdownMenuLabel>Môj účet</DropdownMenuLabel>
           <AlertDialogTrigger asChild>

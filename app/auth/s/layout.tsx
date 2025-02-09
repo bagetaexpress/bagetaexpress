@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { redirect } from "next/navigation";
 
+import Link from "next/link";
 import { getUser } from "@/lib/user-utils";
 import NavWrapper from "@/components/nav/nav-wrapper";
 import NavButton from "@/components/nav/nav-button";
@@ -42,18 +43,18 @@ export default async function authLayout({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <a href="/auth/s/summary">
+              <Link prefetch={false} href="/auth/s/summary">
                 <DropdownMenuItem>Zhrnutie</DropdownMenuItem>
-              </a>
-              <a href="/auth/s/take">
+              </Link>
+              <Link prefetch={false} href="/auth/s/take">
                 <DropdownMenuItem>Prevziať</DropdownMenuItem>
-              </a>
-              <a href="/auth/s/unblock">
+              </Link>
+              <Link prefetch={false} href="/auth/s/unblock">
                 <DropdownMenuItem>Odblokovať</DropdownMenuItem>
-              </a>
-              <a href="/auth/s/block">
+              </Link>
+              <Link prefetch={false} href="/auth/s/block">
                 <DropdownMenuItem>Ukončiť predaj</DropdownMenuItem>
-              </a>
+              </Link>
             </DropdownMenuContent>
           </DropdownMenu>
         </NavWrapper>

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Order } from "@/db/schema";
+import Link from "next/link";
 import { getUser } from "@/lib/user-utils";
 import ClientButton from "./client-button";
 import {
@@ -49,11 +50,12 @@ export default async function HandleOrder({
     return (
       <div className="min-h-full flex justify-center items-center flex-col gap-2">
         <h1 className="text-2xl font-semibold">Objednávka nebola nájdená</h1>
-        <a
+        <Link
+          prefetch={false}
           href={orderStatus === "ordered" ? "/auth/s/take" : "/auth/s/unblock"}
         >
           <Button>Vrátiť sa</Button>
-        </a>
+        </Link>
       </div>
     );
   }

@@ -13,6 +13,7 @@ import {
 import { addToCart } from "@/lib/cart-utils";
 import { useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 import { ExtendedItem } from "@/repositories/item-repository";
@@ -90,11 +91,11 @@ export default function AddToCartButton({
               <DrawerClose asChild>
                 <Button variant="outline">Pokračovať ďalej</Button>
               </DrawerClose>
-              <a href="/auth/c/cart" className="flex">
+              <Link prefetch={false} href="/auth/c/cart" className="flex">
                 <Button disabled={isAdding} className="flex-1">
                   Prejsť do košíka
                 </Button>
-              </a>
+              </Link>
             </DrawerFooter>
           </div>
         </DrawerContent>

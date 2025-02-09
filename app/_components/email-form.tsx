@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -111,19 +112,21 @@ export default function EmailForm() {
         </Button>
         <p className="text-xs text-muted-foreground font-extralight opacity-60">
           This site is protected by reCAPTCHA and the Google{" "}
-          <a
+          <Link
+            prefetch={false}
             href="https://policies.google.com/privacy"
             className="text-blue-400 hover:text-blue-700"
           >
             Privacy Policy
-          </a>{" "}
+          </Link>{" "}
           and{" "}
-          <a
+          <Link
+            prefetch={false}
             href="https://policies.google.com/terms"
             className="text-blue-400 hover:text-blue-700"
           >
             Terms of Service
-          </a>{" "}
+          </Link>{" "}
           apply.
         </p>
       </div>

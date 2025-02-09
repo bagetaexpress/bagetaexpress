@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import Link from "next/link";
 import UserDropdown from "./user-dropdown";
 import LogomarkJS from "./logomark-js";
 import { redirect } from "next/navigation";
@@ -35,12 +36,12 @@ export default async function NavWrapper({
           justify-between max-w-screen-lg mx-auto"
       >
         <div className="relative h-10 w-28">
-          <a href={home}>
+          <Link prefetch={false} href={home}>
             <LogomarkJS
               style={{ fill: "hsl(var(--primary-foreground))" }}
               className="max-h-10 flex-1"
             />
-          </a>
+          </Link>
         </div>
         <div className="flex gap-1">
           {children}

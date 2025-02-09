@@ -1,4 +1,5 @@
 import ItemCard from "@/app/auth/c/store/_components/itemCard";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/user-utils";
 import { getDate, getNewDate } from "@/lib/utils";
@@ -81,7 +82,8 @@ async function StorePageInner() {
         className="flex flex-col justify-end sm:hidden"
       >
         {!hasOrder && (
-          <a
+          <Link
+            prefetch={false}
             href="/auth/c/cart"
             className="m-2"
             style={{ pointerEvents: "all" }}
@@ -90,16 +92,17 @@ async function StorePageInner() {
               Nákupný košík
               <ShoppingCart className="ml-2 h-5 w-5" />
             </Button>
-          </a>
+          </Link>
         )}
         {hasOrder && (
-          <a
+          <Link
+            prefetch={false}
             href="/auth/c/order"
             className="m-2"
             style={{ pointerEvents: "all" }}
           >
             <Button className="w-full">Zobraziť objednávku</Button>
-          </a>
+          </Link>
         )}
       </div>
     </>

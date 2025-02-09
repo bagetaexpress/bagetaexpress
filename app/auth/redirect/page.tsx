@@ -7,7 +7,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Link } from "lucide-react";
+import { Link as LinkIcon } from "lucide-react";
+import Link from "next/link";
 import { authOptions } from "@/lib/auth-options";
 import schoolRepository from "@/repositories/school-repository";
 
@@ -54,14 +55,15 @@ export default async function RedirectPage() {
                 Ak pri prihlásení nemáte možnosť vybrania microsoft účtu ale
                 prihlási vás automaticky na tento, tak sa z neho musíte odhlásiť
                 cez{" "}
-                <a
+                <Link
+                  prefetch={false}
                   target="_blank"
                   href="https://www.microsoft.com/"
                   className=" underline text-blue-500 hover:text-blue-700"
                 >
                   stránku microsoftu
-                  <Link className="w-4 h-4 ml-1 inline-block" />
-                </a>
+                  <LinkIcon className="w-4 h-4 ml-1 inline-block" />
+                </Link>
               </p>
             </AccordionContent>
           </AccordionItem>
@@ -72,21 +74,23 @@ export default async function RedirectPage() {
             <AccordionContent>
               <p className=" max-w-[55ch]">
                 Napíšte nám správu na{" "}
-                <a
+                <Link
+                  prefetch={false}
                   target="_blank"
                   href="https://www.instagram.com/bagetaexpress?igsh=Zmt0eTZqMXE5cnZx"
                   className=" underline text-blue-500 hover:text-blue-700"
                 >
                   instagram @bagetaexpress
-                </a>{" "}
+                </Link>{" "}
                 alebo{" "}
-                <a
+                <Link
+                  prefetch={false}
                   target="_blank"
                   href="https://www.instagram.com/bagetaexpress?igsh=Zmt0eTZqMXE5cnZx"
                   className=" underline text-blue-500 hover:text-blue-700"
                 >
                   facebook Bagetaexpress
-                </a>{" "}
+                </Link>{" "}
                 a my Vám s radosťou pomôžeme
               </p>
             </AccordionContent>
