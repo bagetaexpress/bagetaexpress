@@ -324,7 +324,9 @@ export function Home() {
             Zadajte email a my vás kontaktujeme!
           </p>
         </div>
-        <EmailForm />
+        <Suspense fallback={null}>
+          <EmailForm />
+        </Suspense>
       </div>
       {/*
        */}

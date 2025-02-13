@@ -55,7 +55,9 @@ export default function EmailForm() {
     window.grecaptcha.ready(function () {
       // @ts-ignore
       window.grecaptcha
-        .execute(process.env.RECAPTCHA_SITE_KEY, { action: "submit" })
+        .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, {
+          action: "submit",
+        })
         .then(async function (token: string) {
           const { data, error } = await verifyRecaptcha(token);
           if (error) {
@@ -79,7 +81,7 @@ export default function EmailForm() {
 
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`;
+    script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`;
     document.body.appendChild(script);
   }, []);
 
