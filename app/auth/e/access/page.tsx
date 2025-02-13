@@ -1,7 +1,11 @@
-import Head from "next/head";
 import EmployeeTable from "./_components/employee-table";
 import SellerTable from "./_components/seller-table";
 import { AddEmployeeErrors, AddSellerErrors } from "./access-errors";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "bageta.express | Srpáva prístupu",
+};
 
 export default async function AccessPage(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -9,9 +13,6 @@ export default async function AccessPage(props: {
   const searchParams = await props.searchParams;
   return (
     <div className=" relative min-h-full">
-      <Head>
-        <title>bageta.express | Srpáva prístupu</title>
-      </Head>
       <h1 className="text-3xl font-semibold pt-2">Správa účtov</h1>
       <h2 className="text-2xl font-semibold pt-4">Zamestnanci</h2>
       <EmployeeTable

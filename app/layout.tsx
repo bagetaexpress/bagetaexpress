@@ -40,7 +40,11 @@ export default async function RootLayout({
   void getUser();
 
   return (
-    <html lang="sk" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html
+      lang="sk"
+      className={`${GeistSans.variable} ${GeistMono.variable} light`}
+      style={{ colorScheme: "light" }}
+    >
       <body>
         <MainLayoutWrapper attribute="class" defaultTheme="light">
           {children}

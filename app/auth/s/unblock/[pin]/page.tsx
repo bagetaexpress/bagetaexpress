@@ -2,7 +2,11 @@ import { getUser } from "@/lib/user-utils";
 import { redirect } from "next/navigation";
 import HandleOrder from "../../_components/handle-order";
 import orderRepository from "@/repositories/order-repository";
-import Head from "next/head";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "bageta.express | Naskenovaná objednávka",
+};
 
 export default async function UnlockPinPage(props: {
   params: Promise<{ pin: string }>;
@@ -39,17 +43,12 @@ export default async function UnlockPinPage(props: {
   }
 
   return (
-    <>
-      <Head>
-        <title>bageta.express | Naskenovaná objednávka</title>
-      </Head>
-      <HandleOrder
-        pin={params.pin}
-        confirmText="Odblokovať"
-        confirmAction={confirmOrder}
-        cancelAction={cancleAction}
-        orderStatus="unpicked"
-      />
-    </>
+    <HandleOrder
+      pin={params.pin}
+      confirmText="Odblokovať"
+      confirmAction={confirmOrder}
+      cancelAction={cancleAction}
+      orderStatus="unpicked"
+    />
   );
 }

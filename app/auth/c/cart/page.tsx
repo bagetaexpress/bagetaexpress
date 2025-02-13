@@ -5,14 +5,15 @@ import { redirect } from "next/navigation";
 import LocalCart from "./_components/local-cart";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
-import Head from "next/head";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "bageta.express | Nákupný košík",
+};
 
 export default function CartPage() {
   return (
     <div className="h-full flex flex-col">
-      <Head>
-        <title>bageta.express | Nákupný košík</title>
-      </Head>
       <h1 className="text-2xl font-semibold pt-2">Košík</h1>
       <Suspense
         fallback={

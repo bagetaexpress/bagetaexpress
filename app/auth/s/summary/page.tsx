@@ -24,7 +24,11 @@ import storeRepository from "@/repositories/store-repository";
 import schoolRepository from "@/repositories/school-repository";
 import orderRepository from "@/repositories/order-repository";
 import itemRepository from "@/repositories/item-repository";
-import Head from "next/head";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "bageta.express | Zhrnutie objednávok",
+};
 
 export default async function SummaryPage(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -34,9 +38,6 @@ export default async function SummaryPage(props: {
 
   return (
     <div className="flex flex-col relative min-h-full">
-      <Head>
-        <title>bageta.express | Zhrnutie objednávok</title>
-      </Head>
       <h1 className="text-2xl font-semibold pt-2">Zhrnutie</h1>
       <h2>
         Zobrasujú sa:{" "}

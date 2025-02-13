@@ -4,7 +4,11 @@ import HandleOrder from "../../_components/handle-order";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
 import orderRepository from "@/repositories/order-repository";
-import Head from "next/head";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "bageta.express | Naskenovaná objednávka",
+};
 
 export default async function TakePinPage(props: {
   params: Promise<{ pin: string }>;
@@ -45,9 +49,6 @@ export default async function TakePinPage(props: {
 
   return (
     <>
-      <Head>
-        <title>bageta.express | Naskenovaná objednávka</title>
-      </Head>
       <Suspense
         fallback={
           <div className="flex min-h-full justify-center items-center">

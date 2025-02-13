@@ -17,8 +17,12 @@ import orderRepository from "@/repositories/order-repository";
 import reservationRepository from "@/repositories/reservation-repository";
 import { schoolStoreRepository } from "@/repositories/school-store-repository";
 import { Check } from "lucide-react";
-import Head from "next/head";
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "bageta.express | Uzávierka",
+};
 
 export default async function BlockPage(props: {
   params: Promise<{ slug: string }>;
@@ -27,9 +31,6 @@ export default async function BlockPage(props: {
   const searchParams = await props.searchParams;
   return (
     <div className=" min-h-full flex flex-col gap-2 justify-center items-center">
-      <Head>
-        <title>bageta.express | Uzávierka</title>
-      </Head>
       <div className="w-fit">
         {searchParams.success === "true" && (
           <Alert className=" mb-4 bg-green-300 border-green-500 bg-opacity-50">

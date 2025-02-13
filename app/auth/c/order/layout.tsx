@@ -1,8 +1,12 @@
 import { getUser } from "@/lib/user-utils";
 import orderRepository from "@/repositories/order-repository";
-import Head from "next/head";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "bageta.express | Objednávka",
+};
 
 export default async function CartLayout({
   children,
@@ -24,9 +28,6 @@ export default async function CartLayout({
 
   return (
     <>
-      <Head>
-        <title>bageta.express | Objednávka</title>
-      </Head>
       {children}
     </>
   );

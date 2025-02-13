@@ -13,7 +13,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Head from "next/head";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "bageta.express | Predajca",
+};
 
 export default async function authLayout({
   children,
@@ -27,9 +31,6 @@ export default async function authLayout({
 
   return (
     <div style={{ minHeight: "100dvh" }} className="flex flex-col">
-      <Head>
-        <title>bageta.express | Predajca</title>
-      </Head>
       <div className=" hidden sm:inline-block">
         <NavWrapper>
           <NavButton href="/auth/s/summary" text="Zhrnutie" />
