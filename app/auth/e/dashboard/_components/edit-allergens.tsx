@@ -42,7 +42,7 @@ async function EditAllergensInner() {
   const user = await getUser();
   if (!user || !user.storeId) redirect("/");
 
-  const allergens = await allergenRepository.getMany({storeId: user.storeId});
+  const allergens = await allergenRepository.getMany({ storeId: user.storeId });
 
   async function handleCreateAllergen(formData: FormData) {
     "use server";
@@ -55,7 +55,11 @@ async function EditAllergensInner() {
     const number = parseInt(numberStr);
 
     try {
-      await allergenRepository.createSingle({number, name, storeId: user.storeId});
+      await allergenRepository.createSingle({
+        number,
+        name,
+        storeId: user.storeId,
+      });
     } catch (e) {
       redirect("/auth/e/dashboard?allergenError=Somenthing went wrong");
     }
@@ -91,7 +95,9 @@ async function EditAllergensInner() {
                   <form
                     action={async () => {
                       "use server";
-                      await allergenRepository.deleteSingle({allergenId: allergen.id});
+                      await allergenRepository.deleteSingle({
+                        allergenId: allergen.id,
+                      });
                       revalidatePath("/auth/e/dashboard", "page");
                     }}
                   >

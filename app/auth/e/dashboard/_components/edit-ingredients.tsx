@@ -42,7 +42,9 @@ async function EditIngredientsInner() {
   const user = await getUser();
   if (!user || !user.storeId) redirect("/");
 
-  const ingredients = await ingredientRepository.getMany({storeId: user.storeId});
+  const ingredients = await ingredientRepository.getMany({
+    storeId: user.storeId,
+  });
 
   async function handleCreateIngredient(formData: FormData) {
     "use server";
@@ -55,7 +57,11 @@ async function EditIngredientsInner() {
     if (!user || !user.storeId) return;
 
     try {
-      await ingredientRepository.createSingle({number, name, storeId: user.storeId});
+      await ingredientRepository.createSingle({
+        number,
+        name,
+        storeId: user.storeId,
+      });
     } catch (e) {
       redirect("/auth/e/dashboard?ingredientError=Somenthing went wrong");
     }
@@ -91,7 +97,9 @@ async function EditIngredientsInner() {
                   <form
                     action={async () => {
                       "use server";
-                      await ingredientRepository.deleteSingle({ingredientId: ingredient.id});
+                      await ingredientRepository.deleteSingle({
+                        ingredientId: ingredient.id,
+                      });
                       revalidatePath("/auth/e/dashboard", "page");
                     }}
                   >

@@ -100,7 +100,7 @@
 }
 
 @media (min-width: 1205px) {
-  .landing-page-seller:hover~div {
+  .landing-page-seller:hover ~ div {
     transform: translateX(20%);
   }
 }
@@ -135,7 +135,7 @@
 }
 
 @media (min-width: 1205px) {
-  div:has(+.landing-page-order:hover) {
+  div:has(+ .landing-page-order:hover) {
     transform: translateX(-20%);
   }
 }

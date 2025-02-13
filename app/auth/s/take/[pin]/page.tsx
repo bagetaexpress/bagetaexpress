@@ -4,12 +4,11 @@ import HandleOrder from "../../_components/handle-order";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
 import orderRepository from "@/repositories/order-repository";
+import Head from "next/head";
 
-export default async function TakePinPage(
-  props: {
-    params: Promise<{ pin: string }>;
-  }
-) {
+export default async function TakePinPage(props: {
+  params: Promise<{ pin: string }>;
+}) {
   const params = await props.params;
   async function confirmOrder() {
     "use server";
@@ -45,19 +44,24 @@ export default async function TakePinPage(
   }
 
   return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-full justify-center items-center">
-          <Loader className="h-10 w-10 animate-spin" />
-        </div>
-      }
-    >
-      <HandleOrder
-        pin={params.pin}
-        confirmText="Potvrdiť"
-        confirmAction={confirmOrder}
-        cancelAction={cancleAction}
-      />
-    </Suspense>
+    <>
+      <Head>
+        <title>bageta.express | Naskenovaná objednávka</title>
+      </Head>
+      <Suspense
+        fallback={
+          <div className="flex min-h-full justify-center items-center">
+            <Loader className="h-10 w-10 animate-spin" />
+          </div>
+        }
+      >
+        <HandleOrder
+          pin={params.pin}
+          confirmText="Potvrdiť"
+          confirmAction={confirmOrder}
+          cancelAction={cancleAction}
+        />
+      </Suspense>
+    </>
   );
 }

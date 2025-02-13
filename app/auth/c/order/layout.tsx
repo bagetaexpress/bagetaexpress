@@ -1,5 +1,6 @@
 import { getUser } from "@/lib/user-utils";
 import orderRepository from "@/repositories/order-repository";
+import Head from "next/head";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
@@ -21,5 +22,12 @@ export default async function CartLayout({
     redirect("/auth/c/store");
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <Head>
+        <title>bageta.express | Objednávka</title>
+      </Head>
+      {children}
+    </>
+  );
 }

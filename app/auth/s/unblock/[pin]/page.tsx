@@ -2,12 +2,11 @@ import { getUser } from "@/lib/user-utils";
 import { redirect } from "next/navigation";
 import HandleOrder from "../../_components/handle-order";
 import orderRepository from "@/repositories/order-repository";
+import Head from "next/head";
 
-export default async function UnlockPinPage(
-  props: {
-    params: Promise<{ pin: string }>;
-  }
-) {
+export default async function UnlockPinPage(props: {
+  params: Promise<{ pin: string }>;
+}) {
   const params = await props.params;
   async function confirmOrder() {
     "use server";
@@ -40,12 +39,17 @@ export default async function UnlockPinPage(
   }
 
   return (
-    <HandleOrder
-      pin={params.pin}
-      confirmText="Odblokovať"
-      confirmAction={confirmOrder}
-      cancelAction={cancleAction}
-      orderStatus="unpicked"
-    />
+    <>
+      <Head>
+        <title>bageta.express | Naskenovaná objednávka</title>
+      </Head>
+      <HandleOrder
+        pin={params.pin}
+        confirmText="Odblokovať"
+        confirmAction={confirmOrder}
+        cancelAction={cancleAction}
+        orderStatus="unpicked"
+      />
+    </>
   );
 }

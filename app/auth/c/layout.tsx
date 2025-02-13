@@ -7,6 +7,7 @@ import NavButton from "@/components/nav/nav-button";
 import NavWrapper from "@/components/nav/nav-wrapper";
 import { Button } from "@/components/ui/button";
 import orderRepository from "@/repositories/order-repository";
+import Head from "next/head";
 
 export default async function authLayout({
   children,
@@ -20,6 +21,9 @@ export default async function authLayout({
 
   return (
     <div style={{ minHeight: "100dvh" }} className="flex flex-col">
+      <Head>
+        <title>bageta.express | Domovská stránka</title>
+      </Head>
       <NavWrapper>
         <NavButton href="/auth/c/store" text="Obchod" />
         <Suspense

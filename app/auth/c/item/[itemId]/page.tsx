@@ -3,14 +3,13 @@ import { getDate, getNewDate } from "@/lib/utils";
 import allergenRepository from "@/repositories/allergen-repository";
 import ingredientRepository from "@/repositories/ingredient-repository";
 import itemRepository from "@/repositories/item-repository";
+import Head from "next/head";
 import Image from "next/image";
 import React from "react";
 
-export default async function ItemDetailDialog(
-  props: {
-    params: Promise<{ itemId: string }>;
-  }
-) {
+export default async function ItemDetailDialog(props: {
+  params: Promise<{ itemId: string }>;
+}) {
   const params = await props.params;
   if (
     isNaN(parseInt(params.itemId)) ||
@@ -33,6 +32,9 @@ export default async function ItemDetailDialog(
 
   return (
     <div className="flex flex-col gap-2">
+      <Head>
+        <title>bageta.express | {item.name} - bageta</title>
+      </Head>
       <Image
         src={item.imageUrl}
         width={800}

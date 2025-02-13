@@ -10,14 +10,17 @@ import { getUser } from "@/lib/user-utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
-  title: "bagetaEXPRESS",
-  description: "Rýchle a jednoduché objednávanie bagiet pre študentov!",
+  title:
+    "bageta.express - rýchle a jednoduché objednávanie bagiet pre študentov",
+  description:
+    "Objednaj si svoju desiatu už teraz! Rýchlo a jednoducho! Široký výber bagiet pre študentov.",
   keywords: ["bageta", "express", "objednávka", "študenti", "jedlo", "desiata"],
   openGraph: {
     type: "website",
-    url: "bageta.express",
+    url: "https://bageta.express",
     title: "bagetaEXPRESS",
-    description: "Objednaj si desiatu už teraz!",
+    description:
+      "Objednaj si svoju desiatu už teraz! Rýchlo a jednoducho! Široký výber bagiet pre študentov.",
     images: [
       {
         url: "https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png",
@@ -38,14 +41,6 @@ export default async function RootLayout({
 
   return (
     <html lang="sk" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content="bagetaEXPRESS" />
-      <meta property="og:url" content="bageta.express" />
-      <meta
-        property="og:image"
-        content="https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png"
-      />
-      <meta property="og:description" content="Objednaj si desiatu už teraz!" />
       <body>
         <MainLayoutWrapper attribute="class" defaultTheme="light">
           {children}

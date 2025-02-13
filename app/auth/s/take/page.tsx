@@ -1,16 +1,18 @@
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle, Check } from "lucide-react";
 import Scanner from "../_components/scanner";
+import Head from "next/head";
 
-export default async function TakePage(
-  props: {
-    params: Promise<{ slug: string }>;
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-  }
-) {
+export default async function TakePage(props: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const searchParams = await props.searchParams;
   return (
     <div className=" relative min-h-full max-w-screen-sm mx-auto">
+      <Head>
+        <title>bageta.express | Prevzatie objednávky</title>
+      </Head>
       <h1 className="text-2xl font-semibold pt-2">Prevzať</h1>
       {searchParams.success === "true" && (
         <Alert className=" mb-4 bg-green-300 border-green-500 bg-opacity-50">
