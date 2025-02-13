@@ -8,6 +8,10 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { getUser } from "@/lib/user-utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Github, Instagram } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
   title:
@@ -52,10 +56,45 @@ export default async function RootLayout({
         <SpeedInsights />
         <Analytics />
         <Toaster />
+        <Footer />
       </body>
       {process.env.GOOGLE_ANALYTICS_ID && (
         <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID} />
       )}
     </html>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="w-full min-h-40 bg-background flex flex-col gap-2">
+      <Separator />
+      <div className="flex-1 flex justify-center items-center gap-2 flex-wrap">
+        <Link
+          prefetch={false}
+          href="https://www.instagram.com/bagetaexpress/"
+          target="_blank"
+        >
+          <Button variant="outline" className="gap-2">
+            Instagram
+            <Instagram className="w-6 h-6" />
+          </Button>
+        </Link>
+        <Link
+          prefetch={false}
+          href="https://www.github.com/bagetaexpress/bagetaexpress"
+          target="_blank"
+        >
+          <Button variant="outline" className="gap-2">
+            Github
+            <Github className="w-6 h-6" />
+          </Button>
+        </Link>
+      </div>
+      <Separator />
+      <p className="text-sm color-muted-background text-center pb-2">
+        Copyright &copy; 2025 Tomáš Ž.
+      </p>
+    </footer>
   );
 }

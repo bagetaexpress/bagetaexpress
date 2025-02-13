@@ -313,7 +313,7 @@ export function Home() {
 
       <div
         id="contact"
-        className="relative flex flex-col gap-4 sm:gap-0 mt-52 lg:mt-80 bg-background rounded-xl p-5 shadow-2xl max-w-screen-lg mx-auto"
+        className="relative flex flex-col gap-4 sm:gap-0 my-52 lg:mt-80 bg-background rounded-xl p-5 shadow-2xl max-w-screen-lg mx-auto"
       >
         <BlobFullPrimary2 className="absolute top-0 left-0 z-[-1] w-[50rem] aspect-square scale-[1.2] translate-x-[-20%] translate-y-[-30%]" />
         <BlobOutlineSecondary2 className="absolute top-0 left-0 z-[-1] w-[50rem] aspect-square rotate-90 scale-[0.9] translate-x-[-30%] translate-y-[-20%]" />
@@ -328,37 +328,6 @@ export function Home() {
           <EmailForm />
         </Suspense>
       </div>
-      {/*
-       */}
-
-      <footer className="w-full min-h-40 bg-background mt-52 flex flex-col gap-2">
-        <div className="flex-1 flex justify-center items-center gap-2 flex-wrap">
-          <Link
-            prefetch={false}
-            href="https://www.instagram.com/bagetaexpress/"
-            target="_blank"
-          >
-            <Button variant="outline" className="gap-2">
-              Instagram
-              <Instagram className="w-6 h-6" />
-            </Button>
-          </Link>
-          <Link
-            prefetch={false}
-            href="https://www.github.com/tomz197"
-            target="_blank"
-          >
-            <Button variant="outline" className="gap-2">
-              Github
-              <Github className="w-6 h-6" />
-            </Button>
-          </Link>
-        </div>
-        <Separator />
-        <p className="text-sm color-muted-background text-center pb-2">
-          Copyright &copy; 2024 Tomáš Ž.
-        </p>
-      </footer>
     </div>
   );
 }

@@ -64,7 +64,7 @@ export default async function authLayout({
           </DropdownMenu>
         </NavWrapper>
       </div>
-      <div className="p-2 flex-1 flex">
+      <div className="p-2 pb-20 flex-1 flex">
         <main className="max-w-screen-lg mx-auto flex-1">{children}</main>
       </div>
     </div>
