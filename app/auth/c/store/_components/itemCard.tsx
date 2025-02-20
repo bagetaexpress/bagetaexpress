@@ -58,7 +58,7 @@ export default function ItemCard({
         </CardContent>
       </Link>
       <CardFooter className="grid grid-cols-3 justify-center items-center">
-        <p className="text-center text-xl font-bold">{item.price}€</p>
+        <p className="text-center text-xl font-bold">{item.price.toFixed(2)}€</p>
         <div className="col-span-2">
           <AddToCartButton
             item={{ item, reservation, schoolStore }}
