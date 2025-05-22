@@ -57,6 +57,11 @@ export default async function UserDropdown() {
                   <DropdownMenuItem>Zamestnanec</DropdownMenuItem>
                 </a>
               ) : null}
+              {user.isAdmin ? (
+                <a href="/auth/a/dashboard">
+                  <DropdownMenuItem>Admin</DropdownMenuItem>
+                </a>
+              ) : null}
             </>
           ) : null}
           <a href="/">

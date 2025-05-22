@@ -16,6 +16,9 @@ export default async function NavWrapper({
 
   let home = "/";
   switch (true) {
+    case user.isAdmin:
+      home = "/auth/a/dashboard";
+      break;
     case user.isSeller:
       home = "/auth/s/summary";
       break;
