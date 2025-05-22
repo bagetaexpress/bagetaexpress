@@ -58,6 +58,11 @@ export default async function UserDropdown() {
                   <DropdownMenuItem>Zamestnanec</DropdownMenuItem>
                 </Link>
               ) : null}
+              {user.isAdmin ? (
+                <a href="/auth/a/dashboard">
+                  <DropdownMenuItem>Admin</DropdownMenuItem>
+                </a>
+              ) : null}
             </>
           ) : null}
           <Link prefetch={false} href="/about-us">
