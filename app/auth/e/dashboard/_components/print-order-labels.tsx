@@ -67,6 +67,8 @@ export default function PrintOrderLabels({
             className="grid grid-cols-3 gap-4 p-4"
             style={{
               fontFamily: "Geist, Arial, sans-serif",
+              pageBreakInside: "avoid",
+              breakInside: "avoid",
             }}
           >
             {orders.map((order, i) => {
@@ -81,6 +83,11 @@ export default function PrintOrderLabels({
                     key={i.toString() + j.toString()}
                     style={{
                       pageBreakInside: "avoid",
+                      breakInside: "avoid",
+                      breakAfter: "auto",
+                      breakBefore: "auto",
+                      display: "inline-block",
+                      width: "100%",
                     }}
                   >
                     {store.imageUrl !== "" && store.imageUrl !== null ? (
