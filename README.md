@@ -32,11 +32,6 @@ pnpm install
 pnpm run dev
 ```
 
-## Plans
-
-Due to backend being kinda s&*#ty(and my interest in learning Go), I'm planning to rewrite it in Go. This will also allow creating a mobile app.
-
-
 ## Licence
 
 Can be found [here](LICENCE.txt)
