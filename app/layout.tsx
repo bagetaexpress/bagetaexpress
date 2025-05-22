@@ -7,32 +7,55 @@ import { Toaster } from "@/components/ui/sonner";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { getUser } from "@/lib/user-utils";
-import { GoogleAnalytics } from "@next/third-parties/google";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Github, Instagram } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
-  title:
-    "bageta.express - rýchle a jednoduché objednávanie bagiet pre študentov",
-  description:
-    "Objednaj si svoju desiatu už teraz! Rýchlo a jednoducho! Široký výber bagiet pre študentov.",
-  keywords: ["bageta", "express", "objednávka", "študenti", "jedlo", "desiata"],
+  title: "bagetaEXPRESS - Rýchle objednávanie bagiet pre študentov",
+  description: "Rýchle a jednoduché objednávanie bagiet pre študentov! Objednajte si čerstvú desiatu online a nechajte si ju doručiť priamo do školy.",
+  keywords: ["bageta", "express", "objednávka", "študenti", "jedlo", "desiata", "doručenie", "online objednávka", "školské jedlo"],
+  authors: [{ name: "Tomáš Žifčák" }],
+  creator: "Tomáš Žifčák",
+  publisher: "Tomáš Žifčák",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://bageta.express'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     type: "website",
     url: "https://bageta.express",
-    title: "bagetaEXPRESS",
-    description:
-      "Objednaj si svoju desiatu už teraz! Rýchlo a jednoducho! Široký výber bagiet pre študentov.",
+    title: "bagetaEXPRESS - Rýchle objednávanie bagiet pre študentov",
+    description: "Objednajte si čerstvú desiatu online a nechajte si ju doručiť priamo do školy!",
+    siteName: "bagetaEXPRESS",
+    locale: "sk_SK",
     images: [
       {
         url: "https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png",
         width: 800,
         height: 600,
-        alt: "bagetaEXPRESS",
+        alt: "bagetaEXPRESS - Rýchle objednávanie bagiet",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "bagetaEXPRESS - Rýchle objednávanie bagiet pre študentov",
+    description: "Objednajte si čerstvú desiatu online a nechajte si ju doručiť priamo do školy!",
+    images: ["https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 
@@ -42,13 +65,34 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   void getUser();
-
   return (
-    <html
-      lang="sk"
-      className={`${GeistSans.variable} ${GeistMono.variable} light`}
-      style={{ colorScheme: "light" }}
-    >
+    <html lang="sk" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <link rel="canonical" href="https://bageta.express" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FoodService",
+              "name": "bagetaEXPRESS",
+              "description": "Rýchle a jednoduché objednávanie bagiet pre študentov",
+              "url": "https://bageta.express",
+              "image": "https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png",
+              "servesCuisine": "Fast Food",
+              "priceRange": "€",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "SK"
+              }
+            })
+          }}
+        />
+      </head>
       <body>
         <MainLayoutWrapper attribute="class" defaultTheme="light">
           {children}
@@ -56,45 +100,7 @@ export default async function RootLayout({
         <SpeedInsights />
         <Analytics />
         <Toaster />
-        <Footer />
       </body>
-      {process.env.GOOGLE_ANALYTICS_ID && (
-        <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID} />
-      )}
     </html>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="w-full min-h-40 bg-background flex flex-col gap-2">
-      <Separator />
-      <div className="flex-1 flex justify-center items-center gap-2 flex-wrap">
-        <Link
-          prefetch={false}
-          href="https://www.instagram.com/bagetaexpress/"
-          target="_blank"
-        >
-          <Button variant="outline" className="gap-2">
-            Instagram
-            <Instagram className="w-6 h-6" />
-          </Button>
-        </Link>
-        <Link
-          prefetch={false}
-          href="https://www.github.com/bagetaexpress/bagetaexpress"
-          target="_blank"
-        >
-          <Button variant="outline" className="gap-2">
-            Github
-            <Github className="w-6 h-6" />
-          </Button>
-        </Link>
-      </div>
-      <Separator />
-      <p className="text-sm color-muted-background text-center pb-2">
-        Copyright &copy; 2025 Tomáš Ž.
-      </p>
-    </footer>
   );
 }

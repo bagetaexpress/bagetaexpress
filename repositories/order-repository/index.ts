@@ -130,12 +130,104 @@ async function updateMany({
     );
 }
 
+async function getDailyItemCounts(days: number = 7): Promise<{ date: string; count: number }[]> {
+  const result = await db
+    .select({
+      date: sql<string>`date(${order.updatedAt})`,
+      count: sql<number>`sum(${orderItem.quantity})`,
+    })
+    .from(order)
+    .innerJoin(orderItem, eq(order.id, orderItem.orderId))
+    .where(
+      and(
+        eq(order.status, "pickedup"),
+        sql`date(${order.updatedAt}) >= date('now', '-' || ${days} || ' days')`
+      )
+    )
+    .groupBy(sql`date(${order.updatedAt})`)
+    .orderBy(sql`date(${order.updatedAt})`);
+
+  return result;
+}
+
+async function getOrderStats(days?: number) {
+  const today = new Date();
+  const startDate = days ? new Date(today) : new Date(0); // Use epoch start for all time
+  if (days) {
+    startDate.setDate(today.getDate() - days);
+  }
+
+  const [totalOrders] = await db
+    .select({
+      count: sql<number>`count(*)`,
+    })
+    .from(order)
+    .where(
+      days ? and(
+        sql`date(${order.createdAt}) >= date(${startDate.toISOString()})`,
+        sql`date(${order.createdAt}) <= date(${today.toISOString()})`
+      ) : undefined
+    );
+
+  const [totalOrderedItems] = await db
+    .select({
+      count: sql<number>`sum(${orderItem.quantity})`,
+    })
+    .from(order)
+    .innerJoin(orderItem, eq(order.id, orderItem.orderId))
+    .where(
+      days ? and(
+        sql`date(${order.createdAt}) >= date(${startDate.toISOString()})`,
+        sql`date(${order.createdAt}) <= date(${today.toISOString()})`
+      ) : undefined
+    );
+
+  const [totalPickedUpOrders] = await db
+    .select({
+      count: sql<number>`count(*)`,
+    })
+    .from(order)
+    .where(
+      and(
+        eq(order.status, "pickedup"),
+        days ? and(
+          sql`date(${order.updatedAt}) >= date(${startDate.toISOString()})`,
+          sql`date(${order.updatedAt}) <= date(${today.toISOString()})`
+        ) : undefined
+      )
+    );
+
+  const [totalUnpickedOrders] = await db
+    .select({
+      count: sql<number>`count(*)`,
+    })
+    .from(order)
+    .where(
+      and(
+        eq(order.status, "unpicked"),
+        days ? and(
+          sql`date(${order.updatedAt}) >= date(${startDate.toISOString()})`,
+          sql`date(${order.updatedAt}) <= date(${today.toISOString()})`
+        ) : undefined
+      )
+    );
+
+  return {
+    totalOrders: totalOrders?.count ?? 0,
+    totalOrderedItems: totalOrderedItems?.count ?? 0,
+    totalPickedUpOrders: totalPickedUpOrders?.count ?? 0,
+    totalUnpickedOrders: totalUnpickedOrders?.count ?? 0,
+  };
+}
+
 export const orderRepository = {
   getSingle,
   getMany,
   updateSingle,
   getFirstClose,
   updateMany,
+  getDailyItemCounts,
+  getOrderStats,
 };
 
 export default orderRepository;
