@@ -9,22 +9,53 @@ import { GeistMono } from "geist/font/mono";
 import { getUser } from "@/lib/user-utils";
 
 export const metadata: Metadata = {
-  title: "bagetaEXPRESS",
-  description: "Rýchle a jednoduché objednávanie bagiet pre študentov!",
-  keywords: ["bageta", "express", "objednávka", "študenti", "jedlo", "desiata"],
+  title: "bagetaEXPRESS - Rýchle objednávanie bagiet pre študentov",
+  description: "Rýchle a jednoduché objednávanie bagiet pre študentov! Objednajte si čerstvú desiatu online a nechajte si ju doručiť priamo do školy.",
+  keywords: ["bageta", "express", "objednávka", "študenti", "jedlo", "desiata", "doručenie", "online objednávka", "školské jedlo"],
+  authors: [{ name: "Tomáš Žifčák" }],
+  creator: "Tomáš Žifčák",
+  publisher: "Tomáš Žifčák",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://bageta.express'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     type: "website",
-    url: "bageta.express",
-    title: "bagetaEXPRESS",
-    description: "Objednaj si desiatu už teraz!",
+    url: "https://bageta.express",
+    title: "bagetaEXPRESS - Rýchle objednávanie bagiet pre študentov",
+    description: "Objednajte si čerstvú desiatu online a nechajte si ju doručiť priamo do školy!",
+    siteName: "bagetaEXPRESS",
+    locale: "sk_SK",
     images: [
       {
         url: "https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png",
         width: 800,
         height: 600,
-        alt: "bagetaEXPRESS",
+        alt: "bagetaEXPRESS - Rýchle objednávanie bagiet",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "bagetaEXPRESS - Rýchle objednávanie bagiet pre študentov",
+    description: "Objednajte si čerstvú desiatu online a nechajte si ju doručiť priamo do školy!",
+    images: ["https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 
@@ -36,14 +67,32 @@ export default async function RootLayout({
   void getUser();
   return (
     <html lang="sk" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content="bagetaEXPRESS" />
-      <meta property="og:url" content="bageta.express" />
-      <meta
-        property="og:image"
-        content="https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png"
-      />
-      <meta property="og:description" content="Objednaj si desiatu už teraz!" />
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <link rel="canonical" href="https://bageta.express" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FoodService",
+              "name": "bagetaEXPRESS",
+              "description": "Rýchle a jednoduché objednávanie bagiet pre študentov",
+              "url": "https://bageta.express",
+              "image": "https://utfs.io/f/a9aac9ef-bfd1-4809-ac96-ea741a47f888-inw0fb.png",
+              "servesCuisine": "Fast Food",
+              "priceRange": "€",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "SK"
+              }
+            })
+          }}
+        />
+      </head>
       <body>
         <MainLayoutWrapper attribute="class" defaultTheme="light">
           {children}
