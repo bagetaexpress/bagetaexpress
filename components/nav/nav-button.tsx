@@ -1,20 +1,24 @@
 import { JSXElementConstructor } from "react";
 import Link from "next/link";
-import { Button } from "../ui/button";
 
 interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href: string;
   text?: string;
   Icon?: JSXElementConstructor<any>;
+  isActive?: boolean;
 }
 
-export default function NavButton({ href, text, Icon, ...props }: IProps) {
+export default function NavButton({ href, text, Icon, isActive = false, ...props }: IProps) {
   return (
-    <Link prefetch={false} href={href}>
-      <Button variant="ghost" {...props}>
-        {text}
-        {Icon && <Icon className="ml-2 h-5 w-5" />}
-      </Button>
+    <Link
+      prefetch={false}
+      href={href}
+      className={`px-4 py-2 hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-2 ${
+        isActive ? "underline" : ""
+      }`}
+    >
+      {text}
+      {Icon && <Icon className="h-5 w-5" />}
     </Link>
   );
 }
