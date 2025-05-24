@@ -81,12 +81,29 @@ export function Home() {
             </Link>
           </div>
           <div className="flex gap-1">
-            <Link prefetch={false} href="/#description">
-              <Button variant="ghost">Čo robíme?</Button>
-            </Link>
-            <Link prefetch={false} href="/#contact">
-              <Button variant="ghost">Kontakt</Button>
-            </Link>
+            <div className="flex rounded-md overflow-hidden divide-x">
+              <Link
+                prefetch={false}
+                href="/#description"
+                className="px-4 py-2 hover:bg-accent hover:text-accent-foreground"
+              >
+                Čo robíme?
+              </Link>
+              <Link
+                prefetch={false}
+                href="/#contact"
+                className="px-4 py-2 hover:bg-accent hover:text-accent-foreground"
+              >
+                Kontakt
+              </Link>
+              <Link
+                prefetch={false}
+                href="/support"
+                className="px-4 py-2 hover:bg-accent hover:text-accent-foreground"
+              >
+                Podpora
+              </Link>
+            </div>
             <Suspense fallback={null}>
               <UserDropdown />
             </Suspense>

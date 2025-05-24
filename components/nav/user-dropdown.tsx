@@ -68,6 +68,9 @@ export default async function UserDropdown() {
           <Link prefetch={false} href="/about-us">
             <DropdownMenuItem>O nás</DropdownMenuItem>
           </Link>
+          <Link prefetch={false} href="/support"> 
+            <DropdownMenuItem>Podpora</DropdownMenuItem>
+          </Link>
           <DropdownMenuSeparator />
           <DropdownMenuLabel>Môj účet</DropdownMenuLabel>
           <AlertDialogTrigger asChild>

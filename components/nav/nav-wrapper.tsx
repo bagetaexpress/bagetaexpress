@@ -11,33 +11,29 @@ export default async function NavWrapper({
   children: ReactNode;
 }) {
   const user = await getUser();
-  if (!user) {
-    redirect("/");
-  }
 
   let home = "/";
   switch (true) {
-    case user.isAdmin:
-      home = "/auth/a/dashboard";
-      break;
-    case user.isSeller:
+    case user?.isSeller:
       home = "/auth/s/summary";
       break;
-    case user.isEmployee:
+    case user?.isEmployee:
       home = "/auth/e/dashboard";
       break;
-    case user.isCustomer:
+    case user?.isCustomer:
       home = "/auth/c/store";
+      break;
+    case user?.isAdmin:
+      home = "/auth/a/dashboard";
+      break;
+    default:
+      home = "/";
       break;
   }
 
   return (
     <div className="bg-primary text-primary-foreground p-2">
-      <nav
-        className="
-          w-full h-fit flex flex-row items-center
-          justify-between max-w-screen-lg mx-auto"
-      >
+      <nav className="w-full h-fit flex flex-row items-center justify-between max-w-screen-lg mx-auto">
         <div className="relative h-10 w-28">
           <Link prefetch={false} href={home}>
             <LogomarkJS
@@ -46,9 +42,11 @@ export default async function NavWrapper({
             />
           </Link>
         </div>
-        <div className="flex gap-1">
-          {children}
-          <UserDropdown />
+        <div className="flex flex-row items-center gap-2">
+          <div className="flex rounded-md overflow-hidden divide-x divide-muted-foreground">
+            {children}
+          </div>
+          {user && <UserDropdown />}
         </div>
       </nav>
     </div>

@@ -7,6 +7,10 @@ import { Toaster } from "@/components/ui/sonner";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { getUser } from "@/lib/user-utils";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Instagram, Github } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
   title: "bagetaEXPRESS - Rýchle objednávanie bagiet pre študentov",
@@ -100,7 +104,75 @@ export default async function RootLayout({
         <SpeedInsights />
         <Analytics />
         <Toaster />
+        <Footer />
       </body>
     </html>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="w-full bg-background border-t">
+      <div className="max-w-screen-lg mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Social Links */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-semibold text-lg">Sledujte nás</h3>
+            <div className="flex gap-3">
+              <Link
+                prefetch={false}
+                href="https://www.instagram.com/bagetaexpress/"
+                target="_blank"
+              >
+                <Button variant="outline" size="icon" className="rounded-full">
+                  <Instagram className="w-5 h-5" />
+                </Button>
+              </Link>
+              <Link
+                prefetch={false}
+                href="https://www.github.com/bagetaexpress/bagetaexpress"
+                target="_blank"
+              >
+                <Button variant="outline" size="icon" className="rounded-full">
+                  <Github className="w-5 h-5" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-semibold text-lg">Rýchle odkazy</h3>
+            <div className="flex flex-col gap-2">
+              <Link href="/support" className="text-muted-foreground hover:text-foreground transition-colors">
+                Podpora
+              </Link>
+              <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                Domov
+              </Link>
+            </div>
+          </div>
+
+          {/* Contact Info */}
+          <div className="flex flex-col gap-4">
+            <h3 className="font-semibold text-lg">Kontakt</h3>
+            <p className="text-muted-foreground">
+              Máte otázky? Neváhajte nás kontaktovať.
+            </p>
+          </div>
+        </div>
+
+        <Separator className="my-6" />
+        
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            Copyright &copy; {new Date().getFullYear()} Tomáš Ž.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            bageta.express - rýchle a jednoduché objednávanie bagiet
+          </p>
+        </div>
+      </div>
+    </footer>
   );
 }
