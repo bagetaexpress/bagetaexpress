@@ -70,7 +70,7 @@ export default async function RootLayout({
 }) {
   void getUser();
   return (
-    <html lang="sk" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="sk" suppressHydrationWarning className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="theme-color" content="#ffffff" />
@@ -97,8 +97,8 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className="flex flex-col min-h-screen">
-        <MainLayoutWrapper attribute="class" defaultTheme="light">
+      <body suppressHydrationWarning className="flex flex-col min-h-screen">
+        <MainLayoutWrapper attribute="class" defaultTheme="light" enableSystem enableColorScheme={false}>
           <main className="flex-1">
             {children}
           </main>

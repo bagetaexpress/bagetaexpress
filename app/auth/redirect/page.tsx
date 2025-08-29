@@ -12,10 +12,18 @@ import Link from "next/link";
 import { authOptions } from "@/lib/auth-options";
 import schoolRepository from "@/repositories/school-repository";
 
-export default async function RedirectPage() {
+export default async function RedirectPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     redirect("/");
+  }
+
+  if (session.user.isAdmin && searchParams.redirect !== "false") {
+    redirect("/auth/a/dashboard");
   }
   if (session.user.isEmployee && !session.user.isAdmin) {
     redirect("/auth/e/dashboard");
