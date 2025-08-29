@@ -23,21 +23,33 @@ export default function ItemCard({
   hasOrder: boolean;
 }) {
   return (
-    <Card className="flex flex-col">
+    <Card className="group relative flex flex-col overflow-hidden transition-shadow hover:shadow-md">
       <Link
         prefetch={false}
         className="flex-1 flex flex-col"
         href={`/auth/c/item/${item.id}`}
       >
-        {item.imageUrl !== "" && item.imageUrl !== null ? (
-          <Image
-            src={item.imageUrl}
-            width={400}
-            height={400}
-            alt="Obrázok produktu"
-            className="rounded-md w-full rounded-b-none aspect-video object-cover object-center"
-          />
-        ) : null}
+        <div className="relative w-full rounded-md rounded-b-none overflow-hidden">
+          {item.imageUrl !== "" && item.imageUrl !== null ? (
+            <Image
+              src={item.imageUrl}
+              width={400}
+              height={400}
+              alt={item.name}
+              className="w-full aspect-video object-cover object-center transition-transform duration-300 group-hover:scale-[1.02]"
+            />
+          ) : (
+            <div className="w-full aspect-video bg-gradient-to-br from-muted to-muted-foreground/20 flex items-center justify-center">
+              <span className="text-4xl font-bold">
+                {item.name.charAt(0).toUpperCase()}
+              </span>
+            </div>
+          )}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+          <div className="absolute left-2 top-2">
+            <Badge variant="default" className="text-md">{item.price}€</Badge>
+          </div>
+        </div>
         <CardHeader className="py-2 flex">
           <CardTitle>{item.name}</CardTitle>
           <CardDescription>{store.name}</CardDescription>
@@ -57,9 +69,8 @@ export default function ItemCard({
           </div>
         </CardContent>
       </Link>
-      <CardFooter className="grid grid-cols-3 justify-center items-center">
-        <p className="text-center text-xl font-bold">{item.price}€</p>
-        <div className="col-span-2">
+      <CardFooter className="pt-2">
+        <div className="w-full">
           <AddToCartButton
             item={{ item, reservation, schoolStore }}
             isDisabled={
