@@ -100,7 +100,7 @@ async function ProductDashboard() {
 
   return (
     <>
-      <div className="grid gap-1 lg:grid-cols-4 md:grid-cols.-3 sm:grid-cols-2">
+      <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         {itemStats.map((itemStat, i) => (
           <ItemCard
             key={i}
