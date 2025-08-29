@@ -26,18 +26,55 @@ import ingredientRepository from "@/repositories/ingredient-repository";
 import allergenRepository from "@/repositories/allergen-repository";
 import schoolRepository from "@/repositories/school-repository";
 import itemRepository, { ItemStats } from "@/repositories/item-repository";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerFooter,
+  DrawerTrigger,
+  DrawerClose,
+} from "@/components/ui/drawer";
 
 export default function DashboardPage() {
   return (
     <div className=" relative min-h-full">
       <h1 className="text-3xl font-semibold py-2">Dashboard</h1>
 
-      <div className="flex gap-2 flex-wrap">
-        <EditAllergens />
-        <EditIngredients />
-        <OrderSummary />
-        <ReservationSummary />
-        <EditStoreSuspense />
+        <div className="flex gap-2 flex-wrap">
+          <OrderSummary />
+          <ReservationSummary />
+          <div className="hidden sm:flex items-center">
+            <EditAllergens />
+            <span className="w-[2px] h-7 rounded-full bg-muted"/>
+            <EditIngredients />
+            <span className="w-[2px] h-7 rounded-full bg-muted"/>
+            <EditStoreSuspense />
+          </div>
+      </div>
+      <div className="sm:hidden w-full pt-2">
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button variant="ghost" className="w-full">Zobraziť viac akcií</Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Ďalšie akcie</DrawerTitle>
+            </DrawerHeader>
+            <div className="p-4 flex flex-col gap-3">
+              <EditAllergens />
+              <div className="h-[2px] w-full rounded-full bg-muted" />
+              <EditIngredients />
+              <div className="h-[2px] w-full rounded-full bg-muted" />
+              <EditStoreSuspense />
+            </div>
+            <DrawerFooter>
+              <DrawerClose asChild>
+                <Button variant="secondary">Zavrieť</Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
       </div>
       <h2 className="text-2xl font-semibold pt-4">Školy</h2>
       <Suspense
@@ -134,7 +171,7 @@ async function EditStoreSuspense() {
   return (
     <Suspense
       fallback={
-        <Button className="flex-1 sm:grow-0 opacity-50" variant="outline">
+        <Button className="flex-1 sm:grow-0 opacity-50" variant="ghost">
           Upraviť obchod <Loader className="h-5 w-5 animate-spin" />
         </Button>
       }

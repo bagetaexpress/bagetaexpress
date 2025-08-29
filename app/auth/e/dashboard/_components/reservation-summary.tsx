@@ -49,12 +49,13 @@ async function ReservationSummaryInner() {
     storeId: user.storeId,
     isReservation: true,
   });
+  const totalQuantity = reservationSummary.reduce((acc, { quantity }) => acc + quantity, 0);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button className="flex-1 sm:grow-0" variant="outline">
-          Zhrnutie rezervácií
+          Zhrnutie rezervácií ({totalQuantity}ks)
         </Button>
       </DialogTrigger>
       <DialogContent>

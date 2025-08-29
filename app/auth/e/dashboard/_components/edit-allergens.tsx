@@ -28,7 +28,7 @@ export default function EditAllergens() {
   return (
     <Suspense
       fallback={
-        <Button className="flex-1 sm:grow-0 opacity-50" disabled>
+        <Button variant="ghost" className="flex-1 sm:grow-0 opacity-50" disabled>
           Upraviť alergény <Loader className="w-5 h-5 animate-spin" />
         </Button>
       }
@@ -69,7 +69,7 @@ async function EditAllergensInner() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="flex-1 sm:grow-0">Upraviť alergény</Button>
+        <Button variant="ghost" className="flex-1 sm:grow-0">Upraviť alergény</Button>
       </DialogTrigger>
       <DialogContent className=" max-h-dvh overflow-auto">
         <DialogHeader>
