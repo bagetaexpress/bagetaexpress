@@ -97,9 +97,11 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body>
+      <body className="flex flex-col min-h-screen">
         <MainLayoutWrapper attribute="class" defaultTheme="light">
-          {children}
+          <main className="flex-1">
+            {children}
+          </main>
         </MainLayoutWrapper>
         <SpeedInsights />
         <Analytics />

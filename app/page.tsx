@@ -36,12 +36,12 @@ export default function HomeWrapper() {
   return (
     <>
       <Home />
-      <Suspense fallback={null}>
-        <RedirectWrapper />
-      </Suspense>
+      <RedirectWrapper />
     </>
   );
 }
+
+
 
 async function RedirectWrapper() {
   const user = await getUser();
