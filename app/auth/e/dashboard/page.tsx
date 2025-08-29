@@ -75,7 +75,7 @@ async function SchoolDashboard() {
 
   return (
     <>
-      <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
+      <div className="grid gap-1 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1">
         {schoolStatsMany.map((schoolStat, i) => (
           <Suspense key={i} fallback={<SchoolCardPlaceholder />}>
             <SchoolCard {...schoolStat} />

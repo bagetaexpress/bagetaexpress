@@ -18,17 +18,26 @@ import { revalidatePath } from "next/cache";
 export default function EditReservationItems({
   schoolId,
   reservations,
+  buttonProps,
+  label,
 }: {
   schoolId: School["id"];
   reservations: Array<{
     item: Item;
     reservation: Reservation | null;
   }>;
+  buttonProps?: React.ComponentProps<typeof Button>;
+  label?: React.ReactNode;
 }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="flex-1">Položky rezervácie</Button>
+        <Button
+          {...buttonProps}
+          className={`w-full ${buttonProps?.className ?? ""}`}
+        >
+          {label ?? "Položky rezervácie"}
+        </Button>
       </DialogTrigger>
       <DialogContent autoFocus={false} className="max-h-dvh overflow-auto">
         <DialogHeader>

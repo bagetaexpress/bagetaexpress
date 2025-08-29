@@ -21,9 +21,11 @@ import React, { useEffect } from "react";
 interface IProps {
   orderClose: Date;
   schoolId: number;
+  buttonProps?: React.ComponentProps<typeof Button>;
+  label?: React.ReactNode;
 }
 
-export default function EditOrderClose({ orderClose, schoolId }: IProps) {
+export default function EditOrderClose({ orderClose, schoolId, buttonProps, label }: IProps) {
   const [date, setDate] = React.useState<Date | undefined>();
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
@@ -47,7 +49,12 @@ export default function EditOrderClose({ orderClose, schoolId }: IProps) {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="flex-1">Uzávierka objednávania</Button>
+        <Button
+          {...buttonProps}
+          className={`w-full ${buttonProps?.className ?? ""}`}
+        >
+          {label ?? "Uzávierka objednávania"}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
