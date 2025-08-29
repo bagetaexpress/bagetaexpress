@@ -3,6 +3,7 @@ import { Instagram } from "lucide-react";
 import Link from "next/link";
 import ContactForm from "@/app/_components/contact-form";
 import { Suspense } from "react";
+import Loading from "../loading";
 
 export default function SupportPage() {
   return (
@@ -47,7 +48,7 @@ export default function SupportPage() {
             <CardDescription>Pošlite nám správu a my vám odpovieme čo najskôr</CardDescription>
           </CardHeader>
           <CardContent>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading />}>
               <ContactForm />
             </Suspense>
           </CardContent>

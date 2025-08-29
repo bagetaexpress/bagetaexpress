@@ -51,11 +51,13 @@ async function OrderSummaryInner() {
     })
   ).filter(({ quantity }) => quantity > 0);
 
+  const totalQuantity = ordersSummary.reduce((acc, { quantity }) => acc + quantity, 0);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button className="flex-1 sm:grow-0" variant="outline">
-          Zhrnutie objednávok
+          Zhrnutie objednávok ({totalQuantity}ks)
         </Button>
       </DialogTrigger>
       <DialogContent>

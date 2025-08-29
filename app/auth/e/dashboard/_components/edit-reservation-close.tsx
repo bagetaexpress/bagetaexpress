@@ -21,9 +21,13 @@ import React, { useEffect } from "react";
 export default function EditReservationClose({
   reservationClose,
   schoolId,
+  buttonProps,
+  label,
 }: {
   reservationClose: Date;
   schoolId: number;
+  buttonProps?: React.ComponentProps<typeof Button>;
+  label?: React.ReactNode;
 }) {
   const [date, setDate] = React.useState<Date | undefined>();
   const [isProcessing, setIsProcessing] = React.useState(false);
@@ -51,7 +55,12 @@ export default function EditReservationClose({
       }}
     >
       <DialogTrigger asChild>
-        <Button className="flex-1">Uzávierka rezervácie</Button>
+        <Button
+          {...buttonProps}
+          className={`w-full ${buttonProps?.className ?? ""}`}
+        >
+          {label ?? "Uzávierka rezervácie"}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -132,7 +132,7 @@ export default function EditStore({ store }: StoreProps) {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="flex-1 sm:grow-0" variant="outline">
+        <Button className="flex-1 sm:grow-0" variant="ghost">
           Upraviť obchod
         </Button>
       </DialogTrigger>

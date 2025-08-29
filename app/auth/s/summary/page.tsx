@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Loader, Search } from "lucide-react";
+import { Loader, Search, Inbox, Clock } from "lucide-react";
 import { handleFilterChange } from "./server-util";
 import { Order } from "@/db/schema";
 import PrintOrderList from "@/components/print-order-list";
@@ -25,6 +25,9 @@ import schoolRepository from "@/repositories/school-repository";
 import orderRepository from "@/repositories/order-repository";
 import itemRepository from "@/repositories/item-repository";
 import type { Metadata } from "next";
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
+import { getDate } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "bageta.express | Zhrnutie objednávok",
@@ -102,19 +105,43 @@ async function SummaryPageInner({
   return (
     <>
       {orders.length === 0 && (
-        <div className="flex-1 flex justify-center items-center">
-          <p className="text-center text-gray-500">Žiadne objednávky</p>
+        <div className="flex-1 flex flex-col justify-center items-center gap-3 py-10 text-center text-gray-500">
+          <Inbox className="h-10 w-10" />
+          <div>
+            <p className="font-medium">Žiadne objednávky</p>
+            <p className="text-sm text-muted-foreground">Skúste zmeniť filtrovanie alebo sa vráťte neskôr.</p>
+          </div>
+        </div>
+      )}
+      {orders.length > 0 && (
+        <div className="flex items-center justify-between py-2 text-sm text-muted-foreground">
+          <p>
+            Počet objednávok: <span className="font-medium text-foreground">{orders.length}</span>
+          </p>
         </div>
       )}
       <Accordion type="multiple">
-        {orders.map(({ order, user }) => (
+        {orders.sort((a, b) => new Date(b.order.updatedAt) > new Date(a.order.updatedAt) ? 1 : -1).map(({ order, user }) => (
           <AccordionItem key={order.id} value={order.pin}>
             <AccordionTrigger>
-              <div className="flex justify-between">
-                <p>
-                  <span>Č. obj.: {order.pin}, </span>
-                  <span>{user.name ?? user.email}</span>
-                </p>
+              <div className="flex w-full items-center justify-between gap-4 pr-2">
+                <div className="min-w-0">
+                  <p className="truncate">
+                    <span className="text-xs text-muted-foreground mr-1">Č. obj.</span>
+                    <span className="font-medium">{order.pin}</span>
+                    <span className="mx-2 text-muted-foreground">•</span>
+                    <span className="truncate align-middle">{user.name ?? user.email}</span>
+                  </p>
+                  <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+                    <Badge variant="secondary" className="capitalize">{order.status}</Badge>
+                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{format(getDate(order.updatedAt), "d.M.y HH:mm")}</span>
+                  </div>
+                </div>
+                <div className="hidden xs:block">
+                  <Suspense fallback={<div className="text-sm text-muted-foreground">…</div>}>
+                    <OrderTriggerMeta orderId={order.id} />
+                  </Suspense>
+                </div>
               </div>
             </AccordionTrigger>
             <AccordionContent>
@@ -162,5 +189,18 @@ async function PrintOrderListWrapper() {
     >
       <PrintOrderList orders={itemSummary} store={store} school={school} />
     </Suspense>
+  );
+}
+
+async function OrderTriggerMeta({ orderId }: { orderId: number }) {
+  const items = await itemRepository.getManyWithQuantity({ orderId, orderStatus: ["ordered"] });
+  const itemCount = items.reduce((acc, it) => acc + it.quantity, 0);
+  const total = items.reduce((acc, it) => acc + it.item.price * it.quantity, 0);
+
+  return (
+    <div className="flex shrink-0 items-center gap-2">
+      <Badge variant="outline">{itemCount} polož.</Badge>
+      <Badge>{total.toFixed(2)}€</Badge>
+    </div>
   );
 }
