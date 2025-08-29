@@ -22,12 +22,10 @@ import MockUpOrder2 from "@/assets/images/landing_page_order_2.png";
 import MockUpOrder3 from "@/assets/images/landing_page_order_3.png";
 
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import LogomarkJS from "@/components/nav/logomark-js";
 import UserDropdown from "@/components/nav/user-dropdown";
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
-import { Github, Instagram, Pointer } from "lucide-react";
+import { Pointer } from "lucide-react";
 import { PopupCarousel } from "@/components/ui/custom/popup-carousel";
 import { Suspense } from "react";
 import EmailForm from "./_components/email-form";
@@ -82,13 +80,6 @@ export function Home() {
           </div>
           <div className="flex gap-1">
             <div className="flex rounded-md overflow-hidden divide-x">
-              <Link
-                prefetch={false}
-                href="/#description"
-                className="px-4 py-2 hover:bg-accent hover:text-accent-foreground"
-              >
-                Čo robíme?
-              </Link>
               <Link
                 prefetch={false}
                 href="/#contact"
