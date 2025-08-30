@@ -27,7 +27,6 @@ import itemRepository from "@/repositories/item-repository";
 import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import { getDate } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "bageta.express | Zhrnutie objednávok",
@@ -136,7 +135,7 @@ async function SummaryPageInner({
                   </p>
                   <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
                     <Badge variant="secondary" className="capitalize">{order.status}</Badge>
-                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{format(getDate(order.updatedAt), "d.M.y HH:mm")}</span>
+                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{format(new Date(order.updatedAt), "d.M.y HH:mm")}</span>
                   </div>
                 </div>
                 <div className="hidden xs:block">

@@ -2,7 +2,6 @@ import ItemCard from "@/app/auth/c/store/_components/itemCard";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/user-utils";
-import { getDate, getNewDate } from "@/lib/utils";
 import itemRepository from "@/repositories/item-repository";
 import orderRepository from "@/repositories/order-repository";
 import { Loader, ShoppingCart } from "lucide-react";
@@ -49,17 +48,17 @@ async function StorePageInner() {
         {items
           .sort((a, b) => {
             if (
-              getDate(a.schoolStore.orderClose) >= getNewDate() &&
-              getDate(b.schoolStore.orderClose) < getNewDate()
+              new Date(a.schoolStore.orderClose) >= new Date() &&
+              new Date(b.schoolStore.orderClose) < new Date()
             ) {
               return -1;
             }
             if (
               a.reservation &&
-              (getDate(a.schoolStore.reservationClose) >= getNewDate() ||
+              (new Date(a.schoolStore.reservationClose) >= new Date() ||
                 a.reservation.remaining > 0) &&
               (!b.reservation ||
-                (getDate(b.schoolStore.reservationClose) < getNewDate() &&
+                (new Date(b.schoolStore.reservationClose) < new Date() &&
                   b.reservation.remaining <= 0))
             ) {
               return -1;

@@ -2,7 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 import { getUser } from "./user-utils";
-import { getDate } from "./utils";
 import cartRepository from "@/repositories/cart-repository";
 import { Cart } from "@/db/schema";
 import itemRepository from "@/repositories/item-repository";
@@ -23,21 +22,21 @@ async function addToCart(itemId: number): Promise<void> {
   const { schoolStore, reservation } = res;
 
   if (
-    getDate(schoolStore.orderClose) < getDate(new Date().toLocaleString()) &&
+    new Date(schoolStore.orderClose) < new Date() &&
     !reservation
   ) {
     throw new Error("Objednávky boli uzavreté");
   }
   if (
     reservation &&
-    getDate(schoolStore.reservationClose) < getDate(new Date().toLocaleString())
+    new Date(schoolStore.reservationClose) < new Date()
   ) {
     throw new Error("Rezervácie boli uzavreté");
   }
 
   if (
     reservation &&
-    getDate(schoolStore.orderClose) >= getDate(new Date().toLocaleString()) &&
+    new Date(schoolStore.orderClose) >= new Date() &&
     reservation.remaining <= 0
   ) {
     throw new Error("Nie je dostatok kusov na rezerváciu");

@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/user-utils";
-import { getDate, getFormatedDate, isLessThenNow } from "@/lib/utils";
 import orderRepository from "@/repositories/order-repository";
 import reservationRepository from "@/repositories/reservation-repository";
 import { schoolStoreRepository } from "@/repositories/school-store-repository";
@@ -73,10 +72,10 @@ export default async function BlockPage(props: {
                   schoolId: user.schoolId,
                 });
                 for (const schoolStore of schoolStores) {
-                  if (!isLessThenNow(schoolStore.orderClose)) continue;
+                  if (new Date(schoolStore.orderClose) > new Date()) continue;
 
-                  const orderCloseDate = getDate(schoolStore.orderClose);
-                  const reservationCloseDate = getDate(
+                  const orderCloseDate = new Date(schoolStore.orderClose);
+                  const reservationCloseDate = new Date(
                     schoolStore.reservationClose,
                   );
                   const dayOfWeek = new Date().getDay();
@@ -92,14 +91,14 @@ export default async function BlockPage(props: {
                   );
 
                   console.info(
-                    `SchoolId: ${user.schoolId} - StoreId: ${schoolStore.storeId} - OrderClose: ${getFormatedDate(orderCloseDate)} - ReservationClose: ${getFormatedDate(reservationCloseDate)}`,
+                    `SchoolId: ${user.schoolId} - StoreId: ${schoolStore.storeId} - OrderClose: ${orderCloseDate.toISOString()} - ReservationClose: ${reservationCloseDate.toISOString()}`,
                   );
 
                   await schoolStoreRepository.updateSingle({
                     schoolId: user.schoolId,
                     storeId: schoolStore.storeId,
-                    orderClose: getFormatedDate(orderCloseDate),
-                    reservationClose: getFormatedDate(reservationCloseDate),
+                    orderClose: orderCloseDate.toISOString(),
+                    reservationClose: reservationCloseDate.toISOString(),
                   });
                 }
 

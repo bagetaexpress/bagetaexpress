@@ -13,8 +13,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { updateOrderClose } from "@/lib/store-utils";
-import { getFormatedDate } from "@/lib/utils";
-import { format } from "date-fns";
 import { Loader } from "lucide-react";
 import React, { useEffect } from "react";
 
@@ -27,14 +25,14 @@ interface IProps {
 
 export default function EditOrderClose({ orderClose, schoolId, buttonProps, label }: IProps) {
   const [date, setDate] = React.useState<Date | undefined>();
+  const [time, setTime] = React.useState<Date | undefined>();
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [error, setError] = React.useState<string | undefined>();
 
   useEffect(() => {
-    const offset = 120 * 60 * 1000;
-    const time = orderClose.getTime() - offset;
-    const newDate = new Date(time);
-    setDate(newDate);
+    setDate(new Date(orderClose));
+    setTime(new Date(orderClose));
   }, [orderClose]);
 
   return (
@@ -43,7 +41,8 @@ export default function EditOrderClose({ orderClose, schoolId, buttonProps, labe
       onOpenChange={() => {
         if (isOpen) {
           setIsProcessing(false);
-          setDate(orderClose);
+          setDate(new Date(orderClose));
+          setTime(new Date(orderClose));
         }
         setIsOpen(!isOpen);
       }}
@@ -68,27 +67,17 @@ export default function EditOrderClose({ orderClose, schoolId, buttonProps, labe
             mode="single"
             selected={date}
             className="rounded-md border w-fit"
-            onSelect={(val) => {
-              if (val == null) return;
-              const time = format(date ?? new Date(), "HH:mm");
-              const newDate = format(val, "yyyy-MM-dd");
-
-              setDate(new Date(`${newDate} ${time}`));
-            }}
-            initialFocus
+            onSelect={setDate}
+            autoFocus
             disabled={(date) =>
               date < new Date(new Date().setDate(new Date().getDate() - 1))
             }
           />
           <TimePickerHourMinute
-            setDate={(val) => {
-              if (val == null) return;
-              const newDate = format(date ?? new Date(), "yyyy-MM-dd");
-              const newTime = format(val, "HH:mm");
-              setDate(new Date(`${newDate} ${newTime}`));
-            }}
-            date={date}
+            setDate={setTime}
+            date={time}
           />
+          {error && <p className="text-sm text-red-500">{error}</p>}
         </div>
         <DialogFooter className="gap-2">
           <Button
@@ -104,10 +93,24 @@ export default function EditOrderClose({ orderClose, schoolId, buttonProps, labe
             style={{ marginLeft: 0 }}
             disabled={isProcessing}
             onClick={async () => {
-              if (!date) return;
+              if (date == null) {
+                setError("Dátum je povinný");
+                return;
+              } else if (time == null) {
+                setError("Čas je povinný");
+                return;
+              } 
+
+              setError(undefined);
               setIsProcessing(true);
 
-              await updateOrderClose(schoolId, getFormatedDate(date));
+              const year = date.getFullYear();
+              const month = date.getMonth();
+              const day = date.getDate();
+              const hour = time?.getHours();
+              const minute = time?.getMinutes();
+
+              await updateOrderClose(schoolId, new Date(year, month, day, hour, minute).toISOString());
               setIsProcessing(false);
               setIsOpen(false);
             }}

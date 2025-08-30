@@ -16,7 +16,6 @@ import { deleteOrderAndItems } from "@/lib/order-utils";
 import { Order } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import { revalidatePath } from "next/cache";
-import { getNewDate } from "@/lib/utils";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
 import orderRepository from "@/repositories/order-repository";
@@ -109,7 +108,7 @@ async function OrderPageInner() {
         </p>
       )}
       <div className="flex justify-end">
-        {order.status === "ordered" && orderClose > getNewDate() && (
+        {order.status === "ordered" && new Date(orderClose) > new Date() && (
           <DeleteOrder orderId={order.id} />
         )}
       </div>
@@ -140,7 +139,7 @@ async function DeleteOrder({ orderId }: DeleteOrderProps) {
             action={async () => {
               "use server";
               const orderClose = await orderRepository.getFirstClose(orderId);
-              if (orderClose > getNewDate()) {
+              if (new Date(orderClose) > new Date()) {
                 await deleteOrderAndItems(orderId);
               }
               revalidatePath("/auth/c/order");

@@ -13,9 +13,7 @@ import {
   User,
 } from "@/db/schema";
 import { eq, and, sql, or, getTableColumns } from "drizzle-orm";
-import { getDate, getFormatedDate } from "@/lib/utils";
 import { cache } from "react";
-import { getNewDate } from "../../lib/utils";
 
 const getSingle = cache(
   async ({
@@ -83,12 +81,12 @@ async function updateSingle(
     .update(order)
     .set({
       ...data,
-      updatedAt: getFormatedDate(getNewDate()),
+      updatedAt: new Date().toISOString(),
     })
     .where(eq(order.id, data.id));
 }
 
-async function getFirstClose(orderId: Order["id"]): Promise<Date> {
+async function getFirstClose(orderId: Order["id"]): Promise<string> {
   const [found] = await db
     .select({ orderClose: schoolStore.orderClose })
     .from(order)
@@ -101,9 +99,9 @@ async function getFirstClose(orderId: Order["id"]): Promise<Date> {
     .orderBy(schoolStore.orderClose);
 
   if (!found) {
-    return getDate(new Date().toISOString());
+    return new Date().toISOString();
   }
-  return getDate(found.orderClose);
+  return found.orderClose;
 }
 
 async function updateMany({
@@ -120,7 +118,7 @@ async function updateMany({
     .update(order)
     .set({
       ...data,
-      updatedAt: getFormatedDate(getNewDate()),
+      updatedAt: new Date().toISOString(),
     })
     .where(
       and(

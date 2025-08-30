@@ -5,7 +5,6 @@ import { getUser } from "./user-utils";
 import { db } from "@/db";
 import * as schemas from "@/db/schema";
 import { and, eq, or } from "drizzle-orm";
-import { getDate, getFormatedDate, getNewDate } from "./utils";
 import { customerRepository } from "@/repositories/customer-repository";
 import cartRepository from "@/repositories/cart-repository";
 import orderRepository from "@/repositories/order-repository";
@@ -83,8 +82,8 @@ async function createOrderFromCart(discount: number = 0): Promise<{
           pin,
           discount,
           status: "ordered",
-          createdAt: getFormatedDate(getNewDate()),
-          updatedAt: getFormatedDate(getNewDate()),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
         })
         .returning();
 
@@ -118,10 +117,10 @@ async function createOrderFromCart(discount: number = 0): Promise<{
         }
 
         const isOrderClosed =
-          getDate(extendedItem.school_store.orderClose) < getNewDate();
+          new Date(extendedItem.school_store.orderClose) < new Date();
         const isReservationClosed =
           extendedItem.reservation &&
-          getDate(extendedItem.school_store.reservationClose) < getNewDate();
+          new Date(extendedItem.school_store.reservationClose) < new Date();
 
         if (isOrderClosed && !extendedItem.reservation) {
           error = `Nie je možné objednať '${cartItem.item.name}', čas pre objednanie uplynul`;

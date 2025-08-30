@@ -12,7 +12,6 @@ import { ExtendedItem } from "@/repositories/item-repository";
 import { getUser } from "@/lib/user-utils";
 import storeRepository from "@/repositories/store-repository";
 import PrintOrderList from "@/components/print-order-list";
-import { getDate } from "@/lib/utils";
 import EditReservationClose from "./edit-reservation-close";
 import { Loader, CalendarDays, Clock, ListChecks } from "lucide-react";
 import EditReservationItems from "./edit-reservation-items";
@@ -53,8 +52,6 @@ export default async function SchoolCard({
     return null;
   }
 
-  const orderCloseDate = getDate(orderClose);
-  const reservationCloseDate = getDate(reservationClose);
   const [summary, reservations, store] = await Promise.all([
     itemRepository.getSummary({
       storeId: user.storeId,
@@ -64,17 +61,21 @@ export default async function SchoolCard({
     storeRepository.getSingle({ storeId: user.storeId }),
   ]);
 
+  const orderCloseDate = new Date(orderClose);
+  const reservationCloseDate = new Date(reservationClose);
+
   const now = new Date();
   const isOrderOpen = now < orderCloseDate;
   const isReservationOpen = now < reservationCloseDate && !isOrderOpen;
 
-  function formatRelativeSk(target: Date) {
+  function formatTimeTo(target: Date) {
     const diffMs = target.getTime() - now.getTime();
     const future = diffMs > 0;
     const absMs = Math.abs(diffMs);
     const minutes = Math.floor(absMs / (1000 * 60));
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
+
     if (days >= 1) {
       const remH = hours % 24;
       return future ? `za ${days} d ${remH} h` : `pred ${days} d ${remH} h`;
@@ -121,7 +122,7 @@ export default async function SchoolCard({
                 {orderCloseDate.toLocaleString("sk-SK")}
               </div>
               <div className="text-[10px] sm:text-xs text-muted-foreground">
-                {formatRelativeSk(orderCloseDate)}
+                {formatTimeTo(orderCloseDate)}
               </div>
             </div>
           </div>
@@ -135,7 +136,7 @@ export default async function SchoolCard({
                 {reservationCloseDate.toLocaleString("sk-SK")}
               </div>
               <div className="text-[10px] sm:text-xs text-muted-foreground">
-                {formatRelativeSk(reservationCloseDate)}
+                {formatTimeTo(reservationCloseDate)}
               </div>
             </div>
           </div>
@@ -166,7 +167,7 @@ export default async function SchoolCard({
         <div className="text-xs font-medium text-muted-foreground">Rýchle akcie</div>
         <div className="grid grid-cols-2 gap-2 w-full">
           <EditOrderClose
-            orderClose={orderCloseDate}
+            orderClose={new Date(orderCloseDate)}
             schoolId={school.id}
             label={
               <span className="inline-flex items-center gap-1 text-xs sm:text-sm">
@@ -177,7 +178,7 @@ export default async function SchoolCard({
             buttonProps={{ variant: "secondary", className: "h-9" }}
           />
           <EditReservationClose
-            reservationClose={reservationCloseDate}
+            reservationClose={new Date(reservationCloseDate)}
             schoolId={school.id}
             label={
               <span className="inline-flex items-center gap-1 text-xs sm:text-sm">
@@ -210,7 +211,7 @@ export default async function SchoolCard({
             <PrintOrderLabelsWrapper
               orders={summary}
               store={store}
-              orderClose={orderCloseDate}
+              orderClose={new Date(orderCloseDate)}
             />
           </Suspense>
           <PrintOrderList school={school} orders={summary} store={store} />

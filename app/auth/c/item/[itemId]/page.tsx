@@ -1,5 +1,4 @@
 import { Reservation, SchoolStore } from "@/db/schema";
-import { getDate, getNewDate } from "@/lib/utils";
 import allergenRepository from "@/repositories/allergen-repository";
 import ingredientRepository from "@/repositories/ingredient-repository";
 import itemRepository from "@/repositories/item-repository";
@@ -69,7 +68,7 @@ export default async function ItemDetailDialog(props: {
 }
 
 function OrderDate({ schoolStore }: { schoolStore: SchoolStore }) {
-  if (getDate(schoolStore.orderClose) < getNewDate()) {
+  if (new Date(schoolStore.orderClose) < new Date()) {
     return (
       <p>
         <span className="font-semibold">Objenanie:</span>
@@ -84,7 +83,7 @@ function OrderDate({ schoolStore }: { schoolStore: SchoolStore }) {
       <br />
       Objednanie možné do:{" "}
       <span className="font-semibold text-nowrap">
-        {getDate(schoolStore.orderClose).toLocaleString("sk-SK")}
+        {new Date(schoolStore.orderClose).toLocaleString("sk-SK")}
       </span>
     </p>
   );
@@ -101,7 +100,7 @@ function ReservationDate({
     return null;
   }
 
-  if (getDate(schoolStore.reservationClose) < getNewDate()) {
+  if (new Date(schoolStore.reservationClose) < new Date()) {
     return (
       <p>
         <span className="font-semibold">Rezervácia:</span>
@@ -111,14 +110,14 @@ function ReservationDate({
     );
   }
 
-  if (getDate(schoolStore.orderClose) < getNewDate()) {
+  if (new Date(schoolStore.orderClose) < new Date()) {
     return (
       <p>
         <span className="font-semibold">Rezervácia:</span>
         <br />
         Rezervácia je možná do{" "}
         <span className="font-semibold text-nowrap">
-          {getDate(schoolStore.reservationClose).toLocaleString("sk-SK")}
+          {new Date(schoolStore.reservationClose).toLocaleString("sk-SK")}
         </span>{" "}
         dostupných je {reservation.remaining} ks.
       </p>
@@ -129,11 +128,11 @@ function ReservationDate({
     <p>
       Rezervácia je možná od{" "}
       <span className="font-semibold text-nowrap">
-        {getDate(schoolStore.orderClose).toLocaleString("sk-SK")}
+        {new Date(schoolStore.orderClose).toLocaleString("sk-SK")}
       </span>
       {" do "}
       <span className="font-semibold text-nowrap">
-        {getDate(schoolStore.reservationClose).toLocaleString("sk-SK")}
+        {new Date(schoolStore.reservationClose).toLocaleString("sk-SK")}
       </span>
     </p>
   );

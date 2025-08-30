@@ -6,31 +6,35 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getNewDate(): Date {
-  // return new Date();
-  const date = new Date();
-  //const offset = date.getTimezoneOffset() * 60 * 1000;
-  const offset = 60 * 60 * 1000;
-  const time = date.getTime() + offset;
-
-  return new Date(time);
+function fillTemplate(template: string, { year, month, day, hour, minute, second }: { year: number, month: number, day: number, hour: number, minute: number, second: number }): string {
+  let result = template;
+  result = result.replace("yyyy", year.toString().padStart(4, "0"));
+  result = result.replace("MM", month.toString().padStart(2, "0"));
+  result = result.replace("dd", day.toString().padStart(2, "0"));
+  result = result.replace("HH", hour.toString().padStart(2, "0"));
+  result = result.replace("mm", minute.toString().padStart(2, "0"));
+  result = result.replace("ss", second.toString().padStart(2, "0"));
+  return result;
 }
 
-export function getDate(date_str: string): Date {
-  const date = new Date(date_str);
-  const offset = date.getTimezoneOffset() * 60 * 1000;
-  const time = date.getTime() + offset;
-
-  return new Date(time);
+export function getFormatedDateLocal(date: Date, template: string = "yyyy-MM-dd HH:mm:ss"): string {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const second = date.getSeconds();
+  return fillTemplate(template, { year, month, day, hour, minute, second });
 }
 
-export function getFormatedDate(date: Date): string {
-  return format(date, "yyyy-MM-dd HH:mm:ss");
-}
-
-export function isLessThenNow(date_str: string) {
-  const dat = getDate(date_str);
-  return dat < new Date();
+export function getFormatedDateUTC(date: Date, template: string = "yyyy-MM-dd HH:mm:ss"): string {
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + 1;
+  const day = date.getUTCDate();
+  const hour = date.getUTCHours();
+  const minute = date.getUTCMinutes();
+  const second = date.getUTCSeconds();
+  return fillTemplate(template, { year, month, day, hour, minute, second });
 }
 
 export function isMobile() {

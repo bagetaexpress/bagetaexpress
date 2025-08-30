@@ -13,8 +13,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { updateReservationClose } from "@/lib/store-utils";
-import { getFormatedDate } from "@/lib/utils";
-import { format } from "date-fns";
 import { Loader } from "lucide-react";
 import React, { useEffect } from "react";
 
@@ -30,14 +28,14 @@ export default function EditReservationClose({
   label?: React.ReactNode;
 }) {
   const [date, setDate] = React.useState<Date | undefined>();
+  const [time, setTime] = React.useState<Date | undefined>();
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [error, setError] = React.useState<string | undefined>();
 
   useEffect(() => {
-    const offset = 120 * 60 * 1000;
-    const time = reservationClose.getTime() - offset;
-    const newDate = new Date(time);
-    setDate(newDate);
+    setDate(new Date(reservationClose));
+    setTime(new Date(reservationClose));
   }, [reservationClose]);
 
   return (
@@ -46,10 +44,8 @@ export default function EditReservationClose({
       onOpenChange={() => {
         if (isOpen) {
           setIsProcessing(false);
-          const offset = 120 * 60 * 1000;
-          const time = reservationClose.getTime() - offset;
-          const newDate = new Date(time);
-          setDate(newDate);
+          setDate(new Date(reservationClose));
+          setTime(new Date(reservationClose));
         }
         setIsOpen(!isOpen);
       }}
@@ -72,27 +68,18 @@ export default function EditReservationClose({
             mode="single"
             selected={date}
             className="rounded-md border w-fit"
-            onSelect={(val) => {
-              if (val == null) return;
-              const time = format(date ?? new Date(), "HH:mm");
-              const newDate = format(val, "yyyy-MM-dd");
-
-              setDate(new Date(`${newDate} ${time}`));
-            }}
-            initialFocus
+            onSelect={setDate}
+            autoFocus
             disabled={(date) =>
               date < new Date(new Date().setDate(new Date().getDate() - 1))
             }
           />
           <TimePickerHourMinute
-            setDate={(val) => {
-              if (val == null) return;
-              const newDate = format(date ?? new Date(), "yyyy-MM-dd");
-              const newTime = format(val, "HH:mm");
-              setDate(new Date(`${newDate} ${newTime}`));
-            }}
-            date={date}
+            setDate={setTime}
+            date={time}
           />
+
+          {error && <p className="text-red-500 py-2">{error}</p>}
         </div>
         <DialogFooter className="gap-2">
           <Button
@@ -108,10 +95,26 @@ export default function EditReservationClose({
             style={{ marginLeft: 0 }}
             disabled={isProcessing}
             onClick={async () => {
-              if (!date) return;
+              if (date == null) {
+                setError("Dátum je povinný");
+                setIsProcessing(false);
+                return;
+              } else if (time == null) {
+                setError("Čas je povinný");
+                setIsProcessing(false);
+                return;
+              }
+              setError(undefined);
+
               setIsProcessing(true);
 
-              await updateReservationClose(schoolId, getFormatedDate(date));
+              const year = date.getFullYear();
+              const month = date.getMonth();
+              const day = date.getDate();
+              const hour = time?.getHours();
+              const minute = time?.getMinutes();
+
+              await updateReservationClose(schoolId, new Date(year, month, day, hour, minute).toISOString());
               setIsProcessing(false);
               setIsOpen(false);
             }}

@@ -10,10 +10,10 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
 import { Reservation, SchoolStore } from "@/db/schema";
-import { getDate, getNewDate } from "@/lib/utils";
 import AddToCartButton from "./add-to-cart-button";
 import Link from "next/link";
 import { ExtendedItem } from "@/repositories/item-repository";
+import { getDate } from "date-fns";
 
 export default function ItemCard({
   item: { item, store, reservation, schoolStore },
@@ -90,10 +90,10 @@ function isAddToCartDisabled({
   schoolStore: SchoolStore;
   reservation: Reservation | null;
 }): boolean {
-  if (getDate(schoolStore.orderClose) >= getNewDate()) {
+  if (new Date(schoolStore.orderClose) >= new Date()) {
     return false;
   }
-  if (reservation && getDate(schoolStore.reservationClose) >= getNewDate()) {
+  if (reservation && new Date(schoolStore.reservationClose) >= new Date()) {
     return false;
   }
   return true;
@@ -106,14 +106,14 @@ function OrderDateShort({
   schoolStore: SchoolStore;
   reservation: Reservation | null;
 }) {
-  const orderClose = getDate(schoolStore.orderClose);
-  if (orderClose < getNewDate()) {
+  const orderClose = new Date(schoolStore.orderClose);
+  if (orderClose < new Date()) {
     if (!reservation) {
       return <p>Objednanie uzatvorené</p>;
     }
 
-    const reservationClose = getDate(schoolStore.reservationClose);
-    if (reservationClose < getNewDate()) {
+    const reservationClose = new Date(schoolStore.reservationClose);
+    if (reservationClose < new Date()) {
       return <p>Rezervovanie uzatvorené</p>;
     }
 
