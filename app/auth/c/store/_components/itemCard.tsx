@@ -13,7 +13,7 @@ import { Reservation, SchoolStore } from "@/db/schema";
 import AddToCartButton from "./add-to-cart-button";
 import Link from "next/link";
 import { ExtendedItem } from "@/repositories/item-repository";
-import { getDate } from "date-fns";
+import { offsetDateToSk } from "@/lib/utils";
 
 export default function ItemCard({
   item: { item, store, reservation, schoolStore },
@@ -106,23 +106,24 @@ function OrderDateShort({
   schoolStore: SchoolStore;
   reservation: Reservation | null;
 }) {
-  const orderClose = new Date(schoolStore.orderClose);
-  if (orderClose < new Date()) {
+  const shiftedOrderClose = offsetDateToSk(new Date(schoolStore.orderClose));
+  const shiftedReservationClose = offsetDateToSk(new Date(schoolStore.reservationClose));
+  const shiftedNow = offsetDateToSk(new Date());
+  if (shiftedOrderClose < shiftedNow) {
     if (!reservation) {
       return <p>Objednanie uzatvorené</p>;
     }
 
-    const reservationClose = new Date(schoolStore.reservationClose);
-    if (reservationClose < new Date()) {
+    if (shiftedReservationClose < shiftedNow) {
       return <p>Rezervovanie uzatvorené</p>;
     }
 
-    if (reservationClose.getDate() !== new Date().getDate()) {
+    if (shiftedReservationClose.getDate() !== shiftedNow.getDate()) {
       return (
         <p>
           Rezervuj do{" "}
           <span className="font-semibold text-nowrap">
-            {reservationClose.toLocaleDateString("sk-SK")}
+            {shiftedReservationClose.toLocaleDateString("sk-SK")}
           </span>
         </p>
       );
@@ -132,18 +133,18 @@ function OrderDateShort({
       <p>
         Rezervuj do{" "}
         <span className="font-semibold text-nowrap">
-          {reservationClose.toLocaleTimeString("sk-SK")}
+          {shiftedReservationClose.toLocaleTimeString("sk-SK")}
         </span>
       </p>
     );
   }
 
-  if (orderClose.getDate() !== new Date().getDate()) {
+  if (shiftedOrderClose.getDate() !== shiftedNow.getDate()) {
     return (
       <p>
         Objednaj do{" "}
         <span className="font-semibold text-nowrap">
-          {orderClose.toLocaleDateString("sk-SK")}
+          {shiftedOrderClose.toLocaleDateString("sk-SK")}
         </span>
       </p>
     );
@@ -153,7 +154,7 @@ function OrderDateShort({
     <p>
       Objednaj do{" "}
       <span className="font-semibold text-nowrap">
-        {orderClose.toLocaleTimeString("sk-SK")}
+        {shiftedOrderClose.toLocaleTimeString("sk-SK")}
       </span>
     </p>
   );

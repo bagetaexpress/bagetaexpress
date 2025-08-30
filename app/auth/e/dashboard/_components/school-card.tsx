@@ -25,6 +25,7 @@ import { SchoolStats } from "@/repositories/school-repository";
 import itemRepository from "@/repositories/item-repository";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { offsetDateToSk } from "@/lib/utils";
 
 export function SchoolCardPlaceholder() {
   return (
@@ -119,10 +120,10 @@ export default async function SchoolCard({
             </div>
             <div className="text-right">
               <div className="font-medium text-nowrap">
-                {orderCloseDate.toLocaleString("sk-SK")}
+                {offsetDateToSk(orderCloseDate).toLocaleString("sk-SK")}
               </div>
               <div className="text-[10px] sm:text-xs text-muted-foreground">
-                {formatTimeTo(orderCloseDate)}
+                {formatTimeTo(offsetDateToSk(orderCloseDate))}
               </div>
             </div>
           </div>
@@ -133,10 +134,10 @@ export default async function SchoolCard({
             </div>
             <div className="text-right">
               <div className="font-medium text-nowrap">
-                {reservationCloseDate.toLocaleString("sk-SK")}
+                {offsetDateToSk(reservationCloseDate).toLocaleString("sk-SK")}
               </div>
               <div className="text-[10px] sm:text-xs text-muted-foreground">
-                {formatTimeTo(reservationCloseDate)}
+                {formatTimeTo(offsetDateToSk(reservationCloseDate))}
               </div>
             </div>
           </div>

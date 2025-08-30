@@ -1,10 +1,11 @@
 import { type ClassValue, clsx } from "clsx";
-import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+
 
 function fillTemplate(template: string, { year, month, day, hour, minute, second }: { year: number, month: number, day: number, hour: number, minute: number, second: number }): string {
   let result = template;
@@ -35,6 +36,53 @@ export function getFormatedDateUTC(date: Date, template: string = "yyyy-MM-dd HH
   const minute = date.getUTCMinutes();
   const second = date.getUTCSeconds();
   return fillTemplate(template, { year, month, day, hour, minute, second });
+}
+
+/**
+ * Offsets a Date so that when it is formatted in the CURRENT system timezone,
+ * it will display the same wall-clock time as the provided date would display in
+ * the target IANA timezone.
+ *
+ * In other words, it adjusts by (targetOffset - localOffset) at that instant.
+ */
+export function offsetDateToTimezone(date: Date, timeZone: string): Date {
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
+
+  const parts = formatter.formatToParts(date).reduce((acc, part) => {
+    if (part.type !== "literal") acc[part.type] = part.value;
+    return acc;
+  }, {} as Record<string, string>);
+
+  const year = Number(parts.year);
+  const month = Number(parts.month);
+  const day = Number(parts.day);
+  const hour = Number(parts.hour);
+  const minute = Number(parts.minute);
+  const second = Number(parts.second);
+
+  // UTC time whose components equal the target timezone's wall-clock
+  const targetWallAsUTC = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+
+  // Minutes the target zone is offset from UTC at this instant
+  const targetOffsetMinutes = (targetWallAsUTC.getTime() - date.getTime()) / 60000;
+  // Minutes the current local system timezone is offset from UTC at this instant
+  const localOffsetMinutes = date.getTimezoneOffset();
+
+  const deltaMinutes = targetOffsetMinutes + localOffsetMinutes;
+  return new Date(date.getTime() + deltaMinutes * 60000);
+}
+
+export function offsetDateToSk(date: Date): Date {
+  return offsetDateToTimezone(date, "Europe/Bratislava");
 }
 
 export function isMobile() {
