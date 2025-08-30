@@ -9,8 +9,8 @@ export const cart = sqliteTable("cart", {
     .references(() => user.id),
   createdAt: text("created_at")
     .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+    .default(sql`(STRFTIME('%Y-%m-%dT%H:%M:%fZ','now'))`),
   updatedAt: text("updated_at")
     .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+    .default(sql`(STRFTIME('%Y-%m-%dT%H:%M:%fZ','now'))`),
 });

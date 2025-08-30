@@ -19,10 +19,10 @@ export const schoolStore = sqliteTable(
       .references(() => store.id),
     orderClose: text("order_close")
       .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
+      .default(sql`(STRFTIME('%Y-%m-%dT%H:%M:%fZ','now'))`),
     reservationClose: text("reservation_close")
       .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
+      .default(sql`(STRFTIME('%Y-%m-%dT%H:%M:%fZ','now'))`),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.schoolId, table.storeId] }),
