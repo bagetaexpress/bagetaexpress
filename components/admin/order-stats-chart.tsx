@@ -68,8 +68,8 @@ export default function OrderStatsChart() {
                 return `${d.getDate()}/${d.getMonth() + 1}\n${d.toLocaleDateString(undefined, { weekday: 'short' })}`;
               }}
               height={60}
-              angle={data.length > 10 ? -45 : 0}
-              textAnchor={data.length > 10 ? "end" : "middle"}
+              angle={-45}
+              textAnchor="end"
             />
             <YAxis />
             <Tooltip

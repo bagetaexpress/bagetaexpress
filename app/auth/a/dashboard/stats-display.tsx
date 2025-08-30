@@ -62,25 +62,22 @@ export default function StatsDisplay() {
         </Select>
       </div>
 
-      <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-4">
-        <div className="p-4 border rounded-lg bg-white shadow-sm">
-          <h3 className="text-sm font-medium text-gray-500">Total Orders ({periodLabel})</h3>
-          <p className="text-2xl font-semibold">{stats.totalOrders}</p>
-        </div>
-        
-        <div className="p-4 border rounded-lg bg-white shadow-sm">
-          <h3 className="text-sm font-medium text-gray-500">Total Items ({periodLabel})</h3>
-          <p className="text-2xl font-semibold">{stats.totalOrderedItems}</p>
-        </div>
-        
-        <div className="p-4 border rounded-lg bg-white shadow-sm">
-          <h3 className="text-sm font-medium text-gray-500">Picked Up Orders ({periodLabel})</h3>
-          <p className="text-2xl font-semibold">{stats.totalPickedUpOrders}</p>
-        </div>
-        
-        <div className="p-4 border rounded-lg bg-white shadow-sm">
-          <h3 className="text-sm font-medium text-gray-500">Unpicked Orders ({periodLabel})</h3>
-          <p className="text-2xl font-semibold">{stats.totalUnpickedOrders}</p>
+      <div className="rounded-lg bg-muted-foreground overflow-hidden">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
+          {[
+            { label: "Total Orders", value: stats.totalOrders },
+            { label: "Total Items", value: stats.totalOrderedItems },
+            { label: "Picked Up Orders", value: stats.totalPickedUpOrders },
+            { label: "Unpicked Orders", value: stats.totalUnpickedOrders },
+          ].map((item, index) => (
+            <div
+              key={item.label}
+              className="p-2 sm:p-4 text-center bg-muted"
+            >
+              <h3 className="text-sm font-medium text-gray-500 truncate">{item.label}</h3>
+              <p className="text-2xl font-semibold">{item.value}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
