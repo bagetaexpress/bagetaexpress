@@ -1,7 +1,7 @@
 import { ReactNode, Suspense } from "react";
 import NavWrapper from "@/components/nav/nav-wrapper";
 import NavButton from "@/components/nav/nav-button";
-import Loading from "@/app/loading";
+import { LoadingFill } from "@/app/loading";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
@@ -10,7 +10,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <NavButton href="/auth/a/dashboard" text="Dashboard" />
       </NavWrapper>
       <main className="flex-1 max-w-screen-lg w-full mx-auto py-4">
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<LoadingFill/>}>
           {children}
         </Suspense>
       </main>

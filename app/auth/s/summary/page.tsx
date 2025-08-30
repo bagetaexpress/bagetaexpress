@@ -102,6 +102,8 @@ async function SummaryPageInner({
     status: [filter],
   });
 
+  console.log(orders);
+
   return (
     <>
       {orders.length === 0 && (
@@ -139,7 +141,7 @@ async function SummaryPageInner({
                 </div>
                 <div className="hidden xs:block">
                   <Suspense fallback={<div className="text-sm text-muted-foreground">…</div>}>
-                    <OrderTriggerMeta orderId={order.id} />
+                    <OrderTriggerMeta orderId={order.id} orderStatus={order.status} />
                   </Suspense>
                 </div>
               </div>
@@ -152,7 +154,7 @@ async function SummaryPageInner({
                   </div>
                 }
               >
-                <SummaryRow orderId={order.id} />
+                <SummaryRow orderId={order.id} orderStatus={order.status} />
               </Suspense>
             </AccordionContent>
           </AccordionItem>
@@ -192,8 +194,8 @@ async function PrintOrderListWrapper() {
   );
 }
 
-async function OrderTriggerMeta({ orderId }: { orderId: number }) {
-  const items = await itemRepository.getManyWithQuantity({ orderId, orderStatus: ["ordered"] });
+async function OrderTriggerMeta({ orderId, orderStatus }: { orderId: number, orderStatus: Order["status"] }) {
+  const items = await itemRepository.getManyWithQuantity({ orderId, orderStatus: [orderStatus] });
   const itemCount = items.reduce((acc, it) => acc + it.quantity, 0);
   const total = items.reduce((acc, it) => acc + it.item.price * it.quantity, 0);
 

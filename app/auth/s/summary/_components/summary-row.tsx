@@ -1,13 +1,15 @@
 import itemRepository from "@/repositories/item-repository";
+import { Order } from "@/db/schema";
 
 interface IProps {
   orderId: number;
+  orderStatus: Order["status"];
 }
 
-export default async function SummaryRow({ orderId }: IProps) {
+export default async function SummaryRow({ orderId, orderStatus }: IProps) {
   const items = await itemRepository.getManyWithQuantity({
     orderId,
-    orderStatus: ["ordered"],
+    orderStatus: [orderStatus],
   });
 
   const total = items
@@ -20,12 +22,11 @@ export default async function SummaryRow({ orderId }: IProps) {
         {items.map(({ item, quantity }, i) => (
           <div key={i} className="flex justify-between p-1">
             <div>
-              <h3 className="font-semibold text-lg">{item.name}</h3>
+              <h3 className="text-lg">{item.name}</h3>
               <p className="font-light text-sm">{item.description}</p>
             </div>
             <div className="flex justify-center text-center gap-2 flex-col">
-              <p className=" font-medium text-xl">
-                {/* {(item.price * q).toFixed(2)}€ */}
+              <p className="text-xl">
                 {quantity}x{item.price.toFixed(2)}€
               </p>
             </div>

@@ -97,9 +97,9 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body suppressHydrationWarning className="flex flex-col min-h-screen">
+      <body suppressHydrationWarning className="flex flex-col">
         <MainLayoutWrapper attribute="class" defaultTheme="light" enableSystem enableColorScheme={false}>
-          <main className="flex-1">
+          <main className="flex-1 min-h-screen">
             {children}
           </main>
         </MainLayoutWrapper>

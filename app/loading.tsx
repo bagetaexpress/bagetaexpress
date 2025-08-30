@@ -1,8 +1,8 @@
 import LogomarkJS from "@/components/nav/logomark-js";
 
-export default function Loading() {
+export default function LoadingFullPage() {
   return (
-    <div className="flex min-h-[60vh] w-full items-center justify-center">
+    <div className="flex w-full min-h-screen items-center justify-center">
       <div className="flex flex-col items-center gap-6">
         <LogomarkJS width={180} height={65} />
         <div className="flex items-center gap-2 text-muted-foreground" aria-live="polite" aria-busy>
@@ -15,4 +15,12 @@ export default function Loading() {
   );
 }
 
-
+export function LoadingFill() {
+  return (
+    <div className="flex flex-1 p-5 items-center justify-center">
+      <div className="flex flex-col items-center gap-6">
+        <LogomarkJS width={180} height={65} />
+      </div>
+    </div>
+  );
+}

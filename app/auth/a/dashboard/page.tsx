@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import OrderStatsChart from "@/components/admin/order-stats-chart";
 import { Suspense } from "react";
 import StatsDisplay from "./stats-display";
-import Loading from "@/app/loading";
+import { LoadingFill } from "@/app/loading";
 
 export default async function AdminDashboard() {
   const user = await getUser();
@@ -16,7 +16,7 @@ export default async function AdminDashboard() {
     <div className="space-y-6 px-2 lg:px-0">
       <h1 className="text-3xl font-bold">Admin Dashboard</h1>
       
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<LoadingFill   />}>
           <StatsDisplay />
           <OrderStatsChart />
       </Suspense>
