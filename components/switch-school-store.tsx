@@ -53,6 +53,14 @@ async function SwitchSchoolStoreInner({
     throw new Error("Store not found");
   }
 
+  if (adminOnly && !user.isAdmin) {
+    return null;
+  }
+
+  if (storeOwnerOnly && !user.isStoreOwner && !user.isAdmin) {
+    return null;
+  }
+
   const schools = await schoolRepository.getMany({ storeId: user.storeId });
   const stores = user.isAdmin ? await storeRepository.getMany() : [];
 
@@ -92,14 +100,6 @@ async function SwitchSchoolStoreInner({
 
     revalidatePath(path);
     redirect(path);
-  }
-
-  if (adminOnly && !user.isAdmin) {
-    return null;
-  }
-
-  if (storeOwnerOnly && !user.isStoreOwner && !user.isAdmin) {
-    return null;
   }
 
   return (
