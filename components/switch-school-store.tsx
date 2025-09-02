@@ -46,11 +46,11 @@ async function SwitchSchoolStoreInner({
 }: SwitchSchoolStoreProps) {
   const user = await getUser();
   if (!user || !(user.isStoreOwner || user.isAdmin)) {
-    throw new Error("User not found");
+    return null;
   }
 
   if (!user.storeId) {
-    throw new Error("Store not found");
+    return null;
   }
 
   if (adminOnly && !user.isAdmin) {
