@@ -8,6 +8,7 @@ import NavWrapper from "@/components/nav/nav-wrapper";
 import { Button } from "@/components/ui/button";
 import orderRepository from "@/repositories/order-repository";
 import type { Metadata } from "next";
+import SwitchSchoolStore from "@/components/switch-school-store";
 
 export const metadata: Metadata = {
   title: "bageta.express | Domovská stránka",
@@ -37,6 +38,7 @@ export default async function authLayout({
           <NavButtons />
         </Suspense>
       </NavWrapper>
+      <SwitchSchoolStore storeOwnerOnly showChangeSchool path="/auth/c/store" />
       <div className="p-2 pb-20 flex-1 flex">
         <main className="max-w-screen-lg mx-auto flex-1">{children}</main>
       </div>

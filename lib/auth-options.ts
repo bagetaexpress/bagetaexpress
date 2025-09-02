@@ -17,6 +17,7 @@ export const authOptions: AuthOptions = {
   ],
   pages: {
     newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
+    error: "/auth/error",
   },
   callbacks: {
     async jwt({ token, account }) {
@@ -39,6 +40,7 @@ export const authOptions: AuthOptions = {
           ...session.user,
           id: user.id,
           isAdmin: found?.user?.isAdmin || false,
+          isStoreOwner: found?.employee?.isOwner || false,
           isCustomer: !!found?.customer,
           isSeller: !!found?.seller,
           isEmployee: !!found?.employee,

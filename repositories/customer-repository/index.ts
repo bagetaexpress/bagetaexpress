@@ -27,7 +27,18 @@ async function getSingle({
   return found ?? null;
 }
 
+async function updateSingle({
+  userId,
+  schoolId,
+}: {
+  userId: Customer["userId"];
+  schoolId: Customer["schoolId"];
+}): Promise<void> {
+  await db.update(customer).set({ schoolId }).where(eq(customer.userId, userId));
+}
+
 export const customerRepository = {
   getSingle,
   createSingle,
+  updateSingle,
 };

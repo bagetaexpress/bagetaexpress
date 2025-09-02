@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Metadata } from "next";
+import SwitchSchoolStore from "@/components/switch-school-store";
 
 export const metadata: Metadata = {
   title: "bageta.express | Predajca",
@@ -64,6 +65,7 @@ export default async function authLayout({
           </DropdownMenu>
         </NavWrapper>
       </div>
+      <SwitchSchoolStore storeOwnerOnly showChangeSchool showChangeStore path="/auth/s/summary" />
       <div className="p-2 pb-20 flex-1 flex">
         <main className="max-w-screen-lg mx-auto flex-1">{children}</main>
       </div>

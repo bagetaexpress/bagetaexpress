@@ -37,7 +37,7 @@ export default async function SummaryPage(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
-  const filter = (searchParams.filter as Order["status"]) ?? "ordered";
+  const filter = (searchParams.filter as Order["status"]) ?? "ordered" as Order["status"];
 
   return (
     <div className="flex flex-col relative min-h-full">
@@ -102,8 +102,6 @@ async function SummaryPageInner({
     status: [filter],
   });
 
-  console.log(orders);
-
   return (
     <>
       {orders.length === 0 && (
@@ -135,7 +133,16 @@ async function SummaryPageInner({
                     <span className="truncate align-middle">{user.name ?? user.email}</span>
                   </p>
                   <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-                    <Badge variant="secondary" className="capitalize">{order.status}</Badge>
+                    <Badge variant="secondary" className="capitalize">
+                      {
+                        {
+                          ordered: "Aktuálne",
+                          unpicked: "Nevyzdvihnuté",
+                          pickedup: "Prevzaté",
+                          cancelled: "Zrušené",
+                        }[order.status]
+                      }
+                    </Badge>
                     <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{format(offsetDateToSk(new Date(order.updatedAt)), "d.M.y HH:mm")}</span>
                   </div>
                 </div>

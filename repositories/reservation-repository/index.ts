@@ -1,9 +1,9 @@
 import "server-only";
 import { db } from "@/db";
 import { Item, Reservation, item, reservation } from "@/db/schema";
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, isNull, or, sql } from "drizzle-orm";
 
-async function getMultiple({ storeId }: { storeId: Item["storeId"] }): Promise<
+async function getMultiple({ storeId, schoolId }: { storeId: Item["storeId"], schoolId?: Reservation["schoolId"] }): Promise<
   {
     item: Item;
     reservation: Reservation | null;
@@ -11,9 +11,23 @@ async function getMultiple({ storeId }: { storeId: Item["storeId"] }): Promise<
 > {
   return await db
     .select()
-    .from(reservation)
-    .rightJoin(item, eq(reservation.itemId, item.id))
-    .where(eq(item.storeId, storeId));
+    .from(item)
+    .leftJoin(reservation, eq(reservation.itemId, item.id))
+    .where(
+      eq(item.storeId, storeId)
+    )
+    .then(results =>
+      results.map(row => {
+        if (
+          typeof schoolId !== "undefined" &&
+          row.reservation &&
+          row.reservation.schoolId !== schoolId
+        ) {
+          return { item: row.item, reservation: null };
+        }
+        return row;
+      })
+    )
 }
 
 async function getSingle(

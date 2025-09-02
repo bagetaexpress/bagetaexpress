@@ -26,18 +26,65 @@ import itemRepository from "@/repositories/item-repository";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { offsetDateToSk } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function SchoolCardPlaceholder() {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle></CardTitle>
-        <CardDescription></CardDescription>
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between gap-2">
+          <Skeleton className="h-5 w-40" />
+          <Skeleton className="h-5 w-28 rounded-full" />
+        </div>
+        <Skeleton className="mt-1 h-4 w-24" />
       </CardHeader>
-      <CardContent className="flex justify-center items-center">
-        <Loader className="w-10 h-10 animate-spin" />
+      <CardContent className="grid gap-3">
+        <div className="grid gap-2 text-sm">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Skeleton className="h-4 w-4 rounded-sm" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+            <div className="text-right">
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="mt-1 h-3 w-24" />
+            </div>
+          </div>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Skeleton className="h-4 w-4 rounded-sm" />
+              <Skeleton className="h-4 w-36" />
+            </div>
+            <div className="text-right">
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="mt-1 h-3 w-24" />
+            </div>
+          </div>
+        </div>
+
+        <Separator />
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="rounded-md bg-muted/50 px-3 py-2">
+              <Skeleton className="h-3 w-16" />
+              <Skeleton className="mt-2 h-5 w-10" />
+            </div>
+          ))}
+        </div>
       </CardContent>
-      <CardFooter></CardFooter>
+      <CardFooter className="grid gap-2">
+        <Skeleton className="h-3 w-24" />
+        <div className="grid grid-cols-2 gap-2 w-full">
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+        </div>
+        <Skeleton className="h-9 w-full" />
+        <div className="grid grid-cols-2 gap-2 w-full">
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+        </div>
+      </CardFooter>
     </Card>
   );
 }
@@ -58,7 +105,7 @@ export default async function SchoolCard({
       storeId: user.storeId,
       schoolId: school.id,
     }),
-    reservationRepository.getMultiple({ storeId: user.storeId }),
+    reservationRepository.getMultiple({ storeId: user.storeId, schoolId: school.id }),
     storeRepository.getSingle({ storeId: user.storeId }),
   ]);
 
@@ -123,7 +170,7 @@ export default async function SchoolCard({
                 {offsetDateToSk(orderCloseDate).toLocaleString("sk-SK")}
               </div>
               <div className="text-[10px] sm:text-xs text-muted-foreground">
-                {formatTimeTo(offsetDateToSk(orderCloseDate))}
+                {formatTimeTo(orderCloseDate)}
               </div>
             </div>
           </div>
@@ -137,7 +184,7 @@ export default async function SchoolCard({
                 {offsetDateToSk(reservationCloseDate).toLocaleString("sk-SK")}
               </div>
               <div className="text-[10px] sm:text-xs text-muted-foreground">
-                {formatTimeTo(offsetDateToSk(reservationCloseDate))}
+                {formatTimeTo(reservationCloseDate)}
               </div>
             </div>
           </div>
