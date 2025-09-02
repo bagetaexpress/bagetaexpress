@@ -57,11 +57,22 @@ async function getSingle({
   return found ?? null;
 }
 
+async function updateSingle({
+  userId,
+  data,
+}: {
+  userId: Seller["userId"];
+  data: Partial<Seller>;
+}): Promise<void> {
+  await db.update(seller).set(data).where(eq(seller.userId, userId));
+}
+
 export const sellerRepository = {
   getMultiple,
   createSingle,
   deleteSingle,
   getSingle,
+  updateSingle,
 };
 
 export default sellerRepository;

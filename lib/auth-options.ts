@@ -39,6 +39,7 @@ export const authOptions: AuthOptions = {
           ...session.user,
           id: user.id,
           isAdmin: found?.user?.isAdmin || false,
+          isStoreOwner: found?.employee?.isOwner || false,
           isCustomer: !!found?.customer,
           isSeller: !!found?.seller,
           isEmployee: !!found?.employee,

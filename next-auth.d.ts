@@ -26,6 +26,7 @@ declare module "next-auth" {
     email: string;
     image?: string;
     isAdmin: boolean;
+    isStoreOwner: boolean;
     isCustomer: boolean;
     isSeller: boolean;
     isEmployee: boolean;

@@ -53,11 +53,22 @@ async function getSingle({
   return found ?? null;
 }
 
+async function updateSingle({
+  userId,
+  storeId,
+}: {
+  userId: Employee["userId"];
+  storeId: Employee["storeId"];
+}): Promise<void> {
+  await db.update(employee).set({ storeId }).where(eq(employee.userId, userId));
+}
+
 export const employeeRepository = {
   createSingle,
   getMultiple,
   deleteSingle,
   getSingle,
+  updateSingle,
 };
 
 export default employeeRepository;

@@ -19,9 +19,15 @@ async function updateSingle(data: { id: Store["id"] } & Partial<Store>) {
   await db.update(store).set(data).where(eq(store.id, data.id));
 }
 
+async function getMany(): Promise<Store[]> {
+  const found = await db.select().from(store);
+  return found;
+}
+
 export const storeRepository = {
   getSingle,
   updateSingle,
+  getMany,
 };
 
 export default storeRepository;
