@@ -151,7 +151,7 @@ async function SwitchSchoolStoreInner({
 
 function SwitchSchoolStoreFallback() {
   return (
-    <div className="flex gap-4 flex-wrap items-center border-b border-gray-200 py-2">
+    <div className="flex flex-col sm:flex-row sm:gap-4 flex-wrap items-center border-b border-gray-200 max-w-screen-lg mx-auto w-full">
       <div className="flex py-2 gap-2 flex-1 md:grow-0">
         <Skeleton className="h-10 w-[180px]" />
         <Skeleton className="h-10 w-28" />

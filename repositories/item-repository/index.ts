@@ -9,6 +9,7 @@ import {
   isNotNull,
   getTableColumns,
   SQL,
+  isNull,
 } from "drizzle-orm";
 import {
   Allergen,
@@ -206,7 +207,16 @@ async function getMany({
         schoolId ? eq(schoolStore.schoolId, schoolId) : undefined,
       ),
     )
-    .leftJoin(reservation, eq(reservation.itemId, item.id))
+    .leftJoin(
+      reservation,
+      and(
+        eq(reservation.itemId, item.id),
+        or(
+          schoolId ? eq(reservation.schoolId, schoolId) : undefined,
+          isNull(reservation.schoolId),
+        ),
+      ),
+    )
     .$dynamic();
 
   if (orderStatus !== undefined || orderId !== undefined) {

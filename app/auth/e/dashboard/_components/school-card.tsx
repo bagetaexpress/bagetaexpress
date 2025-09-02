@@ -58,7 +58,7 @@ export default async function SchoolCard({
       storeId: user.storeId,
       schoolId: school.id,
     }),
-    reservationRepository.getMultiple({ storeId: user.storeId }),
+    reservationRepository.getMultiple({ storeId: user.storeId, schoolId: school.id }),
     storeRepository.getSingle({ storeId: user.storeId }),
   ]);
 
