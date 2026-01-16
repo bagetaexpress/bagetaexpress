@@ -1,12 +1,13 @@
-// "use client";
+"use client";
 
 import { Badge } from "@/components/ui/badge";
 import { CartExtendedItem } from "@/repositories/item-repository";
 import { saveUpdateCartItem } from "@/lib/cart-utils";
 import { cn } from "@/lib/utils";
-import { Minus, Plus, Trash } from "lucide-react";
+import { Minus, Plus, Trash2, AlertCircle } from "lucide-react";
 import Image from "next/image";
 import { useMemo } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function CartItemRow({
   cartId,
@@ -66,54 +67,85 @@ export default function CartItemRow({
     return null;
   }
 
+  const itemTotal = props.item.price * props.cartItem.quantity;
+
   return (
     <div
-      className={`flex justify-between p-2 items-center ${isInvalid ? "bg-red-200 bg-opacity-50" : ""}`}
+      className={cn(
+        "flex gap-4 p-4 transition-colors",
+        isInvalid && "bg-red-50 dark:bg-red-950/20"
+      )}
     >
-      <div className="flex gap-1 items-center">
+      {/* Image */}
+      <div className="flex-shrink-0">
         {props.item.imageUrl != null && props.item.imageUrl != "" ? (
-          <Image
-            src={props.item.imageUrl}
-            width={150}
-            height={150}
-            alt="Obrázok produktu"
-            className="rounded-md max-w-24 object-contain"
-          />
-        ) : null}
-        <div>
-          <h3 className="font-semibold text-lg">{props.item.name}</h3>
-          <p className="font-light text-sm">{props.store.name}</p>
-          <CartBadges {...props} />
-        </div>
+          <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-muted">
+            <Image
+              src={props.item.imageUrl}
+              fill
+              alt={props.item.name}
+              className="object-cover"
+            />
+          </div>
+        ) : (
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 flex items-center justify-center">
+            <span className="text-2xl font-bold text-primary/30">
+              {props.item.name.charAt(0).toUpperCase()}
+            </span>
+          </div>
+        )}
       </div>
-      <div className="flex justify-center text-center gap-2 flex-col">
-        <p className=" font-bold text-xl">{props.item.price} €</p>
-        <div className="flex items-center">
-          <button
-            onClick={handleDescrease}
-            type="submit"
-            className="aspect-square rounded-md p-1"
-          >
-            {props.cartItem.quantity === 1 ? (
-              <Trash className="w-5 h-5" />
-            ) : (
-              <Minus className="w-5 h-5" />
+
+      {/* Content */}
+      <div className="flex-1 min-w-0 flex flex-col">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <h3 className="font-semibold text-base leading-tight line-clamp-1">
+              {props.item.name}
+            </h3>
+            <p className="text-sm text-muted-foreground">{props.store.name}</p>
+          </div>
+          <div className="text-right flex-shrink-0">
+            <p className="font-bold text-lg">{itemTotal.toFixed(2)}€</p>
+            {props.cartItem.quantity > 1 && (
+              <p className="text-xs text-muted-foreground">
+                {props.item.price.toFixed(2)}€ / ks
+              </p>
             )}
-          </button>
-          <p className="text-xl text-center w-[2ch] px-2">
-            {props.cartItem.quantity}
-          </p>
-          <button
-            type="submit"
-            onClick={handleIncrease}
-            disabled={props.cartItem.quantity >= 5}
-            className={cn(
-              "rounded-md p-1 aspect-square",
-              props.cartItem.quantity >= 5 && "opacity-50",
-            )}
-          >
-            <Plus className="w-5 h-5" />
-          </button>
+          </div>
+        </div>
+
+        {/* Badges */}
+        <CartBadges {...props} />
+
+        {/* Quantity Controls */}
+        <div className="flex items-center justify-between mt-auto pt-2">
+          <div className="flex items-center gap-1 bg-muted/50 rounded-full p-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 rounded-full hover:bg-destructive/10 hover:text-destructive"
+              onClick={handleDescrease}
+            >
+              {props.cartItem.quantity === 1 ? (
+                <Trash2 className="w-4 h-4" />
+              ) : (
+                <Minus className="w-4 h-4" />
+              )}
+            </Button>
+            <span className="w-8 text-center font-semibold text-sm">
+              {props.cartItem.quantity}
+            </span>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 rounded-full"
+              onClick={handleIncrease}
+              disabled={props.cartItem.quantity >= 5}
+            >
+              <Plus className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>
@@ -130,25 +162,54 @@ function CartBadges({ reservation, schoolStore, cartItem }: CartExtendedItem) {
     [schoolStore.reservationClose],
   );
 
-  return (
-    <div className="flex flex-wrap gap-1">
-      {!reservation && isOrderClosed && (
-        <Badge variant="destructive">Objednávky uzavreté</Badge>
-      )}
-      {reservation && isReservationClosed && (
-        <Badge variant="destructive">Rezervácie uzavreté</Badge>
-      )}
-      {reservation && isOrderClosed && !isReservationClosed && (
-        <Badge variant="secondary">Rezervácia</Badge>
-      )}
-      {reservation && isOrderClosed && (
-        <Badge variant="secondary">Skladom {reservation.remaining}ks.</Badge>
-      )}
-      {reservation &&
-        isOrderClosed &&
-        cartItem.quantity > reservation.remaining && (
-          <Badge variant="destructive">Nedostatok skladom</Badge>
-        )}
-    </div>
-  );
+  const badges = [];
+
+  if (!reservation && isOrderClosed) {
+    badges.push(
+      <Badge key="order-closed" variant="destructive" className="gap-1">
+        <AlertCircle className="w-3 h-3" />
+        Objednávky uzavreté
+      </Badge>
+    );
+  }
+
+  if (reservation && isReservationClosed) {
+    badges.push(
+      <Badge key="reservation-closed" variant="destructive" className="gap-1">
+        <AlertCircle className="w-3 h-3" />
+        Rezervácie uzavreté
+      </Badge>
+    );
+  }
+
+  if (reservation && isOrderClosed && !isReservationClosed) {
+    badges.push(
+      <Badge key="reservation" variant="secondary">
+        Rezervácia
+      </Badge>
+    );
+    badges.push(
+      <Badge key="stock" variant="outline" className="text-xs">
+        Skladom {reservation.remaining} ks
+      </Badge>
+    );
+  }
+
+  if (
+    reservation &&
+    isOrderClosed &&
+    !isReservationClosed &&
+    cartItem.quantity > reservation.remaining
+  ) {
+    badges.push(
+      <Badge key="insufficient" variant="destructive" className="gap-1">
+        <AlertCircle className="w-3 h-3" />
+        Nedostatok skladom
+      </Badge>
+    );
+  }
+
+  if (badges.length === 0) return null;
+
+  return <div className="flex flex-wrap gap-1.5 mt-2">{badges}</div>;
 }

@@ -1,21 +1,23 @@
-import ItemCard from "@/app/auth/c/store/_components/itemCard";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/user-utils";
 import itemRepository from "@/repositories/item-repository";
 import orderRepository from "@/repositories/order-repository";
-import { Loader, ShoppingCart } from "lucide-react";
+import { Loader, ShoppingCart, ArrowRight } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import StoreClient from "./_components/store-client";
 
 export default function StorePage() {
   return (
     <div className="h-full relative flex flex-col">
-      <h1 className="text-2xl font-semibold pt-2">Obchod</h1>
       <Suspense
         fallback={
-          <div className="flex flex-1 justify-center items-center">
-            <Loader className="h-10 w-10 animate-spin" />
+          <div className="flex flex-1 justify-center items-center min-h-[60vh]">
+            <div className="flex flex-col items-center gap-3">
+              <Loader className="h-8 w-8 animate-spin text-primary" />
+              <p className="text-sm text-muted-foreground">Načítavam ponuku...</p>
+            </div>
           </div>
         }
       >
@@ -44,66 +46,42 @@ async function StorePageInner() {
 
   return (
     <>
-      <div className="grid gap-1 mb-14 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
-        {items
-          .sort((a, b) => {
-            if (
-              new Date(a.schoolStore.orderClose) >= new Date() &&
-              new Date(b.schoolStore.orderClose) < new Date()
-            ) {
-              return -1;
-            }
-            if (
-              a.reservation &&
-              (new Date(a.schoolStore.reservationClose) >= new Date() ||
-                a.reservation.remaining > 0) &&
-              (!b.reservation ||
-                (new Date(b.schoolStore.reservationClose) < new Date() &&
-                  b.reservation.remaining <= 0))
-            ) {
-              return -1;
-            }
-            return 0;
-          })
-          .map((item) => (
-            <ItemCard key={item.item.id} item={item} hasOrder={!!hasOrder} />
-          ))}
+      {/* Header Section */}
+      <div className="mb-4">
+        <h1 className="text-3xl font-bold tracking-tight">Ponuka</h1>
+        <p className="text-muted-foreground mt-1">
+          Vyber si z dnešnej ponuky čerstvých produktov
+        </p>
       </div>
+
+      {/* Main Content */}
+      <StoreClient items={items} hasOrder={!!hasOrder} />
+
+      {/* Mobile Bottom Bar */}
       <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: "100dvh",
-          pointerEvents: "none",
-        }}
-        className="flex flex-col justify-end sm:hidden"
+        className="fixed bottom-0 left-0 right-0 p-3 bg-background/95 backdrop-blur-lg border-t border-border/50 sm:hidden z-50"
+        style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
       >
-        {!hasOrder && (
-          <Link
-            prefetch={false}
-            href="/auth/c/cart"
-            className="m-2"
-            style={{ pointerEvents: "all" }}
-          >
-            <Button className="w-full">
+        {!hasOrder ? (
+          <Link prefetch={false} href="/auth/c/cart" className="block">
+            <Button className="w-full h-12 text-base font-semibold shadow-lg">
+              <ShoppingCart className="mr-2 h-5 w-5" />
               Nákupný košík
-              <ShoppingCart className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        ) : (
+          <Link prefetch={false} href="/auth/c/order" className="block">
+            <Button className="w-full h-12 text-base font-semibold shadow-lg">
+              Zobraziť objednávku
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
         )}
-        {hasOrder && (
-          <Link
-            prefetch={false}
-            href="/auth/c/order"
-            className="m-2"
-            style={{ pointerEvents: "all" }}
-          >
-            <Button className="w-full">Zobraziť objednávku</Button>
-          </Link>
-        )}
       </div>
+
+      {/* Spacer for mobile bottom bar */}
+      <div className="h-16 sm:hidden" />
     </>
   );
 }
