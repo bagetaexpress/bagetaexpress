@@ -1,52 +1,53 @@
 import LoginServices from "./_components/login-services";
 import {
   BlobFullPrimary,
-  BlobOutlineWhite,
   BlobOutlineSecondary,
   BlobPatternBlack,
   BlurGradientBackground,
-  BlobOutlineSecondary2,
   BlobFullPrimary2,
-  BlobPatternBlack2,
 } from "@/components/blob";
 
 import MockUpStore from "@/assets/images/landing_page_store.png";
 import MockUpDashboard from "@/assets/images/landing_page_dashboard.png";
 import MockUpSeller from "@/assets/images/landing_page_seller.png";
-import MockUpSeller1 from "@/assets/images/landing_page_seller_1.png";
-import MockUpSeller2 from "@/assets/images/landing_page_seller_2.png";
-import MockUpSeller3 from "@/assets/images/landing_page_seller_3.png";
 import MockUpOrder from "@/assets/images/landing_page_order.png";
-import MockUpOrder1 from "@/assets/images/landing_page_order_1.png";
-import MockUpOrder2 from "@/assets/images/landing_page_order_2.png";
-import MockUpOrder3 from "@/assets/images/landing_page_order_3.png";
 
 import Image from "next/image";
 import LogomarkJS from "@/components/nav/logomark-js";
 import UserDropdown from "@/components/nav/user-dropdown";
 import Link from "next/link";
-import { Pointer } from "lucide-react";
-import { PopupCarousel } from "@/components/ui/custom/popup-carousel";
+import { LayoutDashboard, QrCode, ShoppingBag, Menu } from "lucide-react";
 import { Suspense } from "react";
 import EmailForm from "./_components/email-form";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { getUser } from "@/lib/user-utils";
 import { redirect, RedirectType } from "next/navigation";
+import {
+  FeatureCardWrapper,
+  SectionReveal,
+  ContactReveal,
+} from "./_components/landing-page-client";
 
-export default function HomeWrapper() {
+// Server component wrapper for redirect logic
+export default async function HomeWrapper() {
   return (
     <>
-      <Home />
+      <LandingPage />
       <RedirectWrapper />
     </>
   );
 }
 
-
-
 async function RedirectWrapper() {
   const user = await getUser();
   if (user == null) {
-    return;
+    return null;
   }
   switch (true) {
     case user.isEmployee || user.isAdmin:
@@ -56,286 +57,285 @@ async function RedirectWrapper() {
     case user.isCustomer:
       redirect("/auth/c/store", RedirectType.replace);
   }
-
   return null;
 }
 
-export function Home() {
+// Feature card data type
+type FeatureCardProps = {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  image: typeof MockUpDashboard;
+  delay?: number;
+};
+
+// Feature card component
+function FeatureCard({
+  icon: Icon,
+  title,
+  description,
+  image,
+  delay = 0,
+}: FeatureCardProps) {
+  return (
+    <FeatureCardWrapper delay={delay}>
+      <Card className="group h-full overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1">
+        <div className="aspect-[3/2] overflow-hidden bg-gradient-to-br from-primary/5 to-secondary/5">
+          <Image
+            src={image}
+            alt={title}
+            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+        <CardContent className="p-5">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 rounded-lg bg-primary/10 text-primary">
+              <Icon className="w-5 h-5" />
+            </div>
+            <h3 className="font-bold text-xl">{title}</h3>
+          </div>
+          <p className="text-muted-foreground leading-relaxed">{description}</p>
+        </CardContent>
+      </Card>
+    </FeatureCardWrapper>
+  );
+}
+
+function LandingPage() {
   return (
     <div className="min-h-[100dvh] overflow-hidden relative">
-      <BlurGradientBackground className="absolute left-0 top-0 w-full aspect-square opacity-50 z-[-10]" />
-      <div className="flex min-h-screen flex-col items-center justify-center gap-10 relative px-5">
-        <BlobOutlineWhite className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[0.8] translate-x-[-40%] translate-y-[-70%]" />
-        <BlobPatternBlack className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[0.8] translate-x-[-30%] translate-y-[-29%]" />
-        <BlobFullPrimary className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[1.2] translate-x-[-60%] translate-y-[-30%]" />
-        <BlobOutlineSecondary className="z-[-1] absolute top-[50dvh] left-1/2 aspect-square max-w-[150%] w-[75rem] scale-[0.8] translate-x-[-60%] translate-y-[0%]" />
-        <nav className="h-fit flex flex-row items-center justify-between max-w-screen-lg sm:mt-5 w-full sm:w-[calc(100%-2.5rem)] bg-background p-5 sm:rounded-xl absolute top-0 left-1/2 translate-x-[-50%] shadow-2xl">
-          <div className="relative h-10 w-28">
+      {/* Background decorations */}
+      <BlurGradientBackground className="absolute left-0 top-0 w-full aspect-square opacity-40 z-[-10]" />
+
+      {/* Hero Section */}
+      <section className="min-h-screen flex flex-col relative px-5">
+        {/* Blobs positioned strategically */}
+        <BlobFullPrimary className="z-[-1] absolute top-[20%] right-[-20%] aspect-square w-[60rem] opacity-80" />
+        <BlobPatternBlack className="z-[-1] absolute top-[30%] right-[-10%] aspect-square w-[50rem] scale-75" />
+        <BlobOutlineSecondary className="z-[-1] absolute bottom-[-10%] left-[-20%] aspect-square w-[50rem]" />
+
+        {/* Navigation */}
+        <nav className="h-fit flex flex-row items-center justify-between max-w-screen-xl mx-auto sm:mt-5 w-full sm:w-[calc(100%-2.5rem)] bg-background/80 backdrop-blur-md p-4 sm:p-5 sm:rounded-xl sticky top-0 sm:top-5 shadow-lg z-50">
+          <div className="relative h-8 sm:h-10 w-24 sm:w-28">
             <Link prefetch={false} href="/">
               <LogomarkJS
                 style={{ fill: "hsl(var(--primary-foreground))" }}
-                className="max-h-10 flex-1"
+                className="max-h-8 sm:max-h-10 flex-1"
               />
             </Link>
           </div>
-          <div className="flex gap-1">
-            <div className="flex rounded-md overflow-hidden divide-x">
+          <div className="flex gap-2 items-center">
+            {/* Desktop nav links */}
+            <div className="hidden sm:flex rounded-md overflow-hidden divide-x">
               <Link
                 prefetch={false}
-                href="/#contact"
-                className="px-4 py-2 hover:bg-accent hover:text-accent-foreground"
+                href="#features"
+                className="px-4 py-2 hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                Funkcie
+              </Link>
+              <Link
+                prefetch={false}
+                href="#contact"
+                className="px-4 py-2 hover:bg-accent hover:text-accent-foreground transition-colors"
               >
                 Kontakt
               </Link>
               <Link
                 prefetch={false}
                 href="/support"
-                className="px-4 py-2 hover:bg-accent hover:text-accent-foreground"
+                className="px-4 py-2 hover:bg-accent hover:text-accent-foreground transition-colors"
               >
                 Podpora
               </Link>
             </div>
+            
+            {/* Mobile menu */}
+            <Sheet>
+              <SheetTrigger asChild className="sm:hidden">
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Otvoriť menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[280px]">
+                <div className="flex flex-col gap-4 mt-8">
+                  <Link
+                    href="#features"
+                    className="text-lg font-medium py-2 hover:text-primary transition-colors"
+                  >
+                    Funkcie
+                  </Link>
+                  <Link
+                    href="#contact"
+                    className="text-lg font-medium py-2 hover:text-primary transition-colors"
+                  >
+                    Kontakt
+                  </Link>
+                  <Link
+                    href="/support"
+                    className="text-lg font-medium py-2 hover:text-primary transition-colors"
+                  >
+                    Podpora
+                  </Link>
+                  <div className="pt-4 border-t">
+                    <LoginServices />
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+            
             <Suspense fallback={null}>
               <UserDropdown />
             </Suspense>
           </div>
         </nav>
-        <div className="text-center mt-[20dvh]">
-          <h1
-            className="font-extrabold"
-            style={{
-              fontSize: "clamp(3rem, 10vw, 6rem)",
-              lineHeight: 1,
-            }}
-          >
-            NASKENUJ
-            <br />
-            <span
+
+        {/* Hero Content */}
+        <div className="flex-1 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16 max-w-screen-xl mx-auto w-full py-12 lg:py-0">
+          {/* Text Content */}
+          <div className="flex-1 text-center lg:text-left animate-[fadeInUp_0.8s_ease-out]">
+            <h1
+              className="font-extrabold tracking-tight mb-6"
               style={{
-                WebkitTextStroke: "clamp(2px, 0.5vw, 4px) black",
-                color: "transparent",
+                fontSize: "clamp(2.5rem, 8vw, 5rem)",
+                lineHeight: 1.1,
               }}
             >
-              OBJEDNAJ
-            </span>
-            <br />
-            VYCHUTNAJ
-          </h1>
-        </div>
-        <div className="text-center">
-          <p className="text-xl font-semibold max-w-prose pb-4">
-            <span className="underline">BagetaExpress</span> je objednávací
-            systém pre študentov ktorý ponúka jednoduché a bezproblémové
-            riešenie objednávania jedla na školy
-          </p>
-          <LoginServices />
-        </div>
-        <Image
-          src={MockUpStore}
-          alt="Bageta Express store mockup"
-          className="w-[1024px] max-w-[140%]"
-        />
-      </div>
-      <div
-        id="description"
-        className="grid max-w-screen-lg mx-auto mt-52 gap-y-40 px-5"
-      >
-        <div className="grid sm:grid-cols-2">
-          <div className="flex flex-col justify-center gap-4">
-            <h3 className="font-bold text-3xl">Jednoduchá správa</h3>
-            <p className="max-w-prose font-ligh text-lg">
-              Pridaj nové jedlá, uprav ceny, sleduj objednávky a získaj podrobný
-              prehľad o svojom obchode, individuálne spravuj školy, tlač štítky,
-              spravuj zamestnancov a viac! Všetko na jednom mieste, dostupné
-              kedykoľvek a odkiaľkoľvek.
+              <span className="inline-block animate-[fadeInUp_0.6s_ease-out]">
+                NASKENUJ.
+              </span>
+              <br />
+              <span className="inline-block animate-[fadeInUp_0.6s_ease-out_0.1s_both] text-primary">
+                OBJEDNAJ.
+              </span>
+              <br />
+              <span className="inline-block animate-[fadeInUp_0.6s_ease-out_0.2s_both]">
+                VYCHUTNAJ.
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-8 animate-[fadeInUp_0.6s_ease-out_0.3s_both]">
+              <span className="font-semibold text-foreground">
+                BagetaExpress
+              </span>{" "}
+              je moderný objednávací systém pre študentov. Jednoduché a rýchle
+              objednávanie jedla priamo na vašej škole.
             </p>
-          </div>
-          <div className="relative">
-            <BlobFullPrimary className="absolute left-0 bottom-0 z-[-1] w-[50rem] aspect-square rotate-90 translate-x-[-25%] translate-y-[10%]" />
-            <BlobPatternBlack className="absolute left-0 bottom-0 z-[-1] w-[50rem] scale-[0.8] aspect-square rotate-90 translate-x-[-25%] translate-y-[25%]" />
-            <PopupCarousel
-              items={[
-                <Image
-                  key="dashboard1"
-                  src={MockUpDashboard}
-                  alt="Managment dashboard"
-                  className="drop-shadow-xl aspect-[4/3] object-cover max-h-dvh"
-                />,
-              ]}
-              className="flex"
-            >
-              <Image
-                src={MockUpDashboard}
-                alt="Managment dashboard"
-                className="flex-1 sm:translate-x-[35%] scale-[1.3] sm:scale-[1.7] sm:hover:scale-[1.8] transition-transform duration-300 ease-in-out cursor-pointer"
-              />
-            </PopupCarousel>
-          </div>
-        </div>
-        <div className="grid sm:grid-cols-2 relative">
-          <BlobOutlineSecondary2 className="absolute left-0 top-0 z-[-1] w-[50rem] scale-[0.9] aspect-square translate-x-[-20%] translate-y-[-10%]" />
-          <BlobPatternBlack className="absolute left-0 top-0 z-[-1] w-[50rem] scale-[0.7] rotate-45 aspect-square translate-x-[-30%] translate-y-[0%]" />
-          <PopupCarousel
-            className="flex landing-page-seller"
-            items={[
-              <Image
-                key="seller3"
-                src={MockUpSeller3}
-                alt="Seller page"
-                className="drop-shadow-xl aspect-[9/13] object-cover max-h-dvh"
-              />,
-              <Image
-                key="seller1"
-                src={MockUpSeller1}
-                alt="Seller page"
-                className="drop-shadow-xl aspect-[9/13] object-cover max-h-dvh"
-              />,
-              <Image
-                key="seller2"
-                src={MockUpSeller2}
-                alt="Seller page"
-                className="drop-shadow-xl aspect-[9/13] object-cover max-h-dvh"
-              />,
-            ]}
-          >
-            <div className="hidden lg:inline relative cursor-pointer flex-1">
-              <Pointer className="absolute right-[35%] bottom-0 translate-y-[100%] z-[10] w-[4rem] h-[4rem] shadow-lg p-3 rounded-full bg-muted text-muted-foreground pointer-events-none" />
-              <Image
-                src={MockUpSeller1}
-                id="seller1"
-                alt="Seller page"
-                className="transition-transform duration-300 ease-in-out drop-shadow-2xl"
-              />
-              <Image
-                id="seller2"
-                src={MockUpSeller2}
-                alt="Seller page"
-                className="transition-transform duration-300 ease-in-out drop-shadow-2xl"
-              />
-              <Image
-                id="seller3"
-                src={MockUpSeller3}
-                alt="Seller page"
-                className="transition-transform duration-300 ease-in-out drop-shadow-2xl"
-              />
-              <Image
-                src={MockUpSeller1}
-                alt="Seller page"
-                className="hidden sm:inline invisible"
-              />
+            <div className="animate-[fadeInUp_0.6s_ease-out_0.4s_both]">
+              <LoginServices />
             </div>
-            <Image
-              src={MockUpSeller}
-              alt="Seller summary and QR code scnanner"
-              className="hidden sm:inline lg:hidden translate-x-[-35%] scale-[1.7] hover:scale-[1.8] transition-transform duration-300 ease-in-out cursor-pointer"
-            />
-            <Image
-              src={MockUpSeller}
-              alt="Seller summary and QR code scnanner"
-              className="sm:hidden scale-[1.3] transition-transform duration-300 ease-in-out cursor-pointer"
-            />
-            <Pointer className="hidden sm:inline lg:hidden absolute right-[60%] bottom-0 translate-y-[50%] z-[10] w-[4rem] h-[4rem] shadow-lg p-3 rounded-full bg-muted text-muted-foreground pointer-events-none" />
-            <Pointer className="sm:hidden absolute right-0 bottom-0 z-[10] w-[4rem] h-[4rem] translate-y-[-50%] translate-x-[-50%] shadow-lg p-3 rounded-full bg-muted text-muted-foreground pointer-events-none" />
-          </PopupCarousel>
-          <div className="flex flex-col order-first sm:order-last justify-center gap-4 transition-transform duration-300 ease-in-out landing-page-seller-text">
-            <h3 className="font-bold text-3xl">Bezprobémové prevzanie</h3>
-            <p className="max-w-prose font-ligh text-lg">
-              Prevezmi objednávky jednoducho a rýchlo. Stačí naskenovať QR kód
-              alebo zadať kód manuálne a objednávka je tvoja. Prehľadne
-              zobrazené informácie o objednávke, možnosť zobraziť detaily a
-              získať prehľad o objednávkach. To všetko v jednej aplikácii!
-            </p>
           </div>
-        </div>
-        <div className="grid sm:grid-cols-2 relative">
-          <BlobFullPrimary2 className="absolute right-0 bottom-0 z-[-1] w-[50rem] aspect-square rotate-[-45deg] scale-[1.1] translate-x-[35%] sm:translate-y-[20%]" />
-          <BlobOutlineSecondary className="absolute right-0 bottom-0 z-[-1] w-[50rem] aspect-square rotate-[-45deg] scale-[0.9] translate-x-[35%] sm:translate-y-[30%]" />
-          <div className="flex flex-col justify-center gap-4 transition-transform duration-300 ease-in-out">
-            <h3 className="font-bold text-3xl">Rýchle objednanie</h3>
-            <p className="max-w-prose font-ligh text-lg">
-              Prihlás sa skrz svoj školský účet a objednaj si svoje obľúbené
-              jedlo jednoducho a rýchlo. Prehľadné zobrazenie jedál, rýchle
-              objednanie, interaktívne rozhranie a možnosť sledovať svoju
-              objednávku. Dostupné vždy a všade cez našu webovú stránku.
-            </p>
-          </div>
-          <PopupCarousel
-            className="flex landing-page-order"
-            items={[
-              <Image
-                key="order3"
-                src={MockUpOrder3}
-                alt="Seller summary "
-                className="drop-shadow-xl aspect-[9/13] object-cover max-h-dvh"
-              />,
-              <Image
-                key="order1"
-                src={MockUpOrder1}
-                alt="Seller summary "
-                className="drop-shadow-xl aspect-[9/13] object-cover max-h-dvh"
-              />,
-              <Image
-                key="order2"
-                src={MockUpOrder2}
-                alt="Seller summary "
-                className="drop-shadow-xl aspect-[9/13] object-cover max-h-dvh"
-              />,
-            ]}
-          >
-            <div className="hidden lg:inline relative cursor-pointer flex-1">
-              <Pointer className="absolute left-[35%] bottom-0 translate-y-[100%] z-[10] w-[4rem] h-[4rem] shadow-lg p-3 rounded-full bg-muted text-muted-foreground pointer-events-none" />
-              <Image
-                src={MockUpOrder1}
-                id="order1"
-                alt="Seller summary and QR code scnanner"
-                className="transition-transform duration-300 ease-in-out drop-shadow-2xl"
-              />
-              <Image
-                id="order2"
-                src={MockUpOrder2}
-                alt="Seller summary and QR code scnanner"
-                className="transition-transform duration-300 ease-in-out drop-shadow-2xl"
-              />
-              <Image
-                id="order3"
-                src={MockUpOrder3}
-                alt="Seller summary and QR code scnanner"
-                className="transition-transform duration-300 ease-in-out drop-shadow-2xl"
-              />
-              <Image
-                src={MockUpOrder1}
-                alt="Seller summary and QR code scnanner"
-                className="hidden sm:inline invisible"
-              />
-            </div>
-            <Image
-              src={MockUpOrder}
-              alt="Order screen"
-              className="lg:hidden sm:translate-x-[35%] scale-[1.3] sm:scale-[1.7] sm:hover:scale-[1.8] transition-transform duration-300 ease-in-out cursor-pointer"
-            />
-            <Pointer className="hidden sm:inline lg:hidden absolute left-[65%] bottom-0 translate-y-[50%] z-[10] w-[4rem] h-[4rem] shadow-lg p-3 rounded-full bg-muted text-muted-foreground pointer-events-none" />
-            <Pointer className="sm:hidden absolute right-0 bottom-0 z-[10] w-[4rem] h-[4rem] translate-y-[-75%] translate-x-[-75%] shadow-lg p-3 rounded-full bg-muted text-muted-foreground pointer-events-none" />
-          </PopupCarousel>
-        </div>
-      </div>
 
-      <div
-        id="contact"
-        className="relative flex flex-col gap-4 sm:gap-0 my-52 lg:mt-80 bg-background rounded-xl p-5 shadow-2xl max-w-screen-lg mx-auto"
-      >
-        <BlobFullPrimary2 className="absolute top-0 left-0 z-[-1] w-[50rem] aspect-square scale-[1.2] translate-x-[-20%] translate-y-[-30%]" />
-        <BlobOutlineSecondary2 className="absolute top-0 left-0 z-[-1] w-[50rem] aspect-square rotate-90 scale-[0.9] translate-x-[-30%] translate-y-[-20%]" />
-        <BlobPatternBlack2 className="absolute right-0 bottom-0 z-[-1] w-[50rem] aspect-square rotate-45 scale-[0.9] translate-x-[35%] translate-y-[30%]" />
-        <div className="text-center">
-          <h2 className="text-4xl font-bold text-center">Máš Záujem?</h2>
-          <p className="text-xl leading-loose">
-            Zadajte email a my vás kontaktujeme!
-          </p>
+          {/* Hero Image */}
+          <div className="flex-1 relative animate-[fadeInUp_0.8s_ease-out_0.2s_both]">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-3xl scale-95" />
+              <Image
+                src={MockUpStore}
+                alt="BagetaExpress obchod"
+                className="relative w-full max-w-[600px] mx-auto drop-shadow-2xl hover:scale-[1.02] transition-transform duration-500"
+                priority
+              />
+            </div>
+          </div>
         </div>
-        <Suspense fallback={null}>
-          <EmailForm />
-        </Suspense>
-      </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden lg:block">
+          <Link
+            href="#features"
+            className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <span className="text-sm">Zistiť viac</span>
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+              />
+            </svg>
+          </Link>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-24 lg:py-32 px-5 relative">
+        <BlobFullPrimary2 className="z-[-1] absolute top-[50%] left-[-30%] aspect-square w-[60rem] opacity-60" />
+
+        <div className="max-w-screen-xl mx-auto">
+          {/* Section Header */}
+          <SectionReveal className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Všetko čo potrebujete
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Kompletné riešenie pre správu objednávok, od administrácie až po
+              výdaj
+            </p>
+          </SectionReveal>
+
+          {/* Feature Cards Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <FeatureCard
+              icon={LayoutDashboard}
+              title="Jednoduchá správa"
+              description="Pridávajte jedlá, upravujte ceny, sledujte objednávky a získajte podrobný prehľad o vašom obchode. Všetko na jednom mieste."
+              image={MockUpDashboard}
+              delay={0}
+            />
+            <FeatureCard
+              icon={QrCode}
+              title="Bezproblémové prevzatie"
+              description="Naskenujte QR kód alebo zadajte kód manuálne. Prehľadné informácie o objednávke, rýchle a efektívne."
+              image={MockUpSeller}
+              delay={100}
+            />
+            <FeatureCard
+              icon={ShoppingBag}
+              title="Rýchle objednanie"
+              description="Prihláste sa školským účtom a objednajte si obľúbené jedlo. Interaktívne rozhranie dostupné vždy a všade."
+              image={MockUpOrder}
+              delay={200}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Contact CTA Section */}
+      <section id="contact" className="py-24 lg:py-32 px-5 relative">
+        <BlobPatternBlack className="z-[-1] absolute top-0 right-[-20%] aspect-square w-[40rem] rotate-45 opacity-50" />
+        <BlobOutlineSecondary className="z-[-1] absolute bottom-0 left-[-15%] aspect-square w-[35rem] opacity-70" />
+
+        <ContactReveal className="max-w-screen-md mx-auto">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-primary/80 p-8 md:p-12 shadow-2xl">
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+
+            <div className="relative z-10">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-3">
+                  Máte záujem?
+                </h2>
+                <p className="text-lg text-primary-foreground/90">
+                  Zanechajte nám svoj email a my vás kontaktujeme
+                </p>
+              </div>
+              <div className="bg-background/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+                <Suspense fallback={null}>
+                  <EmailForm />
+                </Suspense>
+              </div>
+            </div>
+          </div>
+        </ContactReveal>
+      </section>
     </div>
   );
 }
