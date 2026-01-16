@@ -8,7 +8,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { getUser } from "@/lib/user-utils";
-import { Loader, Plus } from "lucide-react";
+import { ImageIcon, Loader, MoreHorizontal, Pencil, Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 import AddItemForm from "./_components/add-item";
 import DeleteItemButton from "./_components/delete-item";
@@ -35,6 +35,21 @@ import {
   DrawerTrigger,
   DrawerClose,
 } from "@/components/ui/drawer";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function DashboardPage() {
   return (
@@ -136,29 +151,63 @@ async function ProductDashboard() {
   ]);
 
   return (
-    <>
-      <div className="grid gap-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
+    <div className="rounded-lg border bg-card">
+      <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">
+            {itemStats.length} {itemStats.length === 1 ? "produkt" : itemStats.length >= 2 && itemStats.length <= 4 ? "produkty" : "produktov"}
+          </span>
+        </div>
+        <AddItemForm
+          allergens={allergens}
+          ingredients={ingredients}
+          action="add"
+        >
+          <Button size="sm">
+            <Plus className="h-4 w-4 mr-1" />
+            Pridať produkt
+          </Button>
+        </AddItemForm>
+      </div>
+      
+      {/* Desktop table view */}
+      <div className="hidden md:block">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[80px]">Obrázok</TableHead>
+              <TableHead>Názov</TableHead>
+              <TableHead className="hidden lg:table-cell">Popis</TableHead>
+              <TableHead className="text-right w-[100px]">Cena</TableHead>
+              <TableHead className="text-right w-[100px]">Doručené</TableHead>
+              <TableHead className="w-[100px] text-right">Akcie</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {itemStats.map((itemStat, i) => (
+              <ItemRow
+                key={i}
+                itemStats={itemStat}
+                allergens={allergens}
+                ingredients={ingredients}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* Mobile card view */}
+      <div className="md:hidden divide-y">
         {itemStats.map((itemStat, i) => (
-          <ItemCard
+          <ItemRowMobile
             key={i}
             itemStats={itemStat}
             allergens={allergens}
             ingredients={ingredients}
           />
         ))}
-        <Card className=" h-full w-full flex justify-center items-center p-4">
-          <AddItemForm
-            allergens={allergens}
-            ingredients={ingredients}
-            action="add"
-          >
-            <Button size="icon">
-              <Plus />
-            </Button>
-          </AddItemForm>
-        </Card>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -186,7 +235,7 @@ async function EditStoreInner({ storeId }: { storeId: Store["id"] }) {
   return <EditStore store={store} />;
 }
 
-async function ItemCard({
+async function ItemRow({
   itemStats: { item, ...stats },
   allergens,
   ingredients,
@@ -203,26 +252,38 @@ async function ItemCard({
   });
 
   return (
-    <Card className="flex-1 flex flex-col">
-      {item.imageUrl !== "" && item.imageUrl !== null ? (
-        <Image
-          src={item.imageUrl}
-          width={400}
-          height={400}
-          alt="Obrázok produktu"
-          className="rounded-md w-full rounded-b-none aspect-video object-cover object-center"
-        />
-      ) : null}
-      <CardHeader>
-        <CardTitle>{item.name}</CardTitle>
-        <CardDescription>{item.description}</CardDescription>
-      </CardHeader>
-      <CardContent className="flex-1 flex flex-col justify-end">
-        <p>Doručené: {stats.pickedup ?? 0}</p>
-      </CardContent>
-      <CardFooter>
-        <div className="w-full grid grid-cols-2 gap-1">
-          <DeleteItemButton item={item} />
+    <TableRow className="group">
+      <TableCell className="p-2">
+        {item.imageUrl !== "" && item.imageUrl !== null ? (
+          <Image
+            src={item.imageUrl}
+            width={64}
+            height={64}
+            alt={item.name}
+            className="rounded-md w-16 h-12 object-cover"
+          />
+        ) : (
+          <div className="w-16 h-12 rounded-md bg-muted flex items-center justify-center">
+            <ImageIcon className="h-5 w-5 text-muted-foreground" />
+          </div>
+        )}
+      </TableCell>
+      <TableCell>
+        <div className="font-semibold text-base">{item.name}</div>
+      </TableCell>
+      <TableCell className="hidden lg:table-cell">
+        <span className="text-muted-foreground text-sm line-clamp-2">
+          {item.description || "—"}
+        </span>
+      </TableCell>
+      <TableCell className="text-right font-medium">
+        {item.price.toFixed(2)} €
+      </TableCell>
+      <TableCell className="text-right">
+        <Badge variant="secondary">{stats.pickedup ?? 0}</Badge>
+      </TableCell>
+      <TableCell className="text-right">
+        <div className="flex items-center justify-end gap-1">
           <AddItemForm
             allergens={allergens}
             ingredients={ingredients}
@@ -233,10 +294,86 @@ async function ItemCard({
               ingredients: itemIngredients,
             }}
           >
-            <Button>Upraviť</Button>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Pencil className="h-4 w-4" />
+            </Button>
           </AddItemForm>
+          <DeleteItemButton item={item} variant="icon" />
         </div>
-      </CardFooter>
-    </Card>
+      </TableCell>
+    </TableRow>
+  );
+}
+
+async function ItemRowMobile({
+  itemStats: { item, ...stats },
+  allergens,
+  ingredients,
+}: {
+  itemStats: ItemStats;
+  allergens: Allergen[];
+  ingredients: Ingredient[];
+}) {
+  const itemAllergens = await allergenRepository.getMany({
+    itemId: item.id,
+  });
+  const itemIngredients = await ingredientRepository.getMany({
+    itemId: item.id,
+  });
+
+  return (
+    <div className="flex items-center gap-3 p-3">
+      {item.imageUrl !== "" && item.imageUrl !== null ? (
+        <Image
+          src={item.imageUrl}
+          width={56}
+          height={56}
+          alt={item.name}
+          className="rounded-md w-14 h-14 object-cover flex-shrink-0"
+        />
+      ) : (
+        <div className="w-14 h-14 rounded-md bg-muted flex items-center justify-center flex-shrink-0">
+          <ImageIcon className="h-5 w-5 text-muted-foreground" />
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <p className="font-semibold text-base truncate">{item.name}</p>
+            <p className="text-sm text-muted-foreground">{item.price.toFixed(2)} €</p>
+          </div>
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <Badge variant="secondary" className="text-xs">
+              {stats.pickedup ?? 0} doručených
+            </Badge>
+          </div>
+        </div>
+      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <AddItemForm
+            allergens={allergens}
+            ingredients={ingredients}
+            action="update"
+            item={{
+              ...item,
+              allergens: itemAllergens,
+              ingredients: itemIngredients,
+            }}
+          >
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <Pencil className="h-4 w-4 mr-2" />
+              Upraviť
+            </DropdownMenuItem>
+          </AddItemForm>
+          <DeleteItemButton item={item} variant="dropdown" />
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }
