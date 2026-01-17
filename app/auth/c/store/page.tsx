@@ -47,11 +47,8 @@ async function StorePageInner() {
   return (
     <>
       {/* Header Section */}
-      <div className="mb-4">
+      <div className="mb-0">
         <h1 className="text-3xl font-bold tracking-tight">Ponuka</h1>
-        <p className="text-muted-foreground mt-1">
-          Vyber si z dnešnej ponuky čerstvých produktov
-        </p>
       </div>
 
       {/* Main Content */}
@@ -59,12 +56,12 @@ async function StorePageInner() {
 
       {/* Mobile Bottom Bar */}
       <div
-        className="fixed bottom-0 left-0 right-0 p-3 bg-background/95 backdrop-blur-lg border-t border-border/50 sm:hidden z-50"
+        className="fixed bottom-0 left-0 right-0 p-3 bg-transparent sm:hidden z-50"
         style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
       >
         {!hasOrder ? (
           <Link prefetch={false} href="/auth/c/cart" className="block">
-            <Button className="w-full h-12 text-base font-semibold shadow-lg">
+            <Button className="w-full h-12 text-base font-semibold shadow-lg border-foreground/10 border-2">
               <ShoppingCart className="mr-2 h-5 w-5" />
               Nákupný košík
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -72,7 +69,7 @@ async function StorePageInner() {
           </Link>
         ) : (
           <Link prefetch={false} href="/auth/c/order" className="block">
-            <Button className="w-full h-12 text-base font-semibold shadow-lg">
+            <Button className="w-full h-12 text-base font-semibold shadow-lg border-foreground/10 border-2">
               Zobraziť objednávku
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>

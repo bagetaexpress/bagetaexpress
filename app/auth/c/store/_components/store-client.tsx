@@ -64,30 +64,6 @@ export default function StoreClient({ items, hasOrder }: StoreClientProps) {
     });
   }, [categorizedItems, searchQuery, activeFilter]);
 
-  const counts = useMemo(() => {
-    return {
-      all: categorizedItems.length,
-      available: categorizedItems.filter((i) => i.status === "available").length,
-      reservation: categorizedItems.filter((i) => i.status === "reservation")
-        .length,
-      closed: categorizedItems.filter((i) => i.status === "closed").length,
-    };
-  }, [categorizedItems]);
-
-  const filters: { key: FilterType; label: string; icon: React.ReactNode }[] = [
-    { key: "all", label: "Všetko", icon: <ShoppingBag className="w-3.5 h-3.5" /> },
-    {
-      key: "available",
-      label: "Dostupné",
-      icon: <Sparkles className="w-3.5 h-3.5" />,
-    },
-    {
-      key: "reservation",
-      label: "Rezervácia",
-      icon: <Clock className="w-3.5 h-3.5" />,
-    },
-  ];
-
   return (
     <div className="flex flex-col gap-4">
       {/* Search and Filter Bar */}
@@ -103,35 +79,6 @@ export default function StoreClient({ items, hasOrder }: StoreClientProps) {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-primary/50"
             />
-          </div>
-
-          {/* Filter Chips */}
-          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-            {filters.map((filter) => (
-              <button
-                key={filter.key}
-                onClick={() => setActiveFilter(filter.key)}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap",
-                  activeFilter === filter.key
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
-                )}
-              >
-                {filter.icon}
-                {filter.label}
-                <span
-                  className={cn(
-                    "ml-1 text-xs",
-                    activeFilter === filter.key
-                      ? "text-primary-foreground/80"
-                      : "text-muted-foreground/70"
-                  )}
-                >
-                  ({counts[filter.key]})
-                </span>
-              </button>
-            ))}
           </div>
         </div>
       </div>
