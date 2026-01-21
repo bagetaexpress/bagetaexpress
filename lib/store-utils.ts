@@ -1,7 +1,7 @@
 "use server";
 
 import { getUser } from "./user-utils";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { SchoolStore, Store } from "@/db/schema";
 import { storeRepository } from "@/repositories/store-repository";
 import { schoolStoreRepository } from "@/repositories/school-store-repository";
@@ -41,7 +41,7 @@ async function updateReservationClose(
 }
 
 async function revalidateItems() {
-  revalidateTag("items");
+  updateTag("items");
 }
 
 async function updateStore(data: { id: Store["id"] } & Partial<Store>) {
